@@ -3,7 +3,7 @@
   "name": "__MSG_extension_name_opera__",
   "version": "1.1.6",
   "description": "__MSG_extension_description__",
-  "homepage_url": "https://skipto-landmarks-headings.github.io/page-script-5/",
+  "homepage_url": "https://opena11y.github.io/web-page-table-of-contents/",
   "default_locale": "en",
   "icons": {
     "32": "icons/light-skipto-32.png",

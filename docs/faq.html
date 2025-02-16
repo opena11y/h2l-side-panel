@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Page Table of Contents | SkipTo.js for WCAG 2.4.1 Bypass Blocks</title>
+    <title>Frequently Asked Questions | SkipTo.js for WCAG 2.4.1 Bypass Blocks</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 
     <!-- Choose Light or Dark Theme -->
@@ -20,23 +20,26 @@
 
 
 
+
     <style>
-      main h3 {
-        font-size: 125%;
+      #faq h2 {
+        border-bottom: 1px solid light-dark(#444, #ccc);
       }
-      #anatomy {
-        margin-top: 2em;
-        margin-bottom: 1em;
+      #faq dl {
+        margin-bottom: 2em;
       }
-      figure img {
-        width: 90%;
-        border: 2px solid #888;
+
+      #faq dt {
+        background-color: light-dark(#eee, #484848);
+        padding: 0.25em;
       }
-      figcaption {
-        font-size: 150%;
-        text-align: center;
-        font-weight: bold;
+
+      #faq dd {
+        padding: 0.25em;
+        margin: 0.25em;
+        margin-left: .75em;
       }
+
     </style>
   </head>
   <body>
@@ -88,22 +91,25 @@
 
 
     <!-- Main section-->
-    <main class="container px-4">
-      <div class="row gx-4 justify-content-center">
+    <div id="main-section" class="container px-4">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">Frequently Asked Questions</li>
+        </ol>
+      </nav>
+      <main class="row gx-4 justify-content-center">
         <div class="col-lg-10">
           
-            <figure class="image" style="width: 80%">
-               <img src="images/example_screen_shot.png"
-                    alt=""
-                    style="width: 100%";/>
-                    <figcaption>Example Screen Shot of Table of Contents Extension</figcaption>
-            </figure>
+          <h1>Frequently Asked Questions</h1>
+          
 
-            <h1>Page Table of Contents</h1>
+          <div id="faq">
 
-            <p><em>add content here...</p>
+               <p><em>add content here...</em></p>
 
-                       <hr style="margin-top: 5em;"/>
+
+                         <hr style="margin-top: 5em;"/>
 
             <h2 id="of-course-we-want-feedback">Feedback and Reporting Issues</h2>
 
@@ -111,10 +117,9 @@
 
 
 
-          
         </div>
-      </div>
-    </main>
+      </main>
+    </nav>
             <!-- Footer-->
         <footer class="py-5 bg-light">
 
