@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+        <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Page Table of Contents | SkipTo.js for WCAG 2.4.1 Bypass Blocks</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+
+    <!-- Choose Light or Dark Theme -->
+    <script src="./js/light-dark-scheme.js"></script>
+
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="./css/skipto.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet">
+
+
+
+    <style>
+      main h3 {
+        font-size: 125%;
+      }
+      #anatomy {
+        margin-top: 2em;
+        margin-bottom: 1em;
+      }
+      figure img {
+        width: 90%;
+        border: 2px solid #888;
+      }
+      figcaption {
+        font-size: 150%;
+        text-align: center;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+            <!-- Navigation-->
+        <nav class="navbar
+             navbar-expand-lg navbar-light bg-light"
+             aria-label="Primary"
+             id="mainNav">
+            <div class="container px-4">
+                <span class="brand">
+                  <span class="skipto">SkipTo.js 0.1</span>
+                </span>
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar"
+                        aria-expanded="false" a
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                  <ul class="navbar-nav ms-auto">
+                    
+                      
+                        <li class="nav-item">
+                          <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                      
+                    
+                      
+                        <li class="nav-item">
+                          <a class="nav-link" href="about.html">About</a>
+                        </li>
+                      
+                    
+                  </ul>
+                </div>
+            </div>
+        </nav>
+
+
+
+    <!-- Main section-->
+    <main class="container px-4">
+      <div class="row gx-4 justify-content-center">
+        <div class="col-lg-10">
+          
+            <figure class="image" style="width: 80%">
+               <img src="images/example_screen_shot.png"
+                    alt=""
+                    style="width: 100%";/>
+                    <figcaption>Example Screen Shot of SkipTo.js button and menu</figcaption>
+            </figure>
+
+            <h1>Page Table of Contents</h1>
+
+            <p>SkipTo.js is more than a just replacement for your old classic “Skip To Main Content” link for implementing the <a href="https://www.w3.org/TR/WCAG/#bypass-blocks">WCAG 2.4.1 Bypass Blocks</a> requirement.
+
+            The <a href="page.html">page script</a>, <a href="bookmarklets.html">bookmarkets</a> and <a href="extensions.html">browser extensions</a> create a drop-down menu consisting of the links to important landmarks and headings on a given web page.  The bookmarklets and browser extensions include powerful keyboard shortcuts for navigating landmark regions and headings on web pages, similar to the feature available in screen readers.
+            </p>
+
+            <p>
+            Once the page script is installed and configured, the menu and shortcuts make it easier for keyboard and screen reader users to quickly jump to the desired region of a page by simply choosing it from the list of options.
+            </p>
+
+            <h2 id="features">Three Ways to Use Skipto.js</h2>
+            <table class="table table-striped" aria-labelledby="features">
+              <thead>
+                <tr>
+                  <td rowspan="2"></td>
+                  <th rowspan="2">Menu Button</th>
+                  <th colspan="2" style="text-align: center">Keyboard Shortcuts</th>
+                  <th rowspan="2">Configuration</th>
+                  <th rowspan="2">Benefits</th>
+                </tr>
+                <tr>
+                  <th>Landmark Regions</th>
+                  <th>Headings</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th><a href="extensions.html">Browser Extensions</a></th>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Extension options panel.</td>
+                  <td>
+                    <ul>
+                      <li>An assistive technology for keyboard only users to navigate the landmark regions and headings on any web page.</li>
+                      <li>A testing tool to examine the landmark regions and headings on any web page.</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <th><a href="bookmarklets.html">Bookmarklets</a></th>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Use the <code>data-skipto</code> attribute of the <code>script</code> tag in the link to customize the features of SkipTo.js.</td>
+                  <td>
+                    <ul>
+                      <li>Try out SkipTo.js on any web page to learn how it works.</li>
+                      <li>A testing tool to examine the landmark regions and headings on any web page.</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <th><a href="page.html">Page Script</a></th>
+                  <td>Yes</td>
+                  <td class="no">no</td>
+                  <td class="no">no</td>
+                  <td>
+                    Authors can use:
+                    <ul>
+                      <li>Use the <code>data-skipto</code> attribute to customize the features of SkipTo.js (<em>preferred</em>). </li>
+                      <li>Global configuration object (<em>legacy support</em>).</li>
+                    </ul>
+                  </td>
+                  <td>
+                    <ul>
+                      <li>Authors can use it to replace the simple "Skip To Main" link on the pages.</li>
+                      <li>Provides a powerful and reliable way to navigate the structure of a web page for people with disabilities.</li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h2 id="anatomy">Anatomy of the SkipTo.js Menu</h2>
+
+            <figure>
+                <img src="images/skipto-menu-anatomy.png"
+                     alt="Screen shot of SkipTo.js menu features with call out pointers">
+                <figcaption>Features of the SkipTo.js Menu</figcaption>
+            </figure>
+
+            <h3 id="details-menu">Detailed Information on SkipTo.js Menu</h3>
+            <table class="table table-striped" aria-labelledby="details-menu">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>
+                    "Skip To Content" Button
+                  </th>
+                  <td>
+                    <ul>
+                      <li>Opens and closes the menu of landmark regions and headings.</li>
+                      <li>Button can initially be hidden or visible on the web page.</li>
+                      <li>A shortcut key is used to activate the button (e.g. <kbd>Option+0</kbd> or <kbd>Alt+0</kbd>).</li>
+                      <li>Button is first tab stop on the web page.</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Landmark Regions
+                  </th>
+                  <td>
+                    <ul>
+                      <li>Landmark regions are the first section of the menu.</li>
+                      <li>First menu item is the group label "Landmark Regions" and the number indicates how many landmarks are in the menu.</li>
+                      <li>By default the landmarks are listed in order of importance on the page:
+                        <ol>
+                          <li>Main</li>
+                          <li>Search</li>
+                          <li>Navigation</li>
+                          <li>Complementary</li>
+                          <li>Contentinfo</li>
+                        </ol>
+                      </li>
+                      <li>When a landmark region has an accessible name, it is included in the menu item after the region type.</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Headings
+                  </th>
+                  <td>
+                    <ul>
+                      <li>Heading are the second section of the menu.</li>
+                      <li>The section includes a group label "Headings" and the number indicates how many headings are in the menu.</li>
+                      <li>The headings are listed in document order.</li>
+                      <li>The number before the heading name indicates the level of the sub-section heading.  Level 2 headings are sub-sections of level 1 headings, level 3 headings are subsections of level 2 headings and so on up to heading leel 6.</li>
+                      <il>The accessible name is after the heading level.</il>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Shortcuts
+                  </th>
+                  <td>
+                    <ul>
+                      <li>The Shortcuts group label indicates whether the shortcuts are currently enabled or disabled.</li>
+                      <li>The first menu item is used to change the state of the shortcuts.</li>
+                      <li>The second menu item opens a dialog box showing the current keyboard shortcuts.</li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+                        <hr style="margin-top: 5em;"/>
+
+            <h2 id="of-course-we-want-feedback">Feedback and Reporting Issues</h2>
+
+            <p>We welcome your feedback!  Please do not hesitate to <a href="https://github.com/skipto-landmarks-headings/page-script-5/issues">raise issues and comment on Github</a> if something doesn’t work or you have ideas on how to improve SkipTo.js.</p>
+
+            <p class="happy">Happy skipping!</p>
+
+
+          
+        </div>
+      </div>
+    </main>
+            <!-- Footer-->
+        <footer class="py-5 bg-light">
+
+            <div class="fst-italic text-center" style="margin-bottom: 1em">The <code>SkipTo.js</code> script is the modern way to implement the <a href="https://www.w3.org/WAI/WCAG21/Understanding/bypass-blocks.html">WCAG 2.4.1 Bypass Blocks</a> requirement.</div>
+
+            <div class="container px-4 text-center">SkipTo.js Copyright (c) 2022, 2023, 2024, 2025 Jon Gunderson; Licensed BSD, All rights reserved</div>
+
+            <div class="container px-4 text-center">SkipTo.js Copyright (c) 2021 PayPal Accessibility Team and University of Illinois; Licensed BSD, All rights reserved.</div>
+
+            <div class="container px-4 text-center">BSD License allows for the SkipTo.js code to be freely used (e.g. no cost), copied or modified as long as the copyright notice is included.</div>
+
+            <div class="container px-4 text-center">Website conformance to <a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</a> requirements supported using <a href="https://ainspector.disability.illinois.edu">AInspector browser addon</a>.</div>
+
+        </footer>
+
+
+
+            <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+
+        <!-- Bookmarklets-->
+        <script src="js/createBookmarklets.js"></script>
+
+        <!-- SkipTo.js -->
+        <script data-skipto="positionLeft: 18%"
+                src="./dist/skipto.js">
+        </script>
+
+
+
+  </body>
+</html>

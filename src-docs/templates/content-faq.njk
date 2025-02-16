@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    {% include "./head.njk" %}
+
+    <style>
+      #faq h2 {
+        border-bottom: 1px solid light-dark(#444, #ccc);
+      }
+      #faq dl {
+        margin-bottom: 2em;
+      }
+
+      #faq dt {
+        background-color: light-dark(#eee, #484848);
+        padding: 0.25em;
+      }
+
+      #faq dd {
+        padding: 0.25em;
+        margin: 0.25em;
+        margin-left: .75em;
+      }
+
+    </style>
+  </head>
+  <body>
+    {% include "./header.njk" %}
+
+    <!-- Main section-->
+    <div id="main-section" class="container px-4">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">{{title | safe}}</li>
+        </ol>
+      </nav>
+      <main class="row gx-4 justify-content-center">
+        <div class="col-lg-10">
+          {% block title %}
+          <h1>{{title}}</h1>
+          {% endblock %}
+
+          <div id="faq">
+
+             {% include "./feedback.njk" %}
+
+        </div>
+      </main>
+    </nav>
+    {% include "./footer.njk" %}
+    {% include "./scripts.njk" %}
+
+  </body>
+</html>

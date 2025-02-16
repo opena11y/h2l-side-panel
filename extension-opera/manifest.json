@@ -1,0 +1,62 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extension_name_opera__",
+  "version": "1.1.6",
+  "description": "__MSG_extension_description__",
+  "homepage_url": "https://skipto-landmarks-headings.github.io/page-script-5/",
+  "default_locale": "en",
+  "icons": {
+    "32": "icons/light-skipto-32.png",
+    "48": "icons/light-skipto-48.png",
+    "64": "icons/light-skipto-64.png",
+    "128": "icons/light-skipto-128.png"
+  },
+  "action": {
+    "default_icon": {
+      "32":  "icons/light-skipto-32.png",
+      "48":  "icons/light-skipto-48.png",
+      "64":  "icons/light-skipto-64.png",
+      "128": "icons/light-skipto-128.png"
+    },
+    "default_title": "__MSG_toggle_menu__",
+    "theme_icons": [{
+      "light": "icons/light-skipto-32.png",
+      "dark": "icons/dark-skipto-32.png",
+      "size": 32
+    }, {
+      "light": "icons/light-skipto-48.png",
+      "dark": "icons/dark-skipto-48.png",
+      "size": 48
+    }, {
+      "light": "icons/light-skipto-64.png",
+      "dark": "icons/dark-skipto-64.png",
+      "size": 64
+    }, {
+      "light": "icons/light-skipto-128.png",
+      "dark": "icons/dark-skipto-128.png",
+      "size": 128
+    }]
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "options_page": "options.html",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "web_accessible_resources": [{
+    "resources": ["skipto.js"],
+    "matches": ["<all_urls>"]
+  }],
+  "content_scripts": [
+    {
+      "js": [
+        "content.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
