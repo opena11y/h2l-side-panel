@@ -2,63 +2,63 @@
   "manifest_version": 3,
   "browser_specific_settings": {
     "gecko": {
-      "id": "skipto-for-firefox@openweba11y.com"
+      "id": "toc-sidebar-firefox@openweba11y.com"
     }
   },
   "name": "__MSG_extension_name_firefox__",
-  "version": "1.1.6",
+  "version": "0.1",
   "description": "__MSG_extension_description__",
   "homepage_url": "https://opena11y.github.io/web-page-table-of-contents/",
   "default_locale": "en",
+
   "icons": {
-    "32":  "icons/light-skipto-32.png",
-    "48":  "icons/light-skipto-48.png",
-    "64":  "icons/light-skipto-64.png",
-    "128": "icons/light-skipto-128.png"
+    "32":  "icons/light-toc-sidebar-32.png",
+    "48":  "icons/light-toc-sidebar-48.png",
+    "64":  "icons/light-toc-sidebar-64.png",
+    "128": "icons/light-toc-sidebar-128.png"
   },
+
   "action": {
     "default_icon": {
-      "32":  "icons/light-skipto-32.png",
-      "48":  "icons/light-skipto-48.png",
-      "64":  "icons/light-skipto-64.png",
-      "128": "icons/light-skipto-128.png"
+      "32":  "icons/light-toc-sidebar-32.png",
+      "48":  "icons/light-toc-sidebar-48.png",
+      "64":  "icons/light-toc-sidebar-64.png",
+      "128": "icons/light-toc-sidebar-128.png"
     },
-    "default_title": "__MSG_toggle_menu__",
-    "theme_icons": [{
-      "light": "icons/light-skipto-32.png",
-      "dark": "icons/dark-skipto-32.png",
-      "size": 32
-    }, {
-      "light": "icons/light-skipto-48.png",
-      "dark": "icons/dark-skipto-48.png",
-      "size": 48
-    }, {
-      "light": "icons/light-skipto-64.png",
-      "dark": "icons/dark-skipto-64.png",
-      "size": 64
-    }, {
-      "light": "icons/light-skipto-128.png",
-      "dark": "icons/dark-skipto-128.png",
-      "size": 128
-    }]
+    "default_title": "__MSG_toggle_menu__"
+  },
+
+  "sidebar_action": {
+    "default_icon": {
+      "32":  "icons/light-toc-sidebar-32.png",
+      "48":  "icons/light-toc-sidebar-48.png",
+      "64":  "icons/light-toc-sidebar-64.png",
+      "128": "icons/light-toc-sidebar-128.png"
+    },
+    "default_title": "__MSG_extension_name_firefox__",
+    "default_panel": "sidepanel.html",
+    "open_at_install": false
+  },
+
+  "commands": {
+    "_execute_sidebar_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+0",
+        "linux": "Alt+Shift+0",
+        "mac": "Command+Shift+0"
+      }
+    }
   },
 
   "background": {
-    "scripts": ["background.js"],
+    "service_worker": ["service-worker.js"],
     "type": "module"
-  },
-  "options_ui": {
-    "page": "options.html"
   },
     "permissions": [
     "activeTab",
     "scripting",
     "storage"
   ],
-  "web_accessible_resources": [{
-    "resources": ["skipto.js"],
-    "matches": ["<all_urls>"]
-  }],
   "content_scripts": [
     {
       "js": [

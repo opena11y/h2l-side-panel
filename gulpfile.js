@@ -6,7 +6,7 @@ const {parallel, series}   = require('gulp');
 const eslint       = require('gulp-eslint');
 const minify       = require("gulp-minify");
 const concat       = require("gulp-concat");
-const sass         = require('gulp-sass')(require('sass'));
+const sass         = require('gulp-dart-sass');
  
 gulp.task('linting', () => {
     return src(['src/*.js'])
@@ -44,6 +44,15 @@ gulp.task('extensionsLocales', () => {
     .pipe(dest('extension-firefox/_locales/en'));
 });
 
+gulp.task('style', function () {
+  return gulp.src('./src/*.scss')
+  .pipe(sass().on('error', sass.logError))
+    .pipe(dest('extension-chrome'))
+    .pipe(dest('extension-opera'))
+    .pipe(dest('extension-firefox'));
+});
+
+
 gulp.task('documentation', function (cb) {
   exec('node ./gen-documentation.js', function (err, stdout, stderr) {
     console.log(stdout);
@@ -51,20 +60,21 @@ gulp.task('documentation', function (cb) {
     cb(err);  });
 })
 
-gulp.task('style', function () {
+gulp.task('documentationStyle', function () {
   return gulp.src('./src-docs/templates/*.scss')
   .pipe(sass().on('error', sass.logError))
   .pipe(gulp.dest('./docs/css'));
 });
 
-const linting           = task('linting');
-const extensionsCode    = task('extensionsCode');
-const extensionsLocales = task('extensionsLocales');
-const documentation     = task('documentation');
-const style             = task('style');
+const linting            = task('linting');
+const extensionsCode     = task('extensionsCode');
+const extensionsLocales  = task('extensionsLocales');
+const style              = task('style');
+
+const documentation      = task('documentation');
+const documentationStyle = task('documentationStyle');
 
 exports.default = series(
   linting,
-  parallel(extensionsCode, extensionsLocales),
-  documentation,
-  style);
+  parallel(extensionsCode, extensionsLocales, style),
+  parallel(documentation,documentationStyle));

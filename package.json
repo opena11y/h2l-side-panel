@@ -25,6 +25,7 @@
     "node": ">=6"
   },
   "devDependencies": {
+    "gulp-dart-sass": "^1.1.0",
     "gulp-sass": "^5.1.0",
     "sass": "^1.71.1"
   },
