@@ -23,7 +23,7 @@ const defaultOptions = Object.assign({}, defaultContentOptions);
 
 function hasAllProperties (refObj, srcObj) {
   for (const key of Object.keys(refObj)) {
-    if (!srcObj.hasOwnProperty(key)) {
+    if (!srcObj.hasOwn(key)) {
       return false;
     }
   }
@@ -41,7 +41,7 @@ function isComplete (obj) {
 function addDefaultValues (options) {
   const copy = Object.assign({}, defaultOptions);
   for (let [key, value] of Object.entries(options)) {
-    if (copy.hasOwnProperty(key)) {
+    if (copy.hasOwn(key)) {
       copy[key] = value;
     }
   }
@@ -53,7 +53,7 @@ function addDefaultValues (options) {
 **  getOptions
 */
 export function getOptions () {
-  return new Promise (function (resolve, reject) {
+  return new Promise (function (resolve) {
     browserStorage.get(function (options) {
       if (notLastError()) {
         if (isComplete(options)) {
@@ -73,7 +73,7 @@ export function getOptions () {
 **  saveOptions
 */
 export function saveOptions (options) {
-  return new Promise (function (resolve, reject) {
+  return new Promise (function (resolve) {
     browserStorage.set(options, function () {
       if (notLastError()) { resolve(); }
     });
@@ -84,9 +84,9 @@ export function saveOptions (options) {
 ** resetDefaultOptions
 */
 export function resetDefaultOptions () {
-  return new Promise (function (resolve, reject) {
-    browsersStorage.set(defaultOptions, function () {
-      if (notLastError()) { resolve(); };
+  return new Promise (function (resolve) {
+    browserStorage.set(defaultOptions, function () {
+      if (notLastError()) { resolve(); }
     });
   });
 }
@@ -95,7 +95,7 @@ export function resetDefaultOptions () {
 ** resetDefaultContentOptions
 */
 export function resetDefaultButtonOptions () {
-  return new Promise (function (resolve, reject) {
+  return new Promise (function (resolve) {
     browserStorage.set(defaultContentOptions, function () {
       if (notLastError()) { resolve(); }
     });

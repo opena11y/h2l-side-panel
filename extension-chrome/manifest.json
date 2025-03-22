@@ -42,9 +42,14 @@
     "type": "module"
   },
  "side_panel": {
-    "default_path": "sidebar.html"
+    "default_path": "sidepanel.html"
   },
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
   "permissions": [
+    "tabs",
     "activeTab",
     "scripting",
     "sidePanel",
