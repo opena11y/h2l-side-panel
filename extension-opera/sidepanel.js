@@ -64,21 +64,52 @@ window.addEventListener('load', () => {
   btnGetInfo.addEventListener('click', () => {
     debug && console.log(`[Get Information Button][click]`);
 
-    myBrowser.tabs
-      .query({
-        currentWindow: true,
-        active: true,
-      })
-      .then(sendMessageToTabs)
-      .catch(onError);
-
+    updateContent();
 
   });
 
 });
 
+function clearContent(message = '') {
+
+   while(ulRegions.firstChild) {
+    ulRegions.removeChild(ulRegions.firstChild);
+   }
+
+   while(ulHeadings.firstChild) {
+    ulHeadings.removeChild(ulHeadings.firstChild);
+   }
+
+   if (message) {
+
+      let liNode = document.createElement('li');
+      liNode.textContent = message;
+      ulHeadings.appendChild(liNode);
+
+      liNode = document.createElement('li');
+      liNode.textContent = message;
+      ulRegions.appendChild(liNode);
+
+   }
+
+}
+
+function updateContent() {
+
+  clearContent('loading...');
+
+  myBrowser.tabs
+    .query({
+      currentWindow: true,
+      active: true,
+    })
+    .then(sendMessageToTabs)
+    .catch(onError);
+  }
+
 function onError(error) {
   console.error(`Error: ${error}`);
+  clearContent('Protocol not supported');
 }
 
 async function sendMessageToTabs(tabs) {
@@ -88,9 +119,7 @@ async function sendMessageToTabs(tabs) {
     const myResult = await myBrowser.tabs
       .sendMessage(tab.id, { greeting: "Hi from side panel script" });
 
-     while(ulHeadings.firstChild) {
-      ulHeadings.removeChild(ulHeadings.firstChild);
-     }
+    clearContent();
 
     if (myResult.headings) {
       myResult.headings.forEach( (h) => {
@@ -100,10 +129,6 @@ async function sendMessageToTabs(tabs) {
         console.log(liNode.textContent);
       });
     }
-
-     while(ulRegions.firstChild) {
-      ulRegions.removeChild(ulRegions.firstChild);
-     }
 
     if (myResult.regions) {
       myResult.regions.forEach( (r) => {
@@ -135,7 +160,7 @@ window.addEventListener('load', function () {
   browserTabs.onUpdated.addListener(handleTabUpdated);
   browserTabs.onActivated.addListener(handleTabActivated);
   myBrowser.windows.onFocusChanged.addListener(handleWindowFocusChanged);
-//  resizeView();
+  updateContent();
 });
 
 window.addEventListener('unload', function () {
@@ -164,6 +189,7 @@ function handleTabUpdated (tabId, changeInfo, tab) {
   if (changeInfo.status === "complete") {
     debug && console.log(`[handleTabUpdated][status]: complete`);
     lastStatus = changeInfo.status;
+    updateContent();
   }
   else {
     if (changeInfo.status !== lastStatus) {
@@ -198,7 +224,7 @@ function handleTabActivated (activeInfo) {
   if (debug) {
     logTabUrl(activeInfo);
   }
-//  runContentScripts('handleTabActivated');
+  updateContent();
 }
 
 /*
@@ -218,7 +244,7 @@ function handleWindowFocusChanged (windowId) {
     if (result) {
       myWindowId = windowId;
 
-      //runContentScripts('onGotFocus');
+      updateContent();
       if (debug) console.log(`Focus changed to window: ${myWindowId}`);
     }
   }
