@@ -47,19 +47,26 @@ debug && console.log(`[browserTabs]: ${browserTabs}`);
 
 let myWindowId = -1;  // used for checking if a tab is in the same window as the sidebar
 
+let divTitle;
 let ulHeadings;
 let ulRegions;
+let ulLinks;
 
 
 // Initialize controls in Side Panel
 window.addEventListener('load', () => {
 
   const btnGetInfo = document.querySelector("#id-btn-get-info");
+
+  divTitle   = document.querySelector("#id-div-title");
   ulHeadings = document.querySelector("#id-ul-headings");
   ulRegions  = document.querySelector("#id-ul-regions");
+  ulLinks    = document.querySelector("#id-ul-links");
 
+  debug && console.log(`[divTitle  ]: ${divTitle}`);
   debug && console.log(`[ulHeadings]: ${ulHeadings}`);
   debug && console.log(`[ulRegions ]: ${ulRegions}`);
+  debug && console.log(`[ulLinks   ]: ${ulLinks}`);
 
   btnGetInfo.addEventListener('click', () => {
     debug && console.log(`[Get Information Button][click]`);
@@ -72,6 +79,10 @@ window.addEventListener('load', () => {
 
 function clearContent(message = '') {
 
+   while(divTitle.firstChild) {
+    divTitle.removeChild(divTitle.firstChild);
+   }
+
    while(ulRegions.firstChild) {
     ulRegions.removeChild(ulRegions.firstChild);
    }
@@ -80,7 +91,13 @@ function clearContent(message = '') {
     ulHeadings.removeChild(ulHeadings.firstChild);
    }
 
+   while(ulLinks.firstChild) {
+    ulLinks.removeChild(ulLinks.firstChild);
+   }
+
    if (message) {
+
+      divTitle.textContent = message;
 
       let liNode = document.createElement('li');
       liNode.textContent = message;
@@ -89,6 +106,10 @@ function clearContent(message = '') {
       liNode = document.createElement('li');
       liNode.textContent = message;
       ulRegions.appendChild(liNode);
+
+      liNode = document.createElement('li');
+      liNode.textContent = message;
+      ulLinks.appendChild(liNode);
 
    }
 
@@ -121,10 +142,12 @@ async function sendMessageToTabs(tabs) {
 
     clearContent();
 
+    divTitle.textContent = myResult.title;
+
     if (myResult.headings) {
       myResult.headings.forEach( (h) => {
         const liNode = document.createElement('li');
-        liNode.textContent = `${h.tagName}: ${h.name}`;
+        liNode.textContent = `${h.level}: ${h.accName} (${h.ordinalPosition})`;
         ulHeadings.appendChild(liNode);
         console.log(liNode.textContent);
       });
@@ -133,11 +156,29 @@ async function sendMessageToTabs(tabs) {
     if (myResult.regions) {
       myResult.regions.forEach( (r) => {
         const liNode = document.createElement('li');
-        liNode.textContent = `${r.tagName}`;
+        const textContent = r.accName ? `${r.role}: ${r.accName}` : r.role;
+        liNode.textContent = textContent + ` (${r.ordinalPosition})`;
         ulRegions.appendChild(liNode);
         console.log(liNode.textContent);
       });
     }
+
+    if (myResult.links) {
+      myResult.links.forEach( (l) => {
+        const liNode = document.createElement('li');
+        const textContent = l.accName ?
+                            `${l.accName}` :
+                            `** no name **`;
+        liNode.textContent = textContent + ` (${l.ordinalPosition})`;
+        liNode.setAttribute('data-href', l.href);
+        liNode.setAttribute('data-is-internal', l.isInternal);
+        liNode.setAttribute('data-is-external', l.isExternal);
+        ulLinks.appendChild(liNode);
+        console.log(liNode.textContent);
+      });
+    }
+
+
 
   }
 }

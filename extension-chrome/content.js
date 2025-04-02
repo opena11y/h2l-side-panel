@@ -148,7 +148,7 @@
   /* constants.js */
 
   /* Constants */
-  const debug$11 = new DebugLogging('constants', false);
+  const debug$14 = new DebugLogging('constants', false);
 
   const VERSION = '2.0.6';
 
@@ -651,13 +651,13 @@
    */
 
   function getGuidelineId(sc) {
-    debug$11.flag && debug$11.log(`[getGuidelineId][sc]: ${sc}`);
+    debug$14.flag && debug$14.log(`[getGuidelineId][sc]: ${sc}`);
     const parts = sc.split('.');
     const gl = (parts.length === 3) ? `G_${parts[0]}_${parts[1]}` : ``;
     if (!gl) {
       return 0;
     }
-    debug$11.flag && debug$11.log(`[getGuidelineId][gl]: ${gl}`);
+    debug$14.flag && debug$14.log(`[getGuidelineId][gl]: ${gl}`);
     return WCAG_GUIDELINE[gl];
   }
 
@@ -962,6 +962,195 @@
 
   function  usesARIALabeling (node) {
     return node.hasAttribute('aria-label') || node.hasAttribute('aria-labelledby');
+  }
+
+  /* headingResults.js */
+
+  /* constants */
+  const debug$13 = new DebugLogging('headingResults', false);
+  debug$13.flag = false;
+
+  /**
+   * @class headingResults
+   *
+   * @desc Constructor for an object that contains information on headers
+   */
+
+  class HeadingResults {
+    constructor () {
+      this.headingData = [];
+    }
+
+    get data () {
+      return this.headingData;
+    }
+
+    update(domCache) {
+
+      this.headingData = [];
+
+      debug$13.flag && debug$13.log(`[        structureInfo]: ${domCache.structureInfo}`);
+      debug$13.flag && debug$13.log(`[allHeadingDomElements]: ${domCache.structureInfo.allHeadingDomElements.length}`);
+
+      domCache.structureInfo.allHeadingDomElements.forEach( de => {
+        debug$13.flag && debug$13.log(`[tagName]: ${de.tagName}`);
+
+        const dataItem = {
+          level: de.ariaInfo.ariaLevel,
+          accName: de.accName.name,
+          ordinalPosition: de.ordinalPosition
+        };
+
+        this.headingData.push(dataItem);
+      });
+
+    }
+
+    /**
+     * @method toJSON
+     *
+     * @desc Returns a JSON object describing the document headings
+     *
+     * @return {String} see @desc
+     */
+
+    toJSON () {
+      return JSON.stringify(this.headingData);
+    }
+  }
+
+  /* landmarkRegionResults.js */
+
+  /* constants */
+  const debug$12 = new DebugLogging('landmarkRegionResults', false);
+  debug$12.flag = false;
+
+  /**
+   * @class landmarkRegionResults
+   *
+   * @desc Constructor for an object that contains information on landmark regions
+   */
+
+  class LandmarkRegionResults {
+    constructor () {
+      this.regionData = [];
+    }
+
+    get data () {
+      return this.regionData;
+    }
+
+    update(domCache) {
+
+      debug$12.flag && debug$12.log(`[        structureInfo]: ${domCache.structureInfo}`);
+      debug$12.flag && debug$12.log(`[allLandmarkDomElements]: ${domCache.structureInfo.allLandmarkElements.length}`);
+
+      this.regionData = [];
+
+      domCache.structureInfo.allLandmarkElements.forEach( le => {
+        const de = le.domElement;
+        debug$12.flag && debug$12.log(`[role]: ${de.role}`);
+
+        const dataItem = {
+          role: de.role,
+          accName: de.accName.name,
+          ordinalPosition: de.ordinalPosition
+        };
+
+        this.regionData.push(dataItem);
+      });
+
+    }
+
+    /**
+     * @method toJSON
+     *
+     * @desc Returns a JSON object describing the document landmark regions
+     *
+     * @return {String} see @desc
+     */
+
+    toJSON () {
+      return JSON.stringify(this.regionData);
+    }
+  }
+
+  /* linkResults.js */
+
+  /* constants */
+  const debug$11 = new DebugLogging('linkResults', false);
+  debug$11.flag = false;
+
+  /**
+   * @class linkResults
+   *
+   * @desc Constructor for an object that contains information on links
+   */
+
+  class LinkResults {
+    constructor () {
+      this.linkData = [];
+    }
+
+    get data () {
+      return this.linkData;
+    }
+
+    update(domCache, url) {
+
+      const parsedURL =  URL.parse(url);
+
+      debug$11.flag && debug$11.log(`[parsedURL][hostname]: ${parsedURL.hostname}`);
+      debug$11.flag && debug$11.log(`[parsedURL][pathname]: ${parsedURL.pathname}`);
+
+      this.linkData = [];
+
+      domCache.linkInfo.allLinkDomElements.forEach( de => {
+
+        const parsedHREF = URL.parse(de.node.href);
+
+        debug$11.flag && debug$11.log(`[parsedHREF]: ${parsedHREF}`);
+
+        if (parsedHREF) {
+          debug$11.flag && debug$11.log(`[parsedHREF][    href]: ${parsedHREF.href}`);
+          debug$11.flag && debug$11.log(`[parsedHREF][hostname]: ${parsedHREF.hostname} (${parsedURL.hostname === parsedHREF.hostname})`);
+          debug$11.flag && debug$11.log(`[parsedHREF][pathname]: ${parsedHREF.pathname}`);
+          debug$11.flag && debug$11.log(`[parsedHREF][    hash]: ${parsedHREF.hash}`);
+          debug$11.flag && debug$11.log(`[parsedHREF][  origin]: ${parsedHREF.origin}`);
+
+          const sameHostname = parsedURL.hostname === parsedHREF.hostname;
+          const samePathname = parsedURL.pathname === parsedHREF.pathname;
+
+          const dataItem = {
+            href: de.node.href,
+            isInternal: sameHostname && samePathname,
+            isExternal: !sameHostname,
+            accName: de.accName.name,
+            ordinalPosition: de.ordinalPosition
+          };
+
+          this.linkData.push(dataItem);
+
+          debug$11.flag && debug$11.log(`[parsedHREF][isInternal]: ${dataItem.isInternal}`);
+          debug$11.flag && debug$11.log(`[parsedHREF][isExternal]: ${dataItem.isExternal}`);
+
+        }
+
+      });
+
+    }
+
+    /**
+     * @method toJSON
+     *
+     * @desc Returns a JSON object describing the document links
+     *
+     * @return {String} see @desc
+     */
+
+    toJSON () {
+      return JSON.stringify(this.linkData);
+    }
   }
 
   /* controlInfo.js */
@@ -16072,6 +16261,10 @@
                               elementNode.getAttribute('lang') :
                               '';
 
+      if (parentInfo.addAttrId && elementNode) {
+        elementNode.setAttribute('data-opena11y-ordinal-position', ordinalPosition);
+      }
+
       this.ariaInHTMLInfo  = getAriaInHTMLInfo(elementNode);
       const defaultRole = this.ariaInHTMLInfo.defaultRole;
 
@@ -16658,9 +16851,9 @@
     /**
      * @method update
      *
-     * @desc Checks to see if the domElement has a role of "link"
+     * @desc Adds the id to the list of elements with a id
      *
-     * @param  {Object}  domElement        - DOMElement object representing an element in the DOM
+     * @param  {Object}  domElement - DOMElement object representing an element in the DOM
      */
 
     update (documentIndex, domElement) {
@@ -28728,10 +28921,12 @@
    *                                     document.body
    * @param  {String}  ariaVersion     - Version of ARIA to use for roles,
    *                                     props and state info
+   * @param  {Boolean} addAttrId       - If true, create a data-opena11y-oridinal-position attribute
+   *                                     on element nodes for use in navigation and highlighting
    */
 
   class DOMCache {
-    constructor (startingDoc, startingElement, ariaVersion='ARIA12') {
+    constructor (startingDoc, startingElement, ariaVersion='ARIA12', addAttrId=false) {
       if (typeof startingElement !== 'object') {
         startingElement = startingDoc.body;
       }
@@ -28755,6 +28950,7 @@
       this.allDomTexts    = [];
 
       const parentInfo = new ParentInfo();
+      parentInfo.addAttrId       = addAttrId;  // If true add a data id to each DOM element
       parentInfo.document        = startingDoc;
       parentInfo.accNameDocument = startingDoc;
 
@@ -38664,6 +38860,45 @@
 
   /* helper functions */
 
+  function validateRuleset(ruleset) {
+    if (typeof ruleset === 'string') {
+      ruleset = ruleset.toUpperCase();
+      if (['WCAG20', 'WCAG21', 'WCAG22'].includes(ruleset)) {
+        return ruleset;
+      }
+    }
+    return 'WCAG21';
+  }
+
+  function validateLevel(level) {
+    if (typeof level === 'string') {
+      level = level.toUpperCase();
+      if (['A', 'AA', 'AAA'].includes(level)) {
+        return level;
+      }
+    }
+    return 'AA';
+  }
+
+  function validateScopeFilter(scopeFilter) {
+    if (typeof scopeFilter === 'string') {
+      scopeFilter = scopeFilter.toUpperCase();
+      if (['ALL', 'PAGE', 'WEBSITE'].includes(scopeFilter)) {
+        return scopeFilter;
+      }
+    }
+    return 'ALL';
+  }
+
+  function validateAriaVersion(ariaVersion) {
+    if (typeof ariaVersion === 'string') {
+      ariaVersion = ariaVersion.toUpperCase();
+      if (['ARIA12', 'ARIA13'].includes(ariaVersion)) {
+        return ariaVersion;
+      }
+    }
+    return 'ARIA12';
+  }
   function isWCAG(ruleset, level, rule) {
 
     switch (ruleset.toUpperCase()) {
@@ -38745,46 +38980,72 @@
       this.allDomElements = [];
       this.allRuleResults = [];
 
+      this._headings        = new HeadingResults();
+      this._landmarkRegions = new LandmarkRegionResults();
+      this._links           = new LinkResults();
+
       debug$1.flag && debug$1.log(`[title]: ${this.title}`);
       debug$1.flag && debug$1.log(`[  url]: ${this.url}`);
 
     }
+
+    get headings () {
+      return this._headings;
+    }
+
+    get landmarkRegions () {
+      return this._landmarkRegions;
+    }
+
+    get links () {
+      return this._links;
+    }
+
 
     /**
      * @method runWCAGRules
      *
      * @desc Updates rule results array with results from a WCAG features
      *
-     * @param  {String}  ruleset     - Set of rules to evaluate (values: A" | "AA" | "AAA")
+     * @param  {String}  ruleset     - Set of rules to evaluate (values: 'WCAG20', 'WCAG21', 'WCAG22')
      * @param  {String}  level       - WCAG Level (values: 'A', 'AA', 'AAA')
      * @param  {String}  scopeFilter - Filter rules by scope (values: "ALL" | "PAGE" | "WEBSITE")
      * @param  {String}  ariaVersion - Version of ARIA used for validation rules
      *                                 (values: 'ARIA12' | ARIA13")
+     * @param  {Boolean} addAttrId   - If true, create a data-opena11y-oridinal-position attribute
+     *                                 on element nodes for use in navigation and highlighting
      */
 
-    runWCAGRules (ruleset='WCAG21', level='AA', scopeFilter='ALL', ariaVersion='ARIA12') {
+    runWCAGRules (ruleset='WCAG21',
+                  level='AA',
+                  scopeFilter='ALL',
+                  ariaVersion='ARIA12',
+                  addAttrId=false) {
 
       const startTime = new Date();
-      debug$1.flag && debug$1.log(`[evaluateWCAG][    ruleset]: ${ruleset}`);
-      debug$1.flag && debug$1.log(`[evaluateWCAG][      level]: ${level}`);
-      debug$1.flag && debug$1.log(`[evaluateWCAG][scopeFilter]: ${scopeFilter}`);
-      debug$1.flag && debug$1.log(`[evaluateWCAG][ariaVersion]: ${ariaVersion}`);
 
-      this.ruleset     = ruleset;
-      this.level       = level;
-      this.scopeFilter = scopeFilter;
-      this.ariaVersion = ariaVersion;
+      this.ruleset     = validateRuleset(ruleset);
+      this.level       = validateLevel(level);
+      this.scopeFilter = validateScopeFilter(scopeFilter);
+      this.ariaVersion = validateAriaVersion(ariaVersion);
+      addAttrId = typeof addAttrId === 'boolean' ? addAttrId : false;
 
-      const domCache      = new DOMCache(this.startingDoc, this.startingDoc.body, this.ariaVersion);
+      debug$1.flag && debug$1.log(`[evaluateWCAG][    ruleset]: ${this.ruleset}`);
+      debug$1.flag && debug$1.log(`[evaluateWCAG][      level]: ${this.level}`);
+      debug$1.flag && debug$1.log(`[evaluateWCAG][scopeFilter]: ${this.scopeFilter}`);
+      debug$1.flag && debug$1.log(`[evaluateWCAG][ariaVersion]: ${this.ariaVersion}`);
+      debug$1.flag && debug$1.log(`[evaluateWCAG][  addAttrId]: ${addAttrId}`);
+
+      const domCache      = new DOMCache(this.startingDoc, this.startingDoc.body, this.ariaVersion, addAttrId);
       this.allDomElements = domCache.allDomElements;
       this.allRuleResults = [];
 
       allRules.forEach (rule => {
 
-        if (isWCAG(ruleset, level, rule)) {
-          if ((scopeFilter === 'ALL') ||
-              ((scopeFilter === 'PAGE')    && rule.isScopePage) ||
-              ((scopeFilter === 'WEBSITE') && rule.isScopeWebsite)) {
+        if (isWCAG(this.ruleset, this.level, rule)) {
+          if ((this.scopeFilter === 'ALL') ||
+              ((this.scopeFilter === 'PAGE')    && rule.isScopePage) ||
+              ((this.scopeFilter === 'WEBSITE') && rule.isScopeWebsite)) {
             const ruleResult = new RuleResult(rule);
 
             ruleResult.validate(domCache);
@@ -38792,6 +39053,10 @@
           }
         }
       });
+
+      this._headings.update(domCache);
+      this._landmarkRegions.update(domCache);
+      this._links.update(domCache, this.url);
 
       const endTime = new Date();
       debug$1.flag && debug$1.log(`[evaluateWCAG][Run Time]: ${endTime.getTime() - startTime.getTime()} msecs`);
@@ -38804,16 +39069,22 @@
      * @desc Updates rule results array with results from a specific set of rules
      *
      * @param  {Array}   ruleList  - Array of rule IDs to include in the evaluation
+     * @param  {String}  ariaVersion - Version of ARIA used for validation rules
+     *                                 (values: 'ARIA12' | ARIA13")
+     * @param  {Boolean} addAttrId   - If true, create a data-opena11y-oridinal-position attribute
+     *                                 on element nodes for use in navigation and highlighting
      */
 
-    runRuleListRules (ruleList, ariaVersion='ARIA12') {
+    runRuleListRules (ruleList,
+                      ariaVersion='ARIA12',
+                      addAttrId=false) {
       const startTime = new Date();
       debug$1.flag && debug$1.log(`[evaluateRuleList][ruleList]: ${ruleList}`);
 
       this.ruleset     = 'RULELIST';
       this.ariaVersion = ariaVersion;
 
-      const domCache      = new DOMCache(this.startingDoc, this.startingDoc.body, ariaVersion);
+      const domCache      = new DOMCache(this.startingDoc, this.startingDoc.body, ariaVersion, addAttrId);
       this.allDomElements = domCache.allDomElements;
       this.allRuleResults = [];
 
@@ -38826,6 +39097,10 @@
         }
       });
 
+      this._headings.update(domCache.structureInfo);
+      this._landmarkRegions.update(domCache.structureInfo);
+      this._links.update(domCache.linkInfo, this.url);
+
       const endTime = new Date();
       debug$1.flag && debug$1.log(`[evaluateWCAG][Run Time]: ${endTime.getTime() - startTime.getTime()} msecs`);
 
@@ -38835,15 +39110,20 @@
      * @method runFirstStepRules
      *
      * @desc Updates rule results array with results first step rules
+     * @param  {String}  ariaVersion - Version of ARIA used for validation rules
+     *                                 (values: 'ARIA12' | ARIA13")
+     * @param  {Boolean} addAttrId   - If true, create a data-opena11y-oridinal-position attribute
+     *                                 on element nodes for use in navigation and highlighting
      */
 
-    runFirstStepRules (ariaVersion='ARIA12') {
+    runFirstStepRules (ariaVersion='ARIA12',
+                       addAttrId=false) {
       const startTime = new Date();
 
       this.ruleset     = 'FIRSTSTEP';
       this.ariaVersion = ariaVersion;
 
-      const domCache      = new DOMCache(this.startingDoc, this.startingDoc.body, ariaVersion);
+      const domCache      = new DOMCache(this.startingDoc, this.startingDoc.body, ariaVersion, addAttrId);
       this.allDomElements = domCache.allDomElements;
       this.allRuleResults = [];
 
@@ -38855,6 +39135,10 @@
           this.allRuleResults.push(ruleResult);
         }
       });
+
+      this._headings.update(domCache.structureInfo);
+      this._landmarkRegions.update(domCache.structureInfo);
+      this._links.update(domCache.linkInfo, this.url);
 
       const endTime = new Date();
       debug$1.flag && debug$1.log(`[evaluateWCAG][Run Time]: ${endTime.getTime() - startTime.getTime()} msecs`);
@@ -39088,6 +39372,7 @@
    *
    * @desc Base class for APIs for using the evaluation library to evaluate a DOM 
    *       for WCAG requirements and provides access to descriptive rule information
+   *
    */
 
   class EvaluationLibrary {
@@ -39106,12 +39391,17 @@
      * @param  {Array}   ruleList    - Array of rule id to include in the evaluation
      * @param  {String}  ariaVersion - Version of ARIA used for validation rules
      *                                 Values: 'ARIA12' | 'ARIA13'
+     * @param  {Boolean} addAttrId   - If true, create a data-opena11y-oridinal-position attribute
+     *                                 on element nodes for use in navigation and highlighting
      */
 
-    evaluateRuleList (startingDoc, title='', url='',  ruleList = [], ariaVersion='ARIA12') {
+    evaluateRuleList (startingDoc, title='', url='',
+                      ruleList = [],
+                      ariaVersion='ARIA12',
+                      addAttrId=false) {
 
       const evaluationResult = new EvaluationResult(startingDoc, title, url);
-      evaluationResult.runRuleListRules(ruleList, ariaVersion);
+      evaluationResult.runRuleListRules(ruleList, ariaVersion, addAttrId);
 
       // Debug features
       if (debug.flag) {
@@ -39133,12 +39423,19 @@
      * @param  {String}  scopeFilter - Filter rules by scope (values: "ALL" | "PAGE" | "WEBSITE")
      * @param  {String}  ariaVersion - Version of ARIA used for validation rules
      *                                 Values: 'ARIA12' | 'ARIA13'
-    */
+     * @param  {Boolean} addAttrId   - If true, create a data-opena11y-oridinal-position attribute
+     *                                 on element nodes for use in navigation and highlighting
+   */
 
-    evaluateWCAG (startingDoc, title='', url='', ruleset='WCAG22', level='AAA', scopeFilter='ALL', ariaVersion="ARIA12") {
+    evaluateWCAG (startingDoc, title='', url='',
+                  ruleset='WCAG22',
+                  level='AAA',
+                  scopeFilter='ALL',
+                  ariaVersion="ARIA12",
+                  addAttrId=false) {
 
       const evaluationResult = new EvaluationResult(startingDoc, title, url);
-      evaluationResult.runWCAGRules(ruleset, level, scopeFilter, ariaVersion);
+      evaluationResult.runWCAGRules(ruleset, level, scopeFilter, ariaVersion, addAttrId);
 
       // Debug features
       if (debug.flag) {
@@ -39157,12 +39454,16 @@
      * @param  {String}  url         - url of document being analyzed
      * @param  {String}  ariaVersion - Version of ARIA used for validation rules
      *                                 Values: 'ARIA12' | 'ARIA13'
+     * @param  {Boolean} addAttrId   - If true, create a data-opena11y-oridinal-position attribute
+     *                                 on element nodes for use in navigation and highlighting
     */
 
-    evaluateFirstStepRules (startingDoc, title='', url='', ariaVersion="ARIA12") {
+    evaluateFirstStepRules (startingDoc, title='', url='',
+                            ariaVersion="ARIA12",
+                            addAttrId=false) {
 
       const evaluationResult = new EvaluationResult(startingDoc, title, url);
-      evaluationResult.runFirstStepRules(ariaVersion);
+      evaluationResult.runFirstStepRules(ariaVersion, addAttrId);
 
       // Debug features
       if (debug.flag) {
@@ -39305,51 +39606,25 @@
 
       const doc = window.document;
       const evaluationLibrary = new EvaluationLibrary();
-      const evaluationResult  = evaluationLibrary.evaluateWCAG(doc, doc.title, doc.location.href);
+      const evaluationResult  = evaluationLibrary.evaluateWCAG(doc,
+                                doc.title,
+                                doc.location.href,
+                                '',
+                                '',
+                                '',
+                                '',
+                                true);
 
       console.log(`[content.js][EvalResult][title]: ${evaluationResult.getTitle()}`);
-
-      const headingNodes = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'));
-
-      const headingInfo = [];
-
-      headingNodes.forEach( (h) => {
-        console.log(`[heading][${h.tagName}]: ${h.textContent}`);
-
-        const tag = h.tagName;
-        const txt = h.textContent.trim();
-        headingInfo.push({
-          tagName: tag,
-          name: txt
-        });
-      });
-
-      const regionNodes = Array.from(
-        document.querySelectorAll(`
-        aside,
-        body > footer,
-        body > header,
-        form,
-        main,
-        nav,
-        search,
-        section[aria-label],
-        section[aria-labelledby]
-      `));
-
-      const regionInfo = [];
-
-      regionNodes.forEach( (r) => {
-        console.log(`[region][${r.tagName}]`);
-
-        const tag = r.tagName.toLowerCase();
-        regionInfo.push({
-          tagName: tag
-        });
-      });
+      console.log(`[content.js][EvalResult][headings]: ${evaluationResult.headings.toJSON()}`);
+      console.log(`[content.js][EvalResult][ regions]: ${evaluationResult.landmarkRegions.toJSON()}`);
+      console.log(`[content.js][EvalResult][   links]: ${evaluationResult.links.toJSON()}`);
 
       if(request.greeting) {
-        sendResponse({headings: headingInfo, regions: regionInfo});
+        sendResponse({title: evaluationResult.getTitle(),
+                      headings: evaluationResult.headings.data,
+                      regions: evaluationResult.landmarkRegions.data,
+                      links: evaluationResult.links.data});
       }
       return true;
     }
