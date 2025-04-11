@@ -115,6 +115,32 @@ function clearContent(message = '') {
 
 }
 
+function handleHighlight(event) {
+
+  const ordinalPosition = event.currentTarget.getAttribute('data-ordinal-position');
+
+  async function sendHighlightMessage(tabs) {
+    debug && console.log(`[ssendHighlightMessage]`);
+    for (const tab of tabs) {
+      debug && console.log(`[sendHighlightMessage][tab]: ${tab.id}`);
+      const myResult = await myBrowser.tabs
+        .sendMessage(tab.id, { highlightPosition : ordinalPosition });
+
+      debug && console.log(`[sendHighlightMessage][myResult]: ${myResult}`);
+    }
+  }
+
+  myBrowser.tabs
+    .query({
+      currentWindow: true,
+      active: true,
+    })
+    .then(sendHighlightMessage)
+    .catch(onError);
+}
+
+
+
 function updateContent() {
 
   clearContent('loading...');
@@ -126,7 +152,7 @@ function updateContent() {
     })
     .then(sendMessageToTabs)
     .catch(onError);
-  }
+}
 
 function onError(error) {
   console.error(`Error: ${error}`);
@@ -138,7 +164,7 @@ async function sendMessageToTabs(tabs) {
   for (const tab of tabs) {
     debug && console.log(`[sendMessageToTabs][tab]: ${tab.id}`);
     const myResult = await myBrowser.tabs
-      .sendMessage(tab.id, { greeting: "Hi from side panel script" });
+      .sendMessage(tab.id, { runEvaluation : true });
 
     clearContent();
 
@@ -147,6 +173,8 @@ async function sendMessageToTabs(tabs) {
     if (myResult.headings) {
       myResult.headings.forEach( (h) => {
         const liNode = document.createElement('li');
+        liNode.addEventListener('click', handleHighlight);
+        liNode.setAttribute('data-ordinal-position', h.ordinalPosition);
         liNode.textContent = `${h.level}: ${h.accName} (${h.ordinalPosition})`;
         ulHeadings.appendChild(liNode);
         console.log(liNode.textContent);
@@ -156,6 +184,8 @@ async function sendMessageToTabs(tabs) {
     if (myResult.regions) {
       myResult.regions.forEach( (r) => {
         const liNode = document.createElement('li');
+        liNode.addEventListener('click', handleHighlight);
+        liNode.setAttribute('data-ordinal-position', r.ordinalPosition);
         const textContent = r.accName ? `${r.role}: ${r.accName}` : r.role;
         liNode.textContent = textContent + ` (${r.ordinalPosition})`;
         ulRegions.appendChild(liNode);
@@ -166,10 +196,12 @@ async function sendMessageToTabs(tabs) {
     if (myResult.links) {
       myResult.links.forEach( (l) => {
         const liNode = document.createElement('li');
+        liNode.addEventListener('click', handleHighlight);
         const textContent = l.accName ?
                             `${l.accName}` :
                             `** no name **`;
         liNode.textContent = textContent + ` (${l.ordinalPosition})`;
+        liNode.setAttribute('data-ordinal-position', l.ordinalPosition);
         liNode.setAttribute('data-href', l.href);
         liNode.setAttribute('data-is-internal', l.isInternal);
         liNode.setAttribute('data-is-external', l.isExternal);
@@ -186,6 +218,7 @@ async function sendMessageToTabs(tabs) {
 //-----------------------------------------------
 //  Functions communicating with content script
 //-----------------------------------------------
+
 
 
 
