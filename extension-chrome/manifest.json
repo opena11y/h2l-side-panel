@@ -55,14 +55,14 @@
     "sidePanel",
     "storage"
   ],
-//  "web_accessible_resources": [{
-//    "resources": ["skipto.js"],
-//    "matches": ["<all_urls>"]
-//  }],
+  "web_accessible_resources": [{
+    "resources": ["highlightElement.js"],
+    "matches": ["<all_urls>"]
+  }],
   "content_scripts": [
     {
       "js": [
-        "content.js"
+        "opena11y-for-toc.js"
       ],
       "matches": ["<all_urls>"]
     }

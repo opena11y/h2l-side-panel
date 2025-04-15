@@ -59,13 +59,16 @@
   "commands": {
     "_execute_sidebar_action": {
       "suggested_key": {
-        "default": "Ctrl+Shift+0",
-        "linux": "Alt+Shift+0",
-        "mac": "Command+Shift+0"
+        "default": "Ctrl+Shift+1",
+        "linux": "Alt+Shift+1",
+        "mac": "Command+Shift+1"
       }
     }
   },
-
+  "web_accessible_resources": [{
+    "resources": ["highlightElement.js"],
+    "matches": ["<all_urls>"]
+  }],
   "background": {
     "scripts": ["service-worker.js"],
     "type": "module"
@@ -78,7 +81,7 @@
   "content_scripts": [
     {
       "js": [
-        "content.js"
+        "opena11y-for-toc.js"
       ],
       "matches": ["<all_urls>"]
     }
