@@ -7,49 +7,6 @@ import DebugLogging   from './debug.js';
 const debug = new DebugLogging('tocTablist', false);
 debug.flag = true;
 
-// Browser Constants
-
-const isMozilla = typeof browser === 'object';
-
-debug.flag && debug.log(`[isMozilla]: ${isMozilla}`);
-
-const myBrowser = typeof browser === 'object' ?
-              browser :
-              chrome;
-
-debug.flag && debug.log(`[myBrowser]: ${myBrowser}`);
-
-
-const browserAction = typeof browser === 'object' ?
-              browser.action :
-              chrome.action;
-
-debug.flag && debug.log(`[browserAction]: ${browserAction}`);
-
-const browserRuntime = typeof browser === 'object' ?
-              browser.runtime :
-              chrome.runtime;
-
-debug.flag && debug.log(`[browserRuntime]: ${browserRuntime}`);
-
-const browserScripting = typeof browser === 'object' ?
-              browser.scripting :
-              chrome.scripting;
-
-debug.flag && debug.log(`[browserScripting]: ${browserScripting}`);
-
-const browserI18n = typeof browser === 'object' ?
-            browser.i18n :
-            chrome.i18n;
-
-debug.flag && debug.log(`[browserI18n]: ${browserI18n}`);
-
-const browserTabs = typeof browser === 'object' ?
-            browser.tabs :
-            chrome.tabs;
-
-debug.flag && debug.log(`[browserTabs]: ${browserTabs}`);
-
 /* Utility functions */
 
 /*

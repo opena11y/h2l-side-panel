@@ -90,6 +90,8 @@ class TOCSidePanel extends HTMLElement {
     this.lastStatus = '';
 
     this.tocTablistNode = this.shadowRoot.querySelector('toc-tablist');
+    this.tocTablistNode.init(this, this.handleGetInformationClick);
+
     debug.flag && debug.log(`[tocTablistNode]: ${this.tocTablistNode}`);
     debug.flag && debug.log(`[tocTablistNode][ clearContent]: ${this.tocTablistNode.clearContent}`);
     debug.flag && debug.log(`[tocTablistNode][updateContent]: ${this.tocTablistNode.updateContent}`);
