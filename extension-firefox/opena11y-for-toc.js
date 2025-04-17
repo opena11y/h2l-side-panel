@@ -590,7 +590,7 @@
       this.WCAG_PRINCIPLE         = WCAG_PRINCIPLE;
       this.WCAG_SUCCESS_CRITERION = WCAG_SUCCESS_CRITERION;
     }
-  } 
+  }
 
   /**
    * @constant WCAG21_SC
@@ -952,7 +952,7 @@
   /**
    * @function usesARIALabeling
    *
-   * @desc Returns true if the element has an aria-label or aria-labeledby 
+   * @desc Returns true if the element has an aria-label or aria-labeledby
    *       attributes
    *
    * @param  {Object}  node - DOM node
@@ -1328,17 +1328,17 @@
       function findButton(controlElements) {
         for (let i = 0; i < controlElements.length; i++) {
           const ce = controlElements[i];
-          const de = ce.domElement; 
+          const de = ce.domElement;
           if (((de.tagName === 'input') || (de.tagName === 'button')) &&
               de.typeAttr === type) {
             return ce;
-          } 
+          }
           if (ce.childControlElements.length) {
             const buttonControl = findButton(ce.childControlElements);
             if (buttonControl) {
               return buttonControl;
             }
-          }        
+          }
         }
         return null;
       }
@@ -1371,10 +1371,10 @@
 
     constructor (domElement, parentControlElement) {
       super(domElement, parentControlElement);
-      
+
       const node = domElement.node;
 
-      this.hasTextContent = node.textContent.trim().length > 0; 
+      this.hasTextContent = node.textContent.trim().length > 0;
       this.hasSVGContent = this.checkForSVGContent(node);
 
     }
@@ -1385,7 +1385,7 @@
 
     checkForSVGContent (node) {
       return node.querySelector('svg') ? true : false;
-    }  
+    }
   }
 
 
@@ -1445,14 +1445,14 @@
         }
       }
       return false;
-    }  
+    }
   }
 
   class LegendElement extends ButtonElement {
 
     constructor (domElement, parentControlElement) {
       super(domElement, parentControlElement);
-      
+
     }
 
     get isLegend () {
@@ -1535,7 +1535,7 @@
 
     addChildControlElement (domElement, parentControlElement) {
       const tagName = domElement.tagName;
-      const role = domElement.role; 
+      const role = domElement.role;
       let ce = null;
 
       switch (tagName) {
@@ -12136,7 +12136,7 @@
       if (!this.isValidRole) {
         designPattern = designPatterns[defaultRole];
       } else {
-        this.isAbstractRole  = designPattern.roleType.indexOf('abstract') >= 0;     
+        this.isAbstractRole  = designPattern.roleType.indexOf('abstract') >= 0;
       }
 
       if (!designPattern) {
@@ -12169,7 +12169,7 @@
 
       this.isLandmark  = designPattern.roleType.indexOf('landmark') >= 0;
 
-      this.isSection  = designPattern.roleType.indexOf('section') >= 0;     
+      this.isSection  = designPattern.roleType.indexOf('section') >= 0;
       this.isAbstractRole  = designPattern.roleType.indexOf('abstract') >= 0;
 
       this.flowTo = node.hasAttribute('aria-flowto') ?
@@ -12324,12 +12324,12 @@
             if (attr.allowUndeterminedValue) {
               if (!Number.isInteger(num) || (num < -1) || (value === ''))  {
                 attrsWithInvalidValues.push(attr);
-              }            
+              }
             }
             else {
               if (!Number.isInteger(num) || (num < 1) || (value === ''))  {
                 attrsWithInvalidValues.push(attr);
-              }            
+              }
             }
             break;
 
@@ -12549,12 +12549,12 @@
   /*
    * @class ColorContrast
    *
-   * @desc Identifies the text properties used to determine WCAG color contrast 
-   *       requirements including computing the color contrast ratio based on 
+   * @desc Identifies the text properties used to determine WCAG color contrast
+   *       requirements including computing the color contrast ratio based on
    *       text and background colors
    *
    * @param  {Object}  parentDomElement - Parent DomElement containing ancestor style information
-   * @param  {Object}  elementNode      - dom element node 
+   * @param  {Object}  elementNode      - dom element node
    */
 
   class ColorContrast {
@@ -12608,9 +12608,9 @@
     /**
      * @method normalizeOpacity
      *
-     * @desc Normalizes opacity to a number 
+     * @desc Normalizes opacity to a number
      *
-     * @param {Object}  style                - Computed style object for an element node 
+     * @param {Object}  style                - Computed style object for an element node
      * @param {Object}  parentColorContrast  - Computed color contrast information for parent
      *                                         DomElement
      *
@@ -12668,14 +12668,14 @@
       opacity = Math.max(Math.min(opacity, 1.0), 0.0);
 
       return opacity;
-    }  
+    }
 
     /**
      * @method normalizeBackgroundColor
      *
      * @desc Normalizes background color
      *
-     * @param {Object}  style                - Computed style object for an element node 
+     * @param {Object}  style                - Computed style object for an element node
      * @param {Object}  parentColorContrast  - Computed color contrast information for parent
      *                                         DomElement
      *
@@ -12701,9 +12701,9 @@
     /**
      * @method normalizeBackgroundImage
      *
-     * @desc Normalizes background image 
+     * @desc Normalizes background image
      *
-     * @param {Object}  style                - Computed style object for an element node 
+     * @param {Object}  style                - Computed style object for an element node
      * @param {Object}  parentColorContrast  - Computed color contrast information for parent
      *                                         DomElement
      *
@@ -12729,9 +12729,9 @@
     /*
      * @method normalizeFontSize
      *
-     * @desc Normalizes font size to a number 
+     * @desc Normalizes font size to a number
      *
-     * @param {Object}  style                - Computed style object for an element node 
+     * @param {Object}  style                - Computed style object for an element node
      * @param {Object}  parentColorContrast  - Computed color contrast information for parent
      *                                         DomElement
      *
@@ -12754,16 +12754,16 @@
             fontSize = defaultFontSize;
           }
         }
-      } 
+      }
       return fontSize;
     }
 
     /*
      * @method normalizeFontWeight
      *
-     * @desc Normalizes font weight to a number 
+     * @desc Normalizes font weight to a number
      *
-     * @param {Object}  style                - Computed style object for an element node 
+     * @param {Object}  style                - Computed style object for an element node
      * @param {Object}  parentColorContrast  - Computed color contrast information for parent
      *                                         DomElement
      *
@@ -12804,7 +12804,7 @@
       }
       else {
         fontWeight = parseInt(fontWeight, 10);
-      }    
+      }
       return fontWeight;
     }
 
@@ -14891,7 +14891,7 @@
    *       for both the graphical rendering and assistive technologies
    *
    * @param  {Object}  parentDomElement - Parent DomElement containing ancestor style information
-   * @param  {Object}  elementNode      - dom element node 
+   * @param  {Object}  elementNode      - dom element node
    */
 
   class Visibility {
@@ -14948,14 +14948,14 @@
      * @method normalizeHidden
      *
      * @desc Determine if the hidden attribute is set on this element
-     *       or one of its ancestors 
+     *       or one of its ancestors
      *
      * @param {Object}  node              - dom element node
      * @param {Object}  parentVisibility  - Computed visibility information for parent
      *                                      DomElement
      *
-     * @return {Boolean}  Returns true if element or one of its ancestors has the 
-     *                    hidden attribute 
+     * @return {Boolean}  Returns true if element or one of its ancestors has the
+     *                    hidden attribute
      */
 
     normalizeHidden (node, parentVisibility) {
@@ -14972,14 +14972,14 @@
      * @method normalizeAriaHidden
      *
      * @desc Determine if the aria-hidden attribute is set to true on this element
-     *       or one of its ancestors 
+     *       or one of its ancestors
      *
      * @param {Object}  node              - dom element node
      * @param {Object}  parentVisibility  - Computed visibility information for parent
      *                                      DomElement
      *
-     * @return {Boolean}  Returns true if element or one of its ancestors has the 
-     *                    aria-hidden attribute set to true 
+     * @return {Boolean}  Returns true if element or one of its ancestors has the
+     *                    aria-hidden attribute set to true
      */
 
     normalizeAriaHidden (node, parentVisibility) {
@@ -15000,7 +15000,7 @@
      * @method normalizeDisplay
      *
      * @desc Computes a boolean value to indicate whether the content or its
-     *       ancestor that results in content not being displayed based on 
+     *       ancestor that results in content not being displayed based on
      *       the CSS display property
      *
      * @param {Object}  style             - Computed style object for an element node
@@ -15014,7 +15014,7 @@
       let display = style.getPropertyValue("display");
       let isDisplayNone = false;
 
-      if ((display === 'none') || 
+      if ((display === 'none') ||
           (parentVisibility && parentVisibility.isDisplayNone)) {
         isDisplayNone = true;
       }
@@ -15026,7 +15026,7 @@
      * @method normalizeVisibility
      *
      * @desc Computes a boolean value to indicate whether the content or its
-     *       ancestor that results in content not being displayed based on 
+     *       ancestor that results in content not being displayed based on
      *       the CSS visibility property
      *
      * @param {Object}  style             - Computed style object for an element node
@@ -15038,7 +15038,7 @@
 
     normalizeVisibility (style, parentVisibility) {
       let visibility = style.getPropertyValue("visibility");
-      let isVisibilityHidden =  parentVisibility.isVisibilityHidden; 
+      let isVisibilityHidden =  parentVisibility.isVisibilityHidden;
 
       if ((visibility === 'collapse') ||
           (visibility === 'hidden')) {
@@ -15046,7 +15046,7 @@
       }
       else {
         if (visibility === 'visible') {
-          isVisibilityHidden = false;        
+          isVisibilityHidden = false;
         }
       }
       return isVisibilityHidden;
@@ -16693,13 +16693,13 @@
   /**
    * @class DOMText
    *
-   * @desc Used to represent a dom text node for use in computing information 
+   * @desc Used to represent a dom text node for use in computing information
    *       usefule for accessibility rules.
-   * 
+   *
    *       NOTE: Adjacent dom text nodes in the live dom are combined into a
    *             single DOMText object
    *
-   * @param  {Object}  parentInfo - ParentInfo object 
+   * @param  {Object}  parentInfo - ParentInfo object
    * @param  {Object}  textNode   - dom text node to be represented
    */
 
@@ -16734,7 +16734,7 @@
 
     get isDomElement () {
       return false;
-    }  
+    }
 
     /**
      * @method isDomText
@@ -16867,10 +16867,10 @@
           this.idCountsByDoc[documentIndex] = {};
         }
         if (this.idCountsByDoc[documentIndex][id]) {
-          this.idCountsByDoc[documentIndex][id] += 1;       
+          this.idCountsByDoc[documentIndex][id] += 1;
         }
         else {
-          this.idCountsByDoc[documentIndex][id] = 1;       
+          this.idCountsByDoc[documentIndex][id] = 1;
         }
       }
     }
@@ -20422,7 +20422,7 @@
           {type:  REFERENCES.WCAG_TECHNIQUE,
             title: 'ARIA APG: Providing Accessible Names and Descriptions',
             url: 'https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/'
-          },        
+          },
           { type:  REFERENCES.SPECIFICATION,
             title: 'MDN: The Input Label element',
             url:   'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/label'
@@ -27645,7 +27645,7 @@
    *       'description'
    *
    * @param {Integer} categoryId - Used to identify the rule category
-   * 
+   *
    * @return {Object}  see @desc
    */
 
@@ -28994,7 +28994,7 @@
 
     // Tests if a tag name can be skipped
     isSkipableElement(tagName, type) {
-      const elemSelector = (tagName === 'input') && (typeof type === 'string') ? 
+      const elemSelector = (tagName === 'input') && (typeof type === 'string') ?
                            `${tagName}[type=${type}]` :
                            tagName;
       return skipableElements.includes(elemSelector);
@@ -29020,8 +29020,8 @@
      *
      * @desc Used to collect accessibility information for all the element nd text
      *       nodes on a web page for use the the rules.  It pre-computes values
-     *       that are used by the accessibility rules to test accessibility 
-     *       requirements 
+     *       that are used by the accessibility rules to test accessibility
+     *       requirements
      *
      * @param {Object}  parentinfo    - Parent DomElement associated with the
      *                                  parent element node of the starting node
@@ -29138,14 +29138,14 @@
                       this.transverseDOM(newParentInfo, doc, addDataId);
                     } catch (error) {
                       isCrossDomain = true;
-                    }                    
+                    }
                     this.iframeInfo.update(domItem, isCrossDomain);
                   } else {
                     this.transverseDOM(newParentInfo, node, addDataId);
                   }
                 }
               }
-            }   
+            }
             break;
 
         } /* end switch */
@@ -29662,7 +29662,7 @@
      * @getter isActionMessage
      *
      * @desc Returns true if the result is a violation, warning or manual check
-     *    
+     *
      * @return {Boolean} see @desc
      */
 
@@ -29676,7 +29676,7 @@
      * @getter isElementResult
      *
      * @desc Returns false by default, override in ElementResult def
-     *    
+     *
      * @return {Boolean} see @desc
      */
 
@@ -29790,7 +29790,7 @@
     getResultMessage () {
       return this.result_message;
     }
-    
+
    /**
      * @method getDataForJSON
      *
@@ -29942,7 +29942,7 @@
     /**
      * @method getId
      *
-     * @desc Gets a string identifying the elements id 
+     * @desc Gets a string identifying the elements id
      *
      * @return {String} see description
      */
@@ -30023,7 +30023,7 @@
      *
      * @return {Object} with attribute name as key to attribute value
      */
-     
+
     getHTMLAttributes () {
       return this.domElement.htmlAttrs;
     }
@@ -32126,7 +32126,7 @@
         const de = ce.domElement;
         if (ce.isInputTypeRadio) {
           if (de.visibility.isVisibleToAT) {
-            const gce = ce.getGroupControlElement(); 
+            const gce = ce.getGroupControlElement();
             if (gce) {
               const gde = gce.domElement;
               if (gde.tagName === 'fieldset') {
@@ -32134,7 +32134,7 @@
                   rule_result.addElementResult(TEST_RESULT.PASS, de, 'ELEMENT_PASS_1', [gde.accName.name]);
                 }
                 else {
-                  rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_2', []);              
+                  rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_2', []);
                 }
               }
               else {
@@ -32142,12 +32142,12 @@
                   rule_result.addElementResult(TEST_RESULT.PASS, de, 'ELEMENT_PASS_2', [gde.tagName, gde.role, gde.accName.name]);
                 }
                 else {
-                  rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_3', [gde.tagName, gde.role]);              
+                  rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_3', [gde.tagName, gde.role]);
                 }
               }
             }
             else {
-              rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_1', []);              
+              rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_1', []);
             }
           }
           else {
@@ -32178,7 +32178,7 @@
         if (de.role === 'button') {
           if (de.visibility.isVisibleOnScreen) {
             if (ce.isInputTypeImage) {
-              rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_4', [ce.typeAttr]);              
+              rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_4', [ce.typeAttr]);
             }
               else {
               if (de.tagName === 'input') {
@@ -32186,8 +32186,8 @@
                   rule_result.addElementResult(TEST_RESULT.PASS, de, 'ELEMENT_PASS_1', [ce.typeAttr]);
                 }
                 else {
-                  rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_1', [ce.typeAttr]);              
-                }            
+                  rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_1', [ce.typeAttr]);
+                }
               }
               else {
                 if (de.tagName === 'button') {
@@ -32201,7 +32201,7 @@
                     else {
                       rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_2', []);
                     }
-                  }            
+                  }
                 }
                 else {
                   if (ce.hasTextContent) {
@@ -32214,7 +32214,7 @@
                     else {
                       rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_3', [de.tagName]);
                     }
-                  }                          
+                  }
                 }
               }
             }
@@ -32228,7 +32228,7 @@
                 rule_result.addElementResult(TEST_RESULT.HIDDEN, de, 'ELEMENT_HIDDEN_2', []);
               }
               else {
-                rule_result.addElementResult(TEST_RESULT.HIDDEN, de, 'ELEMENT_HIDDEN_3', [de.tagName]);            
+                rule_result.addElementResult(TEST_RESULT.HIDDEN, de, 'ELEMENT_HIDDEN_3', [de.tagName]);
               }
             }
           }
@@ -32346,7 +32346,7 @@
             rule_result.addElementResult(TEST_RESULT.HIDDEN, de, 'ELEMENT_HIDDEN_1', [de.tagName]);
           }
         }
-      });  
+      });
     } // end validate function
   },
 
@@ -32388,17 +32388,17 @@
                   rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_2', []);
                 }
                 break;
-              
+
               default:
                 rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_3', [legendCount]);
-                break;  
+                break;
             }
 
           } else {
             rule_result.addElementResult(TEST_RESULT.HIDDEN, de, 'ELEMENT_HIDDEN_1', [de.tagName]);
           }
         }
-      });  
+      });
     } // end validate function
   },
 
@@ -32424,11 +32424,11 @@
           if (de.visibility.isVisibleToAT) {
             rule_result.addElementResult(TEST_RESULT.MANUAL_CHECK, de, 'ELEMENT_MC_1', [de.tagName]);
           }
-          else {      
+          else {
             rule_result.addElementResult(TEST_RESULT.HIDDEN, de, 'ELEMENT_HIDDEN_1', [de.tagName]);
           }
         }
-      });  
+      });
     } // end validate function
   },
 
@@ -32462,12 +32462,12 @@
             count = 0;
             dom_cache.controlInfo.allControlElements.forEach(ce2 => {
               const de2 = ce2.domElement;
-              if ((ce1 !== ce2) && 
-                  ((de1.ariaInfo.requiredParents.length === 0) || 
+              if ((ce1 !== ce2) &&
+                  ((de1.ariaInfo.requiredParents.length === 0) ||
                    (ce1.parentControlElement === ce2.parentControlElement)) &&
-                  de2.ariaInfo.isNameRequired && 
+                  de2.ariaInfo.isNameRequired &&
                   de2.visibility.isVisibleToAT) {
-                if ((de1.role === de2.role) && 
+                if ((de1.role === de2.role) &&
                     (ce1.nameForComparision === ce2.nameForComparision)) {
                   count += 1;
                 }
@@ -32480,7 +32480,7 @@
               else {
                 rule_result.addElementResult(TEST_RESULT.PASS, de1, 'ELEMENT_PASS_1', []);
               }
-            } 
+            }
             else {
               // Since their are often duplicate button on pages, when two or more buttons share the same
               // name it should be a manual check
@@ -32511,7 +32511,7 @@
             }
           }
         }
-      });  
+      });
     } // end validate function
   },
 
@@ -32548,7 +32548,7 @@
                   const sb2 = fe2.getButtonControl('submit');
                   if (sb1 && sb2) {
                     de2 = sb2.domElement;
-                    if (de2.visibility.isVisibleToAT && 
+                    if (de2.visibility.isVisibleToAT &&
                         (sb1.nameForComparision === sb2.nameForComparision)) {
                       count += 1;
                     }
@@ -32559,8 +32559,8 @@
                 rule_result.addElementResult(TEST_RESULT.FAIL, de1, 'ELEMENT_FAIL_1', [de1.tagName, de1.typeAttr, de1.accName.name]);
               }
               else {
-                rule_result.addElementResult(TEST_RESULT.PASS, de1, 'ELEMENT_PASS_1', [de1.tagName, de1.typeAttr, de1.accName.name]);                
-              }          
+                rule_result.addElementResult(TEST_RESULT.PASS, de1, 'ELEMENT_PASS_1', [de1.tagName, de1.typeAttr, de1.accName.name]);
+              }
             }
             else {
               rule_result.addElementResult(TEST_RESULT.HIDDEN, de1, 'ELEMENT_HIDDEN_1', [de1.tagName, de1.typeAttr]);
@@ -32577,7 +32577,7 @@
                   const rb2 = fe2.getButtonControl('reset');
                   if (rb1 && rb2) {
                     de2 = rb2.domElement;
-                    if (de2.visibility.isVisibleToAT && 
+                    if (de2.visibility.isVisibleToAT &&
                         (rb1.nameForComparision === rb2.nameForComparision)) {
                       count += 1;
                     }
@@ -32588,8 +32588,8 @@
                 rule_result.addElementResult(TEST_RESULT.FAIL, de1, 'ELEMENT_FAIL_1', [de1.tagName, de1.typeAttr, de1.accName.name]);
               }
               else {
-                rule_result.addElementResult(TEST_RESULT.PASS, de1, 'ELEMENT_PASS_1', [de1.tagName, de1.typeAttr, de1.accName.name]);                
-              }          
+                rule_result.addElementResult(TEST_RESULT.PASS, de1, 'ELEMENT_PASS_1', [de1.tagName, de1.typeAttr, de1.accName.name]);
+              }
             }
             else {
               rule_result.addElementResult(TEST_RESULT.HIDDEN, de1, 'ELEMENT_HIDDEN_1', [de1.tagName, de1.typeAttr]);
@@ -33660,13 +33660,13 @@
 
           if (de.visibility.isVisibleToAT) {
             if (accDesc.name.length) {
-             rule_result.addElementResult(TEST_RESULT.MANUAL_CHECK, de, 'ELEMENT_MC_1', [accDesc.source]);                    
+             rule_result.addElementResult(TEST_RESULT.MANUAL_CHECK, de, 'ELEMENT_MC_1', [accDesc.source]);
             }
             else {
               if (de.node.hasAttribute('longdesc')) {
-                rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_1', []);                                
+                rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_1', []);
               } else {
-               rule_result.addElementResult(TEST_RESULT.MANUAL_CHECK, de, 'ELEMENT_MC_2', []);                                
+               rule_result.addElementResult(TEST_RESULT.MANUAL_CHECK, de, 'ELEMENT_MC_2', []);
               }
             }
           } else {
@@ -33698,17 +33698,17 @@
         if (accName.name.length > 0) {
           if (de.visibility.isVisibleToAT) {
             if (de.tagName === 'img') {
-              rule_result.addElementResult(TEST_RESULT.MANUAL_CHECK, de, 'ELEMENT_MC_1', []);                    
+              rule_result.addElementResult(TEST_RESULT.MANUAL_CHECK, de, 'ELEMENT_MC_1', []);
             } else {
-              rule_result.addElementResult(TEST_RESULT.MANUAL_CHECK, de, 'ELEMENT_MC_2', [de.tagName]);                    
+              rule_result.addElementResult(TEST_RESULT.MANUAL_CHECK, de, 'ELEMENT_MC_2', [de.tagName]);
             }
-          } 
+          }
           else {
             if (de.tagName === 'img') {
               rule_result.addElementResult(TEST_RESULT.HIDDEN, de, 'ELEMENT_HIDDEN_1', []);
             }
             else {
-              rule_result.addElementResult(TEST_RESULT.HIDDEN, de, 'ELEMENT_HIDDEN_2', [de.tagName]);                    
+              rule_result.addElementResult(TEST_RESULT.HIDDEN, de, 'ELEMENT_HIDDEN_2', [de.tagName]);
             }
           }
         }
@@ -37476,7 +37476,7 @@
                 rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_1', [de.tagName, de.role]);
               }
               else {
-                rule_result.addElementResult(TEST_RESULT.MANUAL_CHECK, de, 'ELEMENT_MC_1', [de.tagName, de.role]);              
+                rule_result.addElementResult(TEST_RESULT.MANUAL_CHECK, de, 'ELEMENT_MC_1', [de.tagName, de.role]);
               }
             }
           }
@@ -37606,13 +37606,13 @@
                       }
                     }
                   }
-                }            
+                }
               }
             }
           }
           else {
             rule_result.addElementResult(TEST_RESULT.HIDDEN, de, 'ELEMENT_HIDDEN_1', [de.tagName, de.role]);
-          }        
+          }
         }
       });
     } // end validation function
@@ -37703,14 +37703,14 @@
                   }
                   else {
                     rule_result.addElementResult(TEST_RESULT.FAIL, de, 'ELEMENT_FAIL_8', [attr.name, attr.value, attr.type]);
-                  }  
+                  }
                 }
               }
             }
             else {
-              if (attr.type === 'boolean' || 
-                  attr.type === 'nmtoken' || 
-                  attr.type === 'nmtokens' || 
+              if (attr.type === 'boolean' ||
+                  attr.type === 'nmtoken' ||
+                  attr.type === 'nmtokens' ||
                   attr.type === 'tristate') {
                 rule_result.addElementResult(TEST_RESULT.PASS, de, 'ELEMENT_PASS_1', [attr.name, attr.value]);
               }
@@ -38779,7 +38779,7 @@
 
         rule_category_id:   this.rule_category_id,
         rule_category_info: this.rule_category_info,
-        
+
         wcag_guideline_id:  this.wcag_guideline_id,
         guideline_info:     this.guideline_info,
 
@@ -39227,7 +39227,7 @@
      *
      * @param  {Integer}  ruleset - Numerical constant that specifies the ruleset
      *                             By default all rules are included
-     * 
+     *
      * @return {RuleGroupResult}  see description
      */
 
@@ -39247,7 +39247,7 @@
      * @param {Integer}  guidelineId  - Number representing the guideline id
      * @param {Integer}  ruleset      - Numerical constant that specifies the ruleset
      *                                  By default all rules are included
-     * 
+     *
      * @return {RuleGroupResult}  see description
      */
 
@@ -39376,7 +39376,7 @@
   /**
    * @class EvaluateLibrary
    *
-   * @desc Base class for APIs for using the evaluation library to evaluate a DOM 
+   * @desc Base class for APIs for using the evaluation library to evaluate a DOM
    *       for WCAG requirements and provides access to descriptive rule information
    *
    */
@@ -39480,7 +39480,7 @@
 
     /**
      * @method CONSTANTS
-     * 
+     *
      * @desc Provides access to the Constants used in the evaluation library
      */
 
@@ -39612,8 +39612,6 @@
   scriptNode.id = 'id-opena11y-element-highlight';
   scriptNode.src = browserRuntime.getURL('highlightElement.js');
   document.body.appendChild(scriptNode);
-
-
 
   // Listen for messages from side panel
   browserRuntime.onMessage.addListener(
