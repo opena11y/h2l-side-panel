@@ -33,6 +33,7 @@ template.innerHTML = `
     <h2>Title</h2>
     <div id="id-div-title">Loading...</div>
   </div>
+
   <div role="tablist">
     <div role="tab"
          id="id-tab-headings">
@@ -47,29 +48,22 @@ template.innerHTML = `
       Links
     </div>
   </div>
+
   <div id="tabpanels">
     <div role="tabpanel"
          aria-labelledby="id-tab-headings">
-
-      <ul id="id-ul-headings">
-        <li>Loading...</li>
-      </ul>
+      <toc-headings-tree></toc-headings-tree>
     </div>
 
     <div role="tabpanel"
          aria-labelledby="id-tab-regions">
-
-      <ul id="id-ul-regions">
-        <li>Loading...</li>
-      </ul>
+      <toc-regions-list></toc-regions-list>
     </div>
 
     <div role="tabpanel"
          aria-labelledby="id-tab-links">
-
-      <ul id="id-ul-links">
-        <li>Loading...</li>
-      </ul>    </div>
+      <toc-links-grid></toc-links-grid>
+    </div>
   </div>
 `;
 
@@ -80,7 +74,7 @@ class TOCTabList extends HTMLElement {
 
     debug.flag && debug.log(`loading TOCTabList...`);
 
-    // Use external CSS stylesheet
+    // Use external CSS style sheet
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
     link.setAttribute('href', './toc-tablist.css');
@@ -89,10 +83,14 @@ class TOCTabList extends HTMLElement {
     // Add DOM tree from template
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.divTitle   = this.shadowRoot.querySelector("#id-div-title");
-    this.ulHeadings = this.shadowRoot.querySelector("#id-ul-headings");
-    this.ulRegions  = this.shadowRoot.querySelector("#id-ul-regions");
-    this.ulLinks    = this.shadowRoot.querySelector("#id-ul-links");
+    this.divTitle        = this.shadowRoot.querySelector("#id-div-title");
+    this.tocHeadingsTree = this.shadowRoot.querySelector("toc-headings-tree");
+    this.tocRegionsList  = this.shadowRoot.querySelector("toc-regions-list");
+    this.tocLinksGrid    = this.shadowRoot.querySelector("toc-links-grid");
+
+    debug.flag && debug.log(`[tocLinksGrid]: ${this.tocLinksGrid}`);
+    debug.flag && debug.log(`[tocLinksGrid][ clearContent]: ${this.tocLinksGrid.clearContent}`);
+    debug.flag && debug.log(`[tocLinksGrid][updateContent]: ${this.tocLinksGrid.updateContent}`);
 
     this.btnGetInfo = this.shadowRoot.querySelector("#id-btn-get-info");
 
@@ -102,78 +100,28 @@ class TOCTabList extends HTMLElement {
     this.btnGetInfo.addEventListener('click', getInformationHandler.bind(containerObj));
   }
 
-  clearContent(message = '') {
-    debug.flag && debug.log(`[clearContent]: ${message}`);
+  clearContent(message='') {
+    debug.flag && debug.log(`[clearContent]: ${message} ${typeof message} ${message.length}`);
 
-     removeChildContent(this.divTitle);
-     removeChildContent(this.ulRegions);
-     removeChildContent(this.ulHeadings);
-     removeChildContent(this.ulLinks);
 
-     if (message) {
-        this.divTitle.textContent = message;
-
-        let liNode = document.createElement('li');
-        liNode.textContent = message;
-        this.ulHeadings.appendChild(liNode);
-
-        liNode = document.createElement('li');
-        liNode.textContent = message;
-        this.ulRegions.appendChild(liNode);
-
-        liNode = document.createElement('li');
-        liNode.textContent = message;
-        this.ulLinks.appendChild(liNode);
-     }
+    removeChildContent(this.divTitle);
+    if ((typeof message === 'string') && message.length) {
+      this.divTitle.textContent = message;
+      this.tocHeadingsTree.clearContent(message);
+      this.tocRegionsList.clearContent(message);
+      this.tocLinksGrid.clearContent(message);
+    }
   }
 
   updateContent(myResult, containerObj, highlightHandler) {
     debug.flag && debug.log(`[updateContent]`);
 
-    this.clearContent();
-
     this.divTitle.textContent = myResult.title;
     debug.flag && debug.log(`[Title]:${ myResult.title}`);
 
-    if (myResult.headings) {
-      myResult.headings.forEach( (h) => {
-        const liNode = document.createElement('li');
-        liNode.addEventListener('click', highlightHandler.bind(containerObj));
-        liNode.setAttribute('data-ordinal-position', h.ordinalPosition);
-        liNode.textContent = `${h.level}: ${h.accName} (${h.ordinalPosition})`;
-        this.ulHeadings.appendChild(liNode);
-        debug.flag && debug.log(liNode.textContent);
-      });
-    }
-
-    if (myResult.regions) {
-      myResult.regions.forEach( (r) => {
-        const liNode = document.createElement('li');
-        liNode.addEventListener('click', highlightHandler.bind(containerObj));
-        liNode.setAttribute('data-ordinal-position', r.ordinalPosition);
-        const textContent = r.accName ? `${r.role}: ${r.accName}` : r.role;
-        liNode.textContent = textContent + ` (${r.ordinalPosition})`;
-        this.ulRegions.appendChild(liNode);
-        debug.flag && debug.log(liNode.textContent);
-      });
-    }
-
-    if (myResult.links) {
-      myResult.links.forEach( (l) => {
-        const liNode = document.createElement('li');
-        liNode.addEventListener('click', highlightHandler.bind(containerObj));
-        const textContent = l.accName ?
-                            `${l.accName}` :
-                            `** no name **`;
-        liNode.textContent = textContent + ` (${l.ordinalPosition})`;
-        liNode.setAttribute('data-ordinal-position', l.ordinalPosition);
-        liNode.setAttribute('data-href', l.href);
-        liNode.setAttribute('data-is-internal', l.isInternal);
-        liNode.setAttribute('data-is-external', l.isExternal);
-        this.ulLinks.appendChild(liNode);
-        debug.flag && debug.log(liNode.textContent);
-      });
-    }
+    this.tocHeadingsTree.updateContent(myResult, containerObj, highlightHandler);
+    this.tocRegionsList.updateContent(myResult, containerObj, highlightHandler);
+    this.tocLinksGrid.updateContent(myResult, containerObj, highlightHandler);
   }
 }
 
