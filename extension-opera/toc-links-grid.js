@@ -23,11 +23,17 @@ function removeChildContent(node) {
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
-  <div>
-      <ul id="id-ul-links">
-        <li>Loading...</li>
-      </ul>
-  </div>
+  <table role="grid">
+    <thead>
+       <tr>
+          <th>Pos</th>
+          <th>Name</th>
+          <th>URL</th>
+       </tr>
+    </thead>
+    <tbody id="id-grid-data">
+    </tbody>
+  </table>
 `;
 
 class TOCLinksGrid extends HTMLElement {
@@ -46,40 +52,62 @@ class TOCLinksGrid extends HTMLElement {
     // Add DOM tree from template
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.ulLinks = this.shadowRoot.querySelector("#id-ul-links");
+    this.gridData = this.shadowRoot.querySelector("#id-grid-data");
   }
 
-  clearContent(message = '') {
+  clearContent (message = '') {
     debug.flag && debug.log(`[clearContent]: ${message} ${typeof message} ${message.length}`);
 
-     removeChildContent(this.ulLinks);
+     removeChildContent(this.gridData);
 
      if ((typeof message === 'string') && message.length) {
-        const liNode = document.createElement('li');
-        liNode.textContent = message;
-        this.ulLinks.appendChild(liNode);
+       const trNode = document.createElement('tr');
+       const msgNode =  document.createElement('td');
+       msgNode.setAttribute('colspan', 3);
+       msgNode.textContent = message;
+       trNode.appendChild(msgNode);
+       this.gridData.appendChild(trNode);
      }
   }
 
-  updateContent(myResult, containerObj, highlightHandler) {
+  updateContent (myResult, containerObj, highlightHandler) {
     debug.flag && debug.log(`[updateContent]`);
+
+    function addRow (pos, name, url) {
+      const trNode = document.createElement('tr');
+
+      const posNode =  document.createElement('td');
+      posNode.textContent = pos;
+      trNode.appendChild(posNode);
+
+      const nameNode =  document.createElement('td');
+      nameNode.textContent = name;
+      trNode.appendChild(nameNode);
+
+      const urlNode =  document.createElement('td');
+      urlNode.textContent = url;
+      trNode.appendChild(urlNode);
+
+      return trNode;
+    }
 
     this.clearContent();
 
     if (myResult.links) {
+      let index = 1;
       myResult.links.forEach( (l) => {
-        const liNode = document.createElement('li');
-        liNode.addEventListener('click', highlightHandler.bind(containerObj));
-        const textContent = l.accName ?
-                            `${l.accName}` :
-                            `** no name **`;
-        liNode.textContent = textContent + ` (${l.ordinalPosition})`;
-        liNode.setAttribute('data-ordinal-position', l.ordinalPosition);
-        liNode.setAttribute('data-href', l.href);
-        liNode.setAttribute('data-is-internal', l.isInternal);
-        liNode.setAttribute('data-is-external', l.isExternal);
-        this.ulLinks.appendChild(liNode);
-        debug.flag && debug.log(liNode.textContent);
+        const rowNode = addRow(index, l.accName, l.url);
+
+        rowNode.addEventListener('click', highlightHandler.bind(containerObj));
+        rowNode.setAttribute('data-ordinal-position', l.ordinalPosition);
+        rowNode.setAttribute('data-href', l.href);
+        rowNode.setAttribute('data-is-internal', l.isInternal);
+        rowNode.setAttribute('data-is-external', l.isExternal);
+        rowNode.setAttribute('data-index', index);
+
+        index += 1;
+
+        this.gridData.appendChild(rowNode);
       });
     }
   }

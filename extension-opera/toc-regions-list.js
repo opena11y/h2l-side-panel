@@ -23,10 +23,7 @@ function removeChildContent(node) {
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
-  <div>
-      <ul id="id-ul-regions">
-        <li>Loading...</li>
-      </ul>
+  <div role="listbox">
   </div>
 `;
 
@@ -46,19 +43,20 @@ class TOCRegionsList extends HTMLElement {
     // Add DOM tree from template
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.ulRegions = this.shadowRoot.querySelector("#id-ul-regions");
+    this.listboxNode = this.shadowRoot.querySelector("[role=listbox");
 
   }
 
   clearContent(message='') {
     debug.flag && debug.log(`[clearContent]: ${message} ${typeof message} ${message.length}`);
 
-     removeChildContent(this.ulRegions);
+     removeChildContent(this.listboxNode);
 
      if ((typeof message === 'string') && message.length) {
-        const liNode = document.createElement('li');
-        liNode.textContent = message;
-        this.ulRegions.appendChild(liNode);
+        const listitemNode = document.createElement('div');
+        listitemNode.setAttribute('role', 'listbox');
+        listitemNode.textContent = message;
+        this.listboxNode.appendChild(listitemNode);
      }
   }
 
@@ -69,13 +67,14 @@ class TOCRegionsList extends HTMLElement {
 
     if (myResult.regions) {
       myResult.regions.forEach( (r) => {
-        const liNode = document.createElement('li');
-        liNode.addEventListener('click', highlightHandler.bind(containerObj));
-        liNode.setAttribute('data-ordinal-position', r.ordinalPosition);
+        const listitemNode = document.createElement('div');
+        listitemNode.setAttribute('role', 'listbox');
+        listitemNode.addEventListener('click', highlightHandler.bind(containerObj));
+        listitemNode.setAttribute('data-ordinal-position', r.ordinalPosition);
         const textContent = r.accName ? `${r.role.toUpperCase()}: ${r.accName}` : r.role.toUpperCase();
-        liNode.textContent = textContent + ` (${r.ordinalPosition})`;
-        this.ulRegions.appendChild(liNode);
-        debug.flag && debug.log(liNode.textContent);
+        listitemNode.textContent = textContent + ` (${r.ordinalPosition})`;
+        this.listboxNode.appendChild(listitemNode);
+        debug.flag && debug.log(listitemNode.textContent);
       });
     }
   }

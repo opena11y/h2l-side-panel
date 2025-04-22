@@ -1122,7 +1122,7 @@
           const samePathname = parsedURL.pathname === parsedHREF.pathname;
 
           const dataItem = {
-            href: de.node.href,
+            url: de.node.href,
             isInternal: sameHostname && samePathname,
             isExternal: !sameHostname,
             accName: de.accName.name,
@@ -39397,8 +39397,9 @@
      * @param  {Array}   ruleList    - Array of rule id to include in the evaluation
      * @param  {String}  ariaVersion - Version of ARIA used for validation rules
      *                                 Values: 'ARIA12' | 'ARIA13'
-     * @param  {Boolean} addDataId   - If true, create a data-opena11y-oridinal-position attribute
-     *                                 on element nodes for use in navigation and highlighting
+     * @param  {Boolean} addDataId   - If true, add an data-opena11y-id attribute based on
+     *                                 the elements ordinal position for use in
+     *                                 navigation and highlighting
      */
 
     evaluateRuleList (startingDoc, title='', url='',
@@ -39429,8 +39430,9 @@
      * @param  {String}  scopeFilter - Filter rules by scope (values: "ALL" | "PAGE" | "WEBSITE")
      * @param  {String}  ariaVersion - Version of ARIA used for validation rules
      *                                 Values: 'ARIA12' | 'ARIA13'
-     * @param  {Boolean} addDataId   - If true, create a data-opena11y-oridinal-position attribute
-     *                                 on element nodes for use in navigation and highlighting
+     * @param  {Boolean} addDataId   - If true, add an data-opena11y-id attribute based on
+     *                                 the elements ordinal position for use in
+     *                                 navigation and highlighting
    */
 
     evaluateWCAG (startingDoc, title='', url='',
@@ -39460,8 +39462,9 @@
      * @param  {String}  url         - url of document being analyzed
      * @param  {String}  ariaVersion - Version of ARIA used for validation rules
      *                                 Values: 'ARIA12' | 'ARIA13'
-     * @param  {Boolean} addDataId   - If true, create a data-opena11y-oridinal-position attribute
-     *                                 on element nodes for use in navigation and highlighting
+     * @param  {Boolean} addDataId   - If true, add an data-opena11y-id attribute based on
+     *                                 the elements ordinal position for use in
+     *                                 navigation and highlighting
     */
 
     evaluateFirstStepRules (startingDoc, title='', url='',

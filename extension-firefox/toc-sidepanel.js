@@ -91,6 +91,8 @@ class TOCSidePanel extends HTMLElement {
     */
     window.addEventListener('load', this.handleWindowLoad.bind(this));
     window.addEventListener('unload', this.handleWindowUnload.bind(this));
+
+    window.addEventListener("resize", this.handleResize.bind(this));
   }
 
   clearContent(message = '') {
@@ -140,14 +142,21 @@ class TOCSidePanel extends HTMLElement {
     }
 
     const ordinalPosition = event.currentTarget.getAttribute('data-ordinal-position');
+    const iconNode = event.currentTarget.querySelector('.expand-icon');
 
-    myBrowser.tabs
-      .query({
-        currentWindow: true,
-        active: true,
-      })
-      .then(sendHighlightMessage)
-      .catch(onError);
+    // if clicked on expand icon in the treeview then do not process event
+    if (!iconNode ||
+        (iconNode && (iconNode !== event.target)) ||
+        (iconNode && !iconNode.contains(event.target))) {
+
+      myBrowser.tabs
+        .query({
+          currentWindow: true,
+          active: true,
+        })
+        .then(sendHighlightMessage)
+        .catch(onError);
+    }
   }
 
   async sendMessageToTabs(tabs) {
@@ -286,7 +295,10 @@ class TOCSidePanel extends HTMLElement {
     }
   }
 
-
+  handleResize () {
+    debug.flag && debug.log(`handleResize: ${window.innerHeight} x ${window.innerWidth}`);
+    this.tocTablistNode.resize(window.innerHeight, window.innerWidth);
+  }
 
 }
 
