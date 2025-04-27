@@ -1,1 +1,73 @@
-/* toc-headings-tree.css */
+/* toc-links-grid.css */
+
+table[role="grid"] {
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  border-collapse: collapse;
+  height: 30hv;
+  min-height: 150px;
+  table-layout: fixed;
+}
+
+table[role="grid"] thead,
+table[role="grid"] tbody {
+  display: table;
+  margin: 0;
+  padding: 0;
+  table-layout: fixed;
+  width: 98%;
+}
+
+table[role="grid"] thead {
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+table[role="grid"] tbody tr:nth-child(even) {
+  background: #eee;
+}
+
+table[role="grid"] tr th,
+table[role="grid"] tr td {
+  padding: 2px;
+  border: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+table[role="grid"] tr td:first-child {
+  padding-left: 4px;
+}
+
+
+table[role="grid"] tr th {
+  text-align: left;
+}
+
+[role="grid"] tr:focus td {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 2px;
+  padding-right: 2px;
+  border-top: 2px solid ButtonBorder;
+  border-bottom: 2px solid ButtonBorder;
+}
+
+[role="grid"] tr:focus td:first-child {
+  padding-left: 2px;
+  padding-right: 2px;
+  border-left: 2px solid ButtonBorder;
+  border-right: none;
+}
+
+[role="grid"] tr:focus td:last-child {
+  padding-left: 2px;
+  padding-right: 1px;
+  border-left: none;
+  border-right: 2px solid ButtonBorder;
+}

@@ -2,12 +2,13 @@
 
 [role="tree"] [role="treeitem"] {
   dispaly: block;
-  margin: 4px;
-  padding: 4px;
+  margin: 0;
+  padding: 3px;
   font-size: 1em;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  outline: none;
 }
 
 [role="tree"] [role="treeitem"] span.no-icon,
@@ -68,10 +69,10 @@
 }
 
 [role="tree"] [role="treeitem"]:focus {
-  padding-top: 2px;
-  padding-bottom: 2px;
-  padding-right: 2px;
-  border: 2px solid ButtonBorder;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-right: 1px;
+  border: 2px solid ActiveText;
 }
 
 [role="tree"] [role="treeitem"][data-level="1"]:focus { padding-left: 2px;}

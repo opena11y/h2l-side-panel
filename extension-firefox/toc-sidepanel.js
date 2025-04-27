@@ -1,4 +1,4 @@
-/* toc-tablist.js */
+/* toc-sidepanel.js */
 
 import DebugLogging   from './debug.js';
 
@@ -6,6 +6,10 @@ import DebugLogging   from './debug.js';
 
 const debug = new DebugLogging('tocSidepanel', false);
 debug.flag = true;
+
+export {
+  highlightOrdinalPosition
+};
 
 // Browser Constants
 
@@ -55,6 +59,29 @@ function onError(error) {
   console.error(`Error: ${error}`);
 }
 
+function highlightOrdinalPosition(ordinalPosition) {
+    debug.flag && debug.log(`[handleHighlight]`);
+
+    async function sendHighlightMessage(tabs) {
+      debug.flag && debug.log(`[ssendHighlightMessage]`);
+      for (const tab of tabs) {
+        debug.flag && debug.log(`[sendHighlightMessage][tab]: ${tab.id}`);
+        const myResult = await myBrowser.tabs
+          .sendMessage(tab.id, { highlightPosition : ordinalPosition });
+
+        debug.flag && debug.log(`[sendHighlightMessage][myResult]: ${myResult}`);
+      }
+    }
+
+    myBrowser.tabs
+      .query({
+        currentWindow: true,
+        active: true,
+      })
+      .then(sendHighlightMessage)
+      .catch(onError);
+  }
+
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
@@ -83,7 +110,7 @@ class TOCSidePanel extends HTMLElement {
     this.lastStatus = '';
 
     this.tocTablistNode = this.shadowRoot.querySelector('toc-tablist');
-    this.tocTablistNode.init(this, this.handleGetInformationClick);
+//    this.tocTablistNode.init(this, this.handleGetInformationClick);
 
     debug.flag && debug.log(`[tocTablistNode]: ${this.tocTablistNode}`);
     /*
@@ -127,38 +154,6 @@ class TOCSidePanel extends HTMLElement {
 
   }
 
-  handleHighlight(event) {
-    debug.flag && debug.log(`[handleHighlight]`);
-
-    async function sendHighlightMessage(tabs) {
-      debug.flag && debug.log(`[ssendHighlightMessage]`);
-      for (const tab of tabs) {
-        debug.flag && debug.log(`[sendHighlightMessage][tab]: ${tab.id}`);
-        const myResult = await myBrowser.tabs
-          .sendMessage(tab.id, { highlightPosition : ordinalPosition });
-
-        debug.flag && debug.log(`[sendHighlightMessage][myResult]: ${myResult}`);
-      }
-    }
-
-    const ordinalPosition = event.currentTarget.getAttribute('data-ordinal-position');
-    const iconNode = event.currentTarget.querySelector('.expand-icon');
-
-    // if clicked on expand icon in the treeview then do not process event
-    if (!iconNode ||
-        (iconNode && (iconNode !== event.target)) ||
-        (iconNode && !iconNode.contains(event.target))) {
-
-      myBrowser.tabs
-        .query({
-          currentWindow: true,
-          active: true,
-        })
-        .then(sendHighlightMessage)
-        .catch(onError);
-    }
-  }
-
   async sendMessageToTabs(tabs) {
     debug.flag && debug.log(`[sendMessageToTabs]`);
 
@@ -169,9 +164,7 @@ class TOCSidePanel extends HTMLElement {
       const myResult = await myBrowser.tabs
         .sendMessage(tab.id, { runEvaluation : true });
 
-      tocSidePanelObj.tocTablistNode.updateContent(myResult,
-                                                   tocSidePanelObj,
-                                                   tocSidePanelObj.handleHighlight);
+      tocSidePanelObj.tocTablistNode.updateContent(myResult);
     }
   }
 
@@ -297,7 +290,7 @@ class TOCSidePanel extends HTMLElement {
 
   handleResize () {
     debug.flag && debug.log(`handleResize: ${window.innerHeight} x ${window.innerWidth}`);
-    this.tocTablistNode.resize(window.innerHeight, window.innerWidth);
+    this.tocTablistNode.resize();
   }
 
 }

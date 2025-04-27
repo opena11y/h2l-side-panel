@@ -7,8 +7,11 @@ import DebugLogging   from './debug.js';
 const debug = new DebugLogging('tocTablist', false);
 debug.flag = true;
 
-const sidepanelOffsetHieght = 20;
-const sidepanelOffsetWidth  = 30;
+const sidepanelOffsetHieght = 50;
+const sidepanelOffsetWidth  = 20;
+
+const tabpanelOffsetHeight = 20;
+const tabpanelOffsetWidth = 10;
 
 /* Utility functions */
 
@@ -26,12 +29,6 @@ function removeChildContent(node) {
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
-  <div>
-    <button id="id-btn-get-info">
-      Get Information
-    </button>
-  </div>
-
   <div>
     <h2>Title</h2>
     <div id="id-div-title">Loading...</div>
@@ -80,6 +77,18 @@ template.innerHTML = `
       <toc-links-grid></toc-links-grid>
     </div>
   </div>
+
+  <div id="buttons">
+    <button id="id-btn-options">
+      Options
+    </button>
+    <button id="id-btn-get-info">
+      Get Information
+    </button>
+  </div>
+
+
+
 `;
 
 class TOCTabList extends HTMLElement {
@@ -98,22 +107,30 @@ class TOCTabList extends HTMLElement {
     // Add DOM tree from template
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.btnGetInfo      = this.shadowRoot.querySelector("#id-btn-get-info");
-    this.divTitle        = this.shadowRoot.querySelector("#id-div-title");
-    this.tocHeadingsTree = this.shadowRoot.querySelector("toc-headings-tree");
-    this.tocRegionsList  = this.shadowRoot.querySelector("toc-regions-list");
-    this.tocLinksGrid    = this.shadowRoot.querySelector("toc-links-grid");
+    this.divTitle        = this.shadowRoot.querySelector('#id-div-title');
+    this.divTablist      = this.shadowRoot.querySelector('[role="tablist"]');
+    this.divTabpanels    = this.shadowRoot.querySelector('#tabpanels');
 
-    this.tablistNode = this.shadowRoot.querySelector("[role=tablist]");
+    this.tocHeadingsTree = this.shadowRoot.querySelector('toc-headings-tree');
+    this.tocRegionsList  = this.shadowRoot.querySelector('toc-regions-list');
+    this.tocLinksGrid    = this.shadowRoot.querySelector('toc-links-grid');
 
-    debug.flag && debug.log(`[TabList]: ${this.tablistNode}`);
+    this.btnGetInfo      = this.shadowRoot.querySelector('#id-btn-get-info');
+    this.btnOptions      = this.shadowRoot.querySelector('#id-btn-options');
+    this.divButtons      = this.shadowRoot.querySelector('#buttons');
+
+    debug.flag && debug.log(`[tocHeadingsTree]: ${this.tocHeadingsTree}`);
+    debug.flag && debug.log(`[ tocRegionsList]: ${this.tocRegionsList}`);
+    debug.flag && debug.log(`[   tocLinksGrid]: ${this.tocLinksGrid}`);
+
+    debug.flag && debug.log(`[TabList]: ${this.divTablist}`);
 
     this.tabNodes = [];
 
     this.firstTab = null;
     this.lastTab = null;
 
-    this.tabNodes = Array.from(this.tablistNode.querySelectorAll('[role=tab]'));
+    this.tabNodes = Array.from(this.divTablist.querySelectorAll('[role=tab]'));
     this.tabpanelNodes = [];
 
     this.tabNodes.forEach( (tabNode) => {
@@ -136,27 +153,57 @@ class TOCTabList extends HTMLElement {
     });
 
     this.setSelectedTab(this.firstTab, false);
-
-  }
-
-  resize (height, width) {
-    debug.flag && debug.log(`height: ${height} x ${width}`);
-
-    const panelRect = this.tabpanelNodes[0].getBoundingClientRect();
-
-    const newHeight = height - panelRect.top - sidepanelOffsetHieght;
-    const newWidth  = width - sidepanelOffsetWidth;
-    debug.flag && debug.log(`newHeight: ${newHeight}`);
-    debug.flag && debug.log(` newWidth: ${newWidth}`);
-
-    this.tabpanelNodes.forEach ( (tabpanel) => {
-      tabpanel.style.height = newHeight + 'px';
-      tabpanel.style.width  = newWidth  + 'px';
-    });
+    this.resize(window.innerHeight, window.innerWidth);
   }
 
   init (containerObj, getInformationHandler) {
     this.btnGetInfo.addEventListener('click', getInformationHandler.bind(containerObj));
+  }
+
+  resize () {
+
+    const height = window.innerHeight;
+    const width  = window.innerWidth;
+
+    debug.flag && debug.log(`height: ${height} x width: ${width}`);
+
+    const titleRect     = this.divTitle.getBoundingClientRect();
+    const tablistRect   = this.divTablist.getBoundingClientRect();
+    const tabpanelsRect = this.divTabpanels.getBoundingClientRect();
+    const buttonsRect   = this.divButtons.getBoundingClientRect();
+
+    debug.flag && debug.log(`[    titleRect]: ${    titleRect.height}`);
+    debug.flag && debug.log(`[  tablistRect]: ${  tablistRect.height}`);
+    debug.flag && debug.log(`[tabpanelsRect]: ${tabpanelsRect.height}`);
+    debug.flag && debug.log(`[  buttonsRect]: ${  buttonsRect.height}`);
+
+    const newHeight = height -
+                      titleRect.height -
+                      tablistRect.height -
+                      buttonsRect.height -
+                      sidepanelOffsetHieght;
+
+    const tabpanelHeight = newHeight - tabpanelOffsetHeight;
+
+    const newWidth       = width - sidepanelOffsetWidth;
+    const tabpanelWidth  = newWidth - tabpanelOffsetWidth;
+
+    debug.flag && debug.log(`newHeight: ${newHeight}`);
+    debug.flag && debug.log(` newWidth: ${newWidth}`);
+
+    this.divTabpanels.style.height = newHeight + 'px';
+    this.divTabpanels.style.width  = newWidth + 'px';
+
+    debug.flag && debug.log(`[    newHeight]: ${newHeight}`);
+
+    this.tabpanelNodes.forEach ( (tabpanel) => {
+      tabpanel.style.height = tabpanelHeight + 'px';
+      tabpanel.style.width  = tabpanelWidth  + 'px';
+    });
+
+    this.tocHeadingsTree.resize(tabpanelsRect.height, newWidth);
+    this.tocRegionsList.resize(tabpanelsRect.height, newWidth);
+    this.tocLinksGrid.resize(tabpanelsRect.height, newWidth);
   }
 
   clearContent(message='') {
@@ -172,15 +219,17 @@ class TOCTabList extends HTMLElement {
     }
   }
 
-  updateContent(myResult, containerObj, highlightHandler) {
+  updateContent(myResult) {
     debug.flag && debug.log(`[updateContent]`);
 
     this.divTitle.textContent = myResult.title;
     debug.flag && debug.log(`[Title]:${ myResult.title}`);
 
-    this.tocHeadingsTree.updateContent(myResult, containerObj, highlightHandler);
-    this.tocRegionsList.updateContent(myResult, containerObj, highlightHandler);
-    this.tocLinksGrid.updateContent(myResult, containerObj, highlightHandler);
+    this.tocHeadingsTree.updateContent(myResult);
+    this.tocRegionsList.updateContent(myResult);
+    this.tocLinksGrid.updateContent(myResult);
+
+    this.resize();
   }
 
   // Tablist support functions and heandlers

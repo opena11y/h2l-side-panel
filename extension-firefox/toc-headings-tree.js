@@ -1,6 +1,10 @@
 /* toc-headings-tree.js */
 
-import DebugLogging   from './debug.js';
+import DebugLogging             from './debug.js';
+
+import {
+  highlightOrdinalPosition
+} from './toc-sidepanel.js';
 
 /* Constants */
 
@@ -59,7 +63,10 @@ class TOCHeadingsTree extends HTMLElement {
     this.treeNode = this.shadowRoot.querySelector("[role=tree]");
 
     this.treeitems = [];
+  }
 
+  resize (height, width) {
+    debug.flag && debug.log(`height: ${height} x ${width}`);
   }
 
   clearContent(message = '') {
@@ -77,7 +84,10 @@ class TOCHeadingsTree extends HTMLElement {
   }
 
   updateContent(myResult, containerObj, highlightHandler) {
-    debug.flag && debug.log(`[updateContent]`);
+    debug.flag && debug.log(`[updateContent][headings]: ${myResult.headings}`);
+
+    this.handleObj = containerObj;
+    this.handleHighlight = highlightHandler;
 
     const handleIconClick = this.handleIconClick;
     const treeObj = this;
@@ -91,8 +101,9 @@ class TOCHeadingsTree extends HTMLElement {
       treeitemNode.setAttribute('role', 'treeitem');
       treeitemNode.setAttribute('data-level', heading.level);
       treeitemNode.setAttribute('data-ordinal-position', heading.ordinalPosition);
-      const firstChar = heading.accName[0] ? heading.accName[0].toLowerCase() : '';
+      const firstChar = heading.name[0] ? heading.name[0].toLowerCase() : '';
       treeitemNode.setAttribute('data-first-char', firstChar);
+      treeitemNode.setAttribute('data-visible', heading.isVisibleOnScreen);
       if (heading.level > 1) {
         const iconNode = document.createElement('span');
         iconNode.className = 'no-icon';
@@ -100,9 +111,9 @@ class TOCHeadingsTree extends HTMLElement {
       }
       const nameNode = document.createElement('span');
       nameNode.classList.add('name');
-      nameNode.textContent = `${heading.level}: ${heading.accName} (${heading.ordinalPosition})`;
+      nameNode.textContent = `${heading.level}: ${heading.name}`;
       treeitemNode.appendChild(nameNode);
-      treeitemNode.addEventListener('click', highlightHandler.bind(containerObj));
+      treeitemNode.addEventListener('click', treeObj.handleTreeitemClick.bind(treeObj));
       parentNode.appendChild(treeitemNode);
       return treeitemNode;
     }
@@ -119,7 +130,12 @@ class TOCHeadingsTree extends HTMLElement {
     function processHeadings (parentNode, lastHeadingNode, headings, lastLevel) {
       while (headings[0]) {
         const heading = headings[0];
-        debug.log(`[heading][${headings.length}]: ${heading ? heading.accName : 'none'}`);
+        // Skip if heading not visible or does not have accessible name
+//        if (!heading.isVisibleOnScreen || !name) {
+//          headings.shift();
+//          processHeadings (parentNode, lastHeadingNode, headings, lastLevel);
+//        }
+        debug.flag && debug.log(`[heading][${headings.length}]: ${heading ? heading.name : 'none'}`);
         if ((heading.level === lastLevel) ||
             (lastLevel === 0) ||
             (lastLevel === 1)) {
@@ -154,6 +170,8 @@ class TOCHeadingsTree extends HTMLElement {
             }
             count = count - headings.length;
             lastHeadingNode.setAttribute('data-children', count);
+            const nameSpan = lastHeadingNode.querySelector('.name');
+            nameSpan.textContent += ` (${count})`;
           }
           else {
             return headings;
@@ -167,12 +185,24 @@ class TOCHeadingsTree extends HTMLElement {
 
     if (myResult.headings) {
       debug.log(`[myResult]: ${myResult.headings}`);
-      const headings = Array.from(myResult.headings);
+
+      const headings = Array.from(myResult.headings).filter( (h) => {
+        return (h.level === 1) || (h.isVisibleOnScreen && h.name.length);
+      });
+
       debug.log(`[headings]: ${headings}`);
       processHeadings(this.treeNode, null, headings, 0);
     }
 
-    this.setFocusToTreeitem(this.treeNode.querySelector('[role="treeitem"]'));
+    const firstTreeitem = this.treeNode.querySelector('[role="treeitem"]');
+
+    if (firstTreeitem) {
+      this.setFocusToTreeitem(firstTreeitem);
+    }
+    else {
+      this.clearContent('No headings found');
+    }
+
   }
 
   // Tree keyboard navigation methods
@@ -196,6 +226,13 @@ class TOCHeadingsTree extends HTMLElement {
     return Array.from(this.treeNode.querySelectorAll('[role="treeitem"]:not([role="treeitem"][aria-expanded="false"] + [role="group"] > [role="treeitem"]'));
   }
 
+  highlightHeading(treeitem) {
+    const op = treeitem.getAttribute('data-ordinal-position');
+    if (op) {
+      highlightOrdinalPosition(op);
+    }
+  }
+
   isExpandable(treeitem) {
     return treeitem.hasAttribute('aria-expanded');
   }
@@ -210,65 +247,43 @@ class TOCHeadingsTree extends HTMLElement {
   }
 
   setFocusByFirstCharacter(treeitem, char){
-    debug.flag && debug.log(`[setFocusByFirstCharacter]: ${treeitem} ${char}`);
+
+    function findChar (treeitem) {
+      return char === treeitem.getAttribute('data-first-char');
+    }
 
     const treeitems = this.getVisibleTreeitems();
-    debug.log(`[treeitems]: ${treeitems.length}`);
-    let i;
-    let index = -1;
-    let ti;
-    char = char.toLowerCase();
-
-    // Get start index for search based on position of treeitem
     let startIndex = treeitems.indexOf(treeitem) + 1;
-    if (startIndex >= treeitems.length) {
-      startIndex = 0;
+
+    const searchOrder = (startIndex < treeitems.length) ?
+                        treeitems.splice(startIndex).concat(treeitems.splice(0, startIndex)) :
+                        treeitems;
+    const result = searchOrder.find(findChar);
+    if (result) {
+      this.setFocusToTreeitem(result);
     }
+  }
 
-    // Check remaining items in the tree
-    for (i = startIndex; i < treeitems.length; i++) {
-      ti = treeitems[i];
-      debug.log(`[char]: ${char}  [attr]: ${ti.getAttribute('data-first-char')}`);
-      if (char === ti.getAttribute('data-first-char')) {
-        debug.log(`[found][A]: ${i}`);
-        index = i;
-        break;
-      }
+  setFocusToFirstTreeitem() {
+    const treeitems = this.getVisibleTreeitems();
+    if (treeitems[0]) {
+      this.setFocusToTreeitem(treeitems[0]);
     }
+  }
 
-    // If not found in remaining slots, check from beginning
-    if (index === -1) {
-      for (i = 0; i < startIndex; i++) {
-        ti = treeitems[i];
-        if (char === ti.getAttribute('data-first-char')) {
-          debug.log(`[found][B]: ${i}`);
-          index = i;
-          break;
-        }
-      }
-    }
-
-    debug.log(`[index]: ${index}`);
-
-    // If match was found...
-    if (index > -1) {
-      this.setFocusToTreeitem(treeitems[index]);
+  setFocusToLastTreeitem() {
+    const treeitems = this.getVisibleTreeitems();
+    if (treeitems.length) {
+      this.setFocusToTreeitem(treeitems[treeitems.length-1]);
     }
   }
 
   setFocusToNextTreeitem(treeitem) {
-    debug.log && debug.log(`[setFocusToNextTreeitem]: ${treeitem}`);
-
     const treeitems = this.getVisibleTreeitems();
-    let nextItem = false;
-
-    for (let i = treeitems.length - 1; i >= 0; i--) {
-      const ti = treeitems[i];
-      if (ti === treeitem) {
-        break;
-      }
-      nextItem = ti;
-    }
+    const index = treeitems.indexOf(treeitem) + 1;
+    const nextItem = index < treeitems.length ?
+                     treeitems[index] :
+                     false;
 
     if (nextItem) {
       this.setFocusToTreeitem(nextItem);
@@ -284,15 +299,10 @@ class TOCHeadingsTree extends HTMLElement {
 
   setFocusToPreviousTreeitem(treeitem) {
     const treeitems = this.getVisibleTreeitems();
-    let prevItem = false;
-
-    for (let i = 0; i < treeitems.length; i++) {
-      const ti = treeitems[i];
-      if (ti === treeitem) {
-        break;
-      }
-      prevItem = ti;
-    }
+    const index = treeitems.indexOf(treeitem) - 1;
+    const prevItem = index >= 0 ?
+                     treeitems[index] :
+                     false;
 
     if (prevItem) {
       this.setFocusToTreeitem(prevItem);
@@ -300,13 +310,11 @@ class TOCHeadingsTree extends HTMLElement {
   }
 
   setFocusToTreeitem(treeitem) {
-    debug.flag && debug.log(`[setFocusToTreeitem]: ${treeitem}`);
     this.setTabindex(treeitem);
     treeitem.focus();
   }
 
   setTabindex(treeitem) {
-    debug.flag && debug.log(`[setTabindex]: ${treeitem}`);
     const treeitems = this.getVisibleTreeitems();
     treeitems.forEach( (ti) => {
       ti.setAttribute('tabindex', (ti === treeitem) ? 0 : -1);
@@ -342,11 +350,11 @@ class TOCHeadingsTree extends HTMLElement {
         (iconNode && (iconNode !== event.target)) ||
         (iconNode && !iconNode.contains(event.target))) {
       this.setFocusToTreeitem(tgt);
+      this.highlightHeading(tgt);
       event.stopPropagation();
       event.preventDefault();
     }
   }
-
 
  handleKeydown(event) {
     const tgt = event.currentTarget;
@@ -381,9 +389,9 @@ class TOCHeadingsTree extends HTMLElement {
       }
     } else {
       switch (key) {
-        // NOTE: Return key is supported through the click event
+        case 'Enter':
         case ' ':
-          this.updateContent(tgt.href, tgt.textContent.trim());
+          this.highlightHeading(tgt);
           flag = true;
           break;
 
@@ -420,15 +428,12 @@ class TOCHeadingsTree extends HTMLElement {
           break;
 
         case 'Home':
-          this.setFocusToTreeitem(this.treeitems[0]);
+          this.setFocusToFirstTreeitem();
           flag = true;
           break;
 
         case 'End':
-          var visibleTreeitems = this.getVisibleTreeitems();
-          this.setFocusToTreeitem(
-            visibleTreeitems[visibleTreeitems.length - 1]
-          );
+          this.setFocusToLastTreeitem();
           flag = true;
           break;
 
