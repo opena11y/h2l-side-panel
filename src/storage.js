@@ -1,29 +1,33 @@
  /* storage.js */
 
-// const debug = false;
+/* imports */
+
+import DebugLogging from './debug.js';
+
+/* constants */
+
+const debug = new DebugLogging('storage', false);
+debug.flag = false;
 
 const browserRuntime = typeof browser === 'object' ?
-              browser.runtime :
-              chrome.runtime;
+                       browser.runtime :
+                       chrome.runtime;
 
 const browserStorage = typeof browser === 'object' ?
-    browser.storage.local :
-    chrome.storage.sync;
+                       browser.storage.local :
+                       chrome.storage.sync;
 
-//const browserI18n = typeof browser === 'object' ?
-//            browser.i18n :
-//            chrome.i18n;
-
-const defaultContentOptions = {
-  headings: 'h1 h2 h3 h4 h5 h6',
-  regions: 'banner complementary contentinfo form main navigation region search'
+const defaultOptions = {
+  smallAndOffScreenHeadings: false,
+  unNamedDuplicateRegions: false,
+  internalLinks: true,
+  externalLinks: true,
+  sameDomainLinks: true
 };
-
-const defaultOptions = Object.assign({}, defaultContentOptions);
 
 function hasAllProperties (refObj, srcObj) {
   for (const key of Object.keys(refObj)) {
-    if (!srcObj.hasOwn(key)) {
+    if (!Object.hasOwn(srcObj, key)) {
       return false;
     }
   }
@@ -41,7 +45,7 @@ function isComplete (obj) {
 function addDefaultValues (options) {
   const copy = Object.assign({}, defaultOptions);
   for (let [key, value] of Object.entries(options)) {
-    if (copy.hasOwn(key)) {
+    if (Object.hasOwn(copy, key)) {
       copy[key] = value;
     }
   }
@@ -86,17 +90,6 @@ export function saveOptions (options) {
 export function resetDefaultOptions () {
   return new Promise (function (resolve) {
     browserStorage.set(defaultOptions, function () {
-      if (notLastError()) { resolve(); }
-    });
-  });
-}
-
-/*
-** resetDefaultContentOptions
-*/
-export function resetDefaultButtonOptions () {
-  return new Promise (function (resolve) {
-    browserStorage.set(defaultContentOptions, function () {
       if (notLastError()) { resolve(); }
     });
   });

@@ -18,5 +18,68 @@
   "toggle_menu" : {
     "message": "Table of Contents Sidebar",
     "description": "Tooltip on SkipTo.js toolbar icon"
+  },
+  "buttons_options": {
+    "message": "Options",
+    "description": "Label options button"
+  },
+  "buttons_update_info": {
+    "message": "Update",
+    "description": "Label for update information"
+  },
+  "tablist_title": {
+    "message": "Title",
+    "description": "Label for title of the page"
+  },
+  "tab_headings": {
+    "message": "Headings",
+    "description": "Label for headings tab"
+  },
+  "tab_landmarks": {
+    "message": "Landmarks",
+    "description": "Label for Landmarks tab"
+  },
+  "tab_links": {
+    "message": "Links",
+    "description": "Label for links tab"
+  },
+  "links_grid_position": {
+    "message": "Pos",
+    "description": "Label for position column in links grid"
+  },
+  "links_grid_name": {
+    "message": "Name",
+    "description": "Label for name column in links grid"
+  },
+  "links_grid_url": {
+    "message": "URL",
+    "description": "Label for url column in links grid"
+  },
+  "links_none_found": {
+    "message": "No links found",
+    "description": "Message if no links found on page"
+  },
+  "headings_tree_label": {
+    "message": "Headings",
+    "description": "Label for tree in  headings tree"
+  },
+  "headings_none_found": {
+    "message": "No headings found",
+    "description": "Message if no headings found on page"
+  },
+  "landmarks_list_label": {
+    "message": "Landmark Regions",
+    "description": "Label for list box in landmarks list"
+  },
+  "landmarks_none_found": {
+    "message": "No landmark regions found",
+    "description": "Message if no landmark regions found on page"
+  },
+  "protocol_not_supported": {
+    "message": "Protocol not supported",
+    "description": "Message if a not HTML page is in the window"
   }
+
+
 }
+

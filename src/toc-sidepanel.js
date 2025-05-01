@@ -2,6 +2,10 @@
 
 import DebugLogging   from './debug.js';
 
+import {
+  getMessage
+} from './utils.js';
+
 /* Constants */
 
 const debug = new DebugLogging('tocSidepanel', false);
@@ -20,27 +24,6 @@ const myBrowser = typeof browser === 'object' ?
               browser :
               chrome;
 debug.flag && debug.log(`[myBrowser]: ${myBrowser}`);
-
-
-const browserAction = typeof browser === 'object' ?
-              browser.action :
-              chrome.action;
-debug.flag && debug.log(`[browserAction]: ${browserAction}`);
-
-const browserRuntime = typeof browser === 'object' ?
-              browser.runtime :
-              chrome.runtime;
-debug.flag && debug.log(`[browserRuntime]: ${browserRuntime}`);
-
-const browserScripting = typeof browser === 'object' ?
-              browser.scripting :
-              chrome.scripting;
-debug.flag && debug.log(`[browserScripting]: ${browserScripting}`);
-
-const browserI18n = typeof browser === 'object' ?
-            browser.i18n :
-            chrome.i18n;
-debug.flag && debug.log(`[browserI18n]: ${browserI18n}`);
 
 const browserTabs = typeof browser === 'object' ?
             browser.tabs :
@@ -110,7 +93,6 @@ class TOCSidePanel extends HTMLElement {
     this.lastStatus = '';
 
     this.tocTablistNode = this.shadowRoot.querySelector('toc-tablist');
-//    this.tocTablistNode.init(this, this.handleGetInformationClick);
 
     debug.flag && debug.log(`[tocTablistNode]: ${this.tocTablistNode}`);
     /*
@@ -228,7 +210,7 @@ class TOCSidePanel extends HTMLElement {
     const that = this;
 
     function onErrorPotocol(error) {
-      that.clearContent(`Protocol not supported...`);
+      that.clearContent(getMessage('protocol_not_supported'));
       onError(error);
     }
 

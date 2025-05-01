@@ -1,0 +1,18 @@
+/* toc-landmarks-list.css */
+
+[role="listbox"] [role="listitem"] {
+  dispaly: block;
+  margin: 0;
+  padding: 3px;
+  font-size: 1em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  outline: none;
+}
+
+[role="listbox"] [role="listitem"]:focus {
+  padding: 1px;
+  border: 2px solid ButtonBorder;
+}
+

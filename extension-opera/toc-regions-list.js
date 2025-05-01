@@ -3,13 +3,18 @@
 import DebugLogging   from './debug.js';
 
 import {
+  getOptions,
+  resetDefaultOptions
+} from './storage.js';
+
+import {
   highlightOrdinalPosition
 } from './toc-sidepanel.js';
 
 /* Constants */
 
 const debug = new DebugLogging('tocRegionsList', false);
-debug.flag = true;
+debug.flag = false;
 
 /* Utility functions */
 
@@ -76,28 +81,37 @@ class TOCRegionsList extends HTMLElement {
     const listObj = this;
 
     if (myResult.regions) {
-      myResult.regions.forEach( (r) => {
-        const listitemNode = document.createElement('div');
-        listitemNode.setAttribute('role', 'listitem');
-        listitemNode.setAttribute('data-ordinal-position', r.ordinalPosition);
-        const textContent = r.name ? `${r.role.toUpperCase()}: ${r.name}` : r.role.toUpperCase();
-        listitemNode.textContent = textContent;
-        listitemNode.setAttribute('data-first-char', r.role.toLowerCase()[0]);
-        listitemNode.addEventListener('click', listObj.handleListitemClick.bind(listObj));
-        listitemNode.addEventListener('keydown', listObj.handleKeydown.bind(listObj));
-        this.listboxNode.appendChild(listitemNode);
-        debug.flag && debug.log(listitemNode.textContent);
-      });
-    }
 
-    const firstListitem = this.listboxNode.querySelector('[role="listitem"]');
+      resetDefaultOptions().then(getOptions().then( (options) => {
 
-    if (firstListitem) {
-      this.setFocusToListitem(firstListitem);
+        debug.flag && debug.log(`[options]: ${options}`);
+        myResult.regions.forEach( (r) => {
+          const listitemNode = document.createElement('div');
+          listitemNode.setAttribute('role', 'listitem');
+          listitemNode.setAttribute('data-ordinal-position', r.ordinalPosition);
+          const textContent = r.name ? `${r.role.toUpperCase()}: ${r.name}` : r.role.toUpperCase();
+          listitemNode.textContent = textContent;
+          listitemNode.setAttribute('data-first-char', r.role.toLowerCase()[0]);
+          listitemNode.addEventListener('click', listObj.handleListitemClick.bind(listObj));
+          listitemNode.addEventListener('keydown', listObj.handleKeydown.bind(listObj));
+          this.listboxNode.appendChild(listitemNode);
+          debug.flag && debug.log(listitemNode.textContent);
+        });
+
+        const firstListitem = this.listboxNode.querySelector('[role="listitem"]');
+
+        if (firstListitem) {
+          this.setFocusToListitem(firstListitem);
+        }
+        else {
+          this.clearContent('No landmark regions found');
+        }
+      }));
     }
     else {
-      this.clearContent('No landmark regions found');
+      this.clearContent('Protocal not supported');
     }
+
   }
 
   // Listbox keyboard navigation methods

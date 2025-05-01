@@ -39,7 +39,7 @@ h2 {
   background: hsl(220deg 20% 94%);
   outline: none;
   font-weight: bold;
-  max-width: 22%;
+  max-width: 8em;
   overflow: hidden;
   text-align: left;
   cursor: pointer;
@@ -63,6 +63,9 @@ h2 {
   display: inline-block;
   margin: 2px;
   padding: 4px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 [role="tab"]:hover span.focus,
@@ -79,8 +82,8 @@ h2 {
   border: 2px solid hsl(219deg 1% 72%);
   border-radius: 0 5px 5px;
   background: hsl(220deg 43% 99%);
-  min-height: 200px;
-  min-width: 250px;
+  min-height: 180px;
+  min-width: 180px;
   overflow: auto;
 }
 
@@ -88,8 +91,32 @@ h2 {
   display: none;
 }
 
+#summary {
+  font-size: 120%;
+}
 
 #buttons {
-  padding: 0.5em;
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
+  display: grid;
+  grid-template-columns: 40% 20% 40%;
+}
+
+#buttons .first {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+#buttons .middle {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  text-align: center;
+  vertical-align: center;
+}
+
+#buttons .last {
+  grid-column-start: 3;
+  grid-column-end: 4;
+  text-align: right;
 }
 

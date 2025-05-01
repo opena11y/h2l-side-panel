@@ -1,34 +1,34 @@
 /* toc-headings-tree.js */
 
-import DebugLogging             from './debug.js';
+import DebugLogging from './debug.js';
+
+import {
+  getOptions
+} from './storage.js';
 
 import {
   highlightOrdinalPosition
 } from './toc-sidepanel.js';
 
+import {
+  getMessage,
+  removeChildContent,
+  setI18nLabels,
+  setTablistAttr
+} from './utils.js';
+
 /* Constants */
 
 const debug = new DebugLogging('tocHeadingsTree', false);
-debug.flag = true;
-
-/* Utility functions */
-
-/*
-**  @function removeChildContent
-*/
-
-function removeChildContent(node) {
-   while(node.firstChild) {
-    node.removeChild(node.firstChild);
-   }
-}
+debug.flag = false;
 
 
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
   <div role="tree"
-       aria-label="Headings">
+       aria-label="XYZ"
+       data-i18n-aria-label="headings_tree_label">
   </div>
 `;
 
@@ -42,7 +42,6 @@ icon.innerHTML = `
         <polygon points="8,8 28,20 8,32"/>
     </svg>
 `;
-
 
 class TOCHeadingsTree extends HTMLElement {
   constructor () {
@@ -63,6 +62,7 @@ class TOCHeadingsTree extends HTMLElement {
     this.treeNode = this.shadowRoot.querySelector("[role=tree]");
 
     this.treeitems = [];
+    setI18nLabels(this.shadowRoot, debug.flag);
   }
 
   resize (height, width) {
@@ -186,22 +186,37 @@ class TOCHeadingsTree extends HTMLElement {
     if (myResult.headings) {
       debug.log(`[myResult]: ${myResult.headings}`);
 
-      const headings = Array.from(myResult.headings).filter( (h) => {
-        return (h.level === 1) || (h.isVisibleOnScreen && h.name.length);
+      getOptions().then( (options) => {
+
+        debug.log(`[options][small]: ${options.smallAndOffScreenHeadings}`);
+
+        const headings = Array.from(myResult.headings).filter( (h) => {
+          return h.name.length &&     // heading must have a name
+                 ((h.level === 1) ||  // If a heading level 1, usually important
+                  h.isVisibleOnScreen ||
+                  (h.isVisibleToAT && options.smallAndOffScreenHeadings));
+        });
+
+        processHeadings(this.treeNode, null, headings, 0);
+
+        const firstTreeitem = this.treeNode.querySelector('[role="treeitem"]');
+        const count = this.treeNode.querySelectorAll('[role="treeitem"]').length;
+
+       setTablistAttr('headings-count', count);
+
+        if (firstTreeitem) {
+          this.setFocusToTreeitem(firstTreeitem);
+        }
+        else {
+          this.clearContent(getMessage('headings_none_found', debug.flag));
+        }
+
       });
-
-      debug.log(`[headings]: ${headings}`);
-      processHeadings(this.treeNode, null, headings, 0);
-    }
-
-    const firstTreeitem = this.treeNode.querySelector('[role="treeitem"]');
-
-    if (firstTreeitem) {
-      this.setFocusToTreeitem(firstTreeitem);
     }
     else {
-      this.clearContent('No headings found');
+      this.clearContent(getMessage('protocol_not_supported', debug.flag));
     }
+
 
   }
 
