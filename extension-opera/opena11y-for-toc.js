@@ -1225,6 +1225,7 @@
             ordinalPosition:   de.ordinalPosition,
             isInternal:        sameHostname && samePathname,
             isExternal:        !sameHostname,
+            isSameDomain:      sameHostname && !samePathname,
             extension:         allowedExt,
             isVisibleOnScreen: de.visibility.isVisibleOnScreen,
             isVisibleToAT:     de.visibility.isVisibleToAT
@@ -39704,8 +39705,6 @@
   const evaluationLibrary = new EvaluationLibrary();
   let evaluationResult;
 
-  console.log(`[content.js]: loading...`);
-
   // Load element highlight custom element
 
   const scriptNode = document.createElement('script');
@@ -39719,19 +39718,11 @@
   // Listen for messages from side panel
   browserRuntime.onMessage.addListener(
     function(request, sender, sendResponse) {
-      console.log(sender.tab ?
-                  "[content.js]: from a content script:" + sender.tab.url :
-                  "[content.js]: from the extension");
-
-      console.log(`[content.js][request][runEvaluation    ]: ${request.runEvaluation}`);
-      console.log(`[content.js][request][highlightPosition]: ${request.highlightPosition}`);
 
       // Highlight elements
       if(request.highlightPosition) {
-        console.log(`[content.js][highlightElement]: ${request.highlightPosition}`);
 
         const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
-        console.log(`[content.js][he]: ${he}`);
 
         if (he) {
           he.setAttribute('highlight-attr', 'data-opena11y-id');
@@ -39750,11 +39741,6 @@
                                   '',
                                   '',
                                   true);
-
-        console.log(`[content.js][EvalResult][   title]: ${evaluationResult.getTitle()}`);
-        console.log(`[content.js][EvalResult][headings]: ${evaluationResult.headings.toJSON()}`);
-        console.log(`[content.js][EvalResult][ regions]: ${evaluationResult.landmarkRegions.toJSON()}`);
-        console.log(`[content.js][EvalResult][   links]: ${evaluationResult.links.toJSON()}`);
 
         sendResponse({title: evaluationResult.getTitle(),
                       headings: evaluationResult.headings.data,

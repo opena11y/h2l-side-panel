@@ -158,12 +158,10 @@ class TOCLinksGrid extends HTMLElement {
 
         const links = Array.from(myResult.links).filter( (l) => {
           return (l.isVisibleOnScreen && l.name.length) &&
-                 ((l.isInternal && options.internalLinks) ||
-                  (l.isExternal && options.externalLinks) ||
-                  (!l.isExternal && options.sameDomainLinks));
+                 ((l.isInternal   && options.internalLinks) ||
+                  (l.isExternal   && options.externalLinks) ||
+                  (l.isSameDomain && options.sameDomainLinks));
         });
-
-        debug.log(`[links]: ${myResult.links.length} ${links.length}`);
 
         let index = 1;
         links.forEach( (l) => {

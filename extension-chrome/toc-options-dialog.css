@@ -33,7 +33,7 @@ dialog.toc-options .header {
   background-color: light-dark(#eee, #111);
   color: light-dark(black, white);
   position: relative;
-  font-size: 100%;
+  font-size: 11pt;
 }
 
 dialog.toc-options .header h2 {
@@ -61,19 +61,18 @@ dialog.toc-options .content {
 
 dialog.toc-options fieldset {
   margin: 0;
-  margin-top: 0.5em;
+  margin-top: 1em;
   border: none;
 }
 
 dialog.toc-options legend {
   margin: 0;
   padding: 0;
-  margin-top: 0.5em;
   font-size: 11pt;
   font-weight: bold;
 }
 
-dialog.toc-options label.grid {
+dialog.toc-options .grid {
   margin: 0;
   margin-bottom: 0.25em;
   padding: 0;
@@ -86,7 +85,8 @@ dialog.toc-options label.grid span.label {
 }
 
 dialog.toc-options .content .desc {
-  max-width: 20em;
+  font-size: 90%;
+  font-style: italic;
 }
 
 dialog.toc-options .content .version,

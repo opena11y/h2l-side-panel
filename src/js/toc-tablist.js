@@ -374,7 +374,7 @@ class TOCTabList extends HTMLElement {
   }
 
   handleOptionsClick () {
-    debug.flag && debug.log(`[handleOptionsClick]`);
+    debug.flag && debug.log(`[handleOptionsClick][tocOptionsDialog]: ${this.tocOptionsDialog}`);
     this.tocOptionsDialog.openDialog();
   }
 

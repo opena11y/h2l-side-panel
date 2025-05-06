@@ -83,7 +83,9 @@ template.innerHTML = `
 
         <label class="grid">
           <input type="checkbox"
-                 data-option="internalLinks"/>
+                 data-group="links"
+                 data-option="internalLinks"
+                 aria-describedby="id-link-desc"/>
           <span class="label"
                 data-i18n="options_dialog_label_internal_links">
           </span>
@@ -91,7 +93,9 @@ template.innerHTML = `
 
         <label class="grid">
           <input type="checkbox"
-                 data-option="externalLinks"/>
+                 data-group="links"
+                 data-option="externalLinks"
+                 aria-describedby="id-link-desc"/>
           <span class="label"
                 data-i18n="options_dialog_label_external_links">
           </span>
@@ -99,11 +103,21 @@ template.innerHTML = `
 
         <label class="grid">
           <input type="checkbox"
-                 data-option="sameDomainLinks"/>
+                 data-group="links"
+                 data-option="sameDomainLinks"
+                 aria-describedby="id-link-desc"/>
           <span class="label"
                 data-i18n="options_dialog_label_same_domain">
           </span>
         </label>
+
+        <div class="grid">
+          <div></div>
+          <div id="id-link-desc"
+             class="desc"
+             data-i18n="options_dialog_links_desc">
+          </div>
+        </div>
 
 
     </fieldset>
@@ -165,12 +179,20 @@ export default class TOCOptionsDialog extends HTMLElement {
     this.inputs.forEach( (input) => {
       debug.log(`added handleInputFocus`);
       input.addEventListener('focus', this.handleInputFocus.bind(this));
+      if (input.hasAttribute('data-group')) {
+        input.addEventListener('change', this.handleAtLeastOne.bind(this));
+      }
     });
 
     setI18nLabels(this.shadowRoot, debug.flag);
 
     this.optionControls =  Array.from(this.shadowRoot.querySelectorAll('[data-option]'));
     this.updateOptions();
+  }
+
+  openDialog  () {
+    this.infoDialog.showModal();
+    this.closeButton2.focus();
   }
 
   updateOptions () {
@@ -233,6 +255,41 @@ export default class TOCOptionsDialog extends HTMLElement {
   /   Event handlers
   */
 
+  handleAtLeastOne (event) {
+    debug.log(`[handleAtLeastOne]`);
+    const tgt = event.currentTarget;
+
+    const groupName = tgt.getAttribute('data-group');
+    const groupNodes = Array.from(this.shadowRoot.querySelectorAll(`[data-group="${groupName}"`));
+    debug.log(`[handleAtLeastOne][groupNodes]: ${groupNodes}`);
+
+    let count = 0;
+
+    groupNodes.forEach( (input) => {
+      count += input.checked ? 1 : 0;
+    });
+    debug.log(`[handleAtLeastOne][count]: ${count}`);
+
+    if (count === 1) {
+      groupNodes.forEach( (input) => {
+        if (input.checked) {
+          input.disabled = true;
+        }
+        else {
+          input.disabled = false;
+        }
+      });
+    }
+    else {
+      groupNodes.forEach( (input) => {
+        input.disabled = false;
+      });
+      if (count === 0) {
+        groupNodes[0].checked = true;
+      }
+    }
+  }
+
   handleInputFocus (event) {
     debug.log(`[handleInputFocus]`);
     const tgt = event.currentTarget;
@@ -249,11 +306,6 @@ export default class TOCOptionsDialog extends HTMLElement {
     this.saveOptions();
     this.infoDialog.close();
     updateContent();
-  }
-
-  openDialog () {
-    this.infoDialog.showModal();
-    this.closeButton2.focus();
   }
 
   handleKeyDown (event) {

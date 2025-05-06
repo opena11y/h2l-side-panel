@@ -131,6 +131,10 @@
     "message": "Same domain links",
     "description": "Label for checkbox for same domain links"
   },
+  "options_dialog_links_desc": {
+    "message": "Note: At least one link filter must be selected.",
+    "description": "Description for links group in dialog"
+  },
   "protocol_not_supported": {
     "message": "Protocol not supported",
     "description": "Message if a not HTML page is in the window"
