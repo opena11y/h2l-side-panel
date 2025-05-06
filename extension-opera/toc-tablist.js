@@ -25,100 +25,101 @@ const tabpanelOffsetWidth = 10;
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
-  <div>
-    <h2 data-i18n="tablist_title">Title</h2>
-    <div id="id-div-title">Loading...</div>
-  </div>
+  <div id="id-toc-tablist"
+       class="toc-tablist">
+    <div>
+      <h2 data-i18n="tablist_title">Title</h2>
+      <div id="id-div-title">Loading...</div>
+    </div>
 
-  <div role="tablist">
-    <div role="tab"
-         aria-controls="id-tabpanel-headings">
-      <span class="focus">
-        <span id="id-tab-headings"
-              data-i18n="tab_headings">
-          XYZ
+    <div role="tablist">
+      <div role="tab"
+           aria-controls="id-tabpanel-headings">
+        <span class="focus">
+          <span id="id-tab-headings"
+                data-i18n="tab_headings">
+            XYZ
+          </span>
         </span>
-      </span>
-    </div>
-    <div role="tab"
-         aria-controls="id-tabpanel-landmarks">
-      <span class="focus">
-        <span id="id-tab-landmarks"
-            data-i18n="tab_landmarks">
-          XYZ
+      </div>
+      <div role="tab"
+           aria-controls="id-tabpanel-landmarks">
+        <span class="focus">
+          <span id="id-tab-landmarks"
+              data-i18n="tab_landmarks">
+            XYZ
+          </span>
         </span>
-      </span>
-    </div>
-    <div role="tab"
-         aria-controls="id-tabpanel-links">
-      <span class="focus">
-        <span id="id-tab-links"
-            data-i18n="tab_links">
-          XYZ
+      </div>
+      <div role="tab"
+           aria-controls="id-tabpanel-links">
+        <span class="focus">
+          <span id="id-tab-links"
+              data-i18n="tab_links">
+            XYZ
+          </span>
         </span>
-      </span>
+      </div>
     </div>
+
+    <div id="tabpanels">
+      <div role="tabpanel"
+           id="id-tabpanel-headings"
+           aria-labelledby="id-tab-headings">
+        <toc-headings-tree></toc-headings-tree>
+      </div>
+
+      <div role="tabpanel"
+           id="id-tabpanel-landmarks"
+           aria-labelledby="id-tab-landmarks">
+        <toc-landmarks-list></toc-landmarks-list>
+      </div>
+
+      <div role="tabpanel"
+           id="id-tabpanel-links"
+           aria-labelledby="id-tab-links">
+        <toc-links-grid></toc-links-grid>
+      </div>
+    </div>
+
+    <div id="summary" role="group" aria-label="Summary">
+        <span id="id-headings-count">
+          <span class="value"></span>
+          <span class="single"> Heading</span>
+          <span class="plural"> Headings</span>
+        </span>
+        <span class="divider" aria-hidden="true">•</span>
+        <span id="id-landmarks-count">
+          <span class="value"></span>
+          <span class="single"> Landmark</span>
+          <span class="plural"> Landmarks</span>
+        </span>
+        <span class="divider" aria-hidden="true">•</span>
+        <span id="id-links-count">
+          <span class="value"></span>
+          <span class="single"> Link</span>
+          <span class="plural"> Links</span>
+        </span>
+    </div>
+
+    <footer>
+      <div class="first">
+        <button id="id-btn-options"
+                data-i18n="buttons_options">
+        </button>
+      </div>
+      <div d="id-version"
+           class="middle">
+        0.1
+      </div>
+      <div class="last">
+        <button id="id-btn-update-info"
+                data-i18n="buttons_update_info">
+        </button>
+      </div>
+    </footer>
+    <toc-options-dialog></toc-options-dialog>
   </div>
-
-  <div id="tabpanels">
-    <div role="tabpanel"
-         id="id-tabpanel-headings"
-         aria-labelledby="id-tab-headings">
-      <toc-headings-tree></toc-headings-tree>
-    </div>
-
-    <div role="tabpanel"
-         id="id-tabpanel-landmarks"
-         aria-labelledby="id-tab-landmarks">
-      <toc-landmarks-list></toc-landmarks-list>
-    </div>
-
-    <div role="tabpanel"
-         id="id-tabpanel-links"
-         aria-labelledby="id-tab-links">
-      <toc-links-grid></toc-links-grid>
-    </div>
-  </div>
-
-  <div id="summary" role="group" aria-label="Summary">
-      <span id="id-headings-count">
-        <span class="value"></span>
-        <span class="single"> Heading</span>
-        <span class="plural"> Headings</span>
-      </span>
-      <span class="divider" aria-hidden="true">•</span>
-      <span id="id-landmarks-count">
-        <span class="value"></span>
-        <span class="single"> Landmark</span>
-        <span class="plural"> Landmarks</span>
-      </span>
-      <span class="divider" aria-hidden="true">•</span>
-      <span id="id-links-count">
-        <span class="value"></span>
-        <span class="single"> Link</span>
-        <span class="plural"> Links</span>
-      </span>
-  </div>
-
-  <div id="buttons">
-    <div class="first">
-      <button id="id-btn-options"
-              data-i18n="buttons_options">
-        XYZ
-      </button>
-    </div>
-    <div d="id-version"
-         class="middle">
-      0.1
-    </div>
-    <div class="last">
-      <button id="id-btn-update-info"
-              data-i18n="buttons_update_info">
-        XYZ
-      </button>
-    </div>
-  </div>
-  <toc-options-dialog></toc-options-dialog>
 `;
 
 class TOCTabList extends HTMLElement {
@@ -144,6 +145,7 @@ class TOCTabList extends HTMLElement {
     this.tocHeadingsTree   = this.shadowRoot.querySelector('toc-headings-tree');
     this.tocLandmarksList  = this.shadowRoot.querySelector('toc-landmarks-list');
     this.tocLinksGrid      = this.shadowRoot.querySelector('toc-links-grid');
+    this.tocOptionsDialog  = this.shadowRoot.querySelector('toc-options-dialog');
 
     this.divSummary      = this.shadowRoot.querySelector('#summary');
 
@@ -153,7 +155,7 @@ class TOCTabList extends HTMLElement {
     const btnOptions      = this.shadowRoot.querySelector('#id-btn-options');
     btnOptions.addEventListener('click', this.handleOptionsClick.bind(this));
 
-    this.divButtons      = this.shadowRoot.querySelector('#buttons');
+    this.footerNode      = this.shadowRoot.querySelector('footer');
 
     debug.flag && debug.log(`[ tocHeadingsTree]: ${this.tocHeadingsTree}`);
     debug.flag && debug.log(`[tocLandmarksList]: ${this.tocLandmarksList}`);
@@ -229,19 +231,19 @@ class TOCTabList extends HTMLElement {
     const tablistRect   = this.divTablist.getBoundingClientRect();
     const tabpanelsRect = this.divTabpanels.getBoundingClientRect();
     const summaryRect   = this.divSummary.getBoundingClientRect();
-    const buttonsRect   = this.divButtons.getBoundingClientRect();
+    const footerRect    = this.footerNode.getBoundingClientRect();
 
     debug.flag && debug.log(`[    titleRect]: ${    titleRect.height}`);
     debug.flag && debug.log(`[  tablistRect]: ${  tablistRect.height}`);
     debug.flag && debug.log(`[tabpanelsRect]: ${tabpanelsRect.height}`);
     debug.flag && debug.log(`[  summaryRect]: ${  summaryRect.height}`);
-    debug.flag && debug.log(`[  buttonsRect]: ${  buttonsRect.height}`);
+    debug.flag && debug.log(`[   footerRect]: ${  footerRect.height}`);
 
     const newHeight = height -
                       titleRect.height -
                       tablistRect.height -
                       summaryRect.height -
-                      buttonsRect.height -
+                      footerRect.height -
                       sidepanelOffsetHieght;
 
     const tabpanelHeight = newHeight - tabpanelOffsetHeight;
@@ -367,11 +369,12 @@ class TOCTabList extends HTMLElement {
 
   handleOptionsClick () {
     debug.flag && debug.log(`[handleOptionsClick]`);
+    this.tocOptionsDialog.openDialog();
   }
 
   handleTabKeydown(event) {
-    var tgt = event.currentTarget,
-      flag = false;
+    const tgt = event.currentTarget;
+    let flag = false;
 
     switch (event.key) {
       case 'ArrowLeft':

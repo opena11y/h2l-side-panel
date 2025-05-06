@@ -9,11 +9,8 @@ import {
 } from './storage.js';
 
 import {
-  highlightOrdinalPosition
-} from './toc-sidepanel.js';
-
-import {
   getMessage,
+  highlightOrdinalPosition,
   removeChildContent,
   setI18nLabels,
   setTablistAttr
@@ -42,7 +39,7 @@ class TOCLandmarksList extends HTMLElement {
     // Use external CSS stylesheet
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('href', './toc-regions-list.css');
+    link.setAttribute('href', './toc-landmarks-list.css');
     this.shadowRoot.appendChild(link);
 
     // Add DOM listboxfrom template

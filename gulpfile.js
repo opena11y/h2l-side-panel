@@ -21,13 +21,11 @@ gulp.task('linting', () => {
         .pipe(eslint.failAfterError());
 });
 
-
 // Update extension common code
 
  gulp.task('extensionsCode', () => {
   return src([
-    'src/*.js',
-    'src/*.css',
+    'src/js/*.js',
     'src/*.html',
   ])
     .pipe(dest('extension-chrome'))
@@ -45,7 +43,7 @@ gulp.task('extensionsLocales', () => {
 });
 
 gulp.task('style', function () {
-  return gulp.src('./src/*.scss')
+  return gulp.src('./src/scss/*.scss')
   .pipe(sass().on('error', sass.logError))
     .pipe(dest('extension-chrome'))
     .pipe(dest('extension-opera'))

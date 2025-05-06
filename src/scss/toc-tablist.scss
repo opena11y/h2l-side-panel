@@ -1,21 +1,25 @@
-/* toc-tablist.css */
+/* generated from toc-tablist.scss */
+@use 'toc-base';
+
+.toc-lablist {
+  font-family: toc-base.$font-family;
+  font-size: toc-base.$font-size-content;
+}
 
 h2 {
+  font-size: toc-base.$font-size-title;
+
   margin: 0;
   padding: 0;
   margin-top: 1em;
-  font-size: 120%;
   font-weight: bold;
 }
 
 #id-div-title {
-  display: block;
-  font-size: 120%;
-  margin-bottom: 1em;
-}
+  font-size: toc-base.$font-size-title;
 
-.tabs {
-  font-family: "lucida grande", sans-serif;
+  display: block;
+  margin-bottom: 1em;
 }
 
 [role="tablist"] {
@@ -25,7 +29,6 @@ h2 {
 [role="tab"],
 [role="tab"]:focus,
 [role="tab"]:hover {
-  font-size: 120%;
   display: inline-block;
   position: relative;
   z-index: 2;
@@ -46,11 +49,12 @@ h2 {
 }
 
 [role="tab"][aria-selected="true"] {
+  border-top-color: toc-base.$outline-color-focus;
+
   padding: 2px 2px 4px;
   margin-top: 0;
   border-width: 2px;
   border-top-width: 6px;
-  border-top-color: rgb(36 116 214);
   border-bottom-color: hsl(220deg 43% 99%);
   background: hsl(220deg 43% 99%);
 }
@@ -72,12 +76,13 @@ h2 {
 [role="tab"]:focus span.focus,
 [role="tab"]:active span.focus {
   padding: 2px 4px;
-  border: 2px solid rgb(36 116 214);
+  border-width: toc-base.$outline-width-focus;
+  border-style: toc-base.$outline-style-focus;
+  border-color: toc-base.$outline-color-focus;
   border-radius: 3px;
 }
 
 [role="tabpanel"] {
-  font-size: 120%;
   padding: 5px;
   border: 2px solid hsl(219deg 1% 72%);
   border-radius: 0 5px 5px;
@@ -91,30 +96,30 @@ h2 {
   display: none;
 }
 
-#summary {
-  font-size: 120%;
-}
-
-#buttons {
+footer {
   padding-top: 1.5em;
-  padding-bottom: 1.5em;
+  padding-bottom: 0.5em;
   display: grid;
   grid-template-columns: 40% 20% 40%;
 }
 
-#buttons .first {
+footer button {
+  font-size: toc-base.$font-size-buttons;
+}
+
+footer .first {
   grid-column-start: 1;
   grid-column-end: 2;
 }
 
-#buttons .middle {
+footer .middle {
   grid-column-start: 2;
   grid-column-end: 3;
   text-align: center;
   vertical-align: center;
 }
 
-#buttons .last {
+footer .last {
   grid-column-start: 3;
   grid-column-end: 4;
   text-align: right;

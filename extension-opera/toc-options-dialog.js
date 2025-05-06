@@ -3,6 +3,10 @@
 /* Imports */
 import DebugLogging  from './debug.js';
 
+import {
+  setI18nLabels
+} from './utils.js';
+
 /* Constants */
 const debug = new DebugLogging('[optionsDialog]', false);
 debug.flag = false;
@@ -10,17 +14,103 @@ debug.flag = false;
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
-<dialog id="skip-to-info-dialog" open="">
+<dialog class="toc-options">
   <div class="header">
-    <h2>Shortcut Information</h2>
-    <button id="id-close-1" aria-label="Close">✕</button>
+    <h2 data-i18n="options_dialog_title">TOC Options</h2>
+    <button id="id-close-1"
+            data-i18n-aria-label="options_dialog_close"
+            aria-label="Close" >✕</button>
   </div>
   <div class="content">
-    <p>Some Content...</p>
+
+    <fieldset>
+      <legend data-i18n="options_dialog_legend_highlight">
+        Highlight/Focus
+      </legend>
+
+        <label class="grid">
+            <input type="checkbox"
+                   data-option="highlightFollowsFocus"/>
+          <span class="label"
+                data-i18n="options_dialog_label_highlight">
+          </span>
+        </label>
+
+        <label class="grid">
+          <input type="checkbox"
+                 data-option="enterKeyMovesFocus"/>
+          <span class="label"
+                data-i18n="options_dialog_label_focus">
+          </span>
+        </label>
+
+    </fieldset>
+
+    <fieldset>
+      <legend data-i18n="options_dialog_legend_heading">
+        Heading and Landmark Filters
+      </legend>
+
+        <label class="grid">
+            <input type="checkbox"
+                   data-option="smallAndOffScreenHeadings"/>
+          <span class="label"
+                data-i18n="options_dialog_label_small_headings">
+          </span>
+        </label>
+
+        <label class="grid">
+          <input type="checkbox"
+                 data-option="unNamedDuplicateRegions"/>
+          <span class="label"
+                data-i18n="options_dialog_label_un_named">
+          </span>
+        </label>
+
+    </fieldset>
+
+    <fieldset>
+      <legend data-i18n="options_dialog_legend_link">
+        Link Filters
+      </legend>
+
+        <label class="grid">
+          <input type="checkbox"
+                 data-option="internalLinks"/>
+          <span class="label"
+                data-i18n="options_dialog_label_internal_links">
+          </span>
+        </label>
+
+        <label class="grid">
+          <input type="checkbox"
+                 data-option="externalLinks"/>
+          <span class="label"
+                data-i18n="options_dialog_label_external_links">
+          </span>
+        </label>
+
+        <label class="grid">
+          <input type="checkbox"
+                 data-option="sameDomainLinks"/>
+          <span class="label"
+                data-i18n="options_dialog_label_same_domain">
+          </span>
+        </label>
+
+
+    </fieldset>
   </div>
+
   <div class="buttons">
-    <button id="id-more-info">More Information</button>
-    <button id="id-close-2">Close</button>
+    <button id="id-reset-defaults"
+            data-i18n="options_dialog_reset_defaults">
+      Reset Defaults
+    </button>
+    <button id="id-close-2"
+             data-i18n="options_dialog_close">
+      Close
+    </button>
   </div>
 </dialog>
 `;
@@ -45,6 +135,7 @@ export default class TOCOptionsDialog extends HTMLElement {
     // Get references
 
     this.infoDialog  = this.shadowRoot.querySelector('dialog');
+    debug.log(`[infoDialog]: ${this.infoDialog}`);
 
     this.closeButton1  = this.infoDialog.querySelector('#id-close-1');
     this.closeButton1.addEventListener('click', this.handleCloseButtonClick.bind(this));
@@ -52,16 +143,38 @@ export default class TOCOptionsDialog extends HTMLElement {
 
     this.contentElem  = this.infoDialog.querySelector('.content');
 
-    this.moreInfoButton  = this.infoDialog.querySelector('#id-more-info');
-    this.moreInfoButton.addEventListener('click', this.handleMoreInfoClick.bind(this));
+    this.resetDefaultsButton  = this.infoDialog.querySelector('#id-reset-defaults');
+    this.resetDefaultsButton.addEventListener('click', this.handleResetDefaults.bind(this));
 
     this.closeButton2  = this.infoDialog.querySelector('#id-close-2');
-
     this.closeButton2.addEventListener('click', this.handleCloseButtonClick.bind(this));
     this.closeButton2.addEventListener('keydown', this.handleKeyDown.bind(this));
 
-    this.moreInfoURL = 'http://dres.illinois.edu';
+    this.inputs = Array.from(this.shadowRoot.querySelectorAll('input, button'));
 
+    this.inputs.forEach( (input) => {
+      debug.log(`added handleInputFocus`);
+      input.addEventListener('focus', this.handleInputFocus.bind(this));
+    });
+
+    setI18nLabels(this.shadowRoot, debug.flag);
+
+  }
+
+  /*
+  /   Event handlers
+  */
+
+  handleInputFocus (event) {
+    debug.log(`[handleInputFocus]`);
+    const tgt = event.currentTarget;
+    this.inputs.forEach( (input) => {
+      if (input.tagName === "INPUT") {
+        input === tgt ?
+                  input.parentNode.classList.add('focus') :
+                  input.parentNode.classList.remove('focus');
+      }
+    });
   }
 
   handleCloseButtonClick () {
@@ -73,10 +186,8 @@ export default class TOCOptionsDialog extends HTMLElement {
     this.closeButton2.focus();
   }
 
-  handleMoreInfoClick () {
-    if (this.moreInfoURL) {
-      window.open(this.moreInfoURL, '_blank').focus();
-    }
+  handleResetDefaults () {
+    debug.flag && debug.log(`[handleResetDefaults]`);
   }
 
   handleKeyDown (event) {

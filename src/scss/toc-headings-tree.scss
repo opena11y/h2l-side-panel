@@ -1,14 +1,16 @@
-/* toc-headings-tree.css */
+/* generated from toc-headings-tree.scss */
+@use 'toc-base';
 
 [role="tree"] [role="treeitem"] {
-  dispaly: block;
+  font-family: toc-base.$font-family;
+  font-size: toc-base.$font-size-content;
+
+  display: block;
   margin: 0;
   padding: 3px;
-  font-size: 1em;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  outline: none;
 }
 
 [role="tree"] [role="treeitem"] span.no-icon,
@@ -69,15 +71,21 @@
 }
 
 [role="tree"] [role="treeitem"]:focus {
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-right: 1px;
-  border: 2px solid ActiveText;
+  outline-offset:   toc-base.$outline-offset-focus;
+  outline-color:    toc-base.$outline-color-focus;
+  outline-width:    toc-base.$outline-width-focus;
+  outline-style:    toc-base.$outline-style-focus;
+  background-color: toc-base.$background-color-focus !important;
+  color:            toc-base.$color-focus;
 }
 
-[role="tree"] [role="treeitem"][data-level="1"]:focus { padding-left: 2px;}
-[role="tree"] [role="treeitem"][data-level="2"]:focus { padding-left: 2px;}
-[role="tree"] [role="treeitem"][data-level="3"]:focus { padding-left: 14px}
-[role="tree"] [role="treeitem"][data-level="4"]:focus { padding-left: 30px}
-[role="tree"] [role="treeitem"][data-level="5"]:focus { padding-left: 46px}
-[role="tree"] [role="treeitem"][data-level="6"]:focus { padding-left: 62px}
+[role="tree"] [role="treeitem"]:focus .expand-icon polygon {
+  stroke: toc-base.$outline-color-focus;
+  fill:   toc-base.$outline-color-focus;
+}
+
+[role="tree"] [role="treeitem"]:hover {
+  cursor: pointer;
+}
+
+

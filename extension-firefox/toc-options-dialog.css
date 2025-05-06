@@ -1,13 +1,13 @@
-/* toc-options-dialog.css */
-
-dialog#id-options {
+/* generated from toc-options-dialog.scss */
+/* toc-base.scss */
+dialog.toc-options {
+  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+  font-size: 11pt;
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
-  font-family: $fontFamily;
-  font-size: $fontSize;
-  max-width: 70%;
+  transform: translate(-50%, -50%);
+  width: 90%;
   margin: 0;
   padding: 0;
   background-color: light-dark(white, black);
@@ -17,10 +17,9 @@ dialog#id-options {
   border-color: light-dark(black, white);
   border-radius: 5px;
   z-index: 2000001;
-
 }
 
-dialog#id-options .header {
+dialog.toc-options .header {
   margin: 0;
   margin-bottom: 0.5em;
   padding: 4px;
@@ -30,20 +29,20 @@ dialog#id-options .header {
   border-color: light-dark(black, white);
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  font-weight:  bold;
-  background-color: light-dark(white, black);
+  font-weight: bold;
+  background-color: light-dark(#eee, #111);
   color: light-dark(black, white);
   position: relative;
   font-size: 100%;
 }
 
-dialog#id-options .header h2 {
+dialog.toc-options .header h2 {
   margin: 0;
   padding: 0;
-  font-size: 1em;
+  font-size: 11pt;
 }
 
-dialog#id-options .header button {
+dialog.toc-options .header button {
   position: absolute;
   top: -0.25em;
   right: 0;
@@ -53,45 +52,77 @@ dialog#id-options .header button {
   color: light-dark(black, white);
 }
 
-dialog#id-options .content {
-  margin-left: 2em;
-  margin-right: 2em;
+dialog.toc-options .content {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
   margin-top: 0;
-  margin-bottom: 2em;
+  margin-bottom: 0.5em;
 }
 
-dialog#id-options .content .desc {
+dialog.toc-options fieldset {
+  margin: 0;
+  margin-top: 0.5em;
+  border: none;
+}
+
+dialog.toc-options legend {
+  margin: 0;
+  padding: 0;
+  margin-top: 0.5em;
+  font-size: 11pt;
+  font-weight: bold;
+}
+
+dialog.toc-options label.grid {
+  margin: 0;
+  margin-bottom: 0.25em;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 25px 1fr;
+}
+
+dialog.toc-options label.grid span.label {
+  display: inline-block;
+}
+
+dialog.toc-options .content .desc {
   max-width: 20em;
 }
 
-dialog#id-options .content .version,
-dialog#id-options .content .copyright {
+dialog.toc-options .content .version,
+dialog.toc-options .content .copyright {
   margin-top: 0.5em;
   text-align: center;
   font-weight: bold;
   font-size: 90%;
 }
 
-dialog#id-options .buttons {
+dialog.toc-options .buttons {
   float: right;
   margin-right: 0.5em;
   margin-bottom: 0.5em;
 }
 
-dialog#id-options button {
+dialog.toc-options button {
   margin: 6px;
 }
 
-dialog#id-options .buttons button {
+dialog.toc-options .buttons button {
   min-width: 5em;
 }
 
+.focus input {
+  outline: none;
+}
+
+.focus,
 button:focus {
-  outline: 2px solid currentColor;
+  outline-color: activeText;
+  outline-width: 2px;
+  outline-style: solid;
   outline-offset: 2px;
 }
 
 button:hover {
   cursor: pointer;
 }
-`;

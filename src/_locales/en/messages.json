@@ -1,18 +1,18 @@
 {
   "extension_name_chrome" : {
-    "message": "Page Table of Contents",
+    "message": "Table of Contents for Page Navigation",
     "description": "Extension name for Chrome browser"
   },
   "extension_name_firefox" : {
-    "message": "Page Table of Contents",
+    "message": "Table of Contents for Page Navigation",
     "description": "Extension name for Firefox browser"
   },
   "extension_name_opera" : {
-    "message": "Page Table of Contents",
+    "message": "Table of Contents for Page Navigation",
     "description": "Extension name for Opera browser"
   },
   "extension_description" : {
-    "message": "Table of Contents provides  outline of a web page in a sidebar for navigating web content.",
+    "message": "Table of Contents Navigation provides an outline of a web page in a browser side panel for navigating headings, landmark regions and links on a web page.",
     "description": "Extension description"
   },
   "toggle_menu" : {
@@ -75,10 +75,67 @@
     "message": "No landmark regions found",
     "description": "Message if no landmark regions found on page"
   },
+  "options_dialog_close": {
+    "message": "Close",
+    "description": "Label for close boxes"
+  },
+  "options_dialog_title": {
+    "message": "Options",
+    "description": "Title for options dialog box"
+  },
+  "options_dialog_reset_defaults": {
+    "message": "Reset Defaults",
+    "description": "Label for reset defaults button"
+  },
+  "options_dialog_title": {
+    "message": "Options",
+    "description": "Title for options dialog box"
+  },
+  "options_dialog_legend_highlight": {
+    "message": "Highlight/Focus",
+    "description": "Legend for highlight focus options"
+  },
+  "options_dialog_legend_heading": {
+    "message": "Heading and Landmark Filters",
+    "description": "Legend for heading and landmark filter options"
+  },
+  "options_dialog_legend_link": {
+    "message": "Link Filters",
+    "description": "Legend for link filter options"
+  },
+  "options_dialog_label_highlight": {
+    "message": "Highlight follows focus",
+    "description": "Label for checkbox for highlighting items with focus change"
+  },
+  "options_dialog_label_focus": {
+    "message": "Enter key moves focus to window",
+    "description": "Label for checkbox for moving for to highlighted page element"
+  },
+  "options_dialog_label_small_headings": {
+    "message": "Show hidden and off-screen headings",
+    "description": "Label for checkbox for showing hidden and off-screen headings"
+  },
+  "options_dialog_label_un_named": {
+    "message": "Show regions without accessible names",
+    "description": "Label for checkbox for un-named regions "
+  },
+  "options_dialog_label_internal_links": {
+    "message": "Internal links",
+    "description": "Label for checkbox for including internal links"
+  },
+  "options_dialog_label_external_links": {
+    "message": "External links",
+    "description": "Label for checkbox for including external links"
+  },
+  "options_dialog_label_same_domain": {
+    "message": "Same domain links",
+    "description": "Label for checkbox for same domain links"
+  },
   "protocol_not_supported": {
     "message": "Protocol not supported",
     "description": "Message if a not HTML page is in the window"
   }
+
 
 
 }

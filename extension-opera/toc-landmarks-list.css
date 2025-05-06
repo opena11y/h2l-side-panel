@@ -1,18 +1,26 @@
-/* toc-landmarks-list.css */
-
-[role="listbox"] [role="listitem"] {
-  dispaly: block;
+/* generated from toc-landmarks-list.scss */
+/* toc-base.scss */
+[role=listbox] [role=listitem] {
+  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+  font-size: 11pt;
+  display: block;
   margin: 0;
   padding: 3px;
-  font-size: 1em;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   outline: none;
 }
 
-[role="listbox"] [role="listitem"]:focus {
-  padding: 1px;
-  border: 2px solid ButtonBorder;
+[role=listbox] [role=listitem]:focus {
+  outline-offset: -2px;
+  outline-color: activeText;
+  outline-width: 2px;
+  outline-style: solid;
+  background-color: #eee !important;
+  color: #000;
 }
 
+[role=listbox] [role=listitem]:hover {
+  cursor: pointer;
+}

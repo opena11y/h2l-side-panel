@@ -52,7 +52,7 @@
       "128": "icons/light-toc-sidebar-128.png"
     },
     "default_title": "__MSG_extension_name_firefox__",
-    "default_panel": "sidepanel.html",
+    "default_panel": "toc-sidepanel.html",
     "open_at_install": false
   },
 

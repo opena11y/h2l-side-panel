@@ -1,6 +1,8 @@
-/* toc-links-grid.css */
-
-table[role="grid"] {
+/* generated from toc-links-grid.scss */
+/* toc-base.scss */
+table[role=grid] {
+  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+  font-size: 11pt;
   display: block;
   margin: 0;
   padding: 0;
@@ -11,8 +13,8 @@ table[role="grid"] {
   table-layout: fixed;
 }
 
-table[role="grid"] thead,
-table[role="grid"] tbody {
+table[role=grid] thead,
+table[role=grid] tbody {
   display: table;
   margin: 0;
   padding: 0;
@@ -21,25 +23,21 @@ table[role="grid"] tbody {
   width: 98%;
 }
 
-table[role="grid"] tbody tr {
+table[role=grid] tbody tr {
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-table[role="grid"] thead {
+table[role=grid] thead {
   background-color: white;
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
-table[role="grid"] tbody tr:nth-child(even) {
-  background: #eee;
-}
-
-table[role="grid"] tr th,
-table[role="grid"] tr td {
+table[role=grid] tr th,
+table[role=grid] tr td {
   padding: 4px;
   border: none;
   text-overflow: ellipsis;
@@ -47,17 +45,21 @@ table[role="grid"] tr td {
   white-space: nowrap;
 }
 
-table[role="grid"] tr th {
+table[role=grid] tr th {
   text-align: left;
 }
 
-
-table[role="grid"] th:focus,
-table[role="grid"] td:focus,
-table[role="grid"] tr:focus {
-  outline-offset:  -2px;
-  outline: currentColor 2px solid;
-  background-color: #000 !important;
-  color: #fff;
+table[role=grid] th:focus,
+table[role=grid] td:focus,
+table[role=grid] tr:focus {
+  outline-offset: -2px;
+  outline-color: activeText;
+  outline-width: 2px;
+  outline-style: solid;
+  background-color: #eee !important;
+  color: #000;
 }
 
+table[role=grid] tr:hover {
+  cursor: pointer;
+}

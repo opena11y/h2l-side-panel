@@ -1,0 +1,28 @@
+/* generated from toc-landmarks-list.scss */
+@use 'toc-base';
+
+[role="listbox"] [role="listitem"] {
+  font-family: toc-base.$font-family;
+  font-size: toc-base.$font-size-content;
+
+  display: block;
+  margin: 0;
+  padding: 3px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  outline: none;
+}
+
+[role="listbox"] [role="listitem"]:focus {
+  outline-offset:   toc-base.$outline-offset-focus;
+  outline-color:    toc-base.$outline-color-focus;
+  outline-width:    toc-base.$outline-width-focus;
+  outline-style:    toc-base.$outline-style-focus;
+  background-color: toc-base.$background-color-focus !important;
+  color:            toc-base.$color-focus;
+}
+
+[role="listbox"] [role="listitem"]:hover {
+  cursor: pointer;
+}

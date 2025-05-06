@@ -1,1 +1,6 @@
-/* toc-sidepanel.css */
+/* generated from toc-sidepanel.scss */
+/* toc-base.scss */
+.toc-sidepanel {
+  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+  font-size: 11pt;
+}

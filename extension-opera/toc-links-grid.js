@@ -5,11 +5,8 @@
 import DebugLogging   from './debug.js';
 
 import {
-  highlightOrdinalPosition
-} from './toc-sidepanel.js';
-
-import {
   getMessage,
+  highlightOrdinalPosition,
   removeChildContent,
   setI18nLabels,
   setTablistAttr

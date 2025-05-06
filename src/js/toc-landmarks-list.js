@@ -1,42 +1,35 @@
-/* toc-regions-list.js */
+/* toc-landmarks-list.js */
+
+/* Imports */
 
 import DebugLogging   from './debug.js';
 
 import {
-  getOptions,
-  resetDefaultOptions
+  getOptions
 } from './storage.js';
 
 import {
-  highlightOrdinalPosition
-} from './toc-sidepanel.js';
+  getMessage,
+  highlightOrdinalPosition,
+  removeChildContent,
+  setI18nLabels,
+  setTablistAttr
+} from './utils.js';
 
 /* Constants */
 
-const debug = new DebugLogging('tocRegionsList', false);
+const debug = new DebugLogging('tocLandmarksList', false);
 debug.flag = false;
-
-/* Utility functions */
-
-/*
-**  @function removeChildContent
-*/
-
-function removeChildContent(node) {
-   while(node.firstChild) {
-    node.removeChild(node.firstChild);
-   }
-}
 
 
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
-  <div role="listbox">
+  <div role="listbox" data-i18n-aria-label="landmarks_list_label">
   </div>
 `;
 
-class TOCRegionsList extends HTMLElement {
+class TOCLandmarksList extends HTMLElement {
   constructor () {
     super();
     this.attachShadow({ mode: 'open' });
@@ -46,13 +39,15 @@ class TOCRegionsList extends HTMLElement {
     // Use external CSS stylesheet
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('href', './toc-regions-list.css');
+    link.setAttribute('href', './toc-landmarks-list.css');
     this.shadowRoot.appendChild(link);
 
     // Add DOM listboxfrom template
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
     this.listboxNode = this.shadowRoot.querySelector("[role=listbox");
+
+    setI18nLabels(this.shadowRoot, debug.flag);
 
   }
 
@@ -82,34 +77,62 @@ class TOCRegionsList extends HTMLElement {
 
     if (myResult.regions) {
 
-      resetDefaultOptions().then(getOptions().then( (options) => {
+      const landmarkCounts = {};
+
+      myResult.regions.forEach( (r) => {
+        if (landmarkCounts[r.role]) {
+          landmarkCounts[r.role] += 1;
+        }
+        else {
+          landmarkCounts[r.role] = 1;
+        }
+      });
+
+      for (let role in landmarkCounts) {
+        debug.log(`[${role}]: ${landmarkCounts[role]}`);
+      }
+
+      getOptions().then( (options) => {
 
         debug.flag && debug.log(`[options]: ${options}`);
         myResult.regions.forEach( (r) => {
-          const listitemNode = document.createElement('div');
-          listitemNode.setAttribute('role', 'listitem');
-          listitemNode.setAttribute('data-ordinal-position', r.ordinalPosition);
-          const textContent = r.name ? `${r.role.toUpperCase()}: ${r.name}` : r.role.toUpperCase();
-          listitemNode.textContent = textContent;
-          listitemNode.setAttribute('data-first-char', r.role.toLowerCase()[0]);
-          listitemNode.addEventListener('click', listObj.handleListitemClick.bind(listObj));
-          listitemNode.addEventListener('keydown', listObj.handleKeydown.bind(listObj));
-          this.listboxNode.appendChild(listitemNode);
-          debug.flag && debug.log(listitemNode.textContent);
+          if (r.name ||
+              (landmarkCounts[r.role] < 3) ||
+              options.unNamedDuplicateRegions) {
+
+            const listitemNode = document.createElement('div');
+            listitemNode.setAttribute('role', 'listitem');
+            listitemNode.setAttribute('data-ordinal-position', r.ordinalPosition);
+
+            const roleName = r.role[0].toUpperCase() + r.role.slice(1);
+
+            listitemNode.textContent = r.name ? `${roleName}: ${r.name}` : roleName;
+            listitemNode.setAttribute('data-first-char', r.role.toLowerCase()[0]);
+            listitemNode.addEventListener('click', listObj.handleListitemClick.bind(listObj));
+            listitemNode.addEventListener('keydown', listObj.handleKeydown.bind(listObj));
+
+            this.listboxNode.appendChild(listitemNode);
+            debug.flag && debug.log(listitemNode.textContent);
+          }
+
         });
 
         const firstListitem = this.listboxNode.querySelector('[role="listitem"]');
+
+        const count = this.listboxNode.querySelectorAll('[role="listitem"]').length;
+
+        setTablistAttr('landmarks-count', count);
 
         if (firstListitem) {
           this.setFocusToListitem(firstListitem);
         }
         else {
-          this.clearContent('No landmark regions found');
+          this.clearContent(getMessage('Landmarks_none_found', debug.flag));
         }
-      }));
+      });
     }
     else {
-      this.clearContent('Protocal not supported');
+      this.clearContent(getMessage('protocol_not_supported', debug.flag));
     }
 
   }
@@ -273,7 +296,7 @@ class TOCRegionsList extends HTMLElement {
 }
 
 
-window.customElements.define('toc-regions-list', TOCRegionsList);
+window.customElements.define('toc-landmarks-list', TOCLandmarksList);
 
 
 

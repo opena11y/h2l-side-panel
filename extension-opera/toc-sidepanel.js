@@ -11,10 +11,6 @@ import {
 const debug = new DebugLogging('tocSidepanel', false);
 debug.flag = true;
 
-export {
-  highlightOrdinalPosition
-};
-
 // Browser Constants
 
 const isMozilla = typeof browser === 'object';
@@ -42,7 +38,50 @@ function onError(error) {
   console.error(`Error: ${error}`);
 }
 
-function highlightOrdinalPosition(ordinalPosition) {
+/* templates */
+const template = document.createElement('template');
+template.innerHTML = `
+  <div id="id-toc-sidepanel"
+       class="toc-sidepanel">
+    <toc-tablist></toc-tablist>
+  </div>
+`;
+
+class TOCSidePanel extends HTMLElement {
+  constructor () {
+    super();
+    this.attachShadow({ mode: 'open' });
+
+    debug.flag && debug.log(`loading TOCSidePanel ...`);
+
+    // Add DOM tree from template
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+
+    this.activeTabUrl;
+    this.lastStatus = '';
+
+    this.tocTablistNode = this.shadowRoot.querySelector('toc-tablist');
+    debug.flag && debug.log(`[tocTablistNode]: ${this.tocTablistNode}`);
+
+    // Update side panel title
+
+    document.querySelector('title').textContent = getMessage('extension_name_chrome');
+
+    /*
+    *   Add Window event listeners
+    */
+    window.addEventListener('load', this.handleWindowLoad.bind(this));
+    window.addEventListener('unload', this.handleWindowUnload.bind(this));
+
+    window.addEventListener("resize", this.handleResize.bind(this));
+  }
+
+  clearContent(message = '') {
+    debug.flag && debug.log(`[clearContent]: ${message}`);
+    this.tocTablistNode.clearContent(message);
+  }
+
+  highlightOrdinalPosition(ordinalPosition) {
     debug.flag && debug.log(`[handleHighlight]`);
 
     async function sendHighlightMessage(tabs) {
@@ -65,49 +104,6 @@ function highlightOrdinalPosition(ordinalPosition) {
       .catch(onError);
   }
 
-/* templates */
-const template = document.createElement('template');
-template.innerHTML = `
-  <div id="id-toc-sidepanel">
-    <toc-tablist></toc-tablist>
-  </div>
-`;
-
-class TOCSidePanel extends HTMLElement {
-  constructor () {
-    super();
-    this.attachShadow({ mode: 'open' });
-
-    debug.flag && debug.log(`loading TOCSidePanel ...`);
-
-    // Use external CSS stylesheet
-    const link = document.createElement('link');
-    link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('href', './toc-sidepanel.css');
-    this.shadowRoot.appendChild(link);
-
-    // Add DOM tree from template
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
-
-    this.activeTabUrl;
-    this.lastStatus = '';
-
-    this.tocTablistNode = this.shadowRoot.querySelector('toc-tablist');
-
-    debug.flag && debug.log(`[tocTablistNode]: ${this.tocTablistNode}`);
-    /*
-    *   Add Window event listeners
-    */
-    window.addEventListener('load', this.handleWindowLoad.bind(this));
-    window.addEventListener('unload', this.handleWindowUnload.bind(this));
-
-    window.addEventListener("resize", this.handleResize.bind(this));
-  }
-
-  clearContent(message = '') {
-    debug.flag && debug.log(`[clearContent]: ${message}`);
-    this.tocTablistNode.clearContent(message);
-  }
 
   updateContent() {
     debug.flag && debug.log(`[updateContent]`);

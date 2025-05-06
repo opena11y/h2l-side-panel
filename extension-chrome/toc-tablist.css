@@ -1,31 +1,31 @@
-/* toc-tablist.css */
+/* generated from toc-tablist.scss */
+/* toc-base.scss */
+.toc-lablist {
+  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+  font-size: 11pt;
+}
 
 h2 {
+  font-size: 12pt;
   margin: 0;
   padding: 0;
   margin-top: 1em;
-  font-size: 120%;
   font-weight: bold;
 }
 
 #id-div-title {
+  font-size: 12pt;
   display: block;
-  font-size: 120%;
   margin-bottom: 1em;
 }
 
-.tabs {
-  font-family: "lucida grande", sans-serif;
-}
-
-[role="tablist"] {
+[role=tablist] {
   min-width: 100%;
 }
 
-[role="tab"],
-[role="tab"]:focus,
-[role="tab"]:hover {
-  font-size: 120%;
+[role=tab],
+[role=tab]:focus,
+[role=tab]:hover {
   display: inline-block;
   position: relative;
   z-index: 2;
@@ -33,10 +33,10 @@ h2 {
   margin: 0;
   margin-top: 4px;
   padding: 3px 3px 4px;
-  border: 1px solid hsl(219deg 1% 72%);
-  border-bottom: 2px solid hsl(219deg 1% 72%);
+  border: 1px solid hsl(219, 1%, 72%);
+  border-bottom: 2px solid hsl(219, 1%, 72%);
   border-radius: 5px 5px 0 0;
-  background: hsl(220deg 20% 94%);
+  background: hsl(220, 20%, 94%);
   outline: none;
   font-weight: bold;
   max-width: 8em;
@@ -45,21 +45,21 @@ h2 {
   cursor: pointer;
 }
 
-[role="tab"][aria-selected="true"] {
+[role=tab][aria-selected=true] {
+  border-top-color: activeText;
   padding: 2px 2px 4px;
   margin-top: 0;
   border-width: 2px;
   border-top-width: 6px;
-  border-top-color: rgb(36 116 214);
-  border-bottom-color: hsl(220deg 43% 99%);
-  background: hsl(220deg 43% 99%);
+  border-bottom-color: hsl(220, 43%, 99%);
+  background: hsl(220, 43%, 99%);
 }
 
-[role="tab"][aria-selected="false"] {
-  border-bottom: 1px solid hsl(219deg 1% 72%);
+[role=tab][aria-selected=false] {
+  border-bottom: 1px solid hsl(219, 1%, 72%);
 }
 
-[role="tab"] span.focus {
+[role=tab] span.focus {
   display: inline-block;
   margin: 2px;
   padding: 4px 6px;
@@ -68,55 +68,55 @@ h2 {
   text-overflow: ellipsis;
 }
 
-[role="tab"]:hover span.focus,
-[role="tab"]:focus span.focus,
-[role="tab"]:active span.focus {
+[role=tab]:hover span.focus,
+[role=tab]:focus span.focus,
+[role=tab]:active span.focus {
   padding: 2px 4px;
-  border: 2px solid rgb(36 116 214);
+  border-width: 2px;
+  border-style: solid;
+  border-color: activeText;
   border-radius: 3px;
 }
 
-[role="tabpanel"] {
-  font-size: 120%;
+[role=tabpanel] {
   padding: 5px;
-  border: 2px solid hsl(219deg 1% 72%);
+  border: 2px solid hsl(219, 1%, 72%);
   border-radius: 0 5px 5px;
-  background: hsl(220deg 43% 99%);
+  background: hsl(220, 43%, 99%);
   min-height: 180px;
   min-width: 180px;
   overflow: auto;
 }
 
-[role="tabpanel"].is-hidden {
+[role=tabpanel].is-hidden {
   display: none;
 }
 
-#summary {
-  font-size: 120%;
-}
-
-#buttons {
+footer {
   padding-top: 1.5em;
-  padding-bottom: 1.5em;
+  padding-bottom: 0.5em;
   display: grid;
   grid-template-columns: 40% 20% 40%;
 }
 
-#buttons .first {
+footer button {
+  font-size: 12pt;
+}
+
+footer .first {
   grid-column-start: 1;
   grid-column-end: 2;
 }
 
-#buttons .middle {
+footer .middle {
   grid-column-start: 2;
   grid-column-end: 3;
   text-align: center;
   vertical-align: center;
 }
 
-#buttons .last {
+footer .last {
   grid-column-start: 3;
   grid-column-end: 4;
   text-align: right;
 }
-

@@ -88,8 +88,20 @@ export function setTablistAttr (attr, value) {
 */
 
 export function updateContent () {
-    const sidepanelNode = document.querySelector('toc-sidepanel');
-    if (sidepanelNode) {
-      sidepanelNode.updateContent();
-    }
+  const sidepanelNode = document.querySelector('toc-sidepanel');
+  if (sidepanelNode) {
+    sidepanelNode.updateContent();
   }
+}
+
+  /*
+**  @function highlightOrdinalPosition
+*/
+
+export function highlightOrdinalPosition (ordinalPosition) {
+  const sidepanelNode = document.querySelector('toc-sidepanel');
+  if (sidepanelNode) {
+    sidepanelNode.highlightOrdinalPosition(ordinalPosition);
+  }
+}
+

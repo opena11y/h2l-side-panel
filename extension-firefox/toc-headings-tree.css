@@ -1,83 +1,99 @@
-/* toc-headings-tree.css */
-
-[role="tree"] [role="treeitem"] {
-  dispaly: block;
+/* generated from toc-headings-tree.scss */
+/* toc-base.scss */
+[role=tree] [role=treeitem] {
+  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+  font-size: 11pt;
+  display: block;
   margin: 0;
   padding: 3px;
-  font-size: 1em;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  outline: none;
 }
 
-[role="tree"] [role="treeitem"] span.no-icon,
-[role="tree"] [role="treeitem"] span.expand-icon {
+[role=tree] [role=treeitem] span.no-icon,
+[role=tree] [role=treeitem] span.expand-icon {
   display: inline-block;
   width: 20px;
 }
 
-[role="tree"] [role="treeitem"][aria-expanded="true"] + [role="group"] {
+[role=tree] [role=treeitem][aria-expanded=true] + [role=group] {
   display: block;
   animation: fadeInOut 0.6s ease-in-out;
 }
 
-[role="tree"] [role="treeitem"][aria-expanded="true"] span.expand-icon {
+[role=tree] [role=treeitem][aria-expanded=true] span.expand-icon {
   position: relative;
   top: 3px;
   rotate: 90deg;
   transition: rotate ease 0.4s;
 }
 
-[role="tree"] [role="treeitem"][aria-expanded="false"] + [role="group"] {
+[role=tree] [role=treeitem][aria-expanded=false] + [role=group] {
   display: none;
   animation: fadeInOut 0.6s ease-in-out;
 }
 
-[role="tree"] [role="treeitem"][data-level="1"] { padding-left: 4px;}
-[role="tree"] [role="treeitem"][data-level="2"] { padding-left: 4px;}
-[role="tree"] [role="treeitem"][data-level="3"] { padding-left: 16px}
-[role="tree"] [role="treeitem"][data-level="4"] { padding-left: 32px}
-[role="tree"] [role="treeitem"][data-level="5"] { padding-left: 48px}
-[role="tree"] [role="treeitem"][data-level="6"] { padding-left: 64px}
+[role=tree] [role=treeitem][data-level="1"] {
+  padding-left: 4px;
+}
+
+[role=tree] [role=treeitem][data-level="2"] {
+  padding-left: 4px;
+}
+
+[role=tree] [role=treeitem][data-level="3"] {
+  padding-left: 16px;
+}
+
+[role=tree] [role=treeitem][data-level="4"] {
+  padding-left: 32px;
+}
+
+[role=tree] [role=treeitem][data-level="5"] {
+  padding-left: 48px;
+}
+
+[role=tree] [role=treeitem][data-level="6"] {
+  padding-left: 64px;
+}
 
 @keyframes fadeInOut {
-    0% {
-        opacity: 0;
-        display: none;
-    }
-
-    25% {
-        opacity: 0.15;
-        display: block;
-    }
-
-    50% {
-        opacity: 0.35;
-        display: block;
-    }
-
-    75% {
-        opacity: 0.65;
-        display: block;
-    }
-
-    100% {
-        opacity: 1;
-        display: block;
-    }
+  0% {
+    opacity: 0;
+    display: none;
+  }
+  25% {
+    opacity: 0.15;
+    display: block;
+  }
+  50% {
+    opacity: 0.35;
+    display: block;
+  }
+  75% {
+    opacity: 0.65;
+    display: block;
+  }
+  100% {
+    opacity: 1;
+    display: block;
+  }
+}
+[role=tree] [role=treeitem]:focus {
+  outline-offset: -2px;
+  outline-color: activeText;
+  outline-width: 2px;
+  outline-style: solid;
+  background-color: #eee !important;
+  color: #000;
 }
 
-[role="tree"] [role="treeitem"]:focus {
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-right: 1px;
-  border: 2px solid ActiveText;
+[role=tree] [role=treeitem]:focus .expand-icon polygon {
+  stroke: activeText;
+  fill: activeText;
 }
 
-[role="tree"] [role="treeitem"][data-level="1"]:focus { padding-left: 2px;}
-[role="tree"] [role="treeitem"][data-level="2"]:focus { padding-left: 2px;}
-[role="tree"] [role="treeitem"][data-level="3"]:focus { padding-left: 14px}
-[role="tree"] [role="treeitem"][data-level="4"]:focus { padding-left: 30px}
-[role="tree"] [role="treeitem"][data-level="5"]:focus { padding-left: 46px}
-[role="tree"] [role="treeitem"][data-level="6"]:focus { padding-left: 62px}
+[role=tree] [role=treeitem]:hover {
+  cursor: pointer;
+}

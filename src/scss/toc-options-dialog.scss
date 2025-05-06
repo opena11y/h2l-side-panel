@@ -1,12 +1,15 @@
 /* generated from toc-options-dialog.scss */
-/* toc-base.scss */
+@use 'toc-base';
+
+
 dialog.toc-options {
-  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
-  font-size: 11pt;
+  font-family: toc-base.$font-family;
+  font-size: toc-base.$font-size-content;
+
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%,-50%);
   width: 90%;
   margin: 0;
   padding: 0;
@@ -17,6 +20,7 @@ dialog.toc-options {
   border-color: light-dark(black, white);
   border-radius: 5px;
   z-index: 2000001;
+
 }
 
 dialog.toc-options .header {
@@ -29,7 +33,7 @@ dialog.toc-options .header {
   border-color: light-dark(black, white);
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  font-weight: bold;
+  font-weight:  bold;
   background-color: light-dark(#eee, #111);
   color: light-dark(black, white);
   position: relative;
@@ -117,12 +121,13 @@ dialog.toc-options .buttons button {
 
 .focus,
 button:focus {
-  outline-color: activeText;
-  outline-width: 2px;
-  outline-style: solid;
+  outline-color:    toc-base.$outline-color-focus;
+  outline-width:    toc-base.$outline-width-focus;
+  outline-style:    toc-base.$outline-style-focus;
   outline-offset: 2px;
 }
 
 button:hover {
   cursor: pointer;
 }
+

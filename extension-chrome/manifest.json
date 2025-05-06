@@ -42,7 +42,7 @@
     "type": "module"
   },
  "side_panel": {
-    "default_path": "sidepanel.html"
+    "default_path": "toc-sidepanel.html"
   },
   "host_permissions": [
     "http://*/*",

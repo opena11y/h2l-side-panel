@@ -18,6 +18,8 @@ const browserStorage = typeof browser === 'object' ?
                        chrome.storage.sync;
 
 const defaultOptions = {
+  highlightFollowsFocus: false,
+  enterKeyMovesFocus: true,
   smallAndOffScreenHeadings: false,
   unNamedDuplicateRegions: false,
   internalLinks: true,
