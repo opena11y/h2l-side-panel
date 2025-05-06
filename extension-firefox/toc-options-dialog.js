@@ -4,12 +4,19 @@
 import DebugLogging  from './debug.js';
 
 import {
-  setI18nLabels
+  setI18nLabels,
+  updateContent
 } from './utils.js';
+
+import {
+  getOptions,
+  saveOptions,
+  resetDefaultOptions
+} from './storage.js';
 
 /* Constants */
 const debug = new DebugLogging('[optionsDialog]', false);
-debug.flag = false;
+debug.flag = true;
 
 /* templates */
 const template = document.createElement('template');
@@ -144,7 +151,10 @@ export default class TOCOptionsDialog extends HTMLElement {
     this.contentElem  = this.infoDialog.querySelector('.content');
 
     this.resetDefaultsButton  = this.infoDialog.querySelector('#id-reset-defaults');
-    this.resetDefaultsButton.addEventListener('click', this.handleResetDefaults.bind(this));
+    this.resetDefaultsButton.addEventListener('click', () => {
+      debug.flag && debug.log(`[handleResetDefaults]`);
+      resetDefaultOptions().then(this.updateOptions.bind(this));
+    });
 
     this.closeButton2  = this.infoDialog.querySelector('#id-close-2');
     this.closeButton2.addEventListener('click', this.handleCloseButtonClick.bind(this));
@@ -159,6 +169,64 @@ export default class TOCOptionsDialog extends HTMLElement {
 
     setI18nLabels(this.shadowRoot, debug.flag);
 
+    this.optionControls =  Array.from(this.shadowRoot.querySelectorAll('[data-option]'));
+    this.updateOptions();
+  }
+
+  updateOptions () {
+    const optionControls = this.optionControls;
+
+    getOptions().then( (options) => {
+      optionControls.forEach( input => {
+        const option = input.getAttribute('data-option');
+
+        switch (input.type) {
+          case 'checkbox':
+            input.checked = options[option];
+            debug && console.log(`[updateOptions][${option}]: ${options[option]} (${input.checked})`);
+            break;
+
+          case 'text':
+          case '':
+            input.value = options[option];
+            debug && console.log(`[updateOptions][${option}]: ${options[option]} (${input.value})`);
+            break;
+
+          default:
+            break;
+        }
+      });
+    });
+  }
+
+  saveOptions () {
+
+    const optionControls = this.optionControls;
+
+    getOptions().then( (options) => {
+
+      optionControls.forEach( input => {
+        const option = input.getAttribute('data-option');
+
+        switch (input.type) {
+          case 'checkbox':
+            options[option] = input.checked;
+            debug.flag && console.log(`[saveOptions][${option}]: ${options[option]} (${input.checked})`);
+            break;
+
+          case 'text':
+          case '':
+            options[option] = input.value;
+            debug.flag && console.log(`[saveOptions][${option}]: ${options[option]} (${input.value})`);
+            break;
+
+          default:
+            break;
+        }
+      });
+
+      saveOptions(options);
+    });
   }
 
   /*
@@ -178,16 +246,14 @@ export default class TOCOptionsDialog extends HTMLElement {
   }
 
   handleCloseButtonClick () {
+    this.saveOptions();
     this.infoDialog.close();
+    updateContent();
   }
 
   openDialog () {
     this.infoDialog.showModal();
     this.closeButton2.focus();
-  }
-
-  handleResetDefaults () {
-    debug.flag && debug.log(`[handleResetDefaults]`);
   }
 
   handleKeyDown (event) {

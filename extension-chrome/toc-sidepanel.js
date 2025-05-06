@@ -3,7 +3,8 @@
 import DebugLogging   from './debug.js';
 
 import {
-  getMessage
+  getMessage,
+  setTablistAttr
 } from './utils.js';
 
 /* Constants */
@@ -14,17 +15,23 @@ debug.flag = true;
 // Browser Constants
 
 const isMozilla = typeof browser === 'object';
-debug.flag && debug.log(`[isMozilla]: ${isMozilla}`);
+debug.flag && debug.log(`[     isMozilla]: ${isMozilla}`);
 
 const myBrowser = typeof browser === 'object' ?
               browser :
               chrome;
-debug.flag && debug.log(`[myBrowser]: ${myBrowser}`);
+debug.flag && debug.log(`[     myBrowser]: ${myBrowser}`);
 
 const browserTabs = typeof browser === 'object' ?
             browser.tabs :
             chrome.tabs;
-debug.flag && debug.log(`[browserTabs]: ${browserTabs}`);
+debug.flag && debug.log(`[   browserTabs]: ${browserTabs}`);
+
+const browserRuntime = typeof browser === 'object' ?
+              browser.runtime :
+              chrome.runtime;
+debug.flag && debug.log(`[browserRuntime]: ${browserRuntime}`);
+
 
 let myWindowId = -1;  // used for checking if a tab is in the same window as the sidebar
 
@@ -66,6 +73,9 @@ class TOCSidePanel extends HTMLElement {
     // Update side panel title
 
     document.querySelector('title').textContent = getMessage('extension_name_chrome');
+
+    const version = browserRuntime.getManifest().version;
+    setTablistAttr('version', version);
 
     /*
     *   Add Window event listeners

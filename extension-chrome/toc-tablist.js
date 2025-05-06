@@ -108,9 +108,9 @@ template.innerHTML = `
                 data-i18n="buttons_options">
         </button>
       </div>
-      <div d="id-version"
+      <div id="id-version"
            class="middle">
-        0.1
+        0.0.0
       </div>
       <div class="last">
         <button id="id-btn-update-info"
@@ -146,6 +146,7 @@ class TOCTabList extends HTMLElement {
     this.tocLandmarksList  = this.shadowRoot.querySelector('toc-landmarks-list');
     this.tocLinksGrid      = this.shadowRoot.querySelector('toc-links-grid');
     this.tocOptionsDialog  = this.shadowRoot.querySelector('toc-options-dialog');
+    this.tocVersion        = this.shadowRoot.querySelector('#id-version');
 
     this.divSummary      = this.shadowRoot.querySelector('#summary');
 
@@ -197,6 +198,7 @@ class TOCTabList extends HTMLElement {
 
   static get observedAttributes() {
     return [
+      "version",
       "headings-count",
       "landmarks-count",
       "links-count"
@@ -216,6 +218,10 @@ class TOCTabList extends HTMLElement {
 
     if (name === "links-count") {
       this.setCount('id-links-count', newValue);
+    }
+
+    if (name === "version") {
+      this.tocVersion.textContent = newValue;
     }
 
   }
