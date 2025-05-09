@@ -80,6 +80,20 @@ dialog.toc-options .grid {
   grid-template-columns: 25px 1fr;
 }
 
+dialog.toc-options .select {
+  padding: 0;
+  margin: 0;
+  margin-left: 0.5em;
+}
+
+dialog.toc-options .select label {
+  display: inline-block;
+}
+
+dialog.toc-options .select select {
+  display: inline-block;
+}
+
 dialog.toc-options label.grid span.label {
   display: inline-block;
 }

@@ -10,7 +10,7 @@ import {
 /* Constants */
 
 const debug = new DebugLogging('tocSidepanel', false);
-debug.flag = true;
+debug.flag = false;
 
 // Browser Constants
 
@@ -92,10 +92,10 @@ class TOCSidePanel extends HTMLElement {
   }
 
   highlightOrdinalPosition(ordinalPosition) {
-    debug.flag && debug.log(`[handleHighlight]`);
+    debug.flag && debug.log(`[highlightOrdinalPosition]`);
 
     async function sendHighlightMessage(tabs) {
-      debug.flag && debug.log(`[ssendHighlightMessage]`);
+      debug.flag && debug.log(`[sendHighlightMessage]`);
       for (const tab of tabs) {
         debug.flag && debug.log(`[sendHighlightMessage][tab]: ${tab.id}`);
         const myResult = await myBrowser.tabs
@@ -111,6 +111,29 @@ class TOCSidePanel extends HTMLElement {
         active: true,
       })
       .then(sendHighlightMessage)
+      .catch(onError);
+  }
+
+  focusOrdinalPosition(ordinalPosition) {
+    debug.flag && debug.log(`[focusOrdinalPosition]`);
+
+    async function sendFocusMessage(tabs) {
+      debug.flag && debug.log(`[sendFocusMessage]`);
+      for (const tab of tabs) {
+        debug.flag && debug.log(`[sendFocusMessage][tab]: ${tab.id}`);
+        const myResult = await myBrowser.tabs
+          .sendMessage(tab.id, { focusPosition : ordinalPosition });
+
+        debug.flag && debug.log(`[sendfocusMessage][myResult]: ${myResult}`);
+      }
+    }
+
+    myBrowser.tabs
+      .query({
+        currentWindow: true,
+        active: true,
+      })
+      .then(sendFocusMessage)
       .catch(onError);
   }
 

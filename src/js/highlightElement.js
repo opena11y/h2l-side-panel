@@ -180,7 +180,7 @@ class HighlightElement extends HTMLElement {
 
     this.msgHeadingIsHidden = '';
 
-    this.highlightAttr = 'data-opena11y-id';
+    this.dataAttr = 'data-opena11y-id';
 
     this.configureStyle();
 
@@ -188,22 +188,38 @@ class HighlightElement extends HTMLElement {
 
   static get observedAttributes() {
     return [
-      "highlight-attr",
-      "highlight-value"
+      "data-attr",
+      "highlight-value",
+      "focus-value",
       ];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
 
     switch (name) {
-      case "highlight-attr":
-        this.highlightAttr = newValue;
+      case "data-attr":
+        this.dataAttr = newValue;
+        return;
+
+     case "focus-value":
+        if (newValue) {
+          debug && console.log(`[attributeChangedCallback][${name}]: ${newValue}`);
+          const node = this.queryDOMForAttrValue(this.dataAttr, newValue);
+          debug && console.log(`[attributeChangedCallback][node]: ${node}`);
+          if (node) {
+            this.removeHighlight();
+            debug && console.log(`[attributeChangedCallback][focus]`);
+            window.focus();
+            node.setAttribute('tabindex', '-1');
+            node.focus();
+          }
+        }
         return;
 
       case "highlight-value":
         if (newValue) {
-          debug && console.log(`[attributeChangedCallback][${this.highlightAttr}]: ${newValue}`);
-          const node = this.queryDOMForAttrValue(this.highlightAttr, newValue);
+          debug && console.log(`[attributeChangedCallback][${name}]: ${newValue}`);
+          const node = this.queryDOMForAttrValue(this.dataAttr, newValue);
           debug && console.log(`[attributeChangedCallback][node]: ${node}`);
           if (node) {
             this.highlight(node);

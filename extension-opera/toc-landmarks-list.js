@@ -10,6 +10,7 @@ import {
 
 import {
   getMessage,
+  focusOrdinalPosition,
   highlightOrdinalPosition,
   removeChildContent,
   setI18nLabels,
@@ -46,6 +47,9 @@ class TOCLandmarksList extends HTMLElement {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
     this.listboxNode = this.shadowRoot.querySelector("[role=listbox");
+
+    this.highlightFollowsFocus = false;
+    this.enterKeyMovesFocus    = false;
 
     setI18nLabels(this.shadowRoot, debug.flag);
 
@@ -89,10 +93,16 @@ class TOCLandmarksList extends HTMLElement {
       });
 
       for (let role in landmarkCounts) {
-        debug.log(`[${role}]: ${landmarkCounts[role]}`);
+        debug.flag && debug.log(`[${role}]: ${landmarkCounts[role]}`);
       }
 
       getOptions().then( (options) => {
+
+        debug.flag && debug.log(`[options][    highlightFollowsFocus]: ${options.highlightFollowsFocus}`);
+        debug.flag && debug.log(`[options][       enterKeyMovesFocus]: ${options.enterKeyMovesFocus}`);
+
+        this.highlightFollowsFocus = options.highlightFollowsFocus;
+        this.enterKeyMovesFocus    = options.enterKeyMovesFocus;
 
         debug.flag && debug.log(`[options]: ${options}`);
         myResult.regions.forEach( (r) => {
@@ -143,12 +153,20 @@ class TOCLandmarksList extends HTMLElement {
     return Array.from(this.listboxNode.querySelectorAll('[role="listitem"]'));
   }
 
+  focusRegion(listitem) {
+    const op = listitem.getAttribute('data-ordinal-position');
+    if (op) {
+      focusOrdinalPosition(op);
+    }
+  }
+
   highlightRegion(listitem) {
     const op = listitem.getAttribute('data-ordinal-position');
     if (op) {
       highlightOrdinalPosition(op);
     }
   }
+
 
   setFocusByFirstCharacter(listitem, char){
 
@@ -222,7 +240,7 @@ class TOCLandmarksList extends HTMLElement {
 
   handleListitemClick (event) {
     const tgt = event.currentTarget;
-    debug.log(`[handleListitemClick]: ${tgt.tagName}`);
+    debug.flag && debug.log(`[handleListitemClick]: ${tgt.tagName}`);
     this.setFocusToListitem(tgt);
     this.highlightRegion(tgt);
     event.stopPropagation();
@@ -231,7 +249,7 @@ class TOCLandmarksList extends HTMLElement {
 
  handleKeydown(event) {
     const tgt = event.currentTarget;
-    debug.log(`[handleKeydown]: ${tgt.tagName}`);
+    debug.flag && debug.log(`[handleKeydown]: ${tgt.tagName}`);
     const key = event.key;
     let flag  = false;
 
@@ -255,6 +273,15 @@ class TOCLandmarksList extends HTMLElement {
     } else {
       switch (key) {
         case 'Enter':
+          if (this.enterKeyMovesFocus) {
+            this.focusRegion(tgt);
+          }
+          else {
+            this.highlightRegion(tgt);
+          }
+          flag = true;
+          break;
+
         case ' ':
           this.highlightRegion(tgt);
           flag = true;

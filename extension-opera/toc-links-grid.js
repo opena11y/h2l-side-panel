@@ -6,6 +6,7 @@ import DebugLogging   from './debug.js';
 
 import {
   getMessage,
+  focusOrdinalPosition,
   highlightOrdinalPosition,
   removeChildContent,
   setI18nLabels,
@@ -60,6 +61,9 @@ class TOCLinksGrid extends HTMLElement {
     this.posWidth  = '40px';
     this.nameWidth = '120px';
     this.urlWidth  = '80px';
+
+    this.highlightFollowsFocus = false;
+    this.enterKeyMovesFocus    = false;
 
     setI18nLabels(this.shadowRoot, debug.flag);
 
@@ -140,8 +144,9 @@ class TOCLinksGrid extends HTMLElement {
       nameNode.addEventListener('keydown', linksObj.handleGridcellKeydown.bind(linksObj));
 
       const urlNode =  document.createElement('td');
-      urlNode.className = 'url';
+      urlNode.className   = 'url';
       urlNode.textContent = url;
+      urlNode.title       = url;
       trNode.appendChild(urlNode);
       urlNode.style.width = linksObj.urlWidth;
       urlNode.setAttribute('tabindex', '-1');
@@ -155,6 +160,12 @@ class TOCLinksGrid extends HTMLElement {
     if (myResult.links) {
 
       getOptions().then( (options) => {
+
+        debug.flag && debug.log(`[options][    highlightFollowsFocus]: ${options.highlightFollowsFocus}`);
+        debug.flag && debug.log(`[options][       enterKeyMovesFocus]: ${options.enterKeyMovesFocus}`);
+
+        this.highlightFollowsFocus = options.highlightFollowsFocus;
+        this.enterKeyMovesFocus    = options.enterKeyMovesFocus;
 
         const links = Array.from(myResult.links).filter( (l) => {
           return (l.isVisibleOnScreen && l.name.length) &&
@@ -214,6 +225,14 @@ class TOCLinksGrid extends HTMLElement {
   getGriditems () {
     return Array.from(this.gridNode.querySelectorAll('tbody tr, tbody td'));
   }
+
+  focusGridrow(gridrow) {
+    const op = gridrow.getAttribute('data-ordinal-position');
+    if (op) {
+      focusOrdinalPosition(op);
+    }
+  }
+
 
   highlightGridrow(gridrow) {
     const op = gridrow.getAttribute('data-ordinal-position');
@@ -460,6 +479,14 @@ class TOCLinksGrid extends HTMLElement {
     else {
       switch (key) {
         case 'Enter':
+          if (this.enterKeyMovesFocus) {
+            this.focusGridrow(tgt);
+          }
+          else {
+            this.highlightGridrow(tgt);
+          }
+          break;
+
         case ' ':
           this.highlightGridrow(tgt.parentNode);
           flag = true;

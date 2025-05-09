@@ -8,6 +8,7 @@ import {
 
 import {
   getMessage,
+  focusOrdinalPosition,
   highlightOrdinalPosition,
   removeChildContent,
   setI18nLabels,
@@ -59,6 +60,10 @@ class TOCHeadingsTree extends HTMLElement {
     this.treeNode = this.shadowRoot.querySelector("[role=tree]");
 
     this.treeitems = [];
+
+    this.highlightFollowsFocus = false;
+    this.enterKeyMovesFocus    = false;
+
     setI18nLabels(this.shadowRoot, debug.flag);
   }
 
@@ -90,7 +95,7 @@ class TOCHeadingsTree extends HTMLElement {
     const treeObj = this;
 
     function addTreeitem (parentNode, heading) {
-      debug.log(`addTreeItem`);
+      debug.flag && debug.log(`addTreeItem`);
       const treeitemNode = document.createElement('div');
       treeitemNode.addEventListener('keydown', treeObj.handleKeydown.bind(treeObj));
       treeitemNode.addEventListener('click', treeObj.handleTreeitemClick.bind(treeObj));
@@ -116,7 +121,7 @@ class TOCHeadingsTree extends HTMLElement {
     }
 
     function addGroup (parentNode, id) {
-      debug.log(`addGroup`);
+      debug.flag && debug.log(`addGroup`);
       const groupNode = document.createElement('div');
       groupNode.setAttribute('role', 'group');
       groupNode.id = id;
@@ -181,11 +186,16 @@ class TOCHeadingsTree extends HTMLElement {
     this.clearContent();
 
     if (myResult.headings) {
-      debug.log(`[myResult]: ${myResult.headings}`);
+      debug.flag && debug.log(`[myResult]: ${myResult.headings}`);
 
       getOptions().then( (options) => {
 
-        debug.log(`[options][small]: ${options.smallAndOffScreenHeadings}`);
+        debug.flag && debug.log(`[options][    highlightFollowsFocus]: ${options.highlightFollowsFocus}`);
+        debug.flag && debug.log(`[options][       enterKeyMovesFocus]: ${options.enterKeyMovesFocus}`);
+        debug.flag && debug.log(`[options][smallAndOffScreenHeadings]: ${options.smallAndOffScreenHeadings}`);
+
+        this.highlightFollowsFocus = options.highlightFollowsFocus;
+        this.enterKeyMovesFocus    = options.enterKeyMovesFocus;
 
         const headings = Array.from(myResult.headings).filter( (h) => {
           return h.name.length &&     // heading must have a name
@@ -236,6 +246,13 @@ class TOCHeadingsTree extends HTMLElement {
 
   getVisibleTreeitems () {
     return Array.from(this.treeNode.querySelectorAll('[role="treeitem"]:not([role="treeitem"][aria-expanded="false"] + [role="group"] > [role="treeitem"]'));
+  }
+
+  focusHeading(treeitem) {
+    const op = treeitem.getAttribute('data-ordinal-position');
+    if (op) {
+      focusOrdinalPosition(op);
+    }
   }
 
   highlightHeading(treeitem) {
@@ -402,6 +419,14 @@ class TOCHeadingsTree extends HTMLElement {
     } else {
       switch (key) {
         case 'Enter':
+          if (this.enterKeyMovesFocus) {
+            this.focusHeading(tgt);
+          }
+          else {
+            this.highlightHeading(tgt);
+          }
+          break;
+
         case ' ':
           this.highlightHeading(tgt);
           flag = true;

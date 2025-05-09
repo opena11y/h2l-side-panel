@@ -39725,8 +39725,19 @@
         const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
 
         if (he) {
-          he.setAttribute('highlight-attr', 'data-opena11y-id');
+          he.setAttribute('data-attr', 'data-opena11y-id');
           he.setAttribute('highlight-value', request.highlightPosition);
+        }
+      }
+
+      // Focus elements
+      if(request.focusPosition) {
+
+        const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
+
+        if (he) {
+          he.setAttribute('data-attr', 'data-opena11y-id');
+          he.setAttribute('focus-value', request.focusPosition);
         }
       }
 

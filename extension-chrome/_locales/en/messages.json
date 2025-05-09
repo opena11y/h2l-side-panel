@@ -92,8 +92,8 @@
     "description": "Title for options dialog box"
   },
   "options_dialog_legend_highlight": {
-    "message": "Highlight/Focus",
-    "description": "Legend for highlight focus options"
+    "message": "Highlight",
+    "description": "Legend for highlight options"
   },
   "options_dialog_legend_heading": {
     "message": "Heading and Landmark Filters",
@@ -120,20 +120,40 @@
     "description": "Label for checkbox for un-named regions "
   },
   "options_dialog_label_internal_links": {
-    "message": "Internal links",
+    "message": "Show internal links",
     "description": "Label for checkbox for including internal links"
   },
   "options_dialog_label_external_links": {
-    "message": "External links",
+    "message": "Show external links",
     "description": "Label for checkbox for including external links"
   },
   "options_dialog_label_same_domain": {
-    "message": "Same domain links",
+    "message": "Show same domain links",
     "description": "Label for checkbox for same domain links"
   },
   "options_dialog_links_desc": {
     "message": "Note: At least one link filter must be selected.",
     "description": "Description for links group in dialog"
+  },
+  "options_dialog_label_highlight_style": {
+    "message": "Highlight Style: ",
+    "description": "Label for the highlight style select box"
+  },
+  "options_dialog_highlight_style_small": {
+    "message": "small",
+    "description": "Small option for highlight style"
+  },
+  "options_dialog_highlight_style_medium": {
+    "message": "medium",
+    "description": "Medium option for highlight style"
+  },
+  "options_dialog_highlight_style_large": {
+    "message": "large",
+    "description": "large option for highlight style"
+  },
+  "options_dialog_highlight_style_x_large": {
+    "message": "x-large",
+    "description": "x-large option for highlight style"
   },
   "protocol_not_supported": {
     "message": "Protocol not supported",

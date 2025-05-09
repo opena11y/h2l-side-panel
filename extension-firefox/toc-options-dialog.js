@@ -16,7 +16,7 @@ import {
 
 /* Constants */
 const debug = new DebugLogging('[optionsDialog]', false);
-debug.flag = true;
+debug.flag = false;
 
 /* templates */
 const template = document.createElement('template');
@@ -43,13 +43,26 @@ template.innerHTML = `
           </span>
         </label>
 
-        <label class="grid">
-          <input type="checkbox"
-                 data-option="enterKeyMovesFocus"/>
-          <span class="label"
-                data-i18n="options_dialog_label_focus">
-          </span>
-        </label>
+        <div class="select">
+          <label for="id-highlight-style"
+                 data-i18n="options_dialog_label_highlight_style">
+          </label>
+          <select id="id-highlight-style"
+                   data-option="highlightStyle">
+            <option value="small"
+                    data-i18n="options_dialog_highlight_style_small">
+            </option>
+            <option value="medium"
+                    data-i18n="options_dialog_highlight_style_medium">
+            </option>
+            <option value="large"
+                    data-i18n="options_dialog_highlight_style_large">
+            </option>
+            <option value="x-large"
+                    data-i18n="options_dialog_highlight_style_x_large">
+            </option>
+          </select>
+        </div>
 
     </fieldset>
 
@@ -156,7 +169,7 @@ export default class TOCOptionsDialog extends HTMLElement {
     // Get references
 
     this.infoDialog  = this.shadowRoot.querySelector('dialog');
-    debug.log(`[infoDialog]: ${this.infoDialog}`);
+    debug.flag && debug.log(`[infoDialog]: ${this.infoDialog}`);
 
     this.closeButton1  = this.infoDialog.querySelector('#id-close-1');
     this.closeButton1.addEventListener('click', this.handleCloseButtonClick.bind(this));
@@ -174,10 +187,10 @@ export default class TOCOptionsDialog extends HTMLElement {
     this.closeButton2.addEventListener('click', this.handleCloseButtonClick.bind(this));
     this.closeButton2.addEventListener('keydown', this.handleKeyDown.bind(this));
 
-    this.inputs = Array.from(this.shadowRoot.querySelectorAll('input, button'));
+    this.inputs = Array.from(this.shadowRoot.querySelectorAll('input, button, select'));
 
     this.inputs.forEach( (input) => {
-      debug.log(`added handleInputFocus`);
+      debug.flag && debug.log(`added handleInputFocus`);
       input.addEventListener('focus', this.handleInputFocus.bind(this));
       if (input.hasAttribute('data-group')) {
         input.addEventListener('change', this.handleAtLeastOne.bind(this));
@@ -197,27 +210,41 @@ export default class TOCOptionsDialog extends HTMLElement {
 
   updateOptions () {
     const optionControls = this.optionControls;
+    const atLeastOne     = this.atLeastOne.bind(this);
 
     getOptions().then( (options) => {
       optionControls.forEach( input => {
         const option = input.getAttribute('data-option');
+        const tagName = input.tagName.toLowerCase();
 
-        switch (input.type) {
-          case 'checkbox':
-            input.checked = options[option];
-            debug && console.log(`[updateOptions][${option}]: ${options[option]} (${input.checked})`);
-            break;
 
-          case 'text':
-          case '':
-            input.value = options[option];
-            debug && console.log(`[updateOptions][${option}]: ${options[option]} (${input.value})`);
-            break;
+        if (tagName === 'input') {
+          switch (input.type) {
+            case 'checkbox':
+              input.checked = options[option];
+              debug.flag && debug.log(`[updateOptions][${option}]: ${options[option]} (${input.checked})`);
+              break;
 
-          default:
-            break;
+            case 'text':
+            case '':
+              input.value = options[option];
+              debug.flag && debug.log(`[updateOptions][${option}]: ${options[option]} (${input.value})`);
+              break;
+
+            default:
+              break;
+          }
+        }
+
+        if (tagName === 'select') {
+          const selectValues = Array.from(input.querySelectorAll('option'));
+          selectValues.forEach( (sv) => {
+            debug.flag && debug.log(`[updateOptions][${option}]: ${options[option]} (${sv.value})`);
+            sv.selected = sv.value === options[option];
+          });
         }
       });
+      atLeastOne('links');
     });
   }
 
@@ -229,21 +256,31 @@ export default class TOCOptionsDialog extends HTMLElement {
 
       optionControls.forEach( input => {
         const option = input.getAttribute('data-option');
+        const tagName = input.tagName.toLowerCase();
 
-        switch (input.type) {
-          case 'checkbox':
-            options[option] = input.checked;
-            debug.flag && console.log(`[saveOptions][${option}]: ${options[option]} (${input.checked})`);
-            break;
+        if (tagName === 'input') {
+          switch (input.type) {
+            case 'checkbox':
+              options[option] = input.checked;
+              debug.flag && debug.log(`[saveOptions][${option}]: ${options[option]} (${input.checked})`);
+              break;
 
-          case 'text':
-          case '':
-            options[option] = input.value;
-            debug.flag && console.log(`[saveOptions][${option}]: ${options[option]} (${input.value})`);
-            break;
+            case 'text':
+            case '':
+              options[option] = input.value;
+              debug.flag && debug.log(`[saveOptions][${option}]: ${options[option]} (${input.value})`);
+              break;
 
-          default:
-            break;
+            default:
+              break;
+          }
+        }
+
+        if (tagName === 'select') {
+          const selectValues = Array.from(input.querySelectorAll('option'));
+          selectValues.forEach( (sv) => {
+            options[option] = sv.selected ? sv.value : options[option];
+          });
         }
       });
 
@@ -251,24 +288,18 @@ export default class TOCOptionsDialog extends HTMLElement {
     });
   }
 
-  /*
-  /   Event handlers
-  */
+  atLeastOne (groupName) {
+    debug.flag && debug.log(`[atLeastOne][groupName]: ${groupName}`);
 
-  handleAtLeastOne (event) {
-    debug.log(`[handleAtLeastOne]`);
-    const tgt = event.currentTarget;
-
-    const groupName = tgt.getAttribute('data-group');
     const groupNodes = Array.from(this.shadowRoot.querySelectorAll(`[data-group="${groupName}"`));
-    debug.log(`[handleAtLeastOne][groupNodes]: ${groupNodes}`);
+    debug.flag && debug.log(`[handleAtLeastOne][groupNodes]: ${groupNodes}`);
 
     let count = 0;
 
     groupNodes.forEach( (input) => {
       count += input.checked ? 1 : 0;
     });
-    debug.log(`[handleAtLeastOne][count]: ${count}`);
+    debug.flag && debug.log(`[handleAtLeastOne][count]: ${count}`);
 
     if (count === 1) {
       groupNodes.forEach( (input) => {
@@ -290,8 +321,20 @@ export default class TOCOptionsDialog extends HTMLElement {
     }
   }
 
+
+  /*
+  /   Event handlers
+  */
+
+  handleAtLeastOne (event) {
+    debug.flag && debug.log(`[handleAtLeastOne]`);
+    const tgt = event.currentTarget;
+    const groupName = tgt.getAttribute('data-group');
+    this.atLeastOne(groupName);
+  }
+
   handleInputFocus (event) {
-    debug.log(`[handleInputFocus]`);
+    debug.flag && debug.log(`[handleInputFocus]`);
     const tgt = event.currentTarget;
     this.inputs.forEach( (input) => {
       if (input.tagName === "INPUT") {

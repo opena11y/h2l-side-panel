@@ -1,6 +1,6 @@
 /* service-worker.js */
 
-const debug = true;
+const debug = false;
 
 debug && console.log(`[chrome ]: ${typeof chrome}`);
 debug && console.log(`[chrome ][    sidePanel]: ${typeof chrome} ${ chrome ? typeof chrome.sidePanel : ''}`);

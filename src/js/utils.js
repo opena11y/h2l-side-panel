@@ -94,7 +94,7 @@ export function updateContent () {
   }
 }
 
-  /*
+/*
 **  @function highlightOrdinalPosition
 */
 
@@ -104,4 +104,16 @@ export function highlightOrdinalPosition (ordinalPosition) {
     sidepanelNode.highlightOrdinalPosition(ordinalPosition);
   }
 }
+
+/*
+**  @function highlightOrdinalPosition
+*/
+
+export function focusOrdinalPosition (ordinalPosition) {
+  const sidepanelNode = document.querySelector('toc-sidepanel');
+  if (sidepanelNode) {
+    sidepanelNode.focusOrdinalPosition(ordinalPosition);
+  }
+}
+
 

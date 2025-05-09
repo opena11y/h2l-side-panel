@@ -206,7 +206,7 @@ class TOCTabList extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    debug.log(`[attributeChangedCallback]: ${name} ${newValue}`);
+    debug.flag && debug.log(`[attributeChangedCallback]: ${name} ${newValue}`);
 
     if (name === "headings-count") {
       this.setCount('id-headings-count', newValue);
