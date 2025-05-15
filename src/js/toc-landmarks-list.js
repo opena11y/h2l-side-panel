@@ -117,6 +117,7 @@ class TOCLandmarksList extends HTMLElement {
             const roleName = r.role[0].toUpperCase() + r.role.slice(1);
 
             listitemNode.textContent = r.name ? `${roleName}: ${r.name}` : roleName;
+            listitemNode.setAttribute('data-info', listitemNode.textContent);
             listitemNode.setAttribute('data-first-char', r.role.toLowerCase()[0]);
             listitemNode.addEventListener('click', listObj.handleListitemClick.bind(listObj));
             listitemNode.addEventListener('keydown', listObj.handleKeydown.bind(listObj));
@@ -161,9 +162,10 @@ class TOCLandmarksList extends HTMLElement {
   }
 
   highlightRegion(listitem) {
-    const op = listitem.getAttribute('data-ordinal-position');
+    const op   = listitem.getAttribute('data-ordinal-position');
+    const info = listitem.getAttribute('data-info');
     if (op) {
-      highlightOrdinalPosition(op);
+      highlightOrdinalPosition(op, info);
     }
   }
 

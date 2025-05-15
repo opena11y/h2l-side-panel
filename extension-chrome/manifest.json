@@ -56,7 +56,7 @@
     "storage"
   ],
   "web_accessible_resources": [{
-    "resources": ["highlightElement.js"],
+    "resources": ["toc-highlight.js"],
     "matches": ["<all_urls>"]
   }],
   "content_scripts": [

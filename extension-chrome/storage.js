@@ -18,7 +18,8 @@ const browserStorage = typeof browser === 'object' ?
                        chrome.storage.sync;
 
 const defaultOptions = {
-  highlightStyle: 'medium',
+  highlightSize: 'medium',
+  highlightStyle: 'solid',
   highlightFollowsFocus: false,
   enterKeyMovesFocus: true,
   smallAndOffScreenHeadings: false,

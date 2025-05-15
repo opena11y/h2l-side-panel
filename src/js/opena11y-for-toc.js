@@ -39696,7 +39696,7 @@
 
   /* opena11y-for-toc.js */
 
-  const HIGHLIGHT_ELEMENT_NAME = 'opena11y-highlight-element';
+  const HIGHLIGHT_ELEMENT_NAME = 'toc-highlight';
 
   const browserRuntime = typeof browser === 'object' ?
                 browser.runtime :
@@ -39709,8 +39709,8 @@
 
   const scriptNode = document.createElement('script');
   scriptNode.type = 'text/javascript';
-  scriptNode.id = 'id-opena11y-element-highlight';
-  scriptNode.src = browserRuntime.getURL('highlightElement.js');
+  scriptNode.id = 'id-toc-highlight';
+  scriptNode.src = browserRuntime.getURL('toc-highlight.js');
   document.body.appendChild(scriptNode);
 
 
@@ -39720,13 +39720,24 @@
     function(request, sender, sendResponse) {
 
       // Highlight elements
-      if(request.highlightPosition) {
+      if(request.highlight) {
 
         const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
 
         if (he) {
           he.setAttribute('data-attr', 'data-opena11y-id');
-          he.setAttribute('highlight-value', request.highlightPosition);
+          he.setAttribute('highlight-position', request.highlight.position + ';' + request.highlight.info);
+        }
+      }
+
+      // Update Highlight configuration
+      if(request.updateHighlightConfig) {
+        const hc = request.updateHighlightConfig;
+
+        const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
+
+        if (he) {
+          he.setAttribute('highlight-config', `${hc.size} ${hc.style}`);
         }
       }
 
@@ -39737,7 +39748,7 @@
 
         if (he) {
           he.setAttribute('data-attr', 'data-opena11y-id');
-          he.setAttribute('focus-value', request.focusPosition);
+          he.setAttribute('focus-position', request.focusPosition);
         }
       }
 

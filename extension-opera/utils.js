@@ -98,15 +98,26 @@ export function updateContent () {
 **  @function highlightOrdinalPosition
 */
 
-export function highlightOrdinalPosition (ordinalPosition) {
+export function highlightOrdinalPosition (ordinalPosition, info='') {
   const sidepanelNode = document.querySelector('toc-sidepanel');
   if (sidepanelNode) {
-    sidepanelNode.highlightOrdinalPosition(ordinalPosition);
+    sidepanelNode.highlightOrdinalPosition(ordinalPosition, info);
   }
 }
 
 /*
-**  @function highlightOrdinalPosition
+**  @function updateHighlightConfig
+*/
+
+export function updateHighlightConfig (options) {
+  const sidepanelNode = document.querySelector('toc-sidepanel');
+  if (sidepanelNode) {
+    sidepanelNode.updateHighlightConfig(options);
+  }
+}
+
+/*
+**  @function focusOrdinalPosition
 */
 
 export function focusOrdinalPosition (ordinalPosition) {

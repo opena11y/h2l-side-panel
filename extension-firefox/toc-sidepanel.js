@@ -7,10 +7,14 @@ import {
   setTablistAttr
 } from './utils.js';
 
+import {
+  getOptions
+} from './storage.js';
+
 /* Constants */
 
 const debug = new DebugLogging('tocSidepanel', false);
-debug.flag = false;
+debug.flag = true;
 
 // Browser Constants
 
@@ -82,7 +86,6 @@ class TOCSidePanel extends HTMLElement {
     */
     window.addEventListener('load', this.handleWindowLoad.bind(this));
     window.addEventListener('unload', this.handleWindowUnload.bind(this));
-
     window.addEventListener("resize", this.handleResize.bind(this));
   }
 
@@ -91,7 +94,7 @@ class TOCSidePanel extends HTMLElement {
     this.tocTablistNode.clearContent(message);
   }
 
-  highlightOrdinalPosition(ordinalPosition) {
+  highlightOrdinalPosition(ordinalPosition, info='') {
     debug.flag && debug.log(`[highlightOrdinalPosition]`);
 
     async function sendHighlightMessage(tabs) {
@@ -99,9 +102,39 @@ class TOCSidePanel extends HTMLElement {
       for (const tab of tabs) {
         debug.flag && debug.log(`[sendHighlightMessage][tab]: ${tab.id}`);
         const myResult = await myBrowser.tabs
-          .sendMessage(tab.id, { highlightPosition : ordinalPosition });
+          .sendMessage(tab.id, {highlight: {
+                                    position: ordinalPosition,
+                                    info: info
+                                  }
+                                });
 
         debug.flag && debug.log(`[sendHighlightMessage][myResult]: ${myResult}`);
+      }
+    }
+
+    myBrowser.tabs
+      .query({
+        currentWindow: true,
+        active: true,
+      })
+      .then(sendHighlightMessage)
+      .catch(onError);
+  }
+
+  updateHighlightConfig(options) {
+    debug.flag && debug.log(`[updateHighighlightConfig]`);
+
+    async function sendHighlightMessage(tabs) {
+      debug.flag && debug.log(`[sendUpdateHighlightConfigMessage]`);
+      for (const tab of tabs) {
+        debug.flag && debug.log(`[sendUpdateHighlightConfigMessage][tab]: ${tab.id}`);
+        const myResult = await myBrowser.tabs
+          .sendMessage(tab.id, { updateHighlightConfig: {
+                                    size: options.highlightSize,
+                                    style: options.highlightStyle
+                                  }
+                                });
+        debug.flag && debug.log(`[sendUpdateHighlightConfigMessage][myResult]: ${myResult}`);
       }
     }
 
@@ -189,6 +222,10 @@ class TOCSidePanel extends HTMLElement {
     browserTabs.onUpdated.addListener(this.handleTabUpdated.bind(this));
     browserTabs.onActivated.addListener(this.handleTabActivated.bind(this));
     myBrowser.windows.onFocusChanged.addListener(this.handleWindowFocusChanged.bind(this));
+
+    getOptions().then( (options) => {
+      this.updateHighlightConfig(options);
+    });
     this.updateContent();
   }
 

@@ -59,9 +59,29 @@
     "message": "No links found",
     "description": "Message if no links found on page"
   },
+  "link_label": {
+    "message": "Link",
+    "description": "Used in highlight information"
+  },
+  "link_label_external": {
+    "message": ": External",
+    "description": "Used in highlight information"
+  },
+  "link_label_internal": {
+    "message": ": Internal",
+    "description": "Used in highlight information"
+  },
+  "link_label_same_domain": {
+    "message": ": Same domain",
+    "description": "Used in highlight information"
+  },
   "headings_tree_label": {
     "message": "Headings",
     "description": "Label for tree in  headings tree"
+  },
+  "headings_level_label": {
+    "message": "Level ",
+    "description": "Used in highlight information"
   },
   "headings_none_found": {
     "message": "No headings found",
@@ -135,25 +155,29 @@
     "message": "Note: At least one link filter must be selected.",
     "description": "Description for links group in dialog"
   },
-  "options_dialog_label_highlight_style": {
-    "message": "Highlight Style: ",
-    "description": "Label for the highlight style select box"
+  "options_dialog_label_highlight_size": {
+    "message": "Highlight Border Size: ",
+    "description": "Label for the highlight border size select box"
   },
-  "options_dialog_highlight_style_small": {
+  "options_dialog_highlight_size_small": {
     "message": "small",
-    "description": "Small option for highlight style"
+    "description": "Small option for highlight size"
   },
-  "options_dialog_highlight_style_medium": {
+  "options_dialog_highlight_size_medium": {
     "message": "medium",
-    "description": "Medium option for highlight style"
+    "description": "Medium option for highlight size"
   },
-  "options_dialog_highlight_style_large": {
+  "options_dialog_highlight_size_large": {
     "message": "large",
-    "description": "large option for highlight style"
+    "description": "large option for highlight size"
   },
-  "options_dialog_highlight_style_x_large": {
+  "options_dialog_highlight_size_x_large": {
     "message": "x-large",
-    "description": "x-large option for highlight style"
+    "description": "x-large option for highlight size"
+  },
+  "options_dialog_highlight_size_xx_large": {
+    "message": "xx-large",
+    "description": "xx-large option for highlight size"
   },
   "protocol_not_supported": {
     "message": "Protocol not supported",

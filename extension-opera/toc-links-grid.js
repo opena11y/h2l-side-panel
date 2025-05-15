@@ -123,6 +123,11 @@ class TOCLinksGrid extends HTMLElement {
 
     const linksObj = this;
 
+    const linkLabel           = getMessage('link_label');
+    const linkLabelExternal   = getMessage('link_label_external');
+    const linkLabelInternal   = getMessage('link_label_internal');
+    const linkLabelSameDomain = getMessage('link_label_same_domain');
+
     function addRow (pos, name, ext, url) {
       const trNode = document.createElement('tr');
 
@@ -179,6 +184,19 @@ class TOCLinksGrid extends HTMLElement {
           const rowNode = addRow(index, l.name, l.extension, l.url);
 
           rowNode.setAttribute('data-ordinal-position', l.ordinalPosition);
+
+          rowNode.setAttribute('data-info', linkLabel);
+
+          if (l.isInternal) {
+            rowNode.setAttribute('data-info', linkLabel + linkLabelInternal);
+          }
+          if (l.isExternal) {
+            rowNode.setAttribute('data-info', linkLabel + linkLabelExternal);
+          }
+          if (l.isSameDomain) {
+            rowNode.setAttribute('data-info', linkLabel + linkLabelInternal);
+          }
+
           rowNode.setAttribute('data-href', l.href);
           rowNode.setAttribute('data-is-internal', l.isInternal);
           rowNode.setAttribute('data-is-external', l.isExternal);
@@ -235,9 +253,10 @@ class TOCLinksGrid extends HTMLElement {
 
 
   highlightGridrow(gridrow) {
-    const op = gridrow.getAttribute('data-ordinal-position');
+    const op   = gridrow.getAttribute('data-ordinal-position');
+    const info = gridrow.getAttribute('data-info');
     if (op) {
-      highlightOrdinalPosition(op);
+      highlightOrdinalPosition(op, info);
     }
   }
 

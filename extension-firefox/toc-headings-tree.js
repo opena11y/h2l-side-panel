@@ -94,6 +94,8 @@ class TOCHeadingsTree extends HTMLElement {
     const handleIconClick = this.handleIconClick;
     const treeObj = this;
 
+    const levelLabel = getMessage('headings_level_label');
+
     function addTreeitem (parentNode, heading) {
       debug.flag && debug.log(`addTreeItem`);
       const treeitemNode = document.createElement('div');
@@ -103,6 +105,7 @@ class TOCHeadingsTree extends HTMLElement {
       treeitemNode.setAttribute('role', 'treeitem');
       treeitemNode.setAttribute('data-level', heading.level);
       treeitemNode.setAttribute('data-ordinal-position', heading.ordinalPosition);
+
       const firstChar = heading.name[0] ? heading.name[0].toLowerCase() : '';
       treeitemNode.setAttribute('data-first-char', firstChar);
       treeitemNode.setAttribute('data-visible', heading.isVisibleOnScreen);
@@ -114,6 +117,7 @@ class TOCHeadingsTree extends HTMLElement {
       const nameNode = document.createElement('span');
       nameNode.classList.add('name');
       nameNode.textContent = `${heading.level}: ${heading.name}`;
+      treeitemNode.setAttribute('data-info', levelLabel + nameNode.textContent);
       treeitemNode.appendChild(nameNode);
       treeitemNode.addEventListener('click', treeObj.handleTreeitemClick.bind(treeObj));
       parentNode.appendChild(treeitemNode);
@@ -256,9 +260,10 @@ class TOCHeadingsTree extends HTMLElement {
   }
 
   highlightHeading(treeitem) {
-    const op = treeitem.getAttribute('data-ordinal-position');
+    const op   = treeitem.getAttribute('data-ordinal-position');
+    const info = treeitem.getAttribute('data-info');
     if (op) {
-      highlightOrdinalPosition(op);
+      highlightOrdinalPosition(op, info);
     }
   }
 

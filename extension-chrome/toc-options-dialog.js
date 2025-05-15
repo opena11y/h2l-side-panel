@@ -5,7 +5,8 @@ import DebugLogging  from './debug.js';
 
 import {
   setI18nLabels,
-  updateContent
+  updateContent,
+  updateHighlightConfig
 } from './utils.js';
 
 import {
@@ -44,22 +45,25 @@ template.innerHTML = `
         </label>
 
         <div class="select">
-          <label for="id-highlight-style"
-                 data-i18n="options_dialog_label_highlight_style">
+          <label for="id-highlight-size"
+                 data-i18n="options_dialog_label_highlight_size">
           </label>
-          <select id="id-highlight-style"
-                   data-option="highlightStyle">
+          <select id="id-highlight-size"
+                   data-option="highlightSize">
             <option value="small"
-                    data-i18n="options_dialog_highlight_style_small">
+                    data-i18n="options_dialog_highlight_size_small">
             </option>
             <option value="medium"
-                    data-i18n="options_dialog_highlight_style_medium">
+                    data-i18n="options_dialog_highlight_size_medium">
             </option>
             <option value="large"
-                    data-i18n="options_dialog_highlight_style_large">
+                    data-i18n="options_dialog_highlight_size_large">
             </option>
             <option value="x-large"
-                    data-i18n="options_dialog_highlight_style_x_large">
+                    data-i18n="options_dialog_highlight_size_x_large">
+            </option>
+            <option value="xx-large"
+                    data-i18n="options_dialog_highlight_size_xx_large">
             </option>
           </select>
         </div>
@@ -131,8 +135,6 @@ template.innerHTML = `
              data-i18n="options_dialog_links_desc">
           </div>
         </div>
-
-
     </fieldset>
   </div>
 
@@ -284,6 +286,7 @@ export default class TOCOptionsDialog extends HTMLElement {
         }
       });
 
+      updateHighlightConfig(options);
       saveOptions(options);
     });
   }
