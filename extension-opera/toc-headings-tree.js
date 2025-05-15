@@ -136,11 +136,6 @@ class TOCHeadingsTree extends HTMLElement {
     function processHeadings (parentNode, lastHeadingNode, headings, lastLevel) {
       while (headings[0]) {
         const heading = headings[0];
-        // Skip if heading not visible or does not have accessible name
-//        if (!heading.isVisibleOnScreen || !name) {
-//          headings.shift();
-//          processHeadings (parentNode, lastHeadingNode, headings, lastLevel);
-//        }
         debug.flag && debug.log(`[heading][${headings.length}]: ${heading ? heading.name : 'none'}`);
 
         if ((heading.level === lastLevel) ||
@@ -171,8 +166,11 @@ class TOCHeadingsTree extends HTMLElement {
 
             const headingNode2 = addTreeitem(groupNode, heading);
             headings.shift();
+
             headings = processHeadings (groupNode, headingNode2, headings, heading.level);
+
             count = count - headings.length;
+
             lastHeadingNode.setAttribute('data-children', count);
             const nameSpan = lastHeadingNode.querySelector('.name');
             nameSpan.textContent += ` (${count})`;
