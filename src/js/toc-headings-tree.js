@@ -142,12 +142,13 @@ class TOCHeadingsTree extends HTMLElement {
 //          processHeadings (parentNode, lastHeadingNode, headings, lastLevel);
 //        }
         debug.flag && debug.log(`[heading][${headings.length}]: ${heading ? heading.name : 'none'}`);
+
         if ((heading.level === lastLevel) ||
             (lastLevel === 0) ||
             (lastLevel === 1)) {
-          const headingNode = addTreeitem(parentNode, heading);
+          const headingNode1 = addTreeitem(parentNode, heading);
           headings.shift();
-          processHeadings (parentNode, headingNode, headings, heading.level);
+          processHeadings (parentNode, headingNode1, headings, heading.level);
         }
         else {
           if (heading.level > lastLevel) {
@@ -167,14 +168,14 @@ class TOCHeadingsTree extends HTMLElement {
             }
             const groupNode = addGroup(parentNode, id);
             let count = headings.length;
-            // Check if heading level is being skipped by author
-            if ((heading.level-lastLevel) > 1) {
-              headings = processHeadings (groupNode, lastHeadingNode, headings, 0);
-            }
-            else {
-              headings = processHeadings (groupNode, lastHeadingNode, headings, heading.level);
-            }
+
+            const headingNode2 = addTreeitem(groupNode, heading);
+            headings.shift();
+
+            headings = processHeadings (groupNode, headingNode2, headings, heading.level);
+
             count = count - headings.length;
+
             lastHeadingNode.setAttribute('data-children', count);
             const nameSpan = lastHeadingNode.querySelector('.name');
             nameSpan.textContent += ` (${count})`;
