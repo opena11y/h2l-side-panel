@@ -68,6 +68,24 @@ template.innerHTML = `
           </select>
         </div>
 
+        <div class="select">
+          <label for="id-highlight-style"
+                 data-i18n="options_dialog_label_highlight_style">
+          </label>
+          <select id="id-highlight-style"
+                   data-option="highlightStyle">
+            <option value="solid"
+                    data-i18n="options_dialog_highlight_style_solid">
+            </option>
+            <option value="dashed"
+                    data-i18n="options_dialog_highlight_style_dashed">
+            </option>
+            <option value="dotted"
+                    data-i18n="options_dialog_highlight_style_dotted">
+            </option>
+          </select>
+        </div>
+
     </fieldset>
 
     <fieldset>

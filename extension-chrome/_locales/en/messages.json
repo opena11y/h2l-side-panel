@@ -156,7 +156,7 @@
     "description": "Description for links group in dialog"
   },
   "options_dialog_label_highlight_size": {
-    "message": "Highlight Border Size: ",
+    "message": "Border Size: ",
     "description": "Label for the highlight border size select box"
   },
   "options_dialog_highlight_size_small": {
@@ -178,6 +178,22 @@
   "options_dialog_highlight_size_xx_large": {
     "message": "xx-large",
     "description": "xx-large option for highlight size"
+  },
+  "options_dialog_label_highlight_style": {
+    "message": "Border Style: ",
+    "description": "Label for the highlight border style select box"
+  },
+  "options_dialog_highlight_style_solid": {
+    "message": "solid",
+    "description": "Solid option for highlight style"
+  },
+  "options_dialog_highlight_style_dashed": {
+    "message": "dashed",
+    "description": "Dashed option for highlight style"
+  },
+  "options_dialog_highlight_style_dotted": {
+    "message": "dotted",
+    "description": "Dotted option for highlight style"
   },
   "protocol_not_supported": {
     "message": "Protocol not supported",

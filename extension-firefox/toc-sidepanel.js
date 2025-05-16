@@ -87,6 +87,15 @@ class TOCSidePanel extends HTMLElement {
     window.addEventListener('load', this.handleWindowLoad.bind(this));
     window.addEventListener('unload', this.handleWindowUnload.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
+
+    browserRuntime.connect({ name: 'toc-sidepanel' });
+
+    browserRuntime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request['toc-sidepanel-open'] === true) {
+        sendResponse(true);
+      }
+    });
+
   }
 
   clearContent(message = '') {
