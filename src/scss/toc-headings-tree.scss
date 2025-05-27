@@ -11,6 +11,8 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  color: light-dark(toc-base.$color-light, toc-base.$color-dark);
+  background-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
 }
 
 [role="tree"] [role="treeitem"] span.no-icon,

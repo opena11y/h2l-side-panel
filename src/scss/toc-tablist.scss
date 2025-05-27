@@ -4,11 +4,13 @@
 .toc-lablist {
   font-family: toc-base.$font-family;
   font-size: toc-base.$font-size-content;
+  color: light-dark(toc-base.$color-light, toc-base.$color-dark);
+  background-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
+
 }
 
 h2 {
   font-size: toc-base.$font-size-title;
-
   margin: 0;
   padding: 0;
   margin-top: 1em;
@@ -17,7 +19,6 @@ h2 {
 
 #id-div-title {
   font-size: toc-base.$font-size-title;
-
   display: block;
   margin-bottom: 1em;
 }
@@ -36,8 +37,8 @@ h2 {
   margin: 0;
   margin-top: 4px;
   padding: 3px 3px 4px;
-  border: 1px solid hsl(219deg 1% 72%);
-  border-bottom: 2px solid hsl(219deg 1% 72%);
+  border: 1px solid light-dark(toc-base.$border-color-light, toc-base.$border-color-dark);
+  border-bottom-width: 2px;
   border-radius: 5px 5px 0 0;
   background: hsl(220deg 20% 94%);
   outline: none;

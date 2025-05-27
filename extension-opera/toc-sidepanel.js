@@ -14,7 +14,7 @@ import {
 /* Constants */
 
 const debug = new DebugLogging('tocSidepanel', false);
-debug.flag = true;
+debug.flag = false;
 
 // Browser Constants
 
@@ -88,14 +88,14 @@ class TOCSidePanel extends HTMLElement {
     window.addEventListener('unload', this.handleWindowUnload.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
 
-    browserRuntime.connect({ name: 'toc-sidepanel' });
+    // Setup a port to identify when side panel is open
+    browserRuntime.connect({ name: 'toc-sidepanel-open' });
 
     browserRuntime.onMessage.addListener((request, sender, sendResponse) => {
       if (request['toc-sidepanel-open'] === true) {
         sendResponse(true);
       }
     });
-
   }
 
   clearContent(message = '') {
@@ -271,6 +271,7 @@ class TOCSidePanel extends HTMLElement {
       if (changeInfo.status !== this.lastStatus) {
         debug.flag && debug.log(`[handleTabUpdated][status]: ${changeInfo.status}`);
         this.lastStatus = changeInfo.status;
+        this.clearContent(getMessage('loading_content'));
       }
     }
   }

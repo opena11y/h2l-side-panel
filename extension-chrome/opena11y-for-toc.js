@@ -29365,6 +29365,7 @@
   /* resultSummary.js */
 
   const debug$H = new DebugLogging('ruleResultSummary', false);
+  debug$H.flag = false;
 
   /* ---------------------------------------------------------------- */
   /*                             RuleResultsSummary                        */
@@ -29501,6 +29502,7 @@
 
   /* Constants */
   const debug$G = new DebugLogging('ruleGroupResult', false);
+  debug$G.flag = false;
 
   /**
    * @class RuleGroupResult
@@ -29719,6 +29721,7 @@
 
   /* constants */
   const debug$F = new DebugLogging('baseResult', false);
+  debug$F.flag = false;
 
   /**
    * @class baseResult
@@ -30291,6 +30294,7 @@
   /* elementResultSummary.js */
 
   const debug$D = new DebugLogging('ElementResultSummary', false);
+  debug$D.flag = false;
 
   /* ---------------------------------------------------------------- */
   /*                             ResultSummary                        */
@@ -30433,6 +30437,7 @@
   /* Constants */
 
   const debug$C = new DebugLogging('PageResult', false);
+  debug$C.flag = false;
 
   /**
    * @class PageResult
@@ -30505,6 +30510,7 @@
   /* Constants */
 
   const debug$B = new DebugLogging('PageResult', false);
+  debug$B.flag = false;
 
   /**
    * @class WebsiteResult
@@ -39785,22 +39791,17 @@
     }
   );
 
-  // Check if side panel is open
-
   setInterval(() => {
     chrome.runtime
       .sendMessage({ ['toc-sidepanel-open']: true })
       .then((msgRes) => {
-        if (msgRes !== true) {
-          console.log(`TOC Sidepanel Closed`);
-        }
       })
       .catch( () => {
         const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
         if (he) {
           he.setAttribute('highlight-position', '');
         }
-      });
-  }, 100);
+    });
+  }, 50);
 
 })();

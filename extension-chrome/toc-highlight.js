@@ -1,6 +1,6 @@
-/* highlight.js */
+/* toc-highlight.js */
 
-const debug = true;
+const debug = false;
 
 const minWidth = 68;
 const minHeight = 27;
@@ -295,7 +295,6 @@ class TOCHighlightElement extends HTMLElement {
         return;
 
       case "highlight-config":
-        console.log(`[highlight-style]: ${newValue}`);
 
         const values = newValue.split(' ');
 
@@ -332,8 +331,6 @@ class TOCHighlightElement extends HTMLElement {
    */
 
   configStyle (hSize, hStyle) {
-
-    console.log(`[configStyle]: ${hSize.borderOffset} ${hSize.contrastWidth} ${hSize.borderWidth} ${hStyle}`);
 
     if (!hSize || !hSize.fontSize) {
       hSize = this.highlightSize;
@@ -569,14 +566,9 @@ class TOCHighlightElement extends HTMLElement {
 
    updateHighlightElement (elem, info, borderOffset, borderWidth, contrastWidth, overlayAdjust) {
 
-    console.log(`[updateHighlightElement][ borderOffset]: ${borderOffset}`);
-    console.log(`[updateHighlightElement][  borderWidth]: ${borderWidth}`);
-    console.log(`[updateHighlightElement][contrastWidth]: ${contrastWidth}`);
-
     const adjRect = this.getAdjustedRect(elem, borderOffset, borderWidth, contrastWidth);
 
     const a = -1 * overlayAdjust;
-    console.log(`[updateHighlightElement][a]: ${a}`);
     const b = 2 * contrastWidth;
 
 //    elem.style.outline               = '1px dotted red';
@@ -662,10 +654,6 @@ class TOCHighlightElement extends HTMLElement {
 
     const elemRect  = elem.getBoundingClientRect();
 
-    console.log(`\n[ScrollX]: ${window.scrollX}`);
-    console.log(`[ScrollY]: ${window.scrollY}`);
-    consoleRect('[   elem]:', elemRect);
-
     const adjRect = {
       left: 0,
       top: 0,
@@ -674,7 +662,6 @@ class TOCHighlightElement extends HTMLElement {
     };
 
     const minOffset = borderOffset + 2 * contrastWidth + borderWidth;
-    console.log(`[minOffset]: ${minOffset}`);
 
     adjRect.left    = elemRect.left > minOffset ?
                       Math.round(elemRect.left + (-1 * minOffset) + window.scrollX) :
@@ -695,8 +682,6 @@ class TOCHighlightElement extends HTMLElement {
     if (adjRect.left < 0) {
       adjRect.left = minOffset;
     }
-
-    consoleRect('[adjRect]:', adjRect);
 
     return adjRect;
   }
@@ -812,6 +797,7 @@ class TOCHighlightElement extends HTMLElement {
   removeHighlight() {
     if (this.overlayElem) {
       this.overlayElem.style.display = 'none';
+      this.hiddenElem.style.display = 'none';
     }
   }
 

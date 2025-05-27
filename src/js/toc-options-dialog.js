@@ -1,4 +1,4 @@
-/* shortcutInfoDialog.js */
+/* toc-options-dialog.js */
 
 /* Imports */
 import DebugLogging  from './debug.js';

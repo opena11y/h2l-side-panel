@@ -5,12 +5,21 @@ $font-size-content: 11pt;
 $font-size-title:   12pt;
 $font-size-buttons: 12pt;
 
+// Theme colors
+$color-light: #000;
+$background-light: #fff;
+$border-color-light: #13294b;
+
+$color-dark: #fff;
+$background-dark: #000;
+$border-color-dark: #cddcf2;
+
 // Focus colors
 
-$color-focus: #000;
-$background-color-focus: #eee;
+$color-focus-light: #13294b;
+$background-focus: #eee;
 
-$outline-color-focus: activeText;
+$outline-color-focus: #13294b;
 $outline-offset-focus: -2px;
 $outline-width-focus: 2px;
 $outline-style-focus: solid;

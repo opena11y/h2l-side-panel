@@ -342,6 +342,9 @@ class TOCHeadingsTree extends HTMLElement {
   setFocusToTreeitem(treeitem) {
     this.setTabindex(treeitem);
     treeitem.focus();
+    if (this.highlightFollowsFocus){
+      this.highlightHeading(treeitem);
+    }
   }
 
   setTabindex(treeitem) {

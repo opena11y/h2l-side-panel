@@ -252,9 +252,14 @@ class TOCLinksGrid extends HTMLElement {
   }
 
 
-  highlightGridrow(gridrow) {
-    const op   = gridrow.getAttribute('data-ordinal-position');
-    const info = gridrow.getAttribute('data-info');
+  highlightGriditem(griditem) {
+    const op   = griditem.hasAttribute('data-ordinal-position') ?
+                     griditem.getAttribute('data-ordinal-position') :
+                     griditem.parentNode.getAttribute('data-ordinal-position');
+
+    const info = griditem.hasAttribute('data-info') ?
+                     griditem.getAttribute('data-info') :
+                     griditem.parentNode.getAttribute('data-info');
     if (op) {
       highlightOrdinalPosition(op, info);
     }
@@ -319,6 +324,9 @@ class TOCLinksGrid extends HTMLElement {
   setFocusToGriditem(griditem) {
     this.setTabindex(griditem);
     griditem.focus();
+    if (this.highlightFollowsFocus){
+      this.highlightGriditem(griditem);
+    }
   }
 
   setFocusToPreviousGridrowAndCell(gridcell) {
@@ -405,7 +413,7 @@ class TOCLinksGrid extends HTMLElement {
         (iconNode && (iconNode !== event.target)) ||
         (iconNode && !iconNode.contains(event.target))) {
       this.setFocusToGriditem(tgt);
-      this.highlightGridrow(tgt);
+      this.highlightGriditem(tgt);
       event.stopPropagation();
       event.preventDefault();
     }
@@ -433,7 +441,7 @@ class TOCLinksGrid extends HTMLElement {
       switch (key) {
         case 'Enter':
         case ' ':
-          this.highlightGridrow(tgt);
+          this.highlightGriditem(tgt);
           flag = true;
           break;
 
@@ -502,12 +510,12 @@ class TOCLinksGrid extends HTMLElement {
             this.focusGridrow(tgt);
           }
           else {
-            this.highlightGridrow(tgt);
+            this.highlightGriditem(tgt);
           }
           break;
 
         case ' ':
-          this.highlightGridrow(tgt.parentNode);
+          this.highlightGriditem(tgt.parentNode);
           flag = true;
           break;
 

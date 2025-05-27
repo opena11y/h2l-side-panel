@@ -16,6 +16,11 @@ const browserRuntime = typeof browser === 'object' ?
                        browser.runtime :
                        chrome.runtime;
 
+const browserTabs = typeof browser === 'object' ?
+            browser.tabs :
+            chrome.tabs;
+
+
 /*
  * Toggle sidebar from toolbar icon for Chrome
  */
@@ -39,23 +44,4 @@ if (typeof browser === 'object' && browser.action) {
 // NOTE: Opera does not seem to support opening and
 // closing the sidebar using a toolbar icon
 
-/*
- * Detecting side panel closing
- */
 
-browserRuntime.onConnect.addListener(function (port) {
-  if (port.name === 'toc-sidepanel') {
-    port.onDisconnect.addListener(async () => {
-      console.log('[service-worker]: Side panel closed');
-      browserRuntime.sendMessage({removeHighlight: ''});
-    });
-  }
-});
-
-/*
-**  @function onError
-*/
-
-function onError(error) {
-  console.error(`Error: ${error}`);
-}

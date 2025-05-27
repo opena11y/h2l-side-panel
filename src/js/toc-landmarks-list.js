@@ -229,6 +229,9 @@ class TOCLandmarksList extends HTMLElement {
   setFocusToListitem(listitem) {
     this.setTabindex(listitem);
     listitem.focus();
+    if (this.highlightFollowsFocus){
+      this.highlightRegion(listitem);
+    }
   }
 
   setTabindex(listitem) {

@@ -198,6 +198,10 @@
   "protocol_not_supported": {
     "message": "Protocol not supported",
     "description": "Message if a not HTML page is in the window"
+  },
+  "loading_content": {
+    "message": "Loading content, please wait...",
+    "description": "Message if waiting for a page to complete loading"
   }
 
 
