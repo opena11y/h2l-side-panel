@@ -1,7 +1,12 @@
 /* generated from toc-sidepanel.scss */
 @use 'toc-base';
 
-.toc-sidepanel {
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  display: block;
   font-family: toc-base.$font-family;
   font-size: toc-base.$font-size-content;
 }

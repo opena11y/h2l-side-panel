@@ -1,6 +1,10 @@
 /* generated from toc-headings-tree.scss */
 @use 'toc-base';
 
+:root {
+  color-scheme: light dark;
+}
+
 [role="tree"] [role="treeitem"] {
   font-family: toc-base.$font-family;
   font-size: toc-base.$font-size-content;
@@ -74,20 +78,38 @@
 
 [role="tree"] [role="treeitem"]:focus {
   outline-offset:   toc-base.$outline-offset-focus;
-  outline-color:    toc-base.$outline-color-focus;
+  outline-color:    light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
   outline-width:    toc-base.$outline-width-focus;
   outline-style:    toc-base.$outline-style-focus;
-  background-color: toc-base.$background-color-focus !important;
-  color:            toc-base.$color-focus;
+  background-color: light-dark(toc-base.$background-focus-light, toc-base.$background-focus-dark) !important;
+  color:            light-dark(toc-base.$color-focus-light, toc-base.$color-focus-dark);
 }
 
 [role="tree"] [role="treeitem"]:focus .expand-icon polygon {
-  stroke: toc-base.$outline-color-focus;
-  fill:   toc-base.$outline-color-focus;
+  stroke: light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
+  fill:   light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
 }
 
 [role="tree"] [role="treeitem"]:hover {
   cursor: pointer;
 }
 
+@media (forced-colors: active) {
+
+  [role="tree"] [role="treeitem"] {
+    color:            toc-base.$color-forced;
+    background-color: toc-base.$background-forced;
+  }
+
+  [role="tree"] [role="treeitem"]:focus {
+    outline-color:    toc-base.$outline-color-focus-forced;
+    background-color: toc-base.$background-focus-forced !important;
+    color:            toc-base.$color-focus-forced;
+  }
+
+  [role="tree"] [role="treeitem"]:focus .expand-icon polygon {
+    stroke: toc-base.$outline-color-focus-forced;
+    fill:   toc-base.$outline-color-focus-forced;
+  }
+}
 

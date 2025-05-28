@@ -1,5 +1,14 @@
 /* generated from toc-options-dialog.scss */
 /* toc-base.scss */
+:root {
+  color-scheme: light dark;
+}
+
+dialog::backdrop {
+  background-color: light-dark(#000, #fff);
+  opacity: 0.25;
+}
+
 dialog.toc-options {
   font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
   font-size: 11pt;
@@ -10,13 +19,13 @@ dialog.toc-options {
   width: 90%;
   margin: 0;
   padding: 0;
-  background-color: light-dark(white, black);
-  color: light-dark(black, white);
   border-width: 2px;
   border-style: solid;
-  border-color: light-dark(black, white);
+  border-color: light-dark(#000, #fff);
   border-radius: 5px;
   z-index: 2000001;
+  color: light-dark(#000, #fff);
+  background-color: light-dark(#fff, #000);
 }
 
 dialog.toc-options .header {
@@ -26,12 +35,12 @@ dialog.toc-options .header {
   border-width: 0;
   border-bottom-width: 1px;
   border-style: solid;
-  border-color: light-dark(black, white);
+  border-color: light-dark(#000, #fff);
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   font-weight: bold;
-  background-color: light-dark(#eee, #111);
-  color: light-dark(black, white);
+  background-color: light-dark(#fff, #000);
+  color: light-dark(#000, #fff);
   position: relative;
   font-size: 11pt;
 }
@@ -49,7 +58,7 @@ dialog.toc-options .header button {
   border: none;
   background: transparent;
   font-weight: bold;
-  color: light-dark(black, white);
+  color: light-dark(#000, #fff);
 }
 
 dialog.toc-options .content {
@@ -132,12 +141,39 @@ dialog.toc-options .buttons button {
 
 .focus,
 button:focus {
-  outline-color: activeText;
   outline-width: 2px;
   outline-style: solid;
   outline-offset: 2px;
+  outline-color: light-dark(#13294b, #eee);
 }
 
 button:hover {
   cursor: pointer;
+}
+
+@media (forced-colors: active) {
+  dialog::backdrop {
+    background-color: CanvasText;
+    opacity: 0.25;
+  }
+  dialog.toc-options .header button {
+    color: CanvasText;
+  }
+  dialog.toc-options {
+    border-color: CanvasText;
+    color: CanvasText;
+    background-color: Canvas;
+  }
+  dialog.toc-options .header {
+    border-color: CanvasText;
+    background-color: Canvas;
+    color: CanvasText;
+  }
+  dialog.toc-options .header button {
+    color: CanvasText;
+  }
+  .focus,
+  button:focus {
+    outline-color: ActiveText;
+  }
 }

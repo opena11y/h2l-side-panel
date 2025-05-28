@@ -1,12 +1,15 @@
 /* generated from toc-tablist.scss */
 @use 'toc-base';
 
+:root {
+  color-scheme: light dark;
+}
+
 .toc-lablist {
   font-family: toc-base.$font-family;
   font-size: toc-base.$font-size-content;
   color: light-dark(toc-base.$color-light, toc-base.$color-dark);
   background-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
-
 }
 
 h2 {
@@ -27,9 +30,7 @@ h2 {
   min-width: 100%;
 }
 
-[role="tab"],
-[role="tab"]:focus,
-[role="tab"]:hover {
+[role="tab"] {
   display: inline-block;
   position: relative;
   z-index: 2;
@@ -37,30 +38,35 @@ h2 {
   margin: 0;
   margin-top: 4px;
   padding: 3px 3px 4px;
-  border: 1px solid light-dark(toc-base.$border-color-light, toc-base.$border-color-dark);
+  border-width: 2px;
+  border-style: solid;
   border-bottom-width: 2px;
   border-radius: 5px 5px 0 0;
-  background: hsl(220deg 20% 94%);
   outline: none;
   font-weight: bold;
   max-width: 8em;
   text-align: left;
   cursor: pointer;
+  border-color:    light-dark(toc-base.$border-tablist-light, toc-base.$border-tablist-dark);
+  color: light-dark(toc-base.$color-light, toc-base.$color-dark);
+  background-color: light-dark(toc-base.$background-tab-light, toc-base.$background-tab-dark);
 }
 
 [role="tab"][aria-selected="true"] {
-  border-top-color: toc-base.$outline-color-focus;
-
-  padding: 2px 2px 4px;
+  padding: 2px 2px 3px;
   margin-top: 0;
   border-width: 2px;
   border-top-width: 6px;
-  border-bottom-color: hsl(220deg 43% 99%);
-  background: hsl(220deg 43% 99%);
+  color: light-dark(toc-base.$color-light, toc-base.$color-dark);
+  background-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
+  border-bottom-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
+  border-top-color: light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
 }
 
 [role="tab"][aria-selected="false"] {
-  border-bottom: 1px solid hsl(219deg 1% 72%);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: light-dark(toc-base.$border-color-light, toc-base.$border-color-dark);
 }
 
 [role="tab"] span.focus {
@@ -78,18 +84,20 @@ h2 {
   padding: 2px 4px;
   border-width: toc-base.$outline-width-focus;
   border-style: toc-base.$outline-style-focus;
-  border-color: toc-base.$outline-color-focus;
   border-radius: 3px;
+  border-color: light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
 }
 
 [role="tabpanel"] {
   padding: 5px;
-  border: 2px solid hsl(219deg 1% 72%);
+  border-width: 2px;
+  border-style: solid;
   border-radius: 0 5px 5px;
-  background: hsl(220deg 43% 99%);
   min-height: 180px;
   min-width: 180px;
   overflow: auto;
+  border-color: light-dark(toc-base.$border-tablist-light, toc-base.$border-tablist-dark);
+  background: light-dark(toc-base.$background-light, toc-base.$background-dark);
 }
 
 [role="tabpanel"].is-hidden {
@@ -125,3 +133,38 @@ footer .last {
   text-align: right;
 }
 
+@media (forced-colors: active) {
+
+  .toc-lablist {
+    color:            toc-base.$color-forced;
+    background-color: toc-base.$background-forced;
+  }
+
+  [role="tab"] {
+    border-color:     toc-base.$border-tablist-forced;
+    color:            toc-base.$color-forced;
+    background-color: toc-base.$background-tab-forced;
+  }
+
+  [role="tab"][aria-selected="true"] {
+    color:               toc-base.$color-forced;
+    background-color:    toc-base.$background-forced;
+    border-bottom-color: toc-base.$background-forced;
+    border-top-color:    toc-base.$outline-color-focus-forced;
+  }
+
+  [role="tab"][aria-selected="false"] {
+    border-bottom-color: toc-base.$border-color-forced;
+  }
+
+  [role="tab"]:hover span.focus,
+  [role="tab"]:focus span.focus,
+  [role="tab"]:active span.focus {
+    border-color: toc-base.$outline-color-focus-forced;
+  }
+
+  [role="tabpanel"] {
+    border-color: toc-base.$border-tablist-forced;
+    background:   toc-base.$background-forced;
+  }
+}

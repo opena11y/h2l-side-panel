@@ -8,19 +8,44 @@ $font-size-buttons: 12pt;
 // Theme colors
 $color-light: #000;
 $background-light: #fff;
-$border-color-light: #13294b;
+$border-color-light: #eee;
 
 $color-dark: #fff;
 $background-dark: #000;
-$border-color-dark: #cddcf2;
+$border-color-dark: #444;
+
+$border-tablist-light: #ddd;
+$border-tablist-dark: #555;
+
+$background-tab-light: #eee;
+$background-tab-dark: #444;
 
 // Focus colors
 
 $color-focus-light: #13294b;
-$background-focus: #eee;
+$background-focus-light: #eee;
+$outline-color-focus-light: #13294b;
 
-$outline-color-focus: #13294b;
+$color-focus-dark: #eee;
+$background-focus-dark: #13294b;
+$outline-color-focus-dark: #eee;
+
 $outline-offset-focus: -2px;
 $outline-width-focus: 2px;
 $outline-style-focus: solid;
+
+// Contrast theme colors (forced-colors)
+
+// Theme colors
+$color-forced: CanvasText;
+$background-forced: Canvas;
+$border-color-forced: ButtonBorder;
+$border-tablist-forced: ButtonBorder;
+$background-tab-forced: ButtonFace;
+
+// Focus colors for contrast theme
+
+$color-focus-forced: ActiveText;
+$background-focus-forced: ButtonFace;
+$outline-color-focus-forced: ActiveText;
 

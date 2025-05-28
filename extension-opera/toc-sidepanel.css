@@ -1,6 +1,11 @@
 /* generated from toc-sidepanel.scss */
 /* toc-base.scss */
-.toc-sidepanel {
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  display: block;
   font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
   font-size: 11pt;
 }

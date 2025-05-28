@@ -1,8 +1,14 @@
 /* generated from toc-tablist.scss */
 /* toc-base.scss */
+:root {
+  color-scheme: light dark;
+}
+
 .toc-lablist {
   font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
   font-size: 11pt;
+  color: light-dark(#000, #fff);
+  background-color: light-dark(#fff, #000);
 }
 
 h2 {
@@ -23,9 +29,7 @@ h2 {
   min-width: 100%;
 }
 
-[role=tab],
-[role=tab]:focus,
-[role=tab]:hover {
+[role=tab] {
   display: inline-block;
   position: relative;
   z-index: 2;
@@ -33,29 +37,35 @@ h2 {
   margin: 0;
   margin-top: 4px;
   padding: 3px 3px 4px;
-  border: 1px solid hsl(219, 1%, 72%);
-  border-bottom: 2px solid hsl(219, 1%, 72%);
+  border-width: 2px;
+  border-style: solid;
+  border-bottom-width: 2px;
   border-radius: 5px 5px 0 0;
-  background: hsl(220, 20%, 94%);
   outline: none;
   font-weight: bold;
   max-width: 8em;
   text-align: left;
   cursor: pointer;
+  border-color: light-dark(#ddd, #555);
+  color: light-dark(#000, #fff);
+  background-color: light-dark(#eee, #444);
 }
 
 [role=tab][aria-selected=true] {
-  border-top-color: activeText;
-  padding: 2px 2px 4px;
+  padding: 2px 2px 3px;
   margin-top: 0;
   border-width: 2px;
   border-top-width: 6px;
-  border-bottom-color: hsl(220, 43%, 99%);
-  background: hsl(220, 43%, 99%);
+  color: light-dark(#000, #fff);
+  background-color: light-dark(#fff, #000);
+  border-bottom-color: light-dark(#fff, #000);
+  border-top-color: light-dark(#13294b, #eee);
 }
 
 [role=tab][aria-selected=false] {
-  border-bottom: 1px solid hsl(219, 1%, 72%);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: light-dark(#eee, #444);
 }
 
 [role=tab] span.focus {
@@ -73,18 +83,20 @@ h2 {
   padding: 2px 4px;
   border-width: 2px;
   border-style: solid;
-  border-color: activeText;
   border-radius: 3px;
+  border-color: light-dark(#13294b, #eee);
 }
 
 [role=tabpanel] {
   padding: 5px;
-  border: 2px solid hsl(219, 1%, 72%);
+  border-width: 2px;
+  border-style: solid;
   border-radius: 0 5px 5px;
-  background: hsl(220, 43%, 99%);
   min-height: 180px;
   min-width: 180px;
   overflow: auto;
+  border-color: light-dark(#ddd, #555);
+  background: light-dark(#fff, #000);
 }
 
 [role=tabpanel].is-hidden {
@@ -118,4 +130,34 @@ footer .last {
   grid-column-start: 3;
   grid-column-end: 4;
   text-align: right;
+}
+
+@media (forced-colors: active) {
+  .toc-lablist {
+    color: CanvasText;
+    background-color: Canvas;
+  }
+  [role=tab] {
+    border-color: ButtonBorder;
+    color: CanvasText;
+    background-color: ButtonFace;
+  }
+  [role=tab][aria-selected=true] {
+    color: CanvasText;
+    background-color: Canvas;
+    border-bottom-color: Canvas;
+    border-top-color: ActiveText;
+  }
+  [role=tab][aria-selected=false] {
+    border-bottom-color: ButtonBorder;
+  }
+  [role=tab]:hover span.focus,
+  [role=tab]:focus span.focus,
+  [role=tab]:active span.focus {
+    border-color: ActiveText;
+  }
+  [role=tabpanel] {
+    border-color: ButtonBorder;
+    background: Canvas;
+  }
 }

@@ -1,5 +1,9 @@
 /* generated from toc-headings-tree.scss */
 /* toc-base.scss */
+:root {
+  color-scheme: light dark;
+}
+
 [role=tree] [role=treeitem] {
   font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
   font-size: 11pt;
@@ -9,6 +13,8 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  color: light-dark(#000, #fff);
+  background-color: light-dark(#fff, #000);
 }
 
 [role=tree] [role=treeitem] span.no-icon,
@@ -82,18 +88,34 @@
 }
 [role=tree] [role=treeitem]:focus {
   outline-offset: -2px;
-  outline-color: activeText;
+  outline-color: light-dark(#13294b, #eee);
   outline-width: 2px;
   outline-style: solid;
-  background-color: #eee !important;
-  color: #000;
+  background-color: light-dark(#eee, #13294b) !important;
+  color: light-dark(#13294b, #eee);
 }
 
 [role=tree] [role=treeitem]:focus .expand-icon polygon {
-  stroke: activeText;
-  fill: activeText;
+  stroke: light-dark(#13294b, #eee);
+  fill: light-dark(#13294b, #eee);
 }
 
 [role=tree] [role=treeitem]:hover {
   cursor: pointer;
+}
+
+@media (forced-colors: active) {
+  [role=tree] [role=treeitem] {
+    color: CanvasText;
+    background-color: Canvas;
+  }
+  [role=tree] [role=treeitem]:focus {
+    outline-color: ActiveText;
+    background-color: ButtonFace !important;
+    color: ActiveText;
+  }
+  [role=tree] [role=treeitem]:focus .expand-icon polygon {
+    stroke: ActiveText;
+    fill: ActiveText;
+  }
 }

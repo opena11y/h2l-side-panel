@@ -1,6 +1,14 @@
 /* generated from toc-options-dialog.scss */
 @use 'toc-base';
 
+:root {
+  color-scheme: light dark;
+}
+
+dialog::backdrop {
+  background-color: light-dark(toc-base.$color-light, toc-base.$color-dark);
+  opacity: 0.25;
+}
 
 dialog.toc-options {
   font-family: toc-base.$font-family;
@@ -13,14 +21,13 @@ dialog.toc-options {
   width: 90%;
   margin: 0;
   padding: 0;
-  background-color: light-dark(white, black);
-  color: light-dark(black, white);
   border-width: 2px;
   border-style: solid;
-  border-color: light-dark(black, white);
+  border-color: light-dark(toc-base.$color-light, toc-base.$color-dark);
   border-radius: 5px;
   z-index: 2000001;
-
+  color: light-dark(toc-base.$color-light, toc-base.$color-dark);
+  background-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
 }
 
 dialog.toc-options .header {
@@ -30,12 +37,12 @@ dialog.toc-options .header {
   border-width: 0;
   border-bottom-width: 1px;
   border-style: solid;
-  border-color: light-dark(black, white);
+  border-color: light-dark(toc-base.$color-light, toc-base.$color-dark);
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   font-weight:  bold;
-  background-color: light-dark(#eee, #111);
-  color: light-dark(black, white);
+  background-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
+  color: light-dark(toc-base.$color-light, toc-base.$color-dark);
   position: relative;
   font-size: toc-base.$font-size-content;;
 }
@@ -53,7 +60,7 @@ dialog.toc-options .header button {
   border: none;
   background: transparent;
   font-weight: bold;
-  color: light-dark(black, white);
+  color: light-dark(toc-base.$color-light, toc-base.$color-dark);
 }
 
 dialog.toc-options .content {
@@ -136,13 +143,46 @@ dialog.toc-options .buttons button {
 
 .focus,
 button:focus {
-  outline-color:    toc-base.$outline-color-focus;
   outline-width:    toc-base.$outline-width-focus;
   outline-style:    toc-base.$outline-style-focus;
   outline-offset: 2px;
+  outline-color:    light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
 }
 
 button:hover {
   cursor: pointer;
 }
 
+@media (forced-colors: active) {
+
+  dialog::backdrop {
+    background-color: toc-base.$color-forced;
+    opacity: 0.25;
+  }
+
+  dialog.toc-options .header button {
+    color: toc-base.$color-forced;
+  }
+
+  dialog.toc-options {
+    border-color:     toc-base.$color-forced;
+    color:            toc-base.$color-forced;
+    background-color: toc-base.$background-forced;
+  }
+
+  dialog.toc-options .header {
+    border-color:     toc-base.$color-forced;
+    background-color: toc-base.$background-forced;
+    color:            toc-base.$color-forced;
+  }
+
+  dialog.toc-options .header button {
+    color: toc-base.$color-forced;
+  }
+
+  .focus,
+  button:focus {
+    outline-color: toc-base.$outline-color-focus-forced;
+  }
+
+}

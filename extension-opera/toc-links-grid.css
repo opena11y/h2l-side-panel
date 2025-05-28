@@ -1,5 +1,9 @@
 /* generated from toc-links-grid.scss */
 /* toc-base.scss */
+:root {
+  color-scheme: light dark;
+}
+
 table[role=grid] {
   font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
   font-size: 11pt;
@@ -11,6 +15,8 @@ table[role=grid] {
   height: 30hv;
   min-height: 150px;
   table-layout: fixed;
+  color: light-dark(#000, #fff);
+  background-color: light-dark(#fff, #000);
 }
 
 table[role=grid] thead,
@@ -30,10 +36,10 @@ table[role=grid] tbody tr {
 }
 
 table[role=grid] thead {
-  background-color: white;
   position: sticky;
   top: 0;
   z-index: 10;
+  background-color: light-dark(#fff, #000);
 }
 
 table[role=grid] tr th,
@@ -53,13 +59,30 @@ table[role=grid] th:focus,
 table[role=grid] td:focus,
 table[role=grid] tr:focus {
   outline-offset: -2px;
-  outline-color: activeText;
+  outline-color: light-dark(#13294b, #eee);
   outline-width: 2px;
   outline-style: solid;
-  background-color: #eee !important;
-  color: #000;
+  background-color: light-dark(#eee, #13294b) !important;
+  color: light-dark(#13294b, #eee);
 }
 
 table[role=grid] tr:hover {
   cursor: pointer;
+}
+
+@media (forced-colors: active) {
+  table[role=grid] {
+    color: CanvasText;
+    background-color: Canvas;
+  }
+  table[role=grid] thead {
+    background-color: Canvas;
+  }
+  table[role=grid] th:focus,
+  table[role=grid] td:focus,
+  table[role=grid] tr:focus {
+    outline-color: ActiveText;
+    background-color: ButtonFace !important;
+    color: ActiveText;
+  }
 }
