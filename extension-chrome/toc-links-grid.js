@@ -51,6 +51,14 @@ class TOCLinksGrid extends HTMLElement {
     link.setAttribute('href', './toc-links-grid.css');
     this.shadowRoot.appendChild(link);
 
+    // Use external CSS stylesheet for focus styling
+    const linkFocus = document.createElement('link');
+    linkFocus.setAttribute('rel', 'stylesheet');
+    linkFocus.setAttribute('href', './toc-focus-styled.css');
+    linkFocus.id = 'focus-style';
+    this.shadowRoot.appendChild(linkFocus);
+
+
     // Add DOM tree from template
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 

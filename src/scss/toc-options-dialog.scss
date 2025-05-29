@@ -137,18 +137,6 @@ dialog.toc-options .buttons button {
   min-width: 5em;
 }
 
-.focus input {
-  outline: none;
-}
-
-.focus,
-button:focus {
-  outline-width:    toc-base.$outline-width-focus;
-  outline-style:    toc-base.$outline-style-focus;
-  outline-offset: 2px;
-  outline-color:    light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
-}
-
 button:hover {
   cursor: pointer;
 }
@@ -178,11 +166,6 @@ button:hover {
 
   dialog.toc-options .header button {
     color: toc-base.$color-forced;
-  }
-
-  .focus,
-  button:focus {
-    outline-color: toc-base.$outline-color-focus-forced;
   }
 
 }

@@ -26,7 +26,10 @@ const defaultOptions = {
   unNamedDuplicateRegions: false,
   internalLinks: true,
   externalLinks: true,
-  sameDomainLinks: true
+  sameDomainLinks: true,
+  accessibleNames: true,
+  keyboardSupport: true,
+  keyboardFocus: 'styled'  // options 'styled', 'default' and 'none'
 };
 
 function hasAllProperties (refObj, srcObj) {

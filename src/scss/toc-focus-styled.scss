@@ -1,0 +1,106 @@
+/* generated from toc-focus-styled.scss */
+@use 'toc-base';
+
+:root {
+  color-scheme: light dark;
+}
+
+// Headings tree
+
+[role="tree"] [role="treeitem"]:focus {
+  outline-offset:   toc-base.$outline-offset-focus;
+  outline-color:    light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
+  outline-width:    toc-base.$outline-width-focus;
+  outline-style:    toc-base.$outline-style-focus;
+  background-color: light-dark(toc-base.$background-focus-light, toc-base.$background-focus-dark) !important;
+  color:            light-dark(toc-base.$color-focus-light, toc-base.$color-focus-dark);
+}
+
+[role="tree"] [role="treeitem"]:focus .expand-icon polygon {
+  stroke: light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
+  fill:   light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
+}
+
+@media (forced-colors: active) {
+
+  [role="tree"] [role="treeitem"]:focus {
+    outline-color:    toc-base.$outline-color-focus-forced;
+    background-color: toc-base.$background-focus-forced !important;
+    color:            toc-base.$color-focus-forced;
+  }
+
+  [role="tree"] [role="treeitem"]:focus .expand-icon polygon {
+    stroke: toc-base.$outline-color-focus-forced;
+    fill:   toc-base.$outline-color-focus-forced;
+  }
+}
+
+// Landmark Regions list
+
+[role="listbox"] [role="listitem"]:focus {
+  outline-offset:   toc-base.$outline-offset-focus;
+  outline-color:    light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
+  outline-width:    toc-base.$outline-width-focus;
+  outline-style:    toc-base.$outline-style-focus;
+  background-color: light-dark(toc-base.$background-focus-light, toc-base.$background-focus-dark) !important;
+  color:            light-dark(toc-base.$color-focus-light, toc-base.$color-focus-dark);
+}
+
+@media (forced-colors: active) {
+
+  [role="listbox"] [role="listitem"]:focus {
+    outline-color:    toc-base.$outline-color-focus-forced;
+    background-color: toc-base.$background-focus-forced !important;
+    color:            toc-base.$color-focus-forced;
+  }
+}
+
+// Links Grid
+
+table[role="grid"] th:focus,
+table[role="grid"] td:focus,
+table[role="grid"] tr:focus {
+  outline-offset:   toc-base.$outline-offset-focus;
+  outline-color:    light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
+  outline-width:    toc-base.$outline-width-focus;
+  outline-style:    toc-base.$outline-style-focus;
+  background-color: light-dark(toc-base.$background-focus-light, toc-base.$background-focus-dark) !important;
+  color:            light-dark(toc-base.$color-focus-light, toc-base.$color-focus-dark);
+}
+
+@media (forced-colors: active) {
+
+  table[role="grid"] th:focus,
+  table[role="grid"] td:focus,
+  table[role="grid"] tr:focus {
+    outline-color:    toc-base.$outline-color-focus-forced;
+    background-color: toc-base.$background-focus-forced !important;
+    color:            toc-base.$color-focus-forced;
+  }
+
+}
+
+// Options Dialog
+
+dialog .focus input {
+  outline: none;
+}
+
+dialog .focus,
+dialog button:focus,
+dialog select:focus {
+  outline-width:    toc-base.$outline-width-focus;
+  outline-style:    toc-base.$outline-style-focus;
+  outline-offset: 2px;
+  outline-color:    light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
+}
+
+@media (forced-colors: active) {
+
+  dialog .focus,
+  dialog button:focus,
+  dialog select:focus {
+    outline-color: toc-base.$outline-color-focus-forced;
+  }
+
+}

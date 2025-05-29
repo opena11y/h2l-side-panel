@@ -1,0 +1,87 @@
+/* generated from toc-focus-styled.scss */
+/* toc-base.scss */
+:root {
+  color-scheme: light dark;
+}
+
+[role=tree] [role=treeitem]:focus {
+  outline-offset: -2px;
+  outline-color: light-dark(#13294b, #eee);
+  outline-width: 2px;
+  outline-style: solid;
+  background-color: light-dark(#eee, #13294b) !important;
+  color: light-dark(#13294b, #eee);
+}
+
+[role=tree] [role=treeitem]:focus .expand-icon polygon {
+  stroke: light-dark(#13294b, #eee);
+  fill: light-dark(#13294b, #eee);
+}
+
+@media (forced-colors: active) {
+  [role=tree] [role=treeitem]:focus {
+    outline-color: ActiveText;
+    background-color: ButtonFace !important;
+    color: ActiveText;
+  }
+  [role=tree] [role=treeitem]:focus .expand-icon polygon {
+    stroke: ActiveText;
+    fill: ActiveText;
+  }
+}
+[role=listbox] [role=listitem]:focus {
+  outline-offset: -2px;
+  outline-color: light-dark(#13294b, #eee);
+  outline-width: 2px;
+  outline-style: solid;
+  background-color: light-dark(#eee, #13294b) !important;
+  color: light-dark(#13294b, #eee);
+}
+
+@media (forced-colors: active) {
+  [role=listbox] [role=listitem]:focus {
+    outline-color: ActiveText;
+    background-color: ButtonFace !important;
+    color: ActiveText;
+  }
+}
+table[role=grid] th:focus,
+table[role=grid] td:focus,
+table[role=grid] tr:focus {
+  outline-offset: -2px;
+  outline-color: light-dark(#13294b, #eee);
+  outline-width: 2px;
+  outline-style: solid;
+  background-color: light-dark(#eee, #13294b) !important;
+  color: light-dark(#13294b, #eee);
+}
+
+@media (forced-colors: active) {
+  table[role=grid] th:focus,
+  table[role=grid] td:focus,
+  table[role=grid] tr:focus {
+    outline-color: ActiveText;
+    background-color: ButtonFace !important;
+    color: ActiveText;
+  }
+}
+dialog .focus input {
+  outline: none;
+}
+
+dialog .focus,
+dialog button:focus,
+dialog select:focus {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-offset: 2px;
+  outline-color: light-dark(#13294b, #eee);
+}
+
+@media (forced-colors: active) {
+  dialog .focus,
+  dialog button:focus,
+  dialog select:focus {
+    outline-color: ActiveText;
+  }
+}

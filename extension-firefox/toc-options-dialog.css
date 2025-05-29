@@ -135,18 +135,6 @@ dialog.toc-options .buttons button {
   min-width: 5em;
 }
 
-.focus input {
-  outline: none;
-}
-
-.focus,
-button:focus {
-  outline-width: 2px;
-  outline-style: solid;
-  outline-offset: 2px;
-  outline-color: light-dark(#13294b, #eee);
-}
-
 button:hover {
   cursor: pointer;
 }
@@ -171,9 +159,5 @@ button:hover {
   }
   dialog.toc-options .header button {
     color: CanvasText;
-  }
-  .focus,
-  button:focus {
-    outline-color: ActiveText;
   }
 }

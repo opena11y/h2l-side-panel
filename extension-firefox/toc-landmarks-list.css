@@ -18,15 +18,6 @@
   background-color: light-dark(#fff, #000);
 }
 
-[role=listbox] [role=listitem]:focus {
-  outline-offset: -2px;
-  outline-color: light-dark(#13294b, #eee);
-  outline-width: 2px;
-  outline-style: solid;
-  background-color: light-dark(#eee, #13294b) !important;
-  color: light-dark(#13294b, #eee);
-}
-
 [role=listbox] [role=listitem]:hover {
   cursor: pointer;
 }
@@ -35,10 +26,5 @@
   [role=listbox] [role=listitem] {
     color: CanvasText;
     background-color: Canvas;
-  }
-  [role=listbox] [role=listitem]:focus {
-    outline-color: ActiveText;
-    background-color: ButtonFace !important;
-    color: ActiveText;
   }
 }

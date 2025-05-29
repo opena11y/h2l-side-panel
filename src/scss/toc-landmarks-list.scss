@@ -20,15 +20,6 @@
   background-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
 }
 
-[role="listbox"] [role="listitem"]:focus {
-  outline-offset:   toc-base.$outline-offset-focus;
-  outline-color:    light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
-  outline-width:    toc-base.$outline-width-focus;
-  outline-style:    toc-base.$outline-style-focus;
-  background-color: light-dark(toc-base.$background-focus-light, toc-base.$background-focus-dark) !important;
-  color:            light-dark(toc-base.$color-focus-light, toc-base.$color-focus-dark);
-}
-
 [role="listbox"] [role="listitem"]:hover {
   cursor: pointer;
 }
@@ -38,11 +29,5 @@
   [role="listbox"] [role="listitem"] {
     color:            toc-base.$color-forced;
     background-color: toc-base.$background-forced;
-  }
-
-  [role="listbox"] [role="listitem"]:focus {
-    outline-color:    toc-base.$outline-color-focus-forced;
-    background-color: toc-base.$background-focus-forced !important;
-    color:            toc-base.$color-focus-forced;
   }
 }
