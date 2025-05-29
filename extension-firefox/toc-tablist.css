@@ -22,6 +22,9 @@ h2 {
 #id-div-title {
   font-size: 12pt;
   display: block;
+  height: 2.2em;
+  text-overflow: ellipsis;
+  overflow: hidden;
   margin-bottom: 1em;
 }
 
@@ -33,7 +36,7 @@ h2 {
   display: inline-block;
   position: relative;
   z-index: 2;
-  top: 2px;
+  top: 0px;
   margin: 0;
   margin-top: 4px;
   padding: 3px 3px 4px;
@@ -46,16 +49,18 @@ h2 {
   max-width: 8em;
   text-align: left;
   cursor: pointer;
-  border-color: light-dark(#ddd, #555);
+  border-color: light-dark(#bbb, #444);
   color: light-dark(#000, #fff);
   background-color: light-dark(#eee, #444);
 }
 
 [role=tab][aria-selected=true] {
+  top: 2px;
   padding: 2px 2px 3px;
   margin-top: 0;
   border-width: 2px;
   border-top-width: 6px;
+  border-bottom-width: 2px;
   color: light-dark(#000, #fff);
   background-color: light-dark(#fff, #000);
   border-bottom-color: light-dark(#fff, #000);
@@ -68,25 +73,6 @@ h2 {
   border-bottom-color: light-dark(#eee, #444);
 }
 
-[role=tab] span.focus {
-  display: inline-block;
-  margin: 2px;
-  padding: 4px 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-[role=tab]:hover span.focus,
-[role=tab]:focus span.focus,
-[role=tab]:active span.focus {
-  padding: 2px 4px;
-  border-width: 2px;
-  border-style: solid;
-  border-radius: 3px;
-  border-color: light-dark(#13294b, #eee);
-}
-
 [role=tabpanel] {
   padding: 5px;
   border-width: 2px;
@@ -95,7 +81,7 @@ h2 {
   min-height: 180px;
   min-width: 180px;
   overflow: auto;
-  border-color: light-dark(#ddd, #555);
+  border-color: light-dark(#bbb, #444);
   background: light-dark(#fff, #000);
 }
 
@@ -150,11 +136,6 @@ footer .last {
   }
   [role=tab][aria-selected=false] {
     border-bottom-color: ButtonBorder;
-  }
-  [role=tab]:hover span.focus,
-  [role=tab]:focus span.focus,
-  [role=tab]:active span.focus {
-    border-color: ActiveText;
   }
   [role=tabpanel] {
     border-color: ButtonBorder;

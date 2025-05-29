@@ -4,6 +4,32 @@
   color-scheme: light dark;
 }
 
+[role=tab] span.focus {
+  display: inline-block;
+  margin: 2px;
+  padding: 4px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[role=tab]:hover span.focus,
+[role=tab]:focus span.focus,
+[role=tab]:active span.focus {
+  padding: 2px 4px;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 3px;
+  border-color: light-dark(#13294b, #eee);
+}
+
+@media (forced-colors: active) {
+  [role=tab]:hover span.focus,
+  [role=tab]:focus span.focus,
+  [role=tab]:active span.focus {
+    border-color: ActiveText;
+  }
+}
 [role=tree] [role=treeitem]:focus {
   outline-offset: -2px;
   outline-color: light-dark(#13294b, #eee);

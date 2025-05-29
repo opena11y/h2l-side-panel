@@ -5,6 +5,35 @@
   color-scheme: light dark;
 }
 
+// Tablist
+
+[role="tab"] span.focus {
+  display: inline-block;
+  margin: 2px;
+  padding: 4px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[role="tab"]:hover span.focus,
+[role="tab"]:focus span.focus,
+[role="tab"]:active span.focus {
+  padding: 2px 4px;
+  border-width: toc-base.$outline-width-focus;
+  border-style: toc-base.$outline-style-focus;
+  border-radius: 3px;
+  border-color: light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
+}
+
+@media (forced-colors: active) {
+  [role="tab"]:hover span.focus,
+  [role="tab"]:focus span.focus,
+  [role="tab"]:active span.focus {
+    border-color: toc-base.$outline-color-focus-forced;
+  }
+}
+
 // Headings tree
 
 [role="tree"] [role="treeitem"]:focus {

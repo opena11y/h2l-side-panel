@@ -23,6 +23,9 @@ h2 {
 #id-div-title {
   font-size: toc-base.$font-size-title;
   display: block;
+  height: 2.2em;
+  text-overflow: ellipsis;
+  overflow: hidden;
   margin-bottom: 1em;
 }
 
@@ -34,7 +37,7 @@ h2 {
   display: inline-block;
   position: relative;
   z-index: 2;
-  top: 2px;
+  top: 0px;
   margin: 0;
   margin-top: 4px;
   padding: 3px 3px 4px;
@@ -53,10 +56,12 @@ h2 {
 }
 
 [role="tab"][aria-selected="true"] {
+  top: 2px;
   padding: 2px 2px 3px;
   margin-top: 0;
   border-width: 2px;
   border-top-width: 6px;
+  border-bottom-width: 2px;
   color: light-dark(toc-base.$color-light, toc-base.$color-dark);
   background-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
   border-bottom-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
@@ -69,24 +74,6 @@ h2 {
   border-bottom-color: light-dark(toc-base.$border-color-light, toc-base.$border-color-dark);
 }
 
-[role="tab"] span.focus {
-  display: inline-block;
-  margin: 2px;
-  padding: 4px 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-[role="tab"]:hover span.focus,
-[role="tab"]:focus span.focus,
-[role="tab"]:active span.focus {
-  padding: 2px 4px;
-  border-width: toc-base.$outline-width-focus;
-  border-style: toc-base.$outline-style-focus;
-  border-radius: 3px;
-  border-color: light-dark(toc-base.$outline-color-focus-light, toc-base.$outline-color-focus-dark);
-}
 
 [role="tabpanel"] {
   padding: 5px;
@@ -157,11 +144,6 @@ footer .last {
     border-bottom-color: toc-base.$border-color-forced;
   }
 
-  [role="tab"]:hover span.focus,
-  [role="tab"]:focus span.focus,
-  [role="tab"]:active span.focus {
-    border-color: toc-base.$outline-color-focus-forced;
-  }
 
   [role="tabpanel"] {
     border-color: toc-base.$border-tablist-forced;
