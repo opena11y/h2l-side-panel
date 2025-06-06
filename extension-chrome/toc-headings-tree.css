@@ -14,6 +14,8 @@
   overflow: hidden;
   white-space: nowrap;
   color: light-dark(#000, #fff);
+  fill: light-dark(#000, #fff);
+  stroke: light-dark(#000, #fff);
   background-color: light-dark(#fff, #000);
 }
 

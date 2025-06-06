@@ -129,10 +129,10 @@ template.innerHTML = `
         <label class="grid">
           <input type="checkbox"
                  data-group="links"
-                 data-option="externalLinks"
+                 data-option="sameSubDomainLinks"
                  aria-describedby="id-link-desc"/>
           <span class="label"
-                data-i18n="options_dialog_label_external_links">
+                data-i18n="options_dialog_label_same_sub_domain">
           </span>
         </label>
 
@@ -145,6 +145,17 @@ template.innerHTML = `
                 data-i18n="options_dialog_label_same_domain">
           </span>
         </label>
+
+        <label class="grid">
+          <input type="checkbox"
+                 data-group="links"
+                 data-option="externalLinks"
+                 aria-describedby="id-link-desc"/>
+          <span class="label"
+                data-i18n="options_dialog_label_external_links">
+          </span>
+        </label>
+
 
         <div class="grid">
           <div></div>

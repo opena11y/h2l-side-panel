@@ -3,7 +3,8 @@
 import DebugLogging from './debug.js';
 
 import {
-  getOptions
+  getOptions,
+  saveOption
 } from './storage.js';
 
 import {
@@ -71,8 +72,29 @@ class TOCHeadingsTree extends HTMLElement {
 
     this.highlightFollowsFocus = false;
     this.enterKeyMovesFocus    = false;
+    this.isVisible = true;
+    this.lastHeadingId = '';
 
     setI18nLabels(this.shadowRoot, debug.flag);
+  }
+
+ static get observedAttributes() {
+    return [
+      "visible",
+      ];
+  }
+
+
+  attributeChangedCallback(name, oldValue, newValue) {
+
+    switch (name) {
+      case "visible":
+        this.isVisible = newValue.toLowerCase() === 'true';
+        break;
+
+      default:
+        break;
+    }
   }
 
   resize (height, width) {
@@ -93,14 +115,14 @@ class TOCHeadingsTree extends HTMLElement {
      }
   }
 
-  updateContent(myResult, containerObj, highlightHandler) {
+  updateContent(sameUrl, myResult) {
     debug.flag && debug.log(`[updateContent][headings]: ${myResult.headings}`);
 
-    this.handleObj = containerObj;
-    this.handleHighlight = highlightHandler;
+    let lastTreeitemNode = null;
 
     const handleIconClick = this.handleIconClick;
     const treeObj = this;
+    let index = 1;
 
     const levelLabel = getMessage('headings_level_label');
 
@@ -108,11 +130,20 @@ class TOCHeadingsTree extends HTMLElement {
       debug.flag && debug.log(`addTreeItem`);
       const treeitemNode = document.createElement('div');
       treeitemNode.addEventListener('keydown', treeObj.handleKeydown.bind(treeObj));
-      treeitemNode.addEventListener('click', treeObj.handleTreeitemClick.bind(treeObj));
+      treeitemNode.addEventListener('click',   treeObj.handleClick.bind(treeObj));
+      treeitemNode.addEventListener('focus',   treeObj.handleFocus.bind(treeObj));
+      treeitemNode.addEventListener('blur',    treeObj.handleBlur.bind(treeObj));
       treeitemNode.tabindex = -1;
+      treeitemNode.id = 'heading-' + index;
+      index += 1;
       treeitemNode.setAttribute('role', 'treeitem');
       treeitemNode.setAttribute('data-level', heading.level);
       treeitemNode.setAttribute('data-ordinal-position', heading.ordinalPosition);
+
+      if (treeitemNode.id === treeObj.lastHeadingId) {
+        lastTreeitemNode = treeitemNode;
+        debug.flag && debug.log(`[lastTreeitemNode]: ${lastTreeitemNode}`);
+      }
 
       const firstChar = heading.name[0] ? heading.name[0].toLowerCase() : '';
       treeitemNode.setAttribute('data-first-char', firstChar);
@@ -127,7 +158,7 @@ class TOCHeadingsTree extends HTMLElement {
       nameNode.textContent = `${heading.level}: ${heading.name}`;
       treeitemNode.setAttribute('data-info', levelLabel + nameNode.textContent);
       treeitemNode.appendChild(nameNode);
-      treeitemNode.addEventListener('click', treeObj.handleTreeitemClick.bind(treeObj));
+      treeitemNode.addEventListener('click', treeObj.handleClick.bind(treeObj));
       parentNode.appendChild(treeitemNode);
       return treeitemNode;
     }
@@ -198,12 +229,11 @@ class TOCHeadingsTree extends HTMLElement {
 
       getOptions().then( (options) => {
 
-        debug.flag && debug.log(`[options][    highlightFollowsFocus]: ${options.highlightFollowsFocus}`);
-        debug.flag && debug.log(`[options][       enterKeyMovesFocus]: ${options.enterKeyMovesFocus}`);
-        debug.flag && debug.log(`[options][smallAndOffScreenHeadings]: ${options.smallAndOffScreenHeadings}`);
-
         this.highlightFollowsFocus = options.highlightFollowsFocus;
         this.enterKeyMovesFocus    = options.enterKeyMovesFocus;
+        this.lastHeadingId         = options.lastHeadingId;
+
+        debug.flag && debug.log(`[lastHeadingId]: ${this.lastHeadingId}`);
 
         const headings = Array.from(myResult.headings).filter( (h) => {
           return h.name.length &&     // heading must have a name
@@ -220,7 +250,13 @@ class TOCHeadingsTree extends HTMLElement {
        setTablistAttr('headings-count', count);
 
         if (firstTreeitem) {
-          this.setFocusToTreeitem(firstTreeitem);
+          debug.log(`[sameUrl]: ${sameUrl} (${lastTreeitemNode})`);
+          if (sameUrl  && lastTreeitemNode) {
+            this.setFocusToTreeitem(lastTreeitemNode);
+          }
+          else {
+            this.setFocusToTreeitem(firstTreeitem);
+          }
         }
         else {
           this.clearContent(getMessage('headings_none_found', debug.flag));
@@ -264,11 +300,18 @@ class TOCHeadingsTree extends HTMLElement {
   }
 
   highlightHeading(treeitem) {
-    const op   = treeitem.getAttribute('data-ordinal-position');
+    const op   = treeitem.getAttribute('data-ordinal-position') ?
+                 treeitem.getAttribute('data-ordinal-position') :
+                 '';
     const info = treeitem.getAttribute('data-info');
     if (op) {
       highlightOrdinalPosition(op, info);
+      saveOption('lastHeadingId', treeitem.id);
     }
+  }
+
+  removeHighlight() {
+    highlightOrdinalPosition('', '');
   }
 
   isExpandable(treeitem) {
@@ -349,9 +392,8 @@ class TOCHeadingsTree extends HTMLElement {
 
   setFocusToTreeitem(treeitem) {
     this.setTabindex(treeitem);
-    treeitem.focus();
-    if (this.highlightFollowsFocus){
-      this.highlightHeading(treeitem);
+    if (this.isVisible) {
+      treeitem.focus();
     }
   }
 
@@ -363,6 +405,19 @@ class TOCHeadingsTree extends HTMLElement {
   }
 
   // Event handlers
+
+
+ handleFocus(event) {
+    const tgt = event.currentTarget;
+    if (this.highlightFollowsFocus) {
+      this.highlightHeading(tgt);
+    }
+  }
+
+ handleBlur(event) {
+    const tgt = event.currentTarget;
+    this.removeHighlight()
+  }
 
   handleIconClick (event) {
 
@@ -380,11 +435,11 @@ class TOCHeadingsTree extends HTMLElement {
     event.preventDefault();
   }
 
-  handleTreeitemClick (event) {
+  handleClick (event) {
     const tgt = event.currentTarget;
     const iconNode = tgt.querySelector('.expand-icon');
 
-    debug.flag && debug.log(`[handleTreeitemClick]: ${tgt.tagName}`);
+    debug.flag && debug.log(`[handleClick]: ${tgt.tagName}`);
 
     // if clicked on expand icon in the treeview then do not process event
     if (!iconNode ||

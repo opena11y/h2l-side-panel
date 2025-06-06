@@ -106,6 +106,11 @@ class TOCSidePanel extends HTMLElement {
   highlightOrdinalPosition(ordinalPosition, info='') {
     debug.flag && debug.log(`[highlightOrdinalPosition]`);
 
+    if (!ordinalPosition) {
+      ordinalPosition='';
+      info='';
+    }
+
     async function sendHighlightMessage(tabs) {
       debug.flag && debug.log(`[sendHighlightMessage]`);
       for (const tab of tabs) {

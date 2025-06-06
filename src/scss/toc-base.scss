@@ -23,11 +23,13 @@ $background-tab-dark: #444;
 // Focus colors
 
 $color-focus-light: #13294b;
-$background-focus-light: #eee;
+$background-focus-light: #ecf2fa;
+$background-selected-light: #eee;
 $outline-color-focus-light: #13294b;
 
-$color-focus-dark: #eee;
+$color-focus-dark: #ecf2fa;
 $background-focus-dark: #13294b;
+$background-selected-dark: #444;
 $outline-color-focus-dark: #eee;
 
 $outline-offset-focus: -2px;

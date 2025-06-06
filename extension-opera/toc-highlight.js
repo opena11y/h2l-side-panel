@@ -91,6 +91,7 @@ styleHighlightTemplate.textContent = `
   box-sizing: border-box;
   pointer-events:none;
   z-index: ${zIndexHighlight};
+  display: none;
 }
 
 .${HIGHLIGHT_CLASS}.hasInfoBottom,
@@ -136,6 +137,7 @@ styleHighlightTemplate.textContent = `
   text-align: center;
   animation: fadeIn 1.5s;
   z-index: ${zIndexHighlight};
+  display: none;
 }
 
 .${HIGHLIGHT_CLASS} .overlay-info {

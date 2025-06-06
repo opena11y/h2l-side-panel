@@ -51,6 +51,10 @@
     "message": "Name",
     "description": "Label for name column in links grid"
   },
+  "links_grid_type": {
+    "message": "Type",
+    "description": "Label for type column in links grid"
+  },
   "links_grid_url": {
     "message": "URL",
     "description": "Label for url column in links grid"
@@ -63,17 +67,37 @@
     "message": "Link",
     "description": "Used in highlight information"
   },
-  "link_label_external": {
-    "message": ": External",
-    "description": "Used in highlight information"
+  "link_abbr_external": {
+    "message": "ext",
+    "description": "Abbreviation for external links"
   },
-  "link_label_internal": {
-    "message": ": Internal",
-    "description": "Used in highlight information"
+  "link_name_external": {
+    "message": "External",
+    "description": "Name for external links"
   },
-  "link_label_same_domain": {
+  "link_abbr_internal": {
+    "message": "int",
+    "description": "Abbreviation for external links"
+  },
+  "link_name_internal": {
+    "message": "Internal",
+    "description": "Name for external links"
+  },
+  "link_abbr_same_domain": {
+    "message": "sd",
+    "description": "Abbreviation for same domain links"
+  },
+  "link_name_same_domain": {
     "message": ": Same domain",
-    "description": "Used in highlight information"
+    "description": "Name for same domain links"
+  },
+  "link_abbr_same_sub_domain": {
+    "message": "ssd",
+    "description": "Abbreviation for same sub-domain links"
+  },
+  "link_name_same_sub_domain": {
+    "message": ": Same Sub domain",
+    "description": "Name for same sub-domain links"
   },
   "headings_tree_label": {
     "message": "Headings",
@@ -146,6 +170,10 @@
   "options_dialog_label_external_links": {
     "message": "Show external links",
     "description": "Label for checkbox for including external links"
+  },
+  "options_dialog_label_same_sub_domain": {
+    "message": "Show same sub-domain links",
+    "description": "Label for checkbox for same sub-domain links"
   },
   "options_dialog_label_same_domain": {
     "message": "Show same domain links",

@@ -15,7 +15,9 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  color: light-dark(toc-base.$color-light, toc-base.$color-dark);
+  color:  light-dark(toc-base.$color-light, toc-base.$color-dark);
+  fill:   light-dark(toc-base.$color-light, toc-base.$color-dark);
+  stroke: light-dark(toc-base.$color-light, toc-base.$color-dark);
   background-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
 }
 

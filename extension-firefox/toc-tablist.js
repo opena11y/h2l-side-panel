@@ -2,13 +2,19 @@
 
 /* Imports */
 
-import DebugLogging   from './debug.js';
+import DebugLogging from './debug.js';
 
 import {
   removeChildContent,
   setI18nLabels,
   updateContent
 } from './utils.js';
+
+import {
+  getOptions,
+  saveOptions,
+  saveOption
+} from './storage.js'
 
 /* Constants */
 
@@ -33,7 +39,8 @@ template.innerHTML = `
     </div>
 
     <div role="tablist">
-      <div role="tab"
+      <div id="id-tab-headings"
+           role="tab"
            aria-controls="id-tabpanel-headings">
         <span class="focus">
           <span id="id-tab-headings"
@@ -42,7 +49,8 @@ template.innerHTML = `
           </span>
         </span>
       </div>
-      <div role="tab"
+      <div id="id-tab-landmarks"
+           role="tab"
            aria-controls="id-tabpanel-landmarks">
         <span class="focus">
           <span id="id-tab-landmarks"
@@ -51,7 +59,8 @@ template.innerHTML = `
           </span>
         </span>
       </div>
-      <div role="tab"
+      <div id="id-tab-links"
+           role="tab"
            aria-controls="id-tabpanel-links">
         <span class="focus">
           <span id="id-tab-links"
@@ -178,16 +187,22 @@ class TOCTabList extends HTMLElement {
     this.lastTab = null;
 
     this.tabNodes = Array.from(this.divTablist.querySelectorAll('[role=tab]'));
-    this.tabpanelNodes = [];
+    this.tabpanels = [];
 
     this.tabNodes.forEach( (tabNode) => {
+      const tabpanel = {};
+
       debug.flag && debug.log(`[tabNode]: ${tabNode}`);
       const tabpanelNode =  this.shadowRoot.querySelector(`#${tabNode.getAttribute('aria-controls')}`);
       debug.flag && debug.log(`[tabpanelNode]: ${tabpanelNode}`);
 
       tabNode.tabIndex = -1;
       tabNode.setAttribute('aria-selected', 'false');
-      this.tabpanelNodes.push(tabpanelNode);
+
+      tabpanel.node = tabpanelNode;
+      tabpanel.contentNode = tabpanelNode.firstElementChild;
+
+      this.tabpanels.push(tabpanel);
 
       tabNode.addEventListener('keydown', this.handleTabKeydown.bind(this));
       tabNode.addEventListener('click',   this.handleTabClick.bind(this));
@@ -200,8 +215,24 @@ class TOCTabList extends HTMLElement {
     });
 
     setI18nLabels(this.shadowRoot, debug.flag);
-    this.setSelectedTab(this.firstTab, false);
     this.resize(window.innerHeight, window.innerWidth);
+
+    getOptions().then((options) => {
+
+      const lastTabNode = options.lastTabId ?
+                          this.shadowRoot.querySelector(`#${options.lastTabId}`) :
+                          null;
+
+      debug.log(`[get][  lastTabId]: ${options.lastTabId }`);
+      debug.log(`[get][lastTabNode]: ${lastTabNode}`);
+
+      if (options.lastTabId && lastTabNode) {
+        this.setSelectedTab(lastTabNode, false);
+      }
+      else {
+        this.setSelectedTab(this.firstTab, false);
+      }
+    });
   }
 
   static get observedAttributes() {
@@ -273,9 +304,9 @@ class TOCTabList extends HTMLElement {
 
     debug.flag && debug.log(`[    newHeight]: ${newHeight}`);
 
-    this.tabpanelNodes.forEach ( (tabpanel) => {
-      tabpanel.style.height = tabpanelHeight + 'px';
-      tabpanel.style.width  = tabpanelWidth  + 'px';
+    this.tabpanels.forEach ( (tabpanel) => {
+      tabpanel.node.style.height = tabpanelHeight + 'px';
+      tabpanel.node.style.width  = tabpanelWidth  + 'px';
     });
 
     this.tocHeadingsTree.resize(tabpanelsRect.height, newWidth);
@@ -322,34 +353,63 @@ class TOCTabList extends HTMLElement {
     this.divTitle.textContent = myResult.title;
     debug.flag && debug.log(`[Title]:${ myResult.title}`);
 
-    this.tocHeadingsTree.updateContent(myResult);
-    this.tocLandmarksList.updateContent(myResult);
-    this.tocLinksGrid.updateContent(myResult);
+    debug.log(`[updateContent][url]: ${myResult.url}`);
 
-    this.resize();
+    const tabListObj = this;
+
+    getOptions().then( (options) => {
+      debug.log(`[    url]: ${myResult.url}`);
+      debug.log(`[lastUrl]: ${options.lastUrl}`);
+
+      const sameUrl = options.lastUrl === myResult.url;
+      debug.log(`[sameUrl]: ${sameUrl}`);
+      options.lastUrl = myResult.url;
+
+      if(!sameUrl) {
+        options.lastHeadingId = '';
+        options.lastLandmarkId = '';
+        options.lastLinkId = '';
+      }
+
+      saveOptions(options).then( () => {
+        tabListObj.tocHeadingsTree.updateContent(sameUrl, myResult);
+        tabListObj.tocLandmarksList.updateContent(sameUrl, myResult);
+        tabListObj.tocLinksGrid.updateContent(sameUrl, myResult);
+
+        tabListObj.resize();
+      });
+    });
   }
 
   // Tablist support functions and heandlers
 
   setSelectedTab(currentTab, setFocus) {
+    const tabListObj = this;
     if (typeof setFocus !== 'boolean') {
       setFocus = true;
     }
-    for (var i = 0; i < this.tabNodes.length; i += 1) {
-      var tab = this.tabNodes[i];
-      if (currentTab === tab) {
-        tab.setAttribute('aria-selected', 'true');
-        tab.tabIndex = 0;
-        this.tabpanelNodes[i].classList.remove('is-hidden');
-        if (setFocus) {
-          tab.focus();
+
+    saveOption('lastTabId', currentTab.id).then( () => {
+      debug.log(`[save][currentTab.id]: ${currentTab.id}`);
+
+      for (var i = 0; i < this.tabNodes.length; i += 1) {
+        var tab = this.tabNodes[i];
+        if (currentTab === tab) {
+          tab.setAttribute('aria-selected', 'true');
+          tab.tabIndex = 0;
+          tabListObj.tabpanels[i].node.classList.remove('is-hidden');
+          tabListObj.tabpanels[i].contentNode.setAttribute('visible', 'true');
+          if (setFocus) {
+            tab.focus();
+          }
+        } else {
+          tab.setAttribute('aria-selected', 'false');
+          tab.tabIndex = -1;
+          this.tabpanels[i].node.classList.add('is-hidden');
+          this.tabpanels[i].contentNode.setAttribute('visible', 'false');
         }
-      } else {
-        tab.setAttribute('aria-selected', 'false');
-        tab.tabIndex = -1;
-        this.tabpanelNodes[i].classList.add('is-hidden');
       }
-    }
+    });
   }
 
   setSelectedToPreviousTab(currentTab) {

@@ -30,18 +30,19 @@
     border-color: ActiveText;
   }
 }
+[role=tree] [role=treeitem][tabindex="0"] {
+  background-color: light-dark(#eee, #444);
+}
+
 [role=tree] [role=treeitem]:focus {
   outline-offset: -2px;
   outline-color: light-dark(#13294b, #eee);
   outline-width: 2px;
   outline-style: solid;
-  background-color: light-dark(#eee, #13294b) !important;
-  color: light-dark(#13294b, #eee);
-}
-
-[role=tree] [role=treeitem]:focus .expand-icon polygon {
-  stroke: light-dark(#13294b, #eee);
-  fill: light-dark(#13294b, #eee);
+  background-color: light-dark(#ecf2fa, #13294b) !important;
+  color: light-dark(#13294b, #ecf2fa);
+  fill: light-dark(#13294b, #ecf2fa);
+  stroke: light-dark(#13294b, #ecf2fa);
 }
 
 @media (forced-colors: active) {
@@ -49,19 +50,21 @@
     outline-color: ActiveText;
     background-color: ButtonFace !important;
     color: ActiveText;
-  }
-  [role=tree] [role=treeitem]:focus .expand-icon polygon {
     stroke: ActiveText;
     fill: ActiveText;
   }
 }
+[role=listbox] [role=listitem][tabindex="0"] {
+  background-color: light-dark(#eee, #444);
+}
+
 [role=listbox] [role=listitem]:focus {
   outline-offset: -2px;
   outline-color: light-dark(#13294b, #eee);
   outline-width: 2px;
   outline-style: solid;
-  background-color: light-dark(#eee, #13294b) !important;
-  color: light-dark(#13294b, #eee);
+  background-color: light-dark(#ecf2fa, #13294b) !important;
+  color: light-dark(#13294b, #ecf2fa);
 }
 
 @media (forced-colors: active) {
@@ -71,6 +74,12 @@
     color: ActiveText;
   }
 }
+table[role=grid] th[tabindex="0"],
+table[role=grid] td[tabindex="0"],
+table[role=grid] tr[tabindex="0"] {
+  background-color: light-dark(#eee, #444);
+}
+
 table[role=grid] th:focus,
 table[role=grid] td:focus,
 table[role=grid] tr:focus {
@@ -78,8 +87,8 @@ table[role=grid] tr:focus {
   outline-color: light-dark(#13294b, #eee);
   outline-width: 2px;
   outline-style: solid;
-  background-color: light-dark(#eee, #13294b) !important;
-  color: light-dark(#13294b, #eee);
+  background-color: light-dark(#ecf2fa, #13294b) !important;
+  color: light-dark(#13294b, #ecf2fa);
 }
 
 @media (forced-colors: active) {

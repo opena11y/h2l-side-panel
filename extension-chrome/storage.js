@@ -26,10 +26,16 @@ const defaultOptions = {
   unNamedDuplicateRegions: false,
   internalLinks: true,
   externalLinks: true,
+  sameSubDomainLinks: true,
   sameDomainLinks: true,
   accessibleNames: true,
   keyboardSupport: true,
-  keyboardFocus: 'styled'  // options 'styled', 'default' and 'none'
+  keyboardFocus: 'styled',  // options 'styled', 'default' and 'none'
+  lastUrl: '',
+  lastHeadingId: '',
+  lastLandmarkId: '',
+  lastLinkId: '',
+  lastTabId: ''
 };
 
 function hasAllProperties (refObj, srcObj) {
@@ -64,8 +70,8 @@ function addDefaultValues (options) {
 **  getOptions
 */
 export function getOptions () {
-  return new Promise (function (resolve) {
-    browserStorage.get(function (options) {
+  return new Promise ((resolve) => {
+    browserStorage.get((options) => {
       if (notLastError()) {
         if (isComplete(options)) {
           resolve(options);
@@ -82,11 +88,29 @@ export function getOptions () {
 
 /*
 **  saveOptions
+*
+*   @desc  Saves all options
 */
 export function saveOptions (options) {
-  return new Promise (function (resolve) {
+  return new Promise ((resolve) => {
     browserStorage.set(options, function () {
       if (notLastError()) { resolve(); }
+    });
+  });
+}
+
+/*
+**  saveOption
+*
+*   @desc  Saves a specific option
+*/
+export function saveOption (option, value) {
+  return new Promise (function (resolve) {
+     getOptions().then( (options) => {
+      options[option] = value;
+      saveOptions(options).then(() => {
+        if (notLastError()) { resolve(); }
+      });
     });
   });
 }

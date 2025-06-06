@@ -5,7 +5,8 @@
 import DebugLogging   from './debug.js';
 
 import {
-  getOptions
+  getOptions,
+  saveOption
 } from './storage.js';
 
 import {
@@ -57,9 +58,31 @@ class TOCLandmarksList extends HTMLElement {
 
     this.highlightFollowsFocus = false;
     this.enterKeyMovesFocus    = false;
+    this.isVisible = false;
+
+    this.lastLandmarkId = '';
 
     setI18nLabels(this.shadowRoot, debug.flag);
 
+  }
+
+ static get observedAttributes() {
+    return [
+      "visible",
+      ];
+  }
+
+
+  attributeChangedCallback(name, oldValue, newValue) {
+
+    switch (name) {
+      case "visible":
+        this.isVisible = newValue.toLowerCase() === 'true';
+        break;
+
+      default:
+        break;
+    }
   }
 
   resize (height, width) {
@@ -79,8 +102,11 @@ class TOCLandmarksList extends HTMLElement {
      }
   }
 
-  updateContent(myResult) {
+  updateContent(sameUrl, myResult) {
     debug.flag && debug.log(`[updateContent]`);
+
+    let lastLandmarkNode = null;
+    let index = 1;
 
     this.clearContent();
 
@@ -110,6 +136,8 @@ class TOCLandmarksList extends HTMLElement {
 
         this.highlightFollowsFocus = options.highlightFollowsFocus;
         this.enterKeyMovesFocus    = options.enterKeyMovesFocus;
+        this.lastURL               = options.lastURL;
+        this.lastLandmarkId        = options.lastLandmarkId;
 
         debug.flag && debug.log(`[options]: ${options}`);
         myResult.regions.forEach( (r) => {
@@ -118,6 +146,13 @@ class TOCLandmarksList extends HTMLElement {
               options.unNamedDuplicateRegions) {
 
             const listitemNode = document.createElement('div');
+            listitemNode.id = 'landmark-' + index;
+            index += 1;
+
+            if (listitemNode.id === listObj.lastLandmarkId) {
+              lastLandmarkNode = listitemNode;
+            }
+
             listitemNode.setAttribute('role', 'listitem');
             listitemNode.setAttribute('data-ordinal-position', r.ordinalPosition);
 
@@ -126,8 +161,10 @@ class TOCLandmarksList extends HTMLElement {
             listitemNode.textContent = r.name ? `${roleName}: ${r.name}` : roleName;
             listitemNode.setAttribute('data-info', listitemNode.textContent);
             listitemNode.setAttribute('data-first-char', r.role.toLowerCase()[0]);
-            listitemNode.addEventListener('click', listObj.handleListitemClick.bind(listObj));
+            listitemNode.addEventListener('click', listObj.handleClick.bind(listObj));
             listitemNode.addEventListener('keydown', listObj.handleKeydown.bind(listObj));
+            listitemNode.addEventListener('focus',   listObj.handleFocus.bind(listObj));
+            listitemNode.addEventListener('blur',    listObj.handleBlur.bind(listObj));
 
             this.listboxNode.appendChild(listitemNode);
             debug.flag && debug.log(listitemNode.textContent);
@@ -142,7 +179,12 @@ class TOCLandmarksList extends HTMLElement {
         setTablistAttr('landmarks-count', count);
 
         if (firstListitem) {
-          this.setFocusToListitem(firstListitem);
+          if (sameUrl && lastLandmarkNode) {
+            this.setFocusToListitem(lastLandmarkNode);
+          }
+          else {
+            this.setFocusToListitem(firstListitem);
+          }
         }
         else {
           this.clearContent(getMessage('Landmarks_none_found', debug.flag));
@@ -155,27 +197,31 @@ class TOCLandmarksList extends HTMLElement {
 
   }
 
-  // Listbox keyboard navigation methods
-
   getListitems () {
     return Array.from(this.listboxNode.querySelectorAll('[role="listitem"]'));
   }
 
-  focusRegion(listitem) {
+  focusLandmark(listitem) {
     const op = listitem.getAttribute('data-ordinal-position');
     if (op) {
       focusOrdinalPosition(op);
     }
   }
 
-  highlightRegion(listitem) {
-    const op   = listitem.getAttribute('data-ordinal-position');
+  highlightLandmark(listitem) {
+    const op   = listitem.getAttribute('data-ordinal-position') ?
+                 listitem.getAttribute('data-ordinal-position') :
+                 '';
     const info = listitem.getAttribute('data-info');
     if (op) {
       highlightOrdinalPosition(op, info);
+      saveOption('lastLandmarkId', listitem.id);
     }
   }
 
+  removeHighlight() {
+    highlightOrdinalPosition('', '');
+  }
 
   setFocusByFirstCharacter(listitem, char){
 
@@ -235,9 +281,11 @@ class TOCLandmarksList extends HTMLElement {
 
   setFocusToListitem(listitem) {
     this.setTabindex(listitem);
-    listitem.focus();
-    if (this.highlightFollowsFocus){
-      this.highlightRegion(listitem);
+    if (this.isVisible) {
+      listitem.focus();
+      if (this.highlightFollowsFocus){
+        this.highlightLandmark(listitem);
+      }
     }
   }
 
@@ -250,16 +298,28 @@ class TOCLandmarksList extends HTMLElement {
 
   // Event handlers
 
-  handleListitemClick (event) {
+  handleFocus(event) {
     const tgt = event.currentTarget;
-    debug.flag && debug.log(`[handleListitemClick]: ${tgt.tagName}`);
+    if (this.highlightFollowsFocus) {
+      this.highlightHeading(tgt);
+    }
+  }
+
+  handleBlur(event) {
+    const tgt = event.currentTarget;
+    this.removeHighlight()
+  }
+
+  handleClick (event) {
+    const tgt = event.currentTarget;
+    debug.flag && debug.log(`[handleClick]: ${tgt.tagName}`);
     this.setFocusToListitem(tgt);
-    this.highlightRegion(tgt);
+    this.highlightLandmark(tgt);
     event.stopPropagation();
     event.preventDefault();
   }
 
- handleKeydown(event) {
+  handleKeydown(event) {
     const tgt = event.currentTarget;
     debug.flag && debug.log(`[handleKeydown]: ${tgt.tagName}`);
     const key = event.key;
@@ -286,16 +346,16 @@ class TOCLandmarksList extends HTMLElement {
       switch (key) {
         case 'Enter':
           if (this.enterKeyMovesFocus) {
-            this.focusRegion(tgt);
+            this.focusLandmark(tgt);
           }
           else {
-            this.highlightRegion(tgt);
+            this.highlightLandmark(tgt);
           }
           flag = true;
           break;
 
         case ' ':
-          this.highlightRegion(tgt);
+          this.highlightLandmark(tgt);
           flag = true;
           break;
 
