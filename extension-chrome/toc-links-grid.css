@@ -12,11 +12,27 @@ table[role=grid] {
   padding: 0;
   overflow-y: auto;
   border-collapse: collapse;
-  height: 30hv;
   min-height: 150px;
   table-layout: fixed;
   color: light-dark(#000, #fff);
   background-color: light-dark(#fff, #000);
+}
+
+table[role=grid] span.icon {
+  position: relative;
+  top: 2px;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+table[role=grid] [aria-sort=none] span.icon {
+  display: none;
+}
+
+table[role=grid] [aria-sort=descending] span.icon {
+  top: 0px;
+  transform: rotate(180deg);
 }
 
 table[role=grid] thead,

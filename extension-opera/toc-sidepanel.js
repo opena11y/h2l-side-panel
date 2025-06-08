@@ -187,7 +187,7 @@ class TOCSidePanel extends HTMLElement {
 
   updateContent() {
     debug.flag && debug.log(`[updateContent]`);
-    this.clearContent('loading...');
+    this.clearContent(getMessage('loading_content'));
     myBrowser.tabs
       .query({
         currentWindow: true,
@@ -200,7 +200,7 @@ class TOCSidePanel extends HTMLElement {
   handleGetInformationClick () {
     debug.flag && debug.log(`[handleGetInformationClick]`);
 
-    this.clearContent('loading...');
+    this.clearContent(getMessage('loading_content'));
 
     myBrowser.tabs
       .query({

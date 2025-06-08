@@ -14,11 +14,27 @@ table[role="grid"] {
   padding: 0;
   overflow-y: auto;
   border-collapse: collapse;
-  height: 30hv;
   min-height: 150px;
   table-layout: fixed;
   color: light-dark(toc-base.$color-light, toc-base.$color-dark);
   background-color: light-dark(toc-base.$background-light, toc-base.$background-dark);
+}
+
+table[role="grid"] span.icon {
+  position: relative;
+  top: 2px;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+table[role="grid"] [aria-sort="none"] span.icon {
+  display: none;
+}
+
+table[role="grid"] [aria-sort="descending"] span.icon {
+  top: 0px;
+  transform: rotate(180deg);
 }
 
 table[role="grid"] thead,
@@ -60,6 +76,8 @@ table[role="grid"] tr th {
 table[role="grid"] tr:hover {
   cursor: pointer;
 }
+
+
 
 @media (forced-colors: active) {
 

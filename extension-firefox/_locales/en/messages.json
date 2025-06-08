@@ -28,7 +28,7 @@
     "description": "Label for update information"
   },
   "tablist_title": {
-    "message": "Title",
+    "message": "Page Title",
     "description": "Label for title of the page"
   },
   "tab_headings": {
@@ -66,6 +66,38 @@
   "link_label": {
     "message": "Link",
     "description": "Used in highlight information"
+  },
+  "link_abbr_pdf": {
+    "message": "pdf",
+    "description": "Abbreviation for pdf extensions"
+  },
+  "link_name_pdf": {
+    "message": "Portable Document Format",
+    "description": "Name for pdf documents"
+  },
+  "link_abbr_doc": {
+    "message": "doc",
+    "description": "Abbreviation for pdf extensions"
+  },
+  "link_name_doc": {
+    "message": "Office document formats",
+    "description": "Name for office document formats"
+  },
+  "link_abbr_media": {
+    "message": "media",
+    "description": "Abbreviation for media extensions"
+  },
+  "link_name_media": {
+    "message": "Video, images and graphic files",
+    "description": "Name for media formats"
+  },
+  "link_abbr_zip": {
+    "message": "zip",
+    "description": "Abbreviation for compressed files"
+  },
+  "link_name_zip": {
+    "message": "Comnpressed file formats",
+    "description": "Name for compressed files"
   },
   "link_abbr_external": {
     "message": "ext",

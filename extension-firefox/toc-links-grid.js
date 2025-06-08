@@ -28,18 +28,57 @@ const template = document.createElement('template');
 template.innerHTML = `
   <table role="grid">
     <thead>
-       <tr>
-          <th tabindex="-1"
+       <tr id="id-tr-sort">
+          <th id="id-th-pos"
+              tabindex="-1"
               class="position"
-              data-i18n="links_grid_position">
+              data-sort="position"
+              aria-sort="ascending">
+            <span class="label"
+                  data-i18n="links_grid_position">
+            </span>
+            <span class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="1em"
+                   height="1em"
+                   viewbox="0 0 32 32">
+                  <polygon points="4,8 28,8 16,28"/>
+              </svg>
+            </span>
           </th>
-          <th tabindex="-1"
+          <th id="id-th-name"
+              tabindex="-1"
               class="name"
-              data-i18n="links_grid_name">
+              data-sort="name"
+              aria-sort="none">
+            <span class="label"
+                  data-i18n="links_grid_name">
+            </span>
+            <span class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="1em"
+                   height="1em"
+                   viewbox="0 0 32 32">
+                  <polygon points="4,8 28,8 16,28"/>
+              </svg>
+            </span>
           </th>
-          <th tabindex="-1"
+          <th id="id-th-type"
+              tabindex="-1"
               class="type"
-              data-i18n="links_grid_type">
+              data-sort="type"
+              aria-sort="none">
+            <span class="label"
+                  data-i18n="links_grid_type">
+            </span>
+            <span class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="1em"
+                   height="1em"
+                   viewbox="0 0 32 32">
+                  <polygon points="4,8 28,8 16,28"/>
+              </svg>
+            </span>
           </th>
        </tr>
     </thead>
@@ -79,9 +118,10 @@ class TOCLinksGrid extends HTMLElement {
     trNode.addEventListener('focus',   this.handleFocus.bind(this));
     trNode.addEventListener('blur',    this.handleBlur.bind(this));
 
-    const thNodes = Array.from(this.shadowRoot.querySelectorAll('[role="grid"] thead th'));
+    this.thNodes = Array.from(this.shadowRoot.querySelectorAll('[role="grid"] thead th'));
 
-    thNodes.forEach( (thNode) => {
+    this.thNodes.forEach( (thNode) => {
+      thNode.addEventListener('click',   this.handleClickSort.bind(this));
       thNode.addEventListener('keydown', this.handleGridcellKeydown.bind(this));
       thNode.addEventListener('focus',   this.handleFocus.bind(this));
       thNode.addEventListener('blur',    this.handleBlur.bind(this));
@@ -101,6 +141,7 @@ class TOCLinksGrid extends HTMLElement {
 
     setI18nLabels(this.shadowRoot, debug.flag);
 
+    this.renderedLinks = [];
   }
 
  static get observedAttributes() {
@@ -130,9 +171,9 @@ class TOCLinksGrid extends HTMLElement {
 
     this.gridNode.style.width = tableWidth + 'px';
 
-    const posWidth = 35;
-    const typeWidth = 70;
-    const nameWidth = tableWidth - posWidth - typeWidth;
+    const posWidth = 50;
+    const typeWidth = 55;
+    const nameWidth = tableWidth - posWidth - typeWidth - 25;
 
     this.posWidth   = posWidth + 'px';
     this.nameWidth  = nameWidth + 'px';
@@ -168,7 +209,7 @@ class TOCLinksGrid extends HTMLElement {
        msgNode.setAttribute('colspan', 3);
        msgNode.textContent = message;
        trNode.appendChild(msgNode);
-       trNode.setAttribute('tabindex', '0');
+       trNode.tabIndex = 0;
        this.gridTbodyNode.appendChild(trNode);
      }
   }
@@ -176,89 +217,7 @@ class TOCLinksGrid extends HTMLElement {
   updateContent (sameUrl, myResult) {
     debug.flag && debug.log(`[updateContent]`);
 
-    let lastGridNode = null;
-    let index = 1;
-
     const linksObj = this;
-
-    const linkLabel              = getMessage('link_label');
-    const linkLabelExternal      = getMessage('link_label_external');
-    const linkLabelInternal      = getMessage('link_label_internal');
-    const linkLabelSameDomain    = getMessage('link_label_same_domain');
-    const linkLabelSameSubDomain = getMessage('link_label_same_sub_domain');
-
-    function addRow (pos, name, ext, url, typeContent, typeDesc) {
-      const trNode = document.createElement('tr');
-      trNode.id = 'row-' + index;
-      index += 1;
-
-      if (trNode.id === linksObj.lastLinkId) {
-        lastGridNode = trNode;
-      }
-
-      const posNode =  document.createElement('td');
-      posNode.id = trNode.id + '-pos';
-      posNode.className = 'position';
-      posNode.textContent = pos;
-      trNode.appendChild(posNode);
-      posNode.style.width = linksObj.posWidth;
-      posNode.setAttribute('tabindex', '-1');
-      posNode.addEventListener('keydown', linksObj.handleGridcellKeydown.bind(linksObj));
-      posNode.addEventListener('focus',   linksObj.handleFocus.bind(linksObj));
-      posNode.addEventListener('blur',    linksObj.handleBlur.bind(linksObj));
-
-      if (posNode.id === linksObj.lastLinkId) {
-        lastGridNode = posNode;
-      }
-
-      const nameNode =  document.createElement('td');
-      nameNode.id = trNode.id + '-name';
-      nameNode.className = 'name';
-      nameNode.textContent = name;
-      nameNode.title       = url;
-      trNode.appendChild(nameNode);
-      nameNode.style.width = linksObj.nameWidth;
-      nameNode.setAttribute('tabindex', '-1');
-      nameNode.addEventListener('keydown', linksObj.handleGridcellKeydown.bind(linksObj));
-      nameNode.addEventListener('focus',   linksObj.handleFocus.bind(linksObj));
-      nameNode.addEventListener('blur',    linksObj.handleBlur.bind(linksObj));
-
-      if (nameNode.id === linksObj.lastLinkId) {
-        lastGridNode = nameNode;
-      }
-
-
-      const typeNode =  document.createElement('td');
-      typeNode.id = trNode.id + '-type';
-      typeNode.className   = 'type';
-      typeNode.textContent = typeContent;
-      typeNode.title = typeDesc;
-      trNode.appendChild(typeNode);
-      typeNode.style.width = linksObj.typeWidth;
-      typeNode.setAttribute('tabindex', '-1');
-      typeNode.addEventListener('keydown', linksObj.handleGridcellKeydown.bind(linksObj));
-      typeNode.addEventListener('focus',   linksObj.handleFocus.bind(linksObj));
-      typeNode.addEventListener('blur',    linksObj.handleBlur.bind(linksObj));
-
-      if (typeNode.id === linksObj.lastLinkId) {
-        lastGridNode = typeNode;
-      }
-
-/*
-      const urlNode =  document.createElement('td');
-      urlNode.className   = 'url';
-      urlNode.textContent = url;
-      urlNode.title       = url;
-      trNode.appendChild(urlNode);
-      urlNode.style.width = linksObj.urlWidth;
-      urlNode.setAttribute('tabindex', '-1');
-      urlNode.addEventListener('keydown', linksObj.handleGridcellKeydown.bind(linksObj));
-*/
-
-      return trNode;
-    }
-
-    this.clearContent();
 
     if (myResult.links) {
 
@@ -267,111 +226,309 @@ class TOCLinksGrid extends HTMLElement {
         debug.flag && debug.log(`[options][    highlightFollowsFocus]: ${options.highlightFollowsFocus}`);
         debug.flag && debug.log(`[options][       enterKeyMovesFocus]: ${options.enterKeyMovesFocus}`);
 
-        this.highlightFollowsFocus = options.highlightFollowsFocus;
-        this.enterKeyMovesFocus    = options.enterKeyMovesFocus;
-        this.lastURL               = options.lastURL;
-        this.lastLinkId           = options.lastLinkId;
+        linksObj.highlightFollowsFocus = options.highlightFollowsFocus;
+        linksObj.enterKeyMovesFocus    = options.enterKeyMovesFocus;
+        linksObj.lastURL               = options.lastURL;
+        linksObj.lastLinkId            = options.lastLinkId;
 
-        const links = Array.from(myResult.links).filter( (l) => {
+        linksObj.renderedLinks = Array.from(myResult.links).filter( (l) => {
           return (l.isVisibleOnScreen && l.name.length) &&
                  ((l.isInternal   && options.internalLinks) ||
                   (l.isExternal   && options.externalLinks) ||
                   (l.isSameDomain && options.sameDomainLinks && !l.isSameSubDomain) ||
                   (l.isSameSubDomain && options.sameSubDomainLinks && !l.isInternal));
+        })
+
+        linksObj.renderedLinks.forEach( (link, index) => {
+          [link.type, link.typeDesc, link.typeSort] = linksObj.getTypeContentAndDescription(link);
+          link.pos = index + 1;
         });
 
-        let index = 1;
-        links.forEach( (l) => {
+        const lastGridNode = linksObj.updateLinkContent(linksObj.renderedLinks);
 
-          let linkTypeContent = '';
-          let linkTypeDesc    = '';
+        const firstGridrow = linksObj.gridNode.querySelector('[role="grid"] tbody tr');
 
-          if (l.isInternal) {
-            linkTypeContent = getMessage('link_abbr_internal');
-            linkTypeDesc    = getMessage('link_name_internal');
-          }
-          else {
-            if (l.isSameSubDomain) {
-              linkTypeContent = getMessage('link_abbr_same_sub_domain');
-              linkTypeDesc    = getMessage('link_name_same_sub_domain');
-            }
-            else {
-              if (l.isSameDomain) {
-                linkTypeContent = getMessage('link_abbr_same_domain');
-                linkTypeDesc    = getMessage('link_name_same_domain');
-              }
-              else {
-                linkTypeContent = getMessage('link_abbr_external');
-                linkTypeDesc = getMessage('link_name_external');
-              }
-            }
-          }
-
-          const rowNode = addRow(index,
-                                 l.name,
-                                 l.extension,
-                                 l.url,
-                                 linkTypeContent,
-                                 linkTypeDesc);
-
-          rowNode.setAttribute('data-ordinal-position', l.ordinalPosition);
-          rowNode.setAttribute('data-info', '');
-
-//          rowNode.setAttribute('data-label', linkLabel);
-//          rowNode.setAttribute('data-ext', l.isExternal);
-//          rowNode.setAttribute('data-sd',  l.isSameDomain);
-//          rowNode.setAttribute('data-ssd', l.isSameSubDomain);
-//          rowNode.setAttribute('data-int', l.isInternal);
-//          rowNode.setAttribute('data-extension', l.extension);
-//          rowNode.setAttribute('data-url', l.url);
-
-          rowNode.setAttribute('data-index', index);
-          rowNode.setAttribute('tabindex', '-1');
-          const firstChar = l.name.length ? l.name[0].toLowerCase() : '';
-          rowNode.setAttribute('data-first-char', firstChar);
-          rowNode.addEventListener('click',   this.handleGridrowClick.bind(this));
-          rowNode.addEventListener('keydown', this.handleGridrowKeydown.bind(this));
-          rowNode.addEventListener('focus',   this.handleFocus.bind(this));
-          rowNode.addEventListener('blur',    this.handleBlur.bind(this));
-
-          index += 1;
-
-          this.gridTbodyNode.appendChild(rowNode);
-        });
-
-        const firstGridrow = this.gridNode.querySelector('[role="grid"] tbody tr');
-
-        const count = this.gridNode.querySelectorAll('[role="grid"] tbody tr').length;
+        const count = linksObj.gridNode.querySelectorAll('[role="grid"] tbody tr').length;
         setTablistAttr('links-count', count);
 
         if (firstGridrow) {
           if (sameUrl && lastGridNode) {
-            this.setFocusToGriditem(lastGridNode);
+            linksObj.setFocusToGriditem(lastGridNode);
           }
           else {
-            this.setFocusToGriditem(firstGridrow);
+            linksObj.setFocusToGriditem(firstGridrow);
           }
         }
         else {
-          this.clearContent(getMessage('links_none_found', debug.flag));
+          linksObj.clearContent(getMessage('links_none_found', debug.flag));
         }
       });
     }
     else {
       this.clearContent(getMessage('protocol_not_supported', debug.flag));
     }
-
-
   }
+
+  updateLinkContent (links) {
+    debug.flag && debug.log(`[updateLinksContent]`);
+
+    const linksObj = this;
+    let lastGridNode = null;
+
+    function addRow (pos, ordinalPos, name, url, typeContent, typeDesc, typeSort) {
+
+      function getDataCell(id, cname, content, desc, sortValue, width) {
+
+        const cellNode =  document.createElement('td');
+        cellNode.id = id;
+        cellNode.className = cname;
+        cellNode.textContent = content;
+        if (desc) {
+          cellNode.title = desc;
+        }
+        if (sortValue) {
+          cellNode.setAttribute('data-sort-value', sortValue);
+        }
+        cellNode.style.width = width;
+        cellNode.setAttribute('tabindex', '-1');
+        cellNode.addEventListener('keydown', linksObj.handleGridcellKeydown.bind(linksObj));
+        cellNode.addEventListener('focus',   linksObj.handleFocus.bind(linksObj));
+        cellNode.addEventListener('blur',    linksObj.handleBlur.bind(linksObj));
+
+        if (cellNode.id === linksObj.lastLinkId) {
+          lastGridNode = cellNode;
+        }
+        return cellNode;
+      }
+
+      const trNode = document.createElement('tr');
+      trNode.id = 'row-' + pos;
+      trNode.title = url;
+      const accNameForRow = pos + ', ' + name + ', ' + typeDesc;
+      trNode.setAttribute('aria-label', accNameForRow);
+      trNode.setAttribute('data-ordinal-position', ordinalPos);
+
+      if (trNode.id === linksObj.lastLinkId) {
+        lastGridNode = trNode;
+      }
+
+      trNode.setAttribute('data-index', pos);
+      trNode.setAttribute('tabindex', '-1');
+      const firstChar = name.length ? name[0].toLowerCase() : '';
+      trNode.setAttribute('data-first-char', firstChar);
+      trNode.addEventListener('click',   linksObj.handleGridrowClick.bind(linksObj));
+      trNode.addEventListener('keydown', linksObj.handleGridrowKeydown.bind(linksObj));
+      trNode.addEventListener('focus',   linksObj.handleFocus.bind(linksObj));
+      trNode.addEventListener('blur',    linksObj.handleBlur.bind(linksObj));
+
+      trNode.appendChild(getDataCell(trNode.id + '-pos',
+                                     'position',
+                                     pos,
+                                     '',
+                                     '',
+                                     linksObj.posWidth));
+
+      trNode.appendChild(getDataCell(trNode.id + '-name',
+                                     'name',
+                                     name,
+                                     '',
+                                     '',
+                                     linksObj.nameWidth));
+
+      trNode.appendChild(getDataCell(trNode.id + '-type',
+                                     'type',
+                                     typeContent,
+                                     typeDesc,
+                                     typeSort,
+                                     linksObj.typeWidth));
+      return trNode;
+    }
+
+    this.clearContent();
+
+    links.forEach( (link) => {
+      const rowNode = addRow(link.pos,
+                             link.ordinalPosition,
+                             link.name,
+                             link.url,
+                             link.type,
+                             link.typeDesc,
+                             link.typeSort);
+
+      this.gridTbodyNode.appendChild(rowNode);
+    });
+
+    return lastGridNode;
+  }
+
+  getTypeContentAndDescription(link) {
+
+    let linkTypeContent = '';
+    let linkTypeDesc    = '';
+    let linkTypeSort = 0;
+
+    debug.log(`[extension]: ${link.extension}`);
+
+    if (link.extension) {
+      switch (link.extension) {
+        case 'pdf':
+          linkTypeContent = getMessage('link_abbr_pdf');
+          linkTypeDesc    = getMessage('link_name_pdf');
+          linkTypeSort = 1;
+          break;
+
+        case 'doc':
+          linkTypeContent = getMessage('link_abbr_doc');
+          linkTypeDesc    = getMessage('link_name_doc');
+          linkTypeSort = 2;
+          break;
+
+        case 'media':
+          linkTypeContent = getMessage('link_abbr_media');
+          linkTypeDesc    = getMessage('link_name_media');
+          linkTypeSort = 3;
+          break;
+
+        case 'zip':
+          linkTypeContent = getMessage('link_abbr_zip');
+          linkTypeDesc    = getMessage('link_name_zip');
+          linkTypeSort = 4;
+          break;
+
+        default:
+          break;
+      }
+    }
+    else {
+      if (link.isInternal) {
+        linkTypeContent = getMessage('link_abbr_internal');
+        linkTypeDesc    = getMessage('link_name_internal');
+        linkTypeSort = 11;
+      }
+      else {
+        if (link.isSameSubDomain) {
+          linkTypeContent = getMessage('link_abbr_same_sub_domain');
+          linkTypeDesc    = getMessage('link_name_same_sub_domain');
+          linkTypeSort = 12;
+        }
+        else {
+          if (link.isSameDomain) {
+            linkTypeContent = getMessage('link_abbr_same_domain');
+            linkTypeDesc    = getMessage('link_name_same_domain');
+            linkTypeSort = 13;
+          }
+          else {
+            linkTypeContent = getMessage('link_abbr_external');
+            linkTypeDesc    = getMessage('link_name_external');
+            linkTypeSort = 14;
+         }
+        }
+      }
+    }
+    return [linkTypeContent, linkTypeDesc, linkTypeSort];
+  }
+
+  sortRows(sortColumn, direction) {
+
+    function nameCompare(a, b) {
+      const result = a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+      if (result === 0) {
+        return posCompare(a, b);
+      }
+      return result;
+    }
+
+    function nameCompareDescending(a, b) {
+      const result = b.name.toLowerCase().localeCompare(a.name.toLowerCase());
+      if (result === 0) {
+        return posCompare(a, b);
+      }
+      return result;
+    }
+
+    function typeCompare(a, b) {
+      const result = a.typeSort - b.typeSort;
+      if (result === 0) {
+        return posCompare(a, b);
+      }
+      return result;
+    }
+
+    function typeCompareDescending(a, b) {
+      const result = b.typeSort - a.typeSort;
+      if (result === 0) {
+        return posCompare(a, b);
+      }
+      return result;
+    }
+
+    function posCompare(a, b) {
+      return a.pos - b.pos;
+    }
+
+    function posCompareDescending(a, b) {
+      return b.pos - a.pos;
+    }
+
+    switch (sortColumn) {
+      case 'name':
+        direction === 'ascending' ?
+        this.renderedLinks.sort(nameCompare) :
+        this.renderedLinks.sort(nameCompareDescending);
+        break;
+
+      case 'type':
+        direction === 'ascending' ?
+        this.renderedLinks.sort(typeCompare) :
+        this.renderedLinks.sort(typeCompareDescending);
+        break;
+
+      default:
+        direction === 'ascending' ?
+        this.renderedLinks.sort(posCompare) :
+        this.renderedLinks.sort(posCompareDescending);
+        break;
+    }
+
+    this.updateLinkContent(this.renderedLinks);
+
+    // Update attributes with new sort information
+
+    this.thNodes.forEach( (th) => {
+      if (th.getAttribute('data-sort') === sortColumn) {
+        th.setAttribute('aria-sort', direction);
+      }
+      else {
+        th.setAttribute('aria-sort', 'none');
+      }
+    });
+  }
+
+  sortLinks(elem) {
+    const dir        = elem.getAttribute('aria-sort');
+    const sortColumn = elem.getAttribute('data-sort');
+    switch (dir) {
+      case 'none':
+      case 'descending':
+        this.sortRows(sortColumn, 'ascending');
+        break;
+
+      default:
+        this.sortRows(sortColumn, 'descending');
+        break;
+    }
+  }
+
+
 
   // Tree keyboard navigation methods
 
   getGridrows () {
-    return Array.from(this.gridNode.querySelectorAll('tbody tr'));
+    return Array.from(this.gridNode.querySelectorAll('tr'));
   }
 
   getGriditems () {
-    return Array.from(this.gridNode.querySelectorAll('tbody tr, tbody td'));
+    return Array.from(this.gridNode.querySelectorAll('tr, th, td'));
   }
 
   focusGridrow(gridrow) {
@@ -391,7 +548,9 @@ class TOCLinksGrid extends HTMLElement {
 
     const info = griditem.hasAttribute('data-info') ?
                      griditem.getAttribute('data-info') :
-                     griditem.parentNode.getAttribute('data-info');
+                     griditem.parentNode.hasAttribute('data-info') ?
+                     griditem.parentNode.getAttribute('data-info') :
+                     '';
     highlightOrdinalPosition(op, info);
     saveOption('lastLinkId', griditem.id);
   }
@@ -469,7 +628,6 @@ class TOCLinksGrid extends HTMLElement {
     const linksObj = this;
 
     function findCellInRow(gridrow, className) {
-      debug.log(`[gridrow]: ${gridrow ? gridrow.textContent : 'null'} (${className})`);
       if (gridrow) {
         const gridcell = gridrow.querySelector(`.${className}`);
         if (gridcell) {
@@ -482,13 +640,9 @@ class TOCLinksGrid extends HTMLElement {
 
     const className = gridcell.className;
 
-    debug.log(`[prevRow]: ${gridcell.parentNode.previousElementSibling}`);
-
     if (!findCellInRow(gridcell.parentNode.previousElementSibling, className)) {
       const gridTbody = gridcell.parentNode.parentNode;
-      debug.log(`[gridTbody]: ${gridTbody}`);
       if (gridTbody && gridTbody.previousElementSibling) {
-        debug.log(`[gridTbody][prevRow]: ${gridTbody ? gridTbody.previousElementSibling : 'none'}`);
         findCellInRow(gridTbody.previousElementSibling.firstElementChild, className);
       }
     }
@@ -500,7 +654,6 @@ class TOCLinksGrid extends HTMLElement {
     const linksObj = this;
 
     function findCellInRow(gridrow, className) {
-      debug.log(`[gridrow]: ${gridrow ? gridrow.textContent : 'null'} (${className})`);
       if (gridrow) {
         const gridcell = gridrow.querySelector(`.${className}`);
         if (gridcell) {
@@ -513,13 +666,9 @@ class TOCLinksGrid extends HTMLElement {
 
     const className = gridcell.className;
 
-    debug.log(`[nextRow]: ${gridcell.parentNode.nextElementSibling}`);
-
     if (!findCellInRow(gridcell.parentNode.nextElementSibling, className)) {
       const gridTbody = gridcell.parentNode.parentNode;
-      debug.log(`[gridTbody]: ${gridTbody}`);
       if (gridTbody && gridTbody.nextElementSibling) {
-        debug.log(`[gridTbody][nextRow]: ${gridTbody ? gridTbody.nextElementSibling : 'none'}`);
         findCellInRow(gridTbody.nextElementSibling.firstElementChild, className);
       }
     }
@@ -566,6 +715,7 @@ class TOCLinksGrid extends HTMLElement {
     });
   }
 
+
   // Event handlers
 
   handleFocus(event) {
@@ -575,11 +725,16 @@ class TOCLinksGrid extends HTMLElement {
     }
   }
 
-  handleBlur(event) {
-    const tgt = event.currentTarget;
+  handleBlur() {
     this.removeHighlight()
   }
 
+  handleClickSort(event) {
+    const tgt = event.currentTarget;
+    this.sortLinks(tgt);
+    event.stopPropagation();
+    event.preventDefault();
+  }
 
   handleGridrowClick (event) {
     const tgt = event.currentTarget;
@@ -685,16 +840,13 @@ class TOCLinksGrid extends HTMLElement {
     else {
       switch (key) {
         case 'Enter':
-          if (this.enterKeyMovesFocus) {
-            this.focusGridrow(tgt);
+        case ' ':
+          if (tgt.hasAttribute('data-sort')) {
+            this.sortLinks(tgt);
           }
           else {
-            this.highlightGriditem(tgt);
+            this.highlightGriditem(tgt.parentNode);
           }
-          break;
-
-        case ' ':
-          this.highlightGriditem(tgt.parentNode);
           flag = true;
           break;
 

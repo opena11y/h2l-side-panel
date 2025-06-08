@@ -97,6 +97,7 @@ class TOCLandmarksList extends HTMLElement {
      if ((typeof message === 'string') && message.length) {
         const listitemNode = document.createElement('div');
         listitemNode.setAttribute('role', 'listbox');
+        listitemNode.tabIndex = 0;
         listitemNode.textContent = message;
         this.listboxNode.appendChild(listitemNode);
      }
@@ -345,15 +346,6 @@ class TOCLandmarksList extends HTMLElement {
     } else {
       switch (key) {
         case 'Enter':
-          if (this.enterKeyMovesFocus) {
-            this.focusLandmark(tgt);
-          }
-          else {
-            this.highlightLandmark(tgt);
-          }
-          flag = true;
-          break;
-
         case ' ':
           this.highlightLandmark(tgt);
           flag = true;

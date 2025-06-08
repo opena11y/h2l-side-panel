@@ -28,6 +28,8 @@ const defaultOptions = {
   externalLinks: true,
   sameSubDomainLinks: true,
   sameDomainLinks: true,
+  ariaRoles: true,
+  ariaProps: true,
   accessibleNames: true,
   keyboardSupport: true,
   keyboardFocus: 'styled',  // options 'styled', 'default' and 'none'

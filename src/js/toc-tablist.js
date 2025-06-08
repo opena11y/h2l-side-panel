@@ -34,8 +34,8 @@ template.innerHTML = `
   <div id="id-toc-tablist"
        class="toc-tablist">
     <div>
-      <h2 data-i18n="tablist_title">Title</h2>
-      <div id="id-div-title">Loading...</div>
+      <h2 data-i18n="tablist_title"></h2>
+      <div id="id-div-title"></div>
     </div>
 
     <div role="tablist">
@@ -334,7 +334,7 @@ class TOCTabList extends HTMLElement {
   clearContent(message='') {
     debug.flag && debug.log(`[clearContent]: ${message} ${typeof message} ${message.length}`);
 
-    removeChildContent(this.divTitle);
+    this.divTitle.textContent = '';
     this.setCount('id-headings-count', '');
     this.setCount('id-landmarks-count', '');
     this.setCount('id-links-count', '');

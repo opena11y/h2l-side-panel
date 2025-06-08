@@ -34,7 +34,6 @@ template.innerHTML = `
 const icon = document.createElement('template');
 icon.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg"
-         xml:space="preserve"
          width="1em"
          height="1em"
          viewbox="0 0 32 32">
@@ -109,10 +108,12 @@ class TOCHeadingsTree extends HTMLElement {
      if ((typeof message === 'string') && message.length) {
         const treeitemNode = document.createElement('div');
         treeitemNode.setAttribute('role', 'treeitem');
-        treeitemNode.tabindex = 0;
+        treeitemNode.tabIndex = 0;
         treeitemNode.textContent = message;
         this.treeNode.appendChild(treeitemNode);
+        return treeitemNode;
      }
+     return null;
   }
 
   updateContent(sameUrl, myResult) {
@@ -247,7 +248,7 @@ class TOCHeadingsTree extends HTMLElement {
         const firstTreeitem = this.treeNode.querySelector('[role="treeitem"]');
         const count = this.treeNode.querySelectorAll('[role="treeitem"]').length;
 
-       setTablistAttr('headings-count', count);
+        setTablistAttr('headings-count', count);
 
         if (firstTreeitem) {
           debug.log(`[sameUrl]: ${sameUrl} (${lastTreeitemNode})`);
@@ -267,8 +268,6 @@ class TOCHeadingsTree extends HTMLElement {
     else {
       this.clearContent(getMessage('protocol_not_supported', debug.flag));
     }
-
-
   }
 
   // Tree keyboard navigation methods
@@ -406,15 +405,14 @@ class TOCHeadingsTree extends HTMLElement {
 
   // Event handlers
 
-
- handleFocus(event) {
+  handleFocus(event) {
     const tgt = event.currentTarget;
     if (this.highlightFollowsFocus) {
       this.highlightHeading(tgt);
     }
   }
 
- handleBlur(event) {
+  handleBlur(event) {
     const tgt = event.currentTarget;
     this.removeHighlight()
   }
@@ -486,14 +484,6 @@ class TOCHeadingsTree extends HTMLElement {
     } else {
       switch (key) {
         case 'Enter':
-          if (this.enterKeyMovesFocus) {
-            this.focusHeading(tgt);
-          }
-          else {
-            this.highlightHeading(tgt);
-          }
-          break;
-
         case ' ':
           this.highlightHeading(tgt);
           flag = true;

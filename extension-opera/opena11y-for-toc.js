@@ -1121,15 +1121,32 @@
   const debug$11 = new DebugLogging('linkResults', false);
   debug$11.flag = false;
 
-  const allowedExtensions = [
-    'ai',    // Adobe Illustrator file'
-    'aif',   // AIF audio file
-    'bmp',   // Bitmap image
-    'cda',   // CD (Compact Disc) audio track file
+  const pdfExtensions = [
+    'pdf'   // Protable document format
+  ];
+
+  const docExtensions = [
     'csv',   // Comma separated spaces
     'doc',   // Microsoft Word Document
     'docx',
     'epub',  // Electronic book format
+    'odg',   // Open Document Graphics
+    'odp',   // Open Document Presentations
+    'ods',   // Open Document Spreadsheet
+    'odt',   // Open Document Text
+    'ppt',   // Microsoft Powerpoint document
+    'pptx',
+    'rtf',   // Rich text format
+    'rtfd',
+    'txt',   // Text file
+    'xls',   // Microsoft Spreadsheet document
+    'xlsx'
+  ];
+
+  const mediaExtensions = [
+    'aif',   // AIF audio file
+    'bmp',   // Bitmap image
+    'cda',   // CD (Compact Disc) audio track file
     'ico',   // Icon file
     'jpeg',  // JPEG (Joint Photographic Experts Group) image
     'jpg',
@@ -1139,30 +1156,21 @@
     'mp3',   // MP3 audio file
     'mpa',   // MPEG-2 audio file
     'png',   // PNG (Portable Network Graphics) image
-    'odg',   // Open Document Graphics
-    'odp',   // Open Document Presentations
-    'ods',   // Open Document Spreadsheet
-    'odt',   // Open Document Text
     'ogg',   // Ogg Vorbis audio file
-    'pdf',   // Protable document format
-    'ppt',   // Microsoft Powerpoint document
-    'pptx',
     'ps',    // PostScript file
     'psd',   // PSD (Photoshop document) image
-    'rtf',   // Rich text format
-    'rtfd',
     'svg',   // Scalable Vector Graphics file
-    'tar',   // Linux / Unix tarball file archive
-    'gz',    // Tarball compressed file'
     'tif',   // TIFF (Tagged Image File Format) image
     'tiff',
-    'txt',   // Text file
     'wav',   // WAV file
     'webp',  // WebP image.
     'wma',   // WMA (Windows Media Audio) audio file
-    'wpl',   // Windows Media Player playlist
-    'xls',   // Microsoft Spreadsheet document
-    'xlsx',
+    'wpl'   // Windows Media Player playlist
+  ];
+
+  const zipExtensions = [
+    'tar',   // Linux / Unix tarball file archive
+    'gz',    // Tarball compressed file'
     'zip',   // Comprerssed file format
     '7z'     // 7-Zip compressed file
   ];
@@ -1231,15 +1239,22 @@
           debug$11.flag && debug$11.log(`[parsedHref][  sameDomain]: ${sameDomain}`);
           debug$11.flag && debug$11.log(`[parsedHref][samePathname]: ${samePathname}`);
 
-          const periodIndex   = parsedUrl.pathname.lastIndexOf('.');
-          const extension     = periodIndex > 0 &&
-                                ((parsedUrl.pathname - periodIndex) < 5) ?
-                                parsedUrl.pathname.substring(periodIndex).trim().toLowerCase() :
+          const periodIndex   = parsedHref.pathname.lastIndexOf('.');
+          const extension     = periodIndex > 0 ?
+                                parsedHref.pathname.substring(periodIndex+1).trim().toLowerCase() :
                                 '';
 
-          const allowedExt    = allowedExtensions.includes(extension) ?
-                                extension :
+          const allowedExt    = pdfExtensions.includes(extension) ?
+                                'pdf' :
+                                docExtensions.includes(extension) ?
+                                'doc' :
+                                mediaExtensions.includes(extension) ?
+                                'media' :
+                                zipExtensions.includes(extension) ?
+                                'zip' :
                                 '';
+
+         debug$11.log(`[ext]: ${extension} (${allowedExt}) (${periodIndex})`);
 
           const dataItem = {
             url:               de.node.href,
