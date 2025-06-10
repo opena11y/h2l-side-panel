@@ -46,8 +46,10 @@
   outline-width:    toc-base.$outline-width-focus;
   outline-style:    toc-base.$outline-style-focus;
   background-color: light-dark(toc-base.$background-focus-light, toc-base.$background-focus-dark) !important;
-
   color:  light-dark(toc-base.$color-focus-light, toc-base.$color-focus-dark);
+}
+
+[role="tree"] [role="treeitem"]:focus svg {
   fill:   light-dark(toc-base.$color-focus-light, toc-base.$color-focus-dark);
   stroke: light-dark(toc-base.$color-focus-light, toc-base.$color-focus-dark);
 }

@@ -92,6 +92,7 @@ template.innerHTML = `
     </div>
 
     <div id="summary" role="group" aria-label="Summary">
+      <div role="status">
         <span id="id-headings-count">
           <span class="value"></span>
           <span class="single"> Heading</span>
@@ -109,6 +110,7 @@ template.innerHTML = `
           <span class="single"> Link</span>
           <span class="plural"> Links</span>
         </span>
+      </div>
     </div>
 
     <footer>

@@ -188,13 +188,20 @@ class TOCSidePanel extends HTMLElement {
   updateContent() {
     debug.flag && debug.log(`[updateContent]`);
     this.clearContent(getMessage('loading_content'));
+
+    const spObj = this;
+
+    function onUpdateContentError() {
+      spObj.clearContent(getMessage('protocol_not_supported'));
+      onError()
+    }
     myBrowser.tabs
       .query({
         currentWindow: true,
         active: true,
       })
       .then(this.sendMessageToTabs.bind(this))
-      .catch(onError);
+      .catch(onUpdateContentError);
   }
 
   handleGetInformationClick () {

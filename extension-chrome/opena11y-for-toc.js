@@ -1244,7 +1244,7 @@
                                 parsedHref.pathname.substring(periodIndex+1).trim().toLowerCase() :
                                 '';
 
-          const allowedExt    = pdfExtensions.includes(extension) ?
+          const extensionType = pdfExtensions.includes(extension) ?
                                 'pdf' :
                                 docExtensions.includes(extension) ?
                                 'doc' :
@@ -1254,17 +1254,19 @@
                                 'zip' :
                                 '';
 
-         debug$11.log(`[ext]: ${extension} (${allowedExt}) (${periodIndex})`);
+          debug$11.log(`[ext]: ${extension} (${extensionType}) (${periodIndex})`);
 
           const dataItem = {
             url:               de.node.href,
             name:              cleanName(de.accName.name),
+            desc:              cleanName(de.accDescription.name),
             ordinalPosition:   de.ordinalPosition,
             isInternal:        sameHostname && samePathname,
             isExternal:        !sameDomain,
             isSameDomain:      sameDomain,
             isSameSubDomain:   sameHostname,
-            extension:         allowedExt,
+            extension:         extension,
+            extensionType:     extensionType,
             isVisibleOnScreen: de.visibility.isVisibleOnScreen,
             isVisibleToAT:     de.visibility.isVisibleToAT
           };

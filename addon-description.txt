@@ -1,0 +1,51 @@
+Title
+-----
+Table of Contents Side Panel for XXXX
+
+Summary
+-------
+Table of Contents Side Panel for XXXX extension provides information on the headings, landmark regions and links in a web page.  The associated headings, landmark regions and links in the side panel can be highlighted in the web page for easy identification.
+
+Description
+-----------
+
+Options Dialog
+
+* De
+* Customize the landmark regions and headings sho
+
+
+Documentation URL:
+https://opena11y.github.io/table-of-contents/
+
+Support URL:
+https://github.com/opena11y/table-of-contents/issues
+
+Screenshot Sizes
+----------------
+Chrome: 1280x800 or 640x400 JPEG or 24-bit PNG (no alpha)
+
+Firefox: maximum size 2400x1800
+
+Opera: recommended 612×408, maximum 800x600
+
+Creating Zip Files
+------------------
+zip -r ../../docs/dist/toc-side-panel-firefox-1.0.zip . -x ".*" -x "__MACOSX"
+zip -r ../../docs/dist/toc-side-panel-for-chrome-1.0.zip . -x ".*" -x "__MACOSX"
+
+Questions
+---------
+ActiveTab Justification
+The active table is used to toggle the SkipTo.js menu open and closed when the user clicks the extension icon in the toolbar.
+
+Scripting Justification
+Scripting is used to toggle the side panel menu open and closed when user clicks extension icon.
+
+Storage Justification
+User preferences on the items in the menu, styling and internationalization of menu labels.
+
+Host Permission Justification
+The menu provides keyboard navigation to the landmark regions and headings of web pages to support people with disabilities and therefore is needed on all web pages.
+
+

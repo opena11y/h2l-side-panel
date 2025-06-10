@@ -16,6 +16,8 @@ table[role=grid] {
   table-layout: fixed;
   color: light-dark(#000, #fff);
   background-color: light-dark(#fff, #000);
+  fill: light-dark(#000, #fff);
+  stroke: light-dark(#000, #fff);
 }
 
 table[role=grid] span.icon {

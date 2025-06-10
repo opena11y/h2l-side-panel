@@ -28,7 +28,8 @@ const template = document.createElement('template');
 template.innerHTML = `
   <table role="grid">
     <thead>
-       <tr id="id-tr-sort">
+       <tr id="id-tr-sort"
+           data-i18n-aria-label="links_sorting_options_row">
           <th id="id-th-pos"
               tabindex="-1"
               class="position"
@@ -275,16 +276,16 @@ class TOCLinksGrid extends HTMLElement {
     const linksObj = this;
     let lastGridNode = null;
 
-    function addRow (pos, ordinalPos, name, url, typeContent, typeDesc, typeSort) {
+    function addRow (pos, ordinalPos, name, desc, url, typeContent, typeDesc, typeSort) {
 
-      function getDataCell(id, cname, content, desc, sortValue, width) {
+      function getDataCell(id, cname, content, title, sortValue, width) {
 
         const cellNode =  document.createElement('td');
         cellNode.id = id;
         cellNode.className = cname;
         cellNode.textContent = content;
-        if (desc) {
-          cellNode.title = desc;
+        if (title) {
+          cellNode.title = title;
         }
         if (sortValue) {
           cellNode.setAttribute('data-sort-value', sortValue);
@@ -328,9 +329,13 @@ class TOCLinksGrid extends HTMLElement {
                                      '',
                                      linksObj.posWidth));
 
+      const nameDesc = desc ?
+                       `${name}: ${desc}` :
+                       name;
+
       trNode.appendChild(getDataCell(trNode.id + '-name',
                                      'name',
-                                     name,
+                                     nameDesc,
                                      '',
                                      '',
                                      linksObj.nameWidth));
@@ -350,6 +355,7 @@ class TOCLinksGrid extends HTMLElement {
       const rowNode = addRow(link.pos,
                              link.ordinalPosition,
                              link.name,
+                             link.desc,
                              link.url,
                              link.type,
                              link.typeDesc,
@@ -369,40 +375,42 @@ class TOCLinksGrid extends HTMLElement {
 
     debug.log(`[extension]: ${link.extension}`);
 
-    if (link.extension) {
-      switch (link.extension) {
+    if (link.extensionType) {
+      switch (link.extensionType) {
         case 'pdf':
-          linkTypeContent = getMessage('link_abbr_pdf');
+          linkTypeContent = link.extension;
           linkTypeDesc    = getMessage('link_name_pdf');
           linkTypeSort = 1;
           break;
 
         case 'doc':
-          linkTypeContent = getMessage('link_abbr_doc');
+          linkTypeContent = link.extension;
           linkTypeDesc    = getMessage('link_name_doc');
           linkTypeSort = 2;
           break;
 
         case 'media':
-          linkTypeContent = getMessage('link_abbr_media');
+          linkTypeContent = link.extension;
           linkTypeDesc    = getMessage('link_name_media');
           linkTypeSort = 3;
           break;
 
         case 'zip':
-          linkTypeContent = getMessage('link_abbr_zip');
+          linkTypeContent = link.extension;
           linkTypeDesc    = getMessage('link_name_zip');
           linkTypeSort = 4;
           break;
 
         default:
+          linkTypeContent = link.extension;
+          linkTypeDesc    = '';
           break;
       }
     }
     else {
       if (link.isInternal) {
-        linkTypeContent = getMessage('link_abbr_internal');
-        linkTypeDesc    = getMessage('link_name_internal');
+        linkTypeContent = getMessage('link_name_internal');
+        linkTypeDesc    = '';
         linkTypeSort = 11;
       }
       else {
@@ -418,8 +426,8 @@ class TOCLinksGrid extends HTMLElement {
             linkTypeSort = 13;
           }
           else {
-            linkTypeContent = getMessage('link_abbr_external');
-            linkTypeDesc    = getMessage('link_name_external');
+            linkTypeContent = getMessage('link_name_external');
+            linkTypeDesc    = '';
             linkTypeSort = 14;
          }
         }

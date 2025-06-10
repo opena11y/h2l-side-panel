@@ -1,14 +1,14 @@
 {
   "extension_name_chrome" : {
-    "message": "Table of Contents for Page Navigation",
+    "message": "Table of Contents",
     "description": "Extension name for Chrome browser"
   },
   "extension_name_firefox" : {
-    "message": "Table of Contents for Page Navigation",
+    "message": "Table of Contents",
     "description": "Extension name for Firefox browser"
   },
   "extension_name_opera" : {
-    "message": "Table of Contents for Page Navigation",
+    "message": "Table of Contents",
     "description": "Extension name for Opera browser"
   },
   "extension_description" : {
@@ -42,6 +42,10 @@
   "tab_links": {
     "message": "Links",
     "description": "Label for links tab"
+  },
+  "links_sorting_options_row": {
+    "message": "Sorting options",
+    "description": "Label for heading row with sorting options"
   },
   "links_grid_position": {
     "message": "Pos",
@@ -130,6 +134,14 @@
   "link_name_same_sub_domain": {
     "message": ": Same Sub domain",
     "description": "Name for same sub-domain links"
+  },
+  "headings_descendant": {
+    "message": "descendant",
+    "description": "Label for one heading descendant"
+  },
+  "headings_descendants": {
+    "message": "descendants",
+    "description": "Label for more than one heading descendant"
   },
   "headings_tree_label": {
     "message": "Headings",

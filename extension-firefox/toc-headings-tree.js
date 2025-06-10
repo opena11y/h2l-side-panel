@@ -158,6 +158,7 @@ class TOCHeadingsTree extends HTMLElement {
       nameNode.classList.add('name');
       nameNode.textContent = `${heading.level}: ${heading.name}`;
       treeitemNode.setAttribute('data-info', levelLabel + nameNode.textContent);
+      treeitemNode.setAttribute('aria-label', levelLabel + nameNode.textContent);
       treeitemNode.appendChild(nameNode);
       treeitemNode.addEventListener('click', treeObj.handleClick.bind(treeObj));
       parentNode.appendChild(treeitemNode);
@@ -214,6 +215,11 @@ class TOCHeadingsTree extends HTMLElement {
             lastHeadingNode.setAttribute('data-children', count);
             const nameSpan = lastHeadingNode.querySelector('.name');
             nameSpan.textContent += ` (${count})`;
+            let ariaLabel = lastHeadingNode.getAttribute('aria-label');
+            ariaLabel += count === 1 ?
+                         `, ${count} ${getMessage('headings_descendant')}` :
+                         `, ${count} ${getMessage('headings_descendants')}`;
+            lastHeadingNode.setAttribute('aria-label', ariaLabel);
           }
           else {
             return headings;

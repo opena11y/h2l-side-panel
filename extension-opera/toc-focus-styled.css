@@ -41,6 +41,9 @@
   outline-style: solid;
   background-color: light-dark(#ecf2fa, #13294b) !important;
   color: light-dark(#13294b, #ecf2fa);
+}
+
+[role=tree] [role=treeitem]:focus svg {
   fill: light-dark(#13294b, #ecf2fa);
   stroke: light-dark(#13294b, #ecf2fa);
 }
