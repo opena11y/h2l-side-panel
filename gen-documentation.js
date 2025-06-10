@@ -37,7 +37,7 @@ function outputTemplate(fname, data) {
 
 const pages = [
   { template: './src-docs/templates/content-home.njk',
-    title: 'Page Table of Contents',
+    title: 'Table of Contents Browser Extension',
     link: 'Home',
     filename: 'index.html'
   },

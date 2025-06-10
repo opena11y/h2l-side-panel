@@ -313,17 +313,34 @@ main dd {
   line-height: 1.2em;
 }
 
-main .faq > ul {
-  list-style: none;
-}
-
 main .faq details {
-  margin-bottom: 1em;
+  margin: 0;
+  padding: 0;
 }
 
-main .faq summary {
+main .faq details summary {
   margin: 0;
   padding: 0.25em;
   font-size: 110%;
   font-weight: bold;
+}
+
+main .faq details .content {
+  margin: 0;
+  margin-left: 1em;
+  padding: 0.125em;
+  background-color: #eee;
+  margin-bottom: 0.5em;
+  border: #eee solid 1 px;
+  border-radius: 5px;
+}
+
+main .faq ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+main .faq details .content li {
+  padding: 0.125em;
 }
