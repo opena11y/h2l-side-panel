@@ -12,7 +12,7 @@
     <script src="./js/light-dark-scheme.js"></script>
 
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="./css/page-toc.css" rel="stylesheet" />
+    <link href="./css/toc.css" rel="stylesheet" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
@@ -50,7 +50,7 @@
              id="mainNav">
             <div class="container px-4">
                 <span class="brand">
-                  <span class="skipto">SkipTo.js 0.1</span>
+                  <span class="name">TOC Side Panel 1.0</span>
                 </span>
 
                 <button class="navbar-toggler"
@@ -104,10 +104,48 @@
           <h1>Frequently Asked Questions</h1>
           
 
-          <div id="faq">
+          <div class="faq">
 
-               <p><em>add content here...</em></p>
-
+            <ul>
+              <li>
+                <details>
+                  <summary>What are Headings?</summary>
+                  <ul>
+                    <li>
+                      <a href="https://www.w3.org/WAI/tutorials/page-structure/headings/">Headings</a> are used to add structure to content and should describe the content in the next section or sub-section on the page.
+                    </li>
+                    <li>
+                      There are six levels of headings (e.g. <code>h1</code>-<code>h6</code> elements) in HTML to identify sub-sections in hierarchical content.
+                    </li>
+                    <li>
+                      Web browsers, plug-ins, and assistive technologies can use them to provide in-page navigation.
+                    </li>
+                   <li>
+                      SkipTo.js provides a means for everyone to use keyboard navigation to navigate to headings on page.
+                    </li>
+                    </ul>
+                </details>
+              </li>
+              <li>
+                <details>
+                  <summary>What are Landmark Regions?</summary>
+                  <ul>
+                    <li>
+                      <a href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/">Landmark Regions</a> identify the major sections of a page that is usually conveyed visually with placement, spacing, color, or borders.
+                    </li>
+                    <li>
+                       Landmark regions enable assistive technology users to perceive the start and end of each section of a web page.
+                    </li>
+                    <li>
+                      There are eight types of landmark regions used to identify content on a page: Banner, Complementary, Contentinfo, Form, Main, Navigation, Region and Search.
+                    </li>
+                    <li>
+                      SkipTo.js provides a means for everyone to use keyboard navigation to navigate to landmark regions on page.
+                    </li>
+                  </ul>
+                </details>
+              </li>
+            </ul>
 
                          <hr style="margin-top: 5em;"/>
 

@@ -93,8 +93,6 @@ class TOCLinksGrid extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
 
-    debug.flag && debug.log(`loading TOCLinksGrid...`);
-
     // Use external CSS stylesheet
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
@@ -166,8 +164,6 @@ class TOCLinksGrid extends HTMLElement {
 
 
   resize (height, width) {
-    debug.flag && debug.log(`height: ${height} x ${width}`);
-
     const tableWidth = width - 10;
 
     this.gridNode.style.width = tableWidth + 'px';
@@ -200,8 +196,6 @@ class TOCLinksGrid extends HTMLElement {
   }
 
   clearContent (message = '') {
-    debug.flag && debug.log(`[clearContent]: ${message} ${typeof message} ${message.length}`);
-
      removeChildContent(this.gridTbodyNode);
 
      if ((typeof message === 'string') && message.length) {
@@ -216,16 +210,11 @@ class TOCLinksGrid extends HTMLElement {
   }
 
   updateContent (sameUrl, myResult) {
-    debug.flag && debug.log(`[updateContent]`);
-
     const linksObj = this;
 
     if (myResult.links) {
 
       getOptions().then( (options) => {
-
-        debug.flag && debug.log(`[options][    highlightFollowsFocus]: ${options.highlightFollowsFocus}`);
-        debug.flag && debug.log(`[options][       enterKeyMovesFocus]: ${options.enterKeyMovesFocus}`);
 
         linksObj.highlightFollowsFocus = options.highlightFollowsFocus;
         linksObj.enterKeyMovesFocus    = options.enterKeyMovesFocus;
@@ -271,8 +260,6 @@ class TOCLinksGrid extends HTMLElement {
   }
 
   updateLinkContent (links) {
-    debug.flag && debug.log(`[updateLinksContent]`);
-
     const linksObj = this;
     let lastGridNode = null;
 
@@ -372,8 +359,6 @@ class TOCLinksGrid extends HTMLElement {
     let linkTypeContent = '';
     let linkTypeDesc    = '';
     let linkTypeSort = 0;
-
-    debug.log(`[extension]: ${link.extension}`);
 
     if (link.extensionType) {
       switch (link.extensionType) {
@@ -631,8 +616,6 @@ class TOCLinksGrid extends HTMLElement {
   }
 
   setFocusToPreviousGridrowAndCell(gridcell) {
-    debug.flag && debug.log(`[setFocusToPreviousGridrowAndCell]: ${gridcell}`);
-
     const linksObj = this;
 
     function findCellInRow(gridrow, className) {
@@ -657,8 +640,6 @@ class TOCLinksGrid extends HTMLElement {
   }
 
   setFocusToNextGridrowAndCell(gridcell) {
-    debug.flag && debug.log(`[setFocusToNextGridrowAndCell]: ${gridcell}`);
-
     const linksObj = this;
 
     function findCellInRow(gridrow, className) {
@@ -683,7 +664,6 @@ class TOCLinksGrid extends HTMLElement {
   }
 
   setFocusToNextGridcell(gridcell) {
-    debug.flag && debug.log(`[setFocusToNextGridcell]: ${gridcell}`);
     const nextGridcell = gridcell.nextElementSibling;
     if (nextGridcell) {
       this.setFocusToGriditem(nextGridcell);
@@ -691,7 +671,6 @@ class TOCLinksGrid extends HTMLElement {
   }
 
   setFocusToPreviousGridcell(gridcell) {
-    debug.flag && debug.log(`[setFocusToPreviousGridcell]: ${gridcell}`);
     const prevGridcell = gridcell.previousElementSibling;
     if (prevGridcell) {
       this.setFocusToGriditem(prevGridcell);
@@ -702,7 +681,6 @@ class TOCLinksGrid extends HTMLElement {
   }
 
   setFocusToFirstGridcell(griditem) {
-    debug.flag && debug.log(`[setFocusToFirstGridcell]: ${griditem.tagName}`);
     if (griditem.tagName === 'TR') {
       this.setFocusToGriditem(griditem.firstElementChild);
     }
@@ -712,7 +690,6 @@ class TOCLinksGrid extends HTMLElement {
   }
 
   setFocusToLastGridcell(gridcell) {
-    debug.flag && debug.log(`[setFocusToLstGridcell]: ${gridcell}`);
     this.setFocusToGriditem(gridcell.parentNode.lastElementChild);
   }
 
@@ -748,8 +725,6 @@ class TOCLinksGrid extends HTMLElement {
     const tgt = event.currentTarget;
     const iconNode = tgt.querySelector('.expand-icon');
 
-    debug.flag && debug.log(`[handlegridrowClick]: ${tgt.tagName}`);
-
     // if clicked on expand icon in the treeview then do not process event
     if (!iconNode ||
         (iconNode && (iconNode !== event.target)) ||
@@ -766,63 +741,56 @@ class TOCLinksGrid extends HTMLElement {
     const key = event.key;
     let flag  = false;
 
-    debug.flag && debug.log(`[handleKeydown][key]: ${key}`);
-
     function isPrintableCharacter(str) {
       return str.length === 1 && str.match(/\S/);
     }
 
-    if (event.altKey || event.ctrlKey || event.metaKey) {
+    if (event.shiftKey || event.altKey || event.ctrlKey || event.metaKey) {
       return;
     }
 
-    if (event.shiftKey) {
-      debug.flag && debug.log(`Shift key press`);
-    }
-    else {
-      switch (key) {
-        case 'Enter':
-        case ' ':
-          this.highlightGriditem(tgt);
-          flag = true;
-          break;
+    switch (key) {
+      case 'Enter':
+      case ' ':
+        this.highlightGriditem(tgt);
+        flag = true;
+        break;
 
-        case 'ArrowUp':
-          this.setFocusToPreviousGridrow(tgt);
-          flag = true;
-          break;
+      case 'ArrowUp':
+        this.setFocusToPreviousGridrow(tgt);
+        flag = true;
+        break;
 
-        case 'ArrowDown':
-          this.setFocusToNextGridrow(tgt);
-          flag = true;
-          break;
+      case 'ArrowDown':
+        this.setFocusToNextGridrow(tgt);
+        flag = true;
+        break;
 
-        case 'ArrowRight':
-          this.setFocusToFirstGridcell(tgt);
-          flag = true;
-          break;
+      case 'ArrowRight':
+        this.setFocusToFirstGridcell(tgt);
+        flag = true;
+        break;
 
-        case 'ArrowLeft':
-          flag = true;
-          break;
+      case 'ArrowLeft':
+        flag = true;
+        break;
 
-        case 'Home':
-          this.setFocusToFirstGridrow();
-          flag = true;
-          break;
+      case 'Home':
+        this.setFocusToFirstGridrow();
+        flag = true;
+        break;
 
-        case 'End':
-          this.setFocusToLastGridrow();
-          flag = true;
-          break;
+      case 'End':
+        this.setFocusToLastGridrow();
+        flag = true;
+        break;
 
-        default:
-          if (isPrintableCharacter(key)) {
-            this.setFocusByFirstCharacter(tgt, key);
-            flag = true;
-          }
-          break;
-      }
+      default:
+        if (isPrintableCharacter(key)) {
+          this.setFocusByFirstCharacter(tgt, key);
+          flag = true;
+        }
+        break;
     }
 
     if (flag) {
@@ -836,61 +804,54 @@ class TOCLinksGrid extends HTMLElement {
     const key = event.key;
     let flag  = false;
 
-    debug.flag && debug.log(`[handleGridcellKeydown][key]: ${key}`);
-
-    if (event.altKey || event.ctrlKey || event.metaKey) {
+    if (event.shiftKey || event.altKey || event.ctrlKey || event.metaKey) {
       return;
     }
 
-    if (event.shiftKey) {
-      debug.flag && debug.log(`Shift key press`);
-    }
-    else {
-      switch (key) {
-        case 'Enter':
-        case ' ':
-          if (tgt.hasAttribute('data-sort')) {
-            this.sortLinks(tgt);
-          }
-          else {
-            this.highlightGriditem(tgt.parentNode);
-          }
-          flag = true;
-          break;
+    switch (key) {
+      case 'Enter':
+      case ' ':
+        if (tgt.hasAttribute('data-sort')) {
+          this.sortLinks(tgt);
+        }
+        else {
+          this.highlightGriditem(tgt.parentNode);
+        }
+        flag = true;
+        break;
 
-        case 'ArrowUp':
-          this.setFocusToPreviousGridrowAndCell(tgt);
-          flag = true;
-          break;
+      case 'ArrowUp':
+        this.setFocusToPreviousGridrowAndCell(tgt);
+        flag = true;
+        break;
 
-        case 'ArrowDown':
-          this.setFocusToNextGridrowAndCell(tgt);
-          flag = true;
-          break;
+      case 'ArrowDown':
+        this.setFocusToNextGridrowAndCell(tgt);
+        flag = true;
+        break;
 
-        case 'ArrowRight':
-          this.setFocusToNextGridcell(tgt);
-          flag = true;
-          break;
+      case 'ArrowRight':
+        this.setFocusToNextGridcell(tgt);
+        flag = true;
+        break;
 
-        case 'ArrowLeft':
-          this.setFocusToPreviousGridcell(tgt);
-          flag = true;
-          break;
+      case 'ArrowLeft':
+        this.setFocusToPreviousGridcell(tgt);
+        flag = true;
+        break;
 
-        case 'Home':
-          this.setFocusToFirstGridcell(tgt);
-          flag = true;
-          break;
+      case 'Home':
+        this.setFocusToFirstGridcell(tgt);
+        flag = true;
+        break;
 
-        case 'End':
-          this.setFocusToLastGridcell(tgt);
-          flag = true;
-          break;
+      case 'End':
+        this.setFocusToLastGridcell(tgt);
+        flag = true;
+        break;
 
-        default:
-          break;
-      }
+      default:
+        break;
     }
 
     if (flag) {

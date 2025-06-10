@@ -46,8 +46,6 @@ class TOCHeadingsTree extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
 
-    debug.flag && debug.log(`loading TOCHeadingsTree...`);
-
     // Use external CSS stylesheet
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
@@ -101,7 +99,6 @@ class TOCHeadingsTree extends HTMLElement {
   }
 
   clearContent(message = '') {
-    debug.flag && debug.log(`[clearContent]: ${message} ${typeof message} ${message.length}`);
 
      removeChildContent(this.treeNode);
 
@@ -117,8 +114,6 @@ class TOCHeadingsTree extends HTMLElement {
   }
 
   updateContent(sameUrl, myResult) {
-    debug.flag && debug.log(`[updateContent][headings]: ${myResult.headings}`);
-
     let lastTreeitemNode = null;
 
     const handleIconClick = this.handleIconClick;
@@ -128,7 +123,6 @@ class TOCHeadingsTree extends HTMLElement {
     const levelLabel = getMessage('headings_level_label');
 
     function addTreeitem (parentNode, heading) {
-      debug.flag && debug.log(`addTreeItem`);
       const treeitemNode = document.createElement('div');
       treeitemNode.addEventListener('keydown', treeObj.handleKeydown.bind(treeObj));
       treeitemNode.addEventListener('click',   treeObj.handleClick.bind(treeObj));
@@ -143,7 +137,6 @@ class TOCHeadingsTree extends HTMLElement {
 
       if (treeitemNode.id === treeObj.lastHeadingId) {
         lastTreeitemNode = treeitemNode;
-        debug.flag && debug.log(`[lastTreeitemNode]: ${lastTreeitemNode}`);
       }
 
       const firstChar = heading.name[0] ? heading.name[0].toLowerCase() : '';
@@ -166,7 +159,6 @@ class TOCHeadingsTree extends HTMLElement {
     }
 
     function addGroup (parentNode, id) {
-      debug.flag && debug.log(`addGroup`);
       const groupNode = document.createElement('div');
       groupNode.setAttribute('role', 'group');
       groupNode.id = id;
@@ -177,7 +169,6 @@ class TOCHeadingsTree extends HTMLElement {
     function processHeadings (parentNode, lastHeadingNode, headings, lastLevel) {
       while (headings[0]) {
         const heading = headings[0];
-        debug.flag && debug.log(`[heading][${headings.length}]: ${heading ? heading.name : 'none'}`);
 
         if ((heading.level === lastLevel) ||
             (lastLevel === 0) ||
@@ -232,15 +223,11 @@ class TOCHeadingsTree extends HTMLElement {
     this.clearContent();
 
     if (myResult.headings) {
-      debug.flag && debug.log(`[myResult]: ${myResult.headings}`);
-
       getOptions().then( (options) => {
 
         this.highlightFollowsFocus = options.highlightFollowsFocus;
         this.enterKeyMovesFocus    = options.enterKeyMovesFocus;
         this.lastHeadingId         = options.lastHeadingId;
-
-        debug.flag && debug.log(`[lastHeadingId]: ${this.lastHeadingId}`);
 
         const headings = Array.from(myResult.headings).filter( (h) => {
           return h.name.length &&     // heading must have a name
@@ -257,7 +244,6 @@ class TOCHeadingsTree extends HTMLElement {
         setTablistAttr('headings-count', count);
 
         if (firstTreeitem) {
-          debug.log(`[sameUrl]: ${sameUrl} (${lastTreeitemNode})`);
           if (sameUrl  && lastTreeitemNode) {
             this.setFocusToTreeitem(lastTreeitemNode);
           }
@@ -425,8 +411,6 @@ class TOCHeadingsTree extends HTMLElement {
 
   handleIconClick (event) {
 
-    debug.flag && debug.log(`[handleIconClick]: ${event.currentTarget.tagName}`);
-
     // get treeitem with aria-expanded
     const ti = event.currentTarget.parentNode;
     if (ti.getAttribute('aria-expanded') === 'false') {
@@ -443,8 +427,6 @@ class TOCHeadingsTree extends HTMLElement {
     const tgt = event.currentTarget;
     const iconNode = tgt.querySelector('.expand-icon');
 
-    debug.flag && debug.log(`[handleClick]: ${tgt.tagName}`);
-
     // if clicked on expand icon in the treeview then do not process event
     if (!iconNode ||
         (iconNode && (iconNode !== event.target)) ||
@@ -460,8 +442,6 @@ class TOCHeadingsTree extends HTMLElement {
     const tgt = event.currentTarget;
     const key = event.key;
     let flag  = false;
-
-    debug.flag && debug.log(`[handleKeydown][key]: ${key}`);
 
     function isPrintableCharacter(str) {
       return str.length === 1 && str.match(/\S/);

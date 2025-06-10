@@ -27,6 +27,7 @@ const sidepanelOffsetWidth  = 20;
 const tabpanelOffsetHeight = 20;
 const tabpanelOffsetWidth = 10;
 
+const URL_ABOUT = 'https://opena11y.github.io/table-of-contents/';
 
 /* templates */
 const template = document.createElement('template');
@@ -119,9 +120,10 @@ template.innerHTML = `
                 data-i18n="buttons_options">
         </button>
       </div>
-      <div id="id-version"
-           class="middle">
-        0.0.0
+      <div class="middle">
+        <button id="id-btn-about"
+                data-i18n="buttons_about">
+        </button>
       </div>
       <div class="last">
         <button id="id-btn-update-info"
@@ -137,8 +139,6 @@ class TOCTabList extends HTMLElement {
   constructor () {
     super();
     this.attachShadow({ mode: 'open' });
-
-    debug.flag && debug.log(`loading TOCTabList...`);
 
     // Use external CSS style sheet
     const link = document.createElement('link');
@@ -165,23 +165,19 @@ class TOCTabList extends HTMLElement {
     this.tocLandmarksList  = this.shadowRoot.querySelector('toc-landmarks-list');
     this.tocLinksGrid      = this.shadowRoot.querySelector('toc-links-grid');
     this.tocOptionsDialog  = this.shadowRoot.querySelector('toc-options-dialog');
-    this.tocVersion        = this.shadowRoot.querySelector('#id-version');
 
     this.divSummary      = this.shadowRoot.querySelector('#summary');
 
     const btnGetInfo      = this.shadowRoot.querySelector('#id-btn-update-info');
     btnGetInfo.addEventListener('click', this.handleUpdateClick.bind(this));
 
+    const btnAbout      = this.shadowRoot.querySelector('#id-btn-about');
+    btnAbout.addEventListener('click', this.handleAboutClick.bind(this));
+
     const btnOptions      = this.shadowRoot.querySelector('#id-btn-options');
     btnOptions.addEventListener('click', this.handleOptionsClick.bind(this));
 
     this.footerNode      = this.shadowRoot.querySelector('footer');
-
-    debug.flag && debug.log(`[ tocHeadingsTree]: ${this.tocHeadingsTree}`);
-    debug.flag && debug.log(`[tocLandmarksList]: ${this.tocLandmarksList}`);
-    debug.flag && debug.log(`[    tocLinksGrid]: ${this.tocLinksGrid}`);
-
-    debug.flag && debug.log(`[TabList]: ${this.divTablist}`);
 
     this.tabNodes = [];
 
@@ -194,9 +190,7 @@ class TOCTabList extends HTMLElement {
     this.tabNodes.forEach( (tabNode) => {
       const tabpanel = {};
 
-      debug.flag && debug.log(`[tabNode]: ${tabNode}`);
       const tabpanelNode =  this.shadowRoot.querySelector(`#${tabNode.getAttribute('aria-controls')}`);
-      debug.flag && debug.log(`[tabpanelNode]: ${tabpanelNode}`);
 
       tabNode.tabIndex = -1;
       tabNode.setAttribute('aria-selected', 'false');
@@ -225,9 +219,6 @@ class TOCTabList extends HTMLElement {
                           this.shadowRoot.querySelector(`#${options.lastTabId}`) :
                           null;
 
-      debug.log(`[get][  lastTabId]: ${options.lastTabId }`);
-      debug.log(`[get][lastTabNode]: ${lastTabNode}`);
-
       if (options.lastTabId && lastTabNode) {
         this.setSelectedTab(lastTabNode, false);
       }
@@ -247,7 +238,6 @@ class TOCTabList extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    debug.flag && debug.log(`[attributeChangedCallback]: ${name} ${newValue}`);
 
     if (name === "headings-count") {
       this.setCount('id-headings-count', newValue);
@@ -261,10 +251,6 @@ class TOCTabList extends HTMLElement {
       this.setCount('id-links-count', newValue);
     }
 
-    if (name === "version") {
-      this.tocVersion.textContent = newValue;
-    }
-
   }
 
   resize () {
@@ -272,19 +258,11 @@ class TOCTabList extends HTMLElement {
     const height = window.innerHeight;
     const width  = window.innerWidth;
 
-    debug.flag && debug.log(`height: ${height} x width: ${width}`);
-
     const titleRect     = this.divTitle.getBoundingClientRect();
     const tablistRect   = this.divTablist.getBoundingClientRect();
     const tabpanelsRect = this.divTabpanels.getBoundingClientRect();
     const summaryRect   = this.divSummary.getBoundingClientRect();
     const footerRect    = this.footerNode.getBoundingClientRect();
-
-    debug.flag && debug.log(`[    titleRect]: ${    titleRect.height}`);
-    debug.flag && debug.log(`[  tablistRect]: ${  tablistRect.height}`);
-    debug.flag && debug.log(`[tabpanelsRect]: ${tabpanelsRect.height}`);
-    debug.flag && debug.log(`[  summaryRect]: ${  summaryRect.height}`);
-    debug.flag && debug.log(`[   footerRect]: ${  footerRect.height}`);
 
     const newHeight = height -
                       titleRect.height -
@@ -298,13 +276,8 @@ class TOCTabList extends HTMLElement {
     const newWidth       = width - sidepanelOffsetWidth;
     const tabpanelWidth  = newWidth - tabpanelOffsetWidth;
 
-    debug.flag && debug.log(`newHeight: ${newHeight}`);
-    debug.flag && debug.log(` newWidth: ${newWidth}`);
-
     this.divTabpanels.style.height = newHeight + 'px';
     this.divTabpanels.style.width  = newWidth + 'px';
-
-    debug.flag && debug.log(`[    newHeight]: ${newHeight}`);
 
     this.tabpanels.forEach ( (tabpanel) => {
       tabpanel.node.style.height = tabpanelHeight + 'px';
@@ -334,8 +307,6 @@ class TOCTabList extends HTMLElement {
   }
 
   clearContent(message='') {
-    debug.flag && debug.log(`[clearContent]: ${message} ${typeof message} ${message.length}`);
-
     this.divTitle.textContent = '';
     this.setCount('id-headings-count', '');
     this.setCount('id-landmarks-count', '');
@@ -350,21 +321,11 @@ class TOCTabList extends HTMLElement {
   }
 
   updateContent(myResult) {
-    debug.flag && debug.log(`[updateContent]`);
-
     this.divTitle.textContent = myResult.title;
-    debug.flag && debug.log(`[Title]:${ myResult.title}`);
-
-    debug.log(`[updateContent][url]: ${myResult.url}`);
-
     const tabListObj = this;
 
     getOptions().then( (options) => {
-      debug.log(`[    url]: ${myResult.url}`);
-      debug.log(`[lastUrl]: ${options.lastUrl}`);
-
       const sameUrl = options.lastUrl === myResult.url;
-      debug.log(`[sameUrl]: ${sameUrl}`);
       options.lastUrl = myResult.url;
 
       if(!sameUrl) {
@@ -392,8 +353,6 @@ class TOCTabList extends HTMLElement {
     }
 
     saveOption('lastTabId', currentTab.id).then( () => {
-      debug.log(`[save][currentTab.id]: ${currentTab.id}`);
-
       for (var i = 0; i < this.tabNodes.length; i += 1) {
         var tab = this.tabNodes[i];
         if (currentTab === tab) {
@@ -439,12 +398,14 @@ class TOCTabList extends HTMLElement {
   /* EVENT HANDLERS */
 
   handleUpdateClick () {
-    debug.flag && debug.log(`[handleUpdateClick]`);
     updateContent();
   }
 
+  handleAboutClick () {
+    window.open(URL_ABOUT);
+  }
+
   handleOptionsClick () {
-    debug.flag && debug.log(`[handleOptionsClick][tocOptionsDialog]: ${this.tocOptionsDialog}`);
     this.tocOptionsDialog.openDialog();
   }
 
@@ -484,7 +445,6 @@ class TOCTabList extends HTMLElement {
   }
 
   handleTabClick(event) {
-    debug.flag && debug.log(`[handleTabClick]`);
     this.setSelectedTab(event.currentTarget);
   }
 

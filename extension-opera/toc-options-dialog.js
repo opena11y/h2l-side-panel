@@ -186,8 +186,6 @@ export default class TOCOptionsDialog extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
 
-    debug.flag && debug.log(`loading TOCLinksGrid...`);
-
     // Use external CSS stylesheet
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
@@ -207,7 +205,6 @@ export default class TOCOptionsDialog extends HTMLElement {
     // Get references
 
     this.infoDialog  = this.shadowRoot.querySelector('dialog');
-    debug.flag && debug.log(`[infoDialog]: ${this.infoDialog}`);
 
     this.closeButton1  = this.infoDialog.querySelector('#id-close-1');
     this.closeButton1.addEventListener('click', this.handleCloseButtonClick.bind(this));
@@ -217,7 +214,6 @@ export default class TOCOptionsDialog extends HTMLElement {
 
     this.resetDefaultsButton  = this.infoDialog.querySelector('#id-reset-defaults');
     this.resetDefaultsButton.addEventListener('click', () => {
-      debug.flag && debug.log(`[handleResetDefaults]`);
       resetDefaultOptions().then(this.updateOptions.bind(this));
     });
 
@@ -228,7 +224,6 @@ export default class TOCOptionsDialog extends HTMLElement {
     this.inputs = Array.from(this.shadowRoot.querySelectorAll('input, button, select'));
 
     this.inputs.forEach( (input) => {
-      debug.flag && debug.log(`added handleInputFocus`);
       input.addEventListener('focus', this.handleInputFocus.bind(this));
       if (input.hasAttribute('data-group')) {
         input.addEventListener('change', this.handleAtLeastOne.bind(this));
@@ -260,13 +255,11 @@ export default class TOCOptionsDialog extends HTMLElement {
           switch (input.type) {
             case 'checkbox':
               input.checked = options[option];
-              debug.flag && debug.log(`[updateOptions][${option}]: ${options[option]} (${input.checked})`);
               break;
 
             case 'text':
             case '':
               input.value = options[option];
-              debug.flag && debug.log(`[updateOptions][${option}]: ${options[option]} (${input.value})`);
               break;
 
             default:
@@ -277,7 +270,6 @@ export default class TOCOptionsDialog extends HTMLElement {
         if (tagName === 'select') {
           const selectValues = Array.from(input.querySelectorAll('option'));
           selectValues.forEach( (sv) => {
-            debug.flag && debug.log(`[updateOptions][${option}]: ${options[option]} (${sv.value})`);
             sv.selected = sv.value === options[option];
           });
         }
@@ -300,13 +292,11 @@ export default class TOCOptionsDialog extends HTMLElement {
           switch (input.type) {
             case 'checkbox':
               options[option] = input.checked;
-              debug.flag && debug.log(`[saveOptions][${option}]: ${options[option]} (${input.checked})`);
               break;
 
             case 'text':
             case '':
               options[option] = input.value;
-              debug.flag && debug.log(`[saveOptions][${option}]: ${options[option]} (${input.value})`);
               break;
 
             default:
@@ -328,17 +318,13 @@ export default class TOCOptionsDialog extends HTMLElement {
   }
 
   atLeastOne (groupName) {
-    debug.flag && debug.log(`[atLeastOne][groupName]: ${groupName}`);
 
     const groupNodes = Array.from(this.shadowRoot.querySelectorAll(`[data-group="${groupName}"`));
-    debug.flag && debug.log(`[handleAtLeastOne][groupNodes]: ${groupNodes}`);
-
     let count = 0;
 
     groupNodes.forEach( (input) => {
       count += input.checked ? 1 : 0;
     });
-    debug.flag && debug.log(`[handleAtLeastOne][count]: ${count}`);
 
     if (count === 1) {
       groupNodes.forEach( (input) => {
@@ -366,14 +352,12 @@ export default class TOCOptionsDialog extends HTMLElement {
   */
 
   handleAtLeastOne (event) {
-    debug.flag && debug.log(`[handleAtLeastOne]`);
     const tgt = event.currentTarget;
     const groupName = tgt.getAttribute('data-group');
     this.atLeastOne(groupName);
   }
 
   handleInputFocus (event) {
-    debug.flag && debug.log(`[handleInputFocus]`);
     const tgt = event.currentTarget;
     this.inputs.forEach( (input) => {
       if (input.tagName === "INPUT") {

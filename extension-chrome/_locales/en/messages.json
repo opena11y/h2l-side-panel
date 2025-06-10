@@ -23,6 +23,10 @@
     "message": "Options",
     "description": "Label options button"
   },
+  "buttons_about": {
+    "message": "About",
+    "description": "Label About button"
+  },
   "buttons_update_info": {
     "message": "Update",
     "description": "Label for update information"

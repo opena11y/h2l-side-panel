@@ -19,22 +19,18 @@ debug.flag = false;
 // Browser Constants
 
 const isMozilla = typeof browser === 'object';
-debug.flag && debug.log(`[     isMozilla]: ${isMozilla}`);
 
 const myBrowser = typeof browser === 'object' ?
               browser :
               chrome;
-debug.flag && debug.log(`[     myBrowser]: ${myBrowser}`);
 
 const browserTabs = typeof browser === 'object' ?
             browser.tabs :
             chrome.tabs;
-debug.flag && debug.log(`[   browserTabs]: ${browserTabs}`);
 
 const browserRuntime = typeof browser === 'object' ?
               browser.runtime :
               chrome.runtime;
-debug.flag && debug.log(`[browserRuntime]: ${browserRuntime}`);
 
 
 let myWindowId = -1;  // used for checking if a tab is in the same window as the sidebar
@@ -63,16 +59,12 @@ class TOCSidePanel extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
 
-    debug.flag && debug.log(`loading TOCSidePanel ...`);
-
     // Add DOM tree from template
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.activeTabUrl;
     this.lastStatus = '';
 
     this.tocTablistNode = this.shadowRoot.querySelector('toc-tablist');
-    debug.flag && debug.log(`[tocTablistNode]: ${this.tocTablistNode}`);
 
     // Update side panel title
 
@@ -85,7 +77,6 @@ class TOCSidePanel extends HTMLElement {
     *   Add Window event listeners
     */
     window.addEventListener('load', this.handleWindowLoad.bind(this));
-    window.addEventListener('unload', this.handleWindowUnload.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
 
     // Setup a port to identify when side panel is open
@@ -99,12 +90,10 @@ class TOCSidePanel extends HTMLElement {
   }
 
   clearContent(message = '') {
-    debug.flag && debug.log(`[clearContent]: ${message}`);
     this.tocTablistNode.clearContent(message);
   }
 
   highlightOrdinalPosition(ordinalPosition, info='') {
-    debug.flag && debug.log(`[highlightOrdinalPosition]`);
 
     if (!ordinalPosition) {
       ordinalPosition='';
@@ -112,17 +101,13 @@ class TOCSidePanel extends HTMLElement {
     }
 
     async function sendHighlightMessage(tabs) {
-      debug.flag && debug.log(`[sendHighlightMessage]`);
       for (const tab of tabs) {
-        debug.flag && debug.log(`[sendHighlightMessage][tab]: ${tab.id}`);
         const myResult = await myBrowser.tabs
           .sendMessage(tab.id, {highlight: {
                                     position: ordinalPosition,
                                     info: info
                                   }
                                 });
-
-        debug.flag && debug.log(`[sendHighlightMessage][myResult]: ${myResult}`);
       }
     }
 
@@ -136,19 +121,15 @@ class TOCSidePanel extends HTMLElement {
   }
 
   updateHighlightConfig(options) {
-    debug.flag && debug.log(`[updateHighighlightConfig]`);
 
     async function sendHighlightMessage(tabs) {
-      debug.flag && debug.log(`[sendUpdateHighlightConfigMessage]`);
       for (const tab of tabs) {
-        debug.flag && debug.log(`[sendUpdateHighlightConfigMessage][tab]: ${tab.id}`);
         const myResult = await myBrowser.tabs
           .sendMessage(tab.id, { updateHighlightConfig: {
                                     size: options.highlightSize,
                                     style: options.highlightStyle
                                   }
                                 });
-        debug.flag && debug.log(`[sendUpdateHighlightConfigMessage][myResult]: ${myResult}`);
       }
     }
 
@@ -162,16 +143,11 @@ class TOCSidePanel extends HTMLElement {
   }
 
   focusOrdinalPosition(ordinalPosition) {
-    debug.flag && debug.log(`[focusOrdinalPosition]`);
 
     async function sendFocusMessage(tabs) {
-      debug.flag && debug.log(`[sendFocusMessage]`);
       for (const tab of tabs) {
-        debug.flag && debug.log(`[sendFocusMessage][tab]: ${tab.id}`);
         const myResult = await myBrowser.tabs
           .sendMessage(tab.id, { focusPosition : ordinalPosition });
-
-        debug.flag && debug.log(`[sendfocusMessage][myResult]: ${myResult}`);
       }
     }
 
@@ -186,7 +162,6 @@ class TOCSidePanel extends HTMLElement {
 
 
   updateContent() {
-    debug.flag && debug.log(`[updateContent]`);
     this.clearContent(getMessage('loading_content'));
 
     const spObj = this;
@@ -205,8 +180,6 @@ class TOCSidePanel extends HTMLElement {
   }
 
   handleGetInformationClick () {
-    debug.flag && debug.log(`[handleGetInformationClick]`);
-
     this.clearContent(getMessage('loading_content'));
 
     myBrowser.tabs
@@ -220,12 +193,9 @@ class TOCSidePanel extends HTMLElement {
   }
 
   async sendMessageToTabs(tabs) {
-    debug.flag && debug.log(`[sendMessageToTabs]`);
-
     const tocSidePanelObj = this;
 
     for (const tab of tabs) {
-      debug.flag && debug.log(`[sendMessageToTabs][tab]: ${tab.id}`);
       const myResult = await myBrowser.tabs
         .sendMessage(tab.id, { runEvaluation : true });
 
@@ -238,8 +208,6 @@ class TOCSidePanel extends HTMLElement {
   //-----------------------------------------------
 
   handleWindowLoad () {
-    debug.flag && debug.log(`[handleWindowLoad]`);
-
     browserTabs.onUpdated.addListener(this.handleTabUpdated.bind(this));
     browserTabs.onActivated.addListener(this.handleTabActivated.bind(this));
     myBrowser.windows.onFocusChanged.addListener(this.handleWindowFocusChanged.bind(this));
@@ -250,38 +218,19 @@ class TOCSidePanel extends HTMLElement {
     this.updateContent();
   }
 
-  handleWindowUnload () {
-    debug.flag && debug.log(`[handleWindowUnload]`);
-
-    const page = myBrowser.extension.getBackgroundPage();
-    debug.flag && debug.log(`[unload][page]: ${page}`);
-  }
-
   /*
   **  Handle tabs.onUpdated event when status is 'complete'
   */
   handleTabUpdated (tabId, changeInfo, tab) {
-    debug.flag && debug.log(`[handleTabUpdated]`);
-
     // Skip content update when new page is loaded in background tab
     if (!tab.active) return;
 
-    if (debug) {
-      if (tab.url !== this.activeTabUrl) {
-        this.activeTabUrl = tab.url;
-        console.log(`[handleTabUpdated][url]: ${tab.url}`);
-      }
-      console.log(`[handleTabUpdated][status]: ${changeInfo.status}`);
-    }
-
     if (changeInfo.status === "complete") {
-      debug.flag && debug.log(`[handleTabUpdated][status]: complete`);
       this.lastStatus = changeInfo.status;
       this.updateContent();
     }
     else {
       if (changeInfo.status !== this.lastStatus) {
-        debug.flag && debug.log(`[handleTabUpdated][status]: ${changeInfo.status}`);
         this.lastStatus = changeInfo.status;
         this.clearContent(getMessage('loading_content'));
       }
@@ -292,7 +241,6 @@ class TOCSidePanel extends HTMLElement {
   **  Handle tabs.onActivated event
   */
   handleTabActivated (activeInfo) {
-    debug.flag && debug.log(`[handleTabActivated]`);
     this.logTabUrl(activeInfo);
 
     const that = this;
@@ -335,8 +283,6 @@ class TOCSidePanel extends HTMLElement {
   **  focused window, save the new window ID and update the sidebar content.
   */
   handleWindowFocusChanged (windowId) {
-    debug.flag && debug.log(`[handleWindowFocusChanged][windowId]: ${windowId}`);
-
     if (windowId !== myWindowId) {
       if (isMozilla) {
         let checkingOpenStatus = myBrowser.sidebarAction.isOpen({ windowId });
@@ -347,9 +293,7 @@ class TOCSidePanel extends HTMLElement {
     function onGotStatus (result) {
       if (result) {
         myWindowId = windowId;
-
         this.updateContent();
-        debug.flag && debug.log(`Focus changed to window: ${myWindowId}`);
       }
     }
 
@@ -359,7 +303,6 @@ class TOCSidePanel extends HTMLElement {
   }
 
   handleResize () {
-    debug.flag && debug.log(`handleResize: ${window.innerHeight} x ${window.innerWidth}`);
     this.tocTablistNode.resize();
   }
 

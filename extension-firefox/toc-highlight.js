@@ -501,11 +501,6 @@ class TOCHighlightElement extends HTMLElement {
 
       const elemRect = elem.getBoundingClientRect();
 
-      // If target element is hidden create a visible element
-      debug && console.log(`[    info]: ${info}`);
-      debug && consoleRect('[    rect]:', elemRect);
-      debug && console.log(`[isHidden]: ${this.isElementHidden(elem)}`);
-
       if (this.isElementHidden(elem)) {
         // If element is hidden make hidden element message visible
         // and use for highlighing

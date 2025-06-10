@@ -22,7 +22,7 @@ footer.bg-light {
   margin: 0.25em;
 }
 
-.brand .skipto {
+.brand .name {
   display: inline-block;
   padding: 0.25em;
   color: #ffffff;
@@ -311,4 +311,19 @@ main dd {
   padding: 0;
   margin-left: 0.5em;
   line-height: 1.2em;
+}
+
+main .faq > ul {
+  list-style: none;
+}
+
+main .faq details {
+  margin-bottom: 1em;
+}
+
+main .faq summary {
+  margin: 0;
+  padding: 0.25em;
+  font-size: 110%;
+  font-weight: bold;
 }

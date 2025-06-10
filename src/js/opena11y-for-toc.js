@@ -1202,10 +1202,6 @@
                           partsUrl.length :
                           0;
 
-
-      debug$11.flag && debug$11.log(`[parsedUrl][hostname]: ${parsedUrl.hostname} ${partsUrl[partsUrlLen-1]} ${partsUrl[partsUrlLen-2]}`);
-      debug$11.flag && debug$11.log(`[parsedUrl][pathname]: ${parsedUrl.pathname}`);
-
       this.linkData = [];
 
       domCache.linkInfo.allLinkDomElements.forEach( de => {
@@ -1218,14 +1214,7 @@
                              partsHref.length :
                              0;
 
-        debug$11.flag && debug$11.log(`[parsedHref]: ${parsedHref}`);
-
         if (parsedHref && parsedHref.hostname) {
-          debug$11.flag && debug$11.log(`[parsedHref][    href]: ${parsedHref.href}`);
-          debug$11.flag && debug$11.log(`[parsedHref][hostname]: ${parsedHref.hostname}  ${partsHref[partsHrefLen-1]} ${partsHref[partsHrefLen-2]}`);
-          debug$11.flag && debug$11.log(`[parsedHref][pathname]: ${parsedHref.pathname}`);
-          debug$11.flag && debug$11.log(`[parsedHref][    hash]: ${parsedHref.hash}`);
-          debug$11.flag && debug$11.log(`[parsedHref][  origin]: ${parsedHref.origin}`);
 
           const sameHostname = parsedUrl.hostname === parsedHref.hostname;
           const sameDomain   = (partsUrlLen > 1 && partsHrefLen > 1) ?
@@ -1234,10 +1223,6 @@
                                false;
 
           const samePathname = parsedUrl.pathname === parsedHref.pathname;
-
-          debug$11.flag && debug$11.log(`[parsedHref][sameHostname]: ${sameHostname}`);
-          debug$11.flag && debug$11.log(`[parsedHref][  sameDomain]: ${sameDomain}`);
-          debug$11.flag && debug$11.log(`[parsedHref][samePathname]: ${samePathname}`);
 
           const periodIndex   = parsedHref.pathname.lastIndexOf('.');
           const extension     = periodIndex > 0 ?
@@ -1253,8 +1238,6 @@
                                 zipExtensions.includes(extension) ?
                                 'zip' :
                                 '';
-
-          debug$11.log(`[ext]: ${extension} (${extensionType}) (${periodIndex})`);
 
           const dataItem = {
             url:               de.node.href,
@@ -39845,7 +39828,6 @@
 
       // Highlight elements
       if(request.highlight) {
-
         const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
 
         if (he) {
@@ -39856,10 +39838,7 @@
 
       // Removed highlight
       if(request.removeHighlight) {
-        console.log(`[content.js][removeHighlight]`);
-
         const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
-        console.log(`[content.js][he]: ${he}`);
 
         if (he) {
           he.setAttribute('highlight-position', '');
@@ -39879,7 +39858,6 @@
 
       // Focus elements
       if(request.focusPosition) {
-
         const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
 
         if (he) {

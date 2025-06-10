@@ -36,8 +36,6 @@ class TOCLandmarksList extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
 
-    debug.flag && debug.log(`loading TOCRegionsList...`);
-
     // Use external CSS stylesheet
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
@@ -90,8 +88,6 @@ class TOCLandmarksList extends HTMLElement {
   }
 
   clearContent(message='') {
-    debug.flag && debug.log(`[clearContent]: ${message} ${typeof message} ${message.length}`);
-
      removeChildContent(this.listboxNode);
 
      if ((typeof message === 'string') && message.length) {
@@ -104,8 +100,6 @@ class TOCLandmarksList extends HTMLElement {
   }
 
   updateContent(sameUrl, myResult) {
-    debug.flag && debug.log(`[updateContent]`);
-
     let lastLandmarkNode = null;
     let index = 1;
 
@@ -126,21 +120,13 @@ class TOCLandmarksList extends HTMLElement {
         }
       });
 
-      for (let role in landmarkCounts) {
-        debug.flag && debug.log(`[${role}]: ${landmarkCounts[role]}`);
-      }
-
       getOptions().then( (options) => {
-
-        debug.flag && debug.log(`[options][    highlightFollowsFocus]: ${options.highlightFollowsFocus}`);
-        debug.flag && debug.log(`[options][       enterKeyMovesFocus]: ${options.enterKeyMovesFocus}`);
 
         this.highlightFollowsFocus = options.highlightFollowsFocus;
         this.enterKeyMovesFocus    = options.enterKeyMovesFocus;
         this.lastURL               = options.lastURL;
         this.lastLandmarkId        = options.lastLandmarkId;
 
-        debug.flag && debug.log(`[options]: ${options}`);
         myResult.regions.forEach( (r) => {
           if (r.name ||
               (landmarkCounts[r.role] < 3) ||
@@ -168,7 +154,6 @@ class TOCLandmarksList extends HTMLElement {
             listitemNode.addEventListener('blur',    listObj.handleBlur.bind(listObj));
 
             this.listboxNode.appendChild(listitemNode);
-            debug.flag && debug.log(listitemNode.textContent);
           }
 
         });
@@ -313,7 +298,6 @@ class TOCLandmarksList extends HTMLElement {
 
   handleClick (event) {
     const tgt = event.currentTarget;
-    debug.flag && debug.log(`[handleClick]: ${tgt.tagName}`);
     this.setFocusToListitem(tgt);
     this.highlightLandmark(tgt);
     event.stopPropagation();
@@ -322,11 +306,8 @@ class TOCLandmarksList extends HTMLElement {
 
   handleKeydown(event) {
     const tgt = event.currentTarget;
-    debug.flag && debug.log(`[handleKeydown]: ${tgt.tagName}`);
     const key = event.key;
     let flag  = false;
-
-    debug.flag && debug.log(`[handleKeydown][key]: ${key}`);
 
     function isPrintableCharacter(str) {
       return str.length === 1 && str.match(/\S/);
