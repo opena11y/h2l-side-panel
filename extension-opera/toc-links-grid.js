@@ -27,11 +27,8 @@ const isMozilla = typeof browser === 'object';
 const isWin     = navigator.userAgent.includes('Windows');
 
 const gridOffsetWidth = ( isWin && !isMozilla) ?
-                            45 :
+                            40 :
                             25;
-
-debug.log(`[isWin]: ${isWin}  [isMozilla]: ${isMozilla}  [gridOffsetWidth]: ${gridOffsetWidth}`);
-
 
 /* templates */
 const template = document.createElement('template');
@@ -138,10 +135,9 @@ class TOCLinksGrid extends HTMLElement {
 
     this.gridTbodyNode = this.shadowRoot.querySelector('[role="grid"] tbody');
 
-    this.posWidth  = '40px';
-    this.nameWidth = '120px';
-    this.urlWidth  = '80px';
-    this.typeWidth  = '80px';
+    this.posWidth  = 0;
+    this.nameWidth = 0;
+    this.typeWidth  = 0;
 
     this.highlightFollowsFocus = false;
     this.enterKeyMovesFocus    = false;
@@ -174,7 +170,7 @@ class TOCLinksGrid extends HTMLElement {
 
 
   resize (height, width) {
-    const tableWidth = width - 10;
+    const tableWidth = width;
 
     this.gridNode.style.width = tableWidth + 'px';
 

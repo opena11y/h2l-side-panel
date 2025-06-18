@@ -274,9 +274,7 @@ class TOCTabList extends HTMLElement {
                                  sidepanelOffsetHeight;
 
     const newWidth  = width - sidepanelOffsetWidth;
-    const newHeight = height - baseComponentsHeight;
-
-    debug.log(`[newWidth]: ${newWidth}  [newHeight]: ${newHeight}`);
+    const newHeight = Math.max(minTabpanelHeight, height - baseComponentsHeight);
 
     this.divTabpanels.style.height = newHeight + 'px';
     this.divTabpanels.style.width  = newWidth + 'px';
