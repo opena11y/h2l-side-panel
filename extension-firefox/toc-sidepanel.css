@@ -5,7 +5,19 @@
 }
 
 body {
+  margin: 0;
+  padding: 0;
   display: block;
   font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
   font-size: 11pt;
+}
+
+toc-sidepanel,
+toc-tablist,
+toc-headings-tree,
+toc-landmarks-list,
+toc-link-grid {
+  margin: 0;
+  padding: 0;
+  display: block;
 }

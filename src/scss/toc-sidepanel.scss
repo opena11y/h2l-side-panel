@@ -6,7 +6,19 @@
 }
 
 body {
+  margin: 0;
+  padding: 0;
   display: block;
   font-family: toc-base.$font-family;
   font-size: toc-base.$font-size-content;
+}
+
+toc-sidepanel,
+toc-tablist,
+toc-headings-tree,
+toc-landmarks-list,
+toc-link-grid {
+  margin: 0;
+  padding: 0;
+  display: block;
 }

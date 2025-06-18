@@ -4,6 +4,13 @@
   color-scheme: light dark;
 }
 
+[role=tree] {
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
 [role=tree] [role=treeitem] {
   font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
   font-size: 11pt;

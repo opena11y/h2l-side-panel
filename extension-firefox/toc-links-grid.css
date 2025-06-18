@@ -12,7 +12,6 @@ table[role=grid] {
   padding: 0;
   overflow-y: auto;
   border-collapse: collapse;
-  min-height: 150px;
   table-layout: fixed;
   color: light-dark(#000, #fff);
   background-color: light-dark(#fff, #000);

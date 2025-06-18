@@ -5,7 +5,10 @@
   color-scheme: light dark;
 }
 
-.toc-lablist {
+.toc-tablist {
+  padding: 0;
+  padding-left: 6px;
+  padding-right: 6px;
   font-family: toc-base.$font-family;
   font-size: toc-base.$font-size-content;
   color: light-dark(toc-base.$color-light, toc-base.$color-dark);
@@ -74,15 +77,12 @@ h2 {
   border-bottom-color: light-dark(toc-base.$border-color-light, toc-base.$border-color-dark);
 }
 
-
 [role="tabpanel"] {
   padding: 5px;
   border-width: 2px;
   border-style: solid;
   border-radius: 0 5px 5px;
-  min-height: 180px;
-  min-width: 180px;
-  overflow: auto;
+  overflow: hidden;
   border-color: light-dark(toc-base.$border-tablist-light, toc-base.$border-tablist-dark);
   background: light-dark(toc-base.$background-light, toc-base.$background-dark);
 }

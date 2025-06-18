@@ -23,6 +23,16 @@ import {
 const debug = new DebugLogging('tocLinksGrid', false);
 debug.flag = false;
 
+const isMozilla = typeof browser === 'object';
+const isWin     = navigator.userAgent.includes('Windows');
+
+const gridOffsetWidth = ( isWin && !isMozilla) ?
+                            45 :
+                            25;
+
+debug.log(`[isWin]: ${isWin}  [isMozilla]: ${isMozilla}  [gridOffsetWidth]: ${gridOffsetWidth}`);
+
+
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
@@ -170,7 +180,7 @@ class TOCLinksGrid extends HTMLElement {
 
     const posWidth = 50;
     const typeWidth = 55;
-    const nameWidth = tableWidth - posWidth - typeWidth - 25;
+    const nameWidth = tableWidth - posWidth - typeWidth - gridOffsetWidth;
 
     this.posWidth   = posWidth + 'px';
     this.nameWidth  = nameWidth + 'px';

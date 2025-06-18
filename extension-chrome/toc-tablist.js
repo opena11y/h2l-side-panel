@@ -18,13 +18,17 @@ import {
 
 /* Constants */
 
-const sidepanelOffsetHieght = 50;
-const sidepanelOffsetWidth  = 20;
+const debug = new DebugLogging('tocTablist', false);
+debug.flag = false;
 
-const tabpanelOffsetHeight = 20;
-const tabpanelOffsetWidth  = 10;
+const sidepanelOffsetHeight = 55;
+const sidepanelOffsetWidth  = 25;
 
-debug.log(`[isWin]: ${isWin}  [isMozilla]: ${isMozilla}  [`);
+const tabpanelOffsetHeight = 18;
+const tabpanelOffsetWidth  = 0;
+
+const minTabpanelHeight = 100;
+const minTabpanelWidth = 120;
 
 const URL_ABOUT = 'https://opena11y.github.io/table-of-contents/';
 
@@ -263,20 +267,22 @@ class TOCTabList extends HTMLElement {
     const summaryRect   = this.divSummary.getBoundingClientRect();
     const footerRect    = this.footerNode.getBoundingClientRect();
 
-    const newHeight = height -
-                      titleRect.height -
-                      tablistRect.height -
-                      summaryRect.height -
-                      footerRect.height -
-                      sidepanelOffsetHieght;
+    const baseComponentsHeight = titleRect.height +
+                                 tablistRect.height +
+                                 summaryRect.height +
+                                 footerRect.height +
+                                 sidepanelOffsetHeight;
 
-    const tabpanelHeight = newHeight - tabpanelOffsetHeight;
+    const newWidth  = width - sidepanelOffsetWidth;
+    const newHeight = height - baseComponentsHeight;
 
-    const newWidth       = width - sidepanelOffsetWidth;
-    const tabpanelWidth  = newWidth - tabpanelOffsetWidth;
+    debug.log(`[newWidth]: ${newWidth}  [newHeight]: ${newHeight}`);
 
     this.divTabpanels.style.height = newHeight + 'px';
     this.divTabpanels.style.width  = newWidth + 'px';
+
+    const tabpanelWidth  = newWidth - tabpanelOffsetWidth;
+    const tabpanelHeight = newHeight - tabpanelOffsetHeight;
 
     this.tabpanels.forEach ( (tabpanel) => {
       tabpanel.node.style.height = tabpanelHeight + 'px';

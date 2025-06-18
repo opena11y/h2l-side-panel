@@ -5,6 +5,13 @@
   color-scheme: light dark;
 }
 
+[role="listbox"] {
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
 [role="listbox"] [role="listitem"] {
   font-family: toc-base.$font-family;
   font-size: toc-base.$font-size-content;
