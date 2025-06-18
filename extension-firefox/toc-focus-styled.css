@@ -52,7 +52,7 @@
   [role=tree] [role=treeitem]:focus {
     outline-color: ActiveText;
     background-color: ButtonFace !important;
-    color: ActiveText;
+    color: ButtonFace;
     stroke: ActiveText;
     fill: ActiveText;
   }
@@ -74,7 +74,7 @@
   [role=listbox] [role=listitem]:focus {
     outline-color: ActiveText;
     background-color: ButtonFace !important;
-    color: ActiveText;
+    color: ButtonFace;
   }
 }
 table[role=grid] th[tabindex="0"],
@@ -100,7 +100,7 @@ table[role=grid] tr:focus {
   table[role=grid] tr:focus {
     outline-color: ActiveText;
     background-color: ButtonFace !important;
-    color: ActiveText;
+    color: ButtonFace;
   }
 }
 dialog .focus input {

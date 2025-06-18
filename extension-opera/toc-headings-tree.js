@@ -21,6 +21,9 @@ import {
 const debug = new DebugLogging('tocHeadingsTree', false);
 debug.flag = false;
 
+const isMozilla = typeof browser === 'object';
+const isWin     = navigator.userAgent.includes('Windows');
+
 
 /* templates */
 const template = document.createElement('template');

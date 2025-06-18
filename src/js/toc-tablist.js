@@ -18,14 +18,13 @@ import {
 
 /* Constants */
 
-const debug = new DebugLogging('tocTablist', false);
-debug.flag = false;
-
 const sidepanelOffsetHieght = 50;
 const sidepanelOffsetWidth  = 20;
 
 const tabpanelOffsetHeight = 20;
-const tabpanelOffsetWidth = 10;
+const tabpanelOffsetWidth  = 10;
+
+debug.log(`[isWin]: ${isWin}  [isMozilla]: ${isMozilla}  [`);
 
 const URL_ABOUT = 'https://opena11y.github.io/table-of-contents/';
 
