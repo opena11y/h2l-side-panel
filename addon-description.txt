@@ -4,7 +4,7 @@ Table of Contents Side Panel for XXXX
 
 Summary
 -------
-Table of Contents Side Panel for XXXX extension provides information on the headings, landmark regions and links in a web page.  The associated headings, landmark regions and links in the side panel can be highlighted in the web page for easy identification.
+Table of Contents Side Panel for XXXX extension provides information on the headings, landmark regions and links in a web page.  The associated headings, landmark regions and links in the side panel can be highlighted in the web page for easy identification.  The extension is designed to help people identify and navigate to content of interest.  The extension can also be used as part of accessibility testing to verify the proper use of headings and landmark regions, and for ensuring link names identify the destination of the link.
 
 Description
 -----------
@@ -31,8 +31,8 @@ Opera: recommended 612×408, maximum 800x600
 
 Creating Zip Files
 ------------------
-zip -r ../../docs/dist/toc-side-panel-firefox-1.0.zip . -x ".*" -x "__MACOSX"
-zip -r ../../docs/dist/toc-side-panel-for-chrome-1.0.zip . -x ".*" -x "__MACOSX"
+zip -r ../docs/dist/toc-side-panel-firefox-1.0.zip . -x ".*" -x "__MACOSX"
+zip -r .../docs/dist/toc-side-panel-for-chrome-1.0.zip . -x ".*" -x "__MACOSX"
 
 Questions
 ---------
