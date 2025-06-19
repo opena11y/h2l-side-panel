@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "browser_specific_settings": {
     "gecko": {
-      "id": "toc-sidebar-firefox@openweba11y.com"
+      "id": "toc-side-panel-firefox@openweba11y.com"
     }
   },
   "name": "__MSG_extension_name_firefox__",
