@@ -34,20 +34,27 @@ Opera: recommended 612×408, maximum 800x600
 Creating Zip Files
 ------------------
 zip -r ../docs/dist/toc-side-panel-firefox-1.0.zip . -x ".*" -x "__MACOSX"
-zip -r ../docs/dist/toc-side-panel-chrome-1.0.zip . -x ".*" -x "__MACOSX"
+
 
 Questions
 ---------
+
+Tabs Justification
+As tabs change the side bar is updated with information from the tab and the highlight is removed from tabs that ae no longer in view.
+
 ActiveTab Justification
-The active table is used to toggle the SkipTo.js menu open and closed when the user clicks the extension icon in the toolbar.
+The active table is used to toggle the side panel open and closed when the user clicks the extension icon in the toolbar.
 
 Scripting Justification
 Scripting is used to toggle the side panel menu open and closed when user clicks extension icon.
+
+Side Panel Justification
+The side panel provides a persistent view of headings, landmark regions and links on a web page.  As the user changes tabs or updates the cureent tab the information is automatically updated.
 
 Storage Justification
 User preferences on the items in the menu, styling and internationalization of menu labels.
 
 Host Permission Justification
-The menu provides keyboard navigation to the landmark regions and headings of web pages to support people with disabilities and therefore is needed on all web pages.
+The extension provides keyboard navigation to the landmark regions and headings of web pages to support accessibility testing of web pages for people with disabilities.
 
 
