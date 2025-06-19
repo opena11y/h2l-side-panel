@@ -40,7 +40,7 @@ Questions
 ---------
 
 Tabs Justification
-As tabs change the side bar is updated with information from the tab and the highlight is removed from tabs that ae no longer in view.
+As tabs change the side bar is updated with information from the tab and the highlight is removed from tabs that are no longer in view.
 
 ActiveTab Justification
 The active table is used to toggle the side panel open and closed when the user clicks the extension icon in the toolbar.
