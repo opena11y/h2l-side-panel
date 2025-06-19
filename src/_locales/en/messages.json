@@ -1,18 +1,18 @@
 {
   "extension_name_chrome" : {
-    "message": "Table of Contents",
+    "message": "TOC: Headings, Landmarks and Links",
     "description": "Extension name for Chrome browser"
   },
   "extension_name_firefox" : {
-    "message": "Table of Contents",
+    "message": "TOC: Headings, Landmarks and Links",
     "description": "Extension name for Firefox browser"
   },
   "extension_name_opera" : {
-    "message": "Table of Contents",
+    "message": "TOC: Headings, Landmarks and Links",
     "description": "Extension name for Opera browser"
   },
   "extension_description" : {
-    "message": "Table of Contents provides a view of headings, landmark regions and links on a web page.",
+    "message": "Table of Contents (TOC) provides a view of headings, landmark regions and links on a web page.",
     "description": "Extension description"
   },
   "toggle_menu" : {
