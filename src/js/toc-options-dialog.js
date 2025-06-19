@@ -156,6 +156,16 @@ template.innerHTML = `
           </span>
         </label>
 
+        <label class="grid">
+          <input type="checkbox"
+                 data-group="links"
+                 data-option="nonHtmlExtensionLinks"
+                 aria-describedby="id-link-desc"/>
+          <span class="label"
+                data-i18n="options_dialog_label_non_html_links">
+          </span>
+        </label>
+
 
         <div class="grid">
           <div></div>

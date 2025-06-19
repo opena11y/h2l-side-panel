@@ -232,7 +232,8 @@ class TOCLinksGrid extends HTMLElement {
                  ((l.isInternal   && options.internalLinks) ||
                   (l.isExternal   && options.externalLinks) ||
                   (l.isSameDomain && options.sameDomainLinks && !l.isSameSubDomain) ||
-                  (l.isSameSubDomain && options.sameSubDomainLinks && !l.isInternal));
+                  (l.isSameSubDomain && options.sameSubDomainLinks && !l.isInternal) ||
+                  (l.extensionType && options.nonHtmlExtensionLinks));
         })
 
         linksObj.renderedLinks.forEach( (link, index) => {

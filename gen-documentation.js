@@ -41,6 +41,11 @@ const pages = [
     link: 'Home',
     filename: 'index.html'
   },
+  { template: './src-docs/templates/content-options.njk',
+    title: 'Options',
+    link: 'Options',
+    filename: 'options.html'
+  },
   { template: './src-docs/templates/content-faq.njk',
     title: 'Frequently Asked Questions',
     link: 'FAQ',

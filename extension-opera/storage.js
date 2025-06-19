@@ -18,9 +18,9 @@ const browserStorage = typeof browser === 'object' ?
                        chrome.storage.sync;
 
 const defaultOptions = {
-  highlightSize: 'medium',
-  highlightStyle: 'solid',
-  highlightFollowsFocus: false,
+  highlightSize: 'large',
+  highlightStyle: 'dashed',
+  highlightFollowsFocus: true,
   enterKeyMovesFocus: true,
   smallAndOffScreenHeadings: false,
   unNamedDuplicateRegions: false,
@@ -28,6 +28,7 @@ const defaultOptions = {
   externalLinks: true,
   sameSubDomainLinks: true,
   sameDomainLinks: true,
+  nonHtmlExtensionLinks: true,
   ariaRoles: true,
   ariaProps: true,
   accessibleNames: true,

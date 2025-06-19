@@ -68,7 +68,7 @@
     "description": "Label for url column in links grid"
   },
   "links_none_found": {
-    "message": "No links found",
+    "message": "No links found, check link filter options",
     "description": "Message if no links found on page"
   },
   "link_label": {
@@ -165,7 +165,7 @@
   },
   "landmarks_none_found": {
     "message": "No landmark regions found",
-    "description": "Message if no landmark regions found on page"
+    "description": "Message if no landmark regions found"
   },
   "options_dialog_close": {
     "message": "Close",
@@ -218,6 +218,10 @@
   "options_dialog_label_external_links": {
     "message": "Show external links",
     "description": "Label for checkbox for including external links"
+  },
+  "options_dialog_label_non_html_links": {
+    "message": "Show non-html extension links",
+    "description": "Label for checkbox for including non-html links"
   },
   "options_dialog_label_same_sub_domain": {
     "message": "Show same sub-domain links",
