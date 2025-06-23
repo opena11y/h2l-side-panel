@@ -75,6 +75,7 @@ footer.bg-light {
   padding-left: 1em;
   font-family: $font-brand;
   font-weight: 400;
+  font-size: 2em;
   color: $iconWhite;
   background: $iconBlue;
 }
@@ -228,6 +229,7 @@ figure.image {
 
 figure.image img {
   border: 2px solid light-dark(#dddddd, #333333);
+  width: 100%;
 }
 
 figure.image figcaption {
@@ -278,9 +280,19 @@ main .feature div.type {
   margin-top: 0.5em;
 }
 
+main .feature ul.type {
+  margin: 0;
+  padding: 0;
+}
+
 main .feature ul.type li {
   margin: 0;
   padding: 0;
+  list-style: none;
+}
+
+main .feature ul.type li .extension {
+  font-weight: bold;
 }
 
 div.params {

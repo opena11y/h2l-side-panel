@@ -44,7 +44,7 @@ const pages = [
     filename: 'index.html'
   },
   { template: './src-docs/templates/content-options.njk',
-    title: 'Browser Extension Options',
+    title: 'Options',
     link: 'Options',
     filename: 'options.html'
   },
