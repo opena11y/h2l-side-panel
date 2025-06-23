@@ -2,11 +2,11 @@
   "manifest_version": 3,
   "browser_specific_settings": {
     "gecko": {
-      "id": "toc-sidebar-firefox@openweba11y.com"
+      "id": "toc-side-panel-firefox@openweba11y.com"
     }
   },
   "name": "__MSG_extension_name_firefox__",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "__MSG_extension_description__",
   "homepage_url": "https://opena11y.github.io/web-page-table-of-contents/",
   "default_locale": "en",

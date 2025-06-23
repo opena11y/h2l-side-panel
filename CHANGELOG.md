@@ -1,7 +1,10 @@
 # Version history for Page Table of Contents
 
+## Version 1.0.1
+* Updated URL to documentation
+
 ## Version 1.0
-* Setup development environment
+* Initial release
 
 
 ## Copyright and license

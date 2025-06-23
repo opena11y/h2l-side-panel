@@ -30,7 +30,7 @@ const tabpanelOffsetWidth  = 0;
 const minTabpanelHeight = 100;
 const minTabpanelWidth = 120;
 
-const URL_ABOUT = 'https://opena11y.github.io/table-of-contents/';
+const URL_ABOUT = 'https://opena11y.github.io/toc-headings-landmarks-links';
 
 /* templates */
 const template = document.createElement('template');

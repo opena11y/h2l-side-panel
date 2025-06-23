@@ -18,10 +18,10 @@ Options Dialog
 
 
 Documentation URL:
-https://opena11y.github.io/table-of-contents/
+https://opena11y.github.io/toc-headings-landmarks-links/
 
 Support URL:
-https://github.com/opena11y/table-of-contents/issues
+https://github.com/opena11y/toc-headings-landmarks-links/issues
 
 Screenshot Sizes
 ----------------
@@ -33,7 +33,8 @@ Opera: recommended 612×408, maximum 800x600
 
 Creating Zip Files
 ------------------
-zip -r ../docs/dist/toc-side-panel-firefox-1.0.zip . -x ".*" -x "__MACOSX"
+zip -r ../docs/dist/toc-side-panel-firefox-1.0.1.zip . -x ".*" -x "__MACOSX"
+zip -r ../docs/dist/toc-side-panel-chrome-1.0.1.zip . -x ".*" -x "__MACOSX"
 
 
 Questions

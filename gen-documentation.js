@@ -12,8 +12,10 @@ const extName     = "TOC: Headings, Landmarks and Links";
 
 /* Constants */
 
-const outputDirectory = './docs/';
+const outputDirectory   = './docs/';
 const templateDirectory = './src-docs/templates';
+const websiteURL        = 'https://opena11y.github.io/toc-headings-landmarks-links/';
+const repositoryURL     = 'https://github.com/opena11y/toc-headings-landmarks-links';
 
 // setUseCodeTags(true);
 
@@ -65,6 +67,8 @@ const pages = [
 pages.forEach( p => {
   console.log(`[page]: ${p.filename}`);
   outputFile(p.filename, nunjucks.render(p.template,{
+    websiteURL: websiteURL,
+    repositoryURL: repositoryURL,
     extName: extName,
     tagLineName: tagLineName,
     version: version,
