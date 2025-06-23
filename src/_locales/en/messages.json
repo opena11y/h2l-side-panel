@@ -179,10 +179,6 @@
     "message": "Reset Defaults",
     "description": "Label for reset defaults button"
   },
-  "options_dialog_title": {
-    "message": "Options",
-    "description": "Title for options dialog box"
-  },
   "options_dialog_legend_highlight": {
     "message": "Highlight",
     "description": "Legend for highlight options"

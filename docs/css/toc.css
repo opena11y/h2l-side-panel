@@ -3,6 +3,17 @@
   color-scheme: light dark;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+}
+
+main a,
+main a:visited {
+  color: #2e64b7;
+}
+
 nav.second-level,
 nav.navbar.bg-light {
   background-color: light-dark(#eeeeee, #101010) !important;
@@ -16,15 +27,35 @@ footer.bg-light {
 
 .brand {
   display: block;
-  font-family: "Fjalla One", sans-serif;
-  font-weight: 400;
   font-style: normal;
   margin: 0.25em;
 }
 
-.brand .name {
+.brand .icon {
+  padding: 0;
+  margin: 0;
   display: inline-block;
+}
+
+.brand .icon img {
+  padding: 0;
+  margin: 0;
+  height: 32px;
+  border: 1px solid #13294B;
+}
+
+.brand .version {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  color: #13294B;
+}
+
+.tagline {
   padding: 0.25em;
+  padding-left: 1em;
+  font-family: "Fjalla One", sans-serif;
+  font-weight: 400;
   color: #ffffff;
   background: #13294B;
 }
@@ -169,10 +200,10 @@ div.language-html pre .k {
 }
 
 figure.image {
-  margin: 0.5em;
-  margin-top: 2em;
-  margin-bottom: 4em;
-  max-width: 90%;
+  margin: 0;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  max-width: 98%;
 }
 
 figure.image img {
@@ -189,40 +220,58 @@ figure.image figcaption {
   text-align: center;
 }
 
-div.container h1,
-div.container .h1 {
+main h1 {
   padding: 0;
   margin: 0;
   font-size: 2rem;
 }
 
-div.container h2,
-div.container .h2 {
+main h2 {
   padding: 0;
   margin: 0;
   margin-top: 1em;
   font-size: 1.5rem;
 }
 
-div.container h3,
-div.container .h3 {
+main .feature h2 {
+  margin-top: 0.25em;
+}
+
+main h3 {
   padding: 0;
   margin: 0;
   margin-top: 0.5em;
   font-size: 1.25rem;
 }
 
-div.container h4,
-div.container .h4 {
+main h4 {
   padding: 0;
   margin: 0;
   margin-top: 0.5em;
   font-size: 1.1rem;
 }
 
+main .feature div.type {
+  margin: 0;
+  padding: 0;
+  margin-top: 0.5em;
+}
+
+main .feature ul.type li {
+  margin: 0;
+  padding: 0;
+}
+
 div.params {
   margin: 0.5em 0;
   padding: 0.5em;
+}
+
+.feedback {
+  margin: 0;
+  padding: 0.25em;
+  margin-top: 5em;
+  border-top: 2px solid #99b7e5;
 }
 
 .bg-light code {
@@ -256,6 +305,26 @@ main li span.shortcut {
   display: inline-block;
   width: 1.5em;
   font-weight: bold;
+}
+
+main .feature {
+  margin: 0;
+  padding: 0;
+  margin-top: 2em;
+  border-top: 2px solid #99b7e5;
+}
+
+main h2 {
+  margin-top: 0;
+}
+
+main .feature ul {
+  margin: 0;
+}
+
+main .feature ul li {
+  margin: 0;
+  padding-bottom: 0.5em;
 }
 
 .hidden-small {

@@ -6,7 +6,9 @@ const fs = require('fs');
 const path = require('path');
 const nunjucks  = require('nunjucks');
 
-const version = "1.0";
+const version     = "1.0";
+const tagLineName = "Table of Contents for Headings, Landmarks and Links";
+const extName     = "TOC: Headings, Landmarks and Links";
 
 /* Constants */
 
@@ -37,12 +39,12 @@ function outputTemplate(fname, data) {
 
 const pages = [
   { template: './src-docs/templates/content-home.njk',
-    title: 'Table of Contents Browser Extension',
+    title: 'Browser Extension',
     link: 'Home',
     filename: 'index.html'
   },
   { template: './src-docs/templates/content-options.njk',
-    title: 'Options',
+    title: 'Browser Extension Options',
     link: 'Options',
     filename: 'options.html'
   },
@@ -63,6 +65,8 @@ const pages = [
 pages.forEach( p => {
   console.log(`[page]: ${p.filename}`);
   outputFile(p.filename, nunjucks.render(p.template,{
+    extName: extName,
+    tagLineName: tagLineName,
     version: version,
     title: p.title,
     pages: pages,

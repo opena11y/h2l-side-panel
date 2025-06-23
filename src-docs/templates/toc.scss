@@ -2,19 +2,35 @@
 $iconBlue: #13294B;
 $iconRed: #C5050C;
 $iconBackground: #dddddd;
+$separatorColor: #99b7e5;
 $iconWhite: #ffffff;
 $contentBlue: #005797;
 $linkCurrent: #000000;
+$linkMainColor: #2e64b7;
 
 $navBackground: #eeeeee;
 $navBackgroundDark: #101010;
 
 $contentBlueDark: rgb(110, 168, 254);
 $linkCurrentDark: #888;
+$font-content: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+$font-brand: "Fjalla One", sans-serif;
 
 :root {
   color-scheme: light dark;
 }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-content;
+}
+
+main a,
+main a:visited {
+  color: $linkMainColor;
+}
+
 
 nav.second-level,
 nav.navbar.bg-light {
@@ -29,15 +45,36 @@ footer.bg-light {
 
 .brand {
   display: block;
-  font-family: "Fjalla One", sans-serif;
-  font-weight: 400;
   font-style: normal;
   margin: 0.25em;
 }
 
-.brand .name {
+.brand .icon {
+  padding: 0;
+  margin: 0;
   display: inline-block;
+}
+
+.brand .icon img {
+  padding: 0;
+  margin: 0;
+  height: 32px;
+  border: 1px solid $iconBlue;
+}
+
+.brand .version {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  color: $iconBlue;
+}
+
+
+.tagline {
   padding: 0.25em;
+  padding-left: 1em;
+  font-family: $font-brand;
+  font-weight: 400;
   color: $iconWhite;
   background: $iconBlue;
 }
@@ -183,10 +220,10 @@ div.language-html pre .k /* keyword, storage, storage.type */ {
 
 
 figure.image {
-  margin: 0.5em;
-  margin-top: 2em;
-  margin-bottom: 4em;
-  max-width: 90%;
+  margin: 0;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  max-width: 98%;
 }
 
 figure.image img {
@@ -203,31 +240,31 @@ figure.image figcaption {
   text-align: center;
 }
 
-div.container h1,
-div.container .h1 {
+main h1 {
   padding: 0;
   margin: 0;
   font-size: 2rem;
 }
 
-div.container h2,
-div.container .h2 {
+main h2 {
   padding: 0;
   margin: 0;
   margin-top: 1em;
   font-size: 1.5rem;
 }
 
-div.container h3,
-div.container .h3 {
+main .feature h2 {
+  margin-top: 0.25em;
+}
+
+main h3 {
   padding: 0;
   margin: 0;
   margin-top: 0.5em;
   font-size: 1.25rem;
 }
 
-div.container h4,
-div.container .h4,
+main h4,
  {
   padding: 0;
   margin: 0;
@@ -235,9 +272,27 @@ div.container .h4,
   font-size: 1.1rem;
 }
 
+main .feature div.type {
+  margin: 0;
+  padding: 0;
+  margin-top: 0.5em;
+}
+
+main .feature ul.type li {
+  margin: 0;
+  padding: 0;
+}
+
 div.params {
   margin: 0.5em 0;
   padding: 0.5em;
+}
+
+.feedback {
+  margin: 0;
+  padding: 0.25em;
+  margin-top: 5em;
+  border-top: 2px solid $separatorColor;
 }
 
 
@@ -272,6 +327,26 @@ main li span.shortcut {
   display: inline-block;
   width: 1.5em;
   font-weight: bold;
+}
+
+main .feature {
+  margin: 0;
+  padding: 0;
+  margin-top: 2em;
+  border-top: 2px solid $separatorColor;
+}
+
+main h2 {
+  margin-top: 0;
+}
+
+main .feature ul {
+  margin: 0;
+}
+
+main .feature ul li {
+  margin: 0;
+  padding-bottom: 0.5em;
 }
 
 .hidden-small {

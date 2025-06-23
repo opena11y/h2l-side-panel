@@ -4,7 +4,7 @@ TOC: Headings, Landmark Regions and Links
 
 Summary
 -------
-The Table of Contents (TOC) for Headings, Landmarks and Links extension provides information on the headings, landmark regions and links in a web page.  The associated headings, landmark regions and links in the side panel can be highlighted in the web page for easy identification.  The extension is designed to help people identify and navigate to content of interest.  The extension can be used as part of accessibility testing to verify the proper use of headings and landmark regions, and to ensure link names identify the destination of the link.
+The Table of Contents (TOC) for Headings, Landmarks and Links extension provides information on the headings, landmark regions and links on a web page in a browser side panel.  The associated headings, landmark regions and links in the side panel can be highlighted in the web page for identification.  The extension helps people identify and navigate to content of interest.  The extension can be used as part of accessibility testing to verify the proper use of headings and landmark regions, and to ensure link names identify the destination of the link.
 
 Description
 -----------
@@ -46,7 +46,7 @@ ActiveTab Justification
 The active table is used to toggle the side panel open and closed when the user clicks the extension icon in the toolbar.
 
 Scripting Justification
-Scripting is used to toggle the side panel menu open and closed when user clicks extension icon.
+Scripting is used to toggle the side panel menu open and closed when user clicks extension icon and for highlighting content in the page.
 
 Side Panel Justification
 The side panel provides a persistent view of headings, landmark regions and links on a web page.  As the user changes tabs or updates the cureent tab the information is automatically updated.
