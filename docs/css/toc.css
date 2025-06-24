@@ -423,5 +423,12 @@ main .faq ul {
 }
 
 main .faq details .content li {
-  padding: 0.125em;
+  margin: 0;
+  padding: 0;
+  margin-top: 0.125em;
+  margin-bottom: 0.5em;
+}
+
+main .faq .content h2 {
+  font-size: 110%;
 }
