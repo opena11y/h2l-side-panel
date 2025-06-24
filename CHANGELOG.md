@@ -1,5 +1,8 @@
 # Version history for Page Table of Contents
 
+## Version 1.0.2
+* Fixed bug with link name sorting feature
+
 ## Version 1.0.1
 * Updated URL to documentation
 

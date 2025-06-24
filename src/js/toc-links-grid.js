@@ -431,7 +431,9 @@ class TOCLinksGrid extends HTMLElement {
   sortRows(sortColumn, direction) {
 
     function nameCompare(a, b) {
-      const result = a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+      const aStr = a.name.toLowerCase().trim();
+      const bStr = b.name.toLowerCase().trim();
+      const result = aStr.localeCompare(bStr);
       if (result === 0) {
         return posCompare(a, b);
       }
@@ -439,7 +441,9 @@ class TOCLinksGrid extends HTMLElement {
     }
 
     function nameCompareDescending(a, b) {
-      const result = b.name.toLowerCase().localeCompare(a.name.toLowerCase());
+      const aStr = a.name.toLowerCase().trim();
+      const bStr = b.name.toLowerCase().trim();
+      const result = bStr.localeCompare(aStr);
       if (result === 0) {
         return posCompare(a, b);
       }
