@@ -6,7 +6,7 @@
     }
   },
   "name": "__MSG_extension_name_firefox__",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "__MSG_extension_description__",
   "homepage_url": "https://opena11y.github.io/web-page-table-of-contents/",
   "default_locale": "en",
@@ -75,7 +75,6 @@
   },
     "permissions": [
     "activeTab",
-    "scripting",
     "storage"
   ],
   "content_scripts": [

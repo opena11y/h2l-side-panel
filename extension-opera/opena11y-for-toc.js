@@ -720,9 +720,9 @@
 
   /*
   *   normalize: Trim leading and trailing white space and condense all
-  *   internal sequences of white space to a single space. Adapted from
-  *   Mozilla documentation on String.prototype.trim polyfill. Handles
-  *   BOM and NBSP characters.
+  *   internal sequences of white space to a single space. Originally
+  *   adapted from Mozilla documentation on String.prototype.trim polyfill.
+  *   Handles BOM and NBSP characters.
   */
   function normalize (s) {
   //  const rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
