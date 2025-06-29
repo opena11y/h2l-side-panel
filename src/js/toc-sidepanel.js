@@ -267,11 +267,11 @@ class TOCSidePanel extends HTMLElement {
   async logTabUrl(info) {
     try {
       let tab = await browserTabs.get(info.tabId);
-      console.log(`[handleTabActivated][ myWindowId]: ${myWindowId}`);
-      console.log(`[handleTabActivated][   windowId]: ${tab.windowId}`);
-      console.log(`[handleTabActivated][same window]: ${tab.windowId === myWindowId}`);
-      console.log(`[handleTabActivated][         id]: ${tab.id}`);
-      console.log(`[handleTabActivated][        url]: ${tab.url}`);
+      debug.flag && debug.log(`[handleTabActivated][ myWindowId]: ${myWindowId}`);
+      debug.flag && debug.log(`[handleTabActivated][   windowId]: ${tab.windowId}`);
+      debug.flag && debug.log(`[handleTabActivated][same window]: ${tab.windowId === myWindowId}`);
+      debug.flag && debug.log(`[handleTabActivated][         id]: ${tab.id}`);
+      debug.flag && debug.log(`[handleTabActivated][        url]: ${tab.url}`);
     }
     catch (error) {
       console.error(error);
