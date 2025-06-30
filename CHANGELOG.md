@@ -1,5 +1,9 @@
 # Version history for Page Table of Contents
 
+## Version 1.0.3
+* Removed scripting permission
+* Removed console.log code
+
 ## Version 1.0.2
 * Fixed bug with link name sorting feature
 
