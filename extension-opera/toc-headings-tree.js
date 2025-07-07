@@ -231,8 +231,7 @@ class TOCHeadingsTree extends HTMLElement {
         const headings = Array.from(myResult.headings).filter( (h) => {
           return h.name.length &&     // heading must have a name
                  ((h.level === 1) ||  // If a heading level 1, usually important
-                  h.isVisibleOnScreen ||
-                  (h.isVisibleToAT && options.smallAndOffScreenHeadings));
+                  h.isVisibleOnScreen);
         });
 
         processHeadings(this.treeNode, null, headings, 0);

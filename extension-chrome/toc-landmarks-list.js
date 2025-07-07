@@ -23,6 +23,7 @@ import {
 const debug = new DebugLogging('tocLandmarksList', false);
 debug.flag = false;
 
+const MAX_LANDMARKS_WITHOUT_NAMES = 4;
 
 /* templates */
 const template = document.createElement('template');
@@ -129,7 +130,7 @@ class TOCLandmarksList extends HTMLElement {
 
         myResult.regions.forEach( (r) => {
           if (r.name ||
-              (landmarkCounts[r.role] < 3) ||
+              (landmarkCounts[r.role] <= MAX_LANDMARKS_WITHOUT_NAMES) ||
               options.unNamedDuplicateRegions) {
 
             const listitemNode = document.createElement('div');

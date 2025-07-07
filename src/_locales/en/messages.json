@@ -183,9 +183,9 @@
     "message": "Highlight",
     "description": "Legend for highlight options"
   },
-  "options_dialog_legend_heading": {
-    "message": "Heading and Landmark Filters",
-    "description": "Legend for heading and landmark filter options"
+  "options_dialog_legend_landmarks": {
+    "message": "Landmark Filters",
+    "description": "Legend for landmark filter options"
   },
   "options_dialog_legend_link": {
     "message": "Link Filters",
@@ -204,7 +204,7 @@
     "description": "Label for checkbox for showing hidden and off-screen headings"
   },
   "options_dialog_label_un_named": {
-    "message": "Show regions without accessible names",
+    "message": "Show all regions without accessible names",
     "description": "Label for checkbox for un-named regions "
   },
   "options_dialog_label_internal_links": {

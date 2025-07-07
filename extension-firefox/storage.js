@@ -28,7 +28,6 @@ const defaultOptions = {
   highlightStyle: 'dashed',
   highlightFollowsFocus: true,
   enterKeyMovesFocus: true,
-  smallAndOffScreenHeadings: false,
   unNamedDuplicateRegions: false,
   internalLinks: true,
   externalLinks: true,

@@ -90,16 +90,8 @@ template.innerHTML = `
 
     <fieldset>
       <legend data-i18n="options_dialog_legend_heading">
-        Heading and Landmark Filters
+        Landmark Filters
       </legend>
-
-        <label class="grid">
-            <input type="checkbox"
-                   data-option="smallAndOffScreenHeadings"/>
-          <span class="label"
-                data-i18n="options_dialog_label_small_headings">
-          </span>
-        </label>
 
         <label class="grid">
           <input type="checkbox"

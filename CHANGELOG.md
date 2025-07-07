@@ -1,5 +1,8 @@
 # Version history for Page Table of Contents
 
+## Version 1.0.4
+* Removed heading filters option
+
 ## Version 1.0.3
 * Removed scripting permission
 * Removed console.log code
