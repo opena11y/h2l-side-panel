@@ -1,0 +1,24 @@
+/* generated from h2l-sidepanel.scss */
+@use 'h2l-base';
+
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  display: block;
+  font-family: h2l-base.$font-family;
+  font-size: h2l-base.$font-size-content;
+}
+
+h2l-sidepanel,
+h2l-tablist,
+h2l-headings-tree,
+h2l-landmarks-list,
+h2l-link-grid {
+  margin: 0;
+  padding: 0;
+  display: block;
+}

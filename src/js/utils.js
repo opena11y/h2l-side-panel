@@ -76,8 +76,8 @@ export function setI18nLabels (docNode, debug=false) {
 */
 
 export function setTablistAttr (attr, value) {
-    const sidepanelNode = document.querySelector('toc-sidepanel');
-    const tablistNode   = sidepanelNode.shadowRoot.querySelector('toc-tablist');
+    const sidepanelNode = document.querySelector('h2l-sidepanel');
+    const tablistNode   = sidepanelNode.shadowRoot.querySelector('h2l-tablist');
     if (tablistNode) {
       tablistNode.setAttribute(attr, value);
     }
@@ -88,7 +88,7 @@ export function setTablistAttr (attr, value) {
 */
 
 export function updateContent () {
-  const sidepanelNode = document.querySelector('toc-sidepanel');
+  const sidepanelNode = document.querySelector('h2l-sidepanel');
   if (sidepanelNode) {
     sidepanelNode.updateContent();
   }
@@ -99,7 +99,7 @@ export function updateContent () {
 */
 
 export function highlightOrdinalPosition (ordinalPosition, info='') {
-  const sidepanelNode = document.querySelector('toc-sidepanel');
+  const sidepanelNode = document.querySelector('h2l-sidepanel');
   if (sidepanelNode) {
     sidepanelNode.highlightOrdinalPosition(ordinalPosition, info);
   }
@@ -110,7 +110,7 @@ export function highlightOrdinalPosition (ordinalPosition, info='') {
 */
 
 export function updateHighlightConfig (options) {
-  const sidepanelNode = document.querySelector('toc-sidepanel');
+  const sidepanelNode = document.querySelector('h2l-sidepanel');
   if (sidepanelNode) {
     sidepanelNode.updateHighlightConfig(options);
   }
@@ -121,7 +121,7 @@ export function updateHighlightConfig (options) {
 */
 
 export function focusOrdinalPosition (ordinalPosition) {
-  const sidepanelNode = document.querySelector('toc-sidepanel');
+  const sidepanelNode = document.querySelector('h2l-sidepanel');
   if (sidepanelNode) {
     sidepanelNode.focusOrdinalPosition(ordinalPosition);
   }

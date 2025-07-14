@@ -1,39 +1,39 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extension_name_chrome__",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "__MSG_extension_description__",
   "homepage_url": "https://opena11y.github.io/",
   "default_locale": "en",
   "icons": {
-    "32":  "icons/light-toc-sidebar-32.png",
-    "48":  "icons/light-toc-sidebar-48.png",
-    "64":  "icons/light-toc-sidebar-64.png",
-    "128": "icons/light-toc-sidebar-128.png"
+    "32":  "icons/h2l-32-light.png",
+    "48":  "icons/h2l-48-light.png",
+    "64":  "icons/h2l-64-light.png",
+    "128": "icons/h2l-128-light.png"
   },
   "action": {
     "default_icon": {
-      "32":  "icons/light-toc-sidebar-32.png",
-      "48":  "icons/light-toc-sidebar-48.png",
-      "64":  "icons/light-toc-sidebar-64.png",
-      "128": "icons/light-toc-sidebar-128.png"
+      "32":  "icons/h2l-32-light.png",
+      "48":  "icons/h2l-48-light.png",
+      "64":  "icons/h2l-64-light.png",
+      "128": "icons/h2l-128-light.png"
     },
     "default_title": "__MSG_toggle_menu__",
     "theme_icons": [{
-      "light": "icons/light-toc-sidebar-32.png",
-      "dark": "icons/dark-toc-sidebar-32.png",
+      "light": "icons/h2l-32-light.png",
+      "dark": "icons/h2l-32-dark.png",
       "size": 32
     }, {
-      "light": "icons/light-toc-sidebar-48.png",
-      "dark": "icons/dark-toc-sidebar-48.png",
+      "light": "icons/h2l-48-light.png",
+      "dark": "icons/h2l-48-dark.png",
       "size": 48
     }, {
-      "light": "icons/light-toc-sidebar-64.png",
-      "dark": "icons/dark-toc-sidebar-64.png",
+      "light": "icons/h2l-64-light.png",
+      "dark": "icons/h2l-64-dark.png",
       "size": 64
     }, {
-      "light": "icons/light-toc-sidebar-128.png",
-      "dark": "icons/dark-stoc-sidebar-128.png",
+      "light": "icons/h2l-128-light.png",
+      "dark": "icons/h2l-128-dark.png",
       "size": 128
     }]
   },
@@ -42,7 +42,7 @@
     "type": "module"
   },
  "side_panel": {
-    "default_path": "toc-sidepanel.html"
+    "default_path": "h2l-sidepanel.html"
   },
   "host_permissions": [
     "http://*/*",
@@ -54,13 +54,13 @@
     "storage"
   ],
   "web_accessible_resources": [{
-    "resources": ["toc-highlight.js"],
+    "resources": ["h2l-highlight.js"],
     "matches": ["<all_urls>"]
   }],
   "content_scripts": [
     {
       "js": [
-        "opena11y-for-toc.js"
+        "opena11y-for-h2l.js"
       ],
       "matches": ["<all_urls>"]
     }

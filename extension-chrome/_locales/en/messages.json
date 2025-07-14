@@ -1,22 +1,22 @@
 {
   "extension_name_chrome" : {
-    "message": "TOC: Headings, Landmarks and Links",
+    "message": "Headings, Landmarks and Links",
     "description": "Extension name for Chrome browser"
   },
   "extension_name_firefox" : {
-    "message": "TOC: Headings, Landmarks and Links",
+    "message": "Headings, Landmarks and Links",
     "description": "Extension name for Firefox browser"
   },
   "extension_name_opera" : {
-    "message": "TOC: Headings, Landmarks and Links",
+    "message": "Headings, Landmarks and Links",
     "description": "Extension name for Opera browser"
   },
   "extension_description" : {
-    "message": "Table of Contents (TOC) provides a view of headings, landmark regions and links on a web page.",
+    "message": "Shows the headings, landmarks and links on a web page.",
     "description": "Extension description"
   },
   "toggle_menu" : {
-    "message": "Table of Contents Sidebar",
+    "message": "Toggle Sidebar",
     "description": "Tooltip on SkipTo.js toolbar icon"
   },
   "buttons_options": {
@@ -30,6 +30,10 @@
   "buttons_update_info": {
     "message": "Update",
     "description": "Label for update information"
+  },
+  "buttons_export": {
+    "message": "Export",
+    "description": "Label for export information"
   },
   "tablist_title": {
     "message": "Page Title",
@@ -270,6 +274,14 @@
   "options_dialog_highlight_style_dotted": {
     "message": "dotted",
     "description": "Dotted option for highlight style"
+  },
+  "export_dialog_title": {
+    "message": "Export to CSV",
+    "description": "Export dialog title"
+  },
+  "export_dialog_legend_info": {
+    "message": "Information on",
+    "description": "Export dialog title"
   },
   "protocol_not_supported": {
     "message": "Protocol not supported",

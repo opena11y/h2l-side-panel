@@ -6,16 +6,16 @@ const fs = require('fs');
 const path = require('path');
 const nunjucks  = require('nunjucks');
 
-const version     = "1.0";
-const tagLineName = "Table of Contents for Headings, Landmarks and Links";
-const extName     = "TOC: Headings, Landmarks and Links";
+const version     = "1.1";
+const tagLineName = "Headings, Landmarks and Links";
+const extName     = "Headings, Landmarks and Links Side Panel";
 
 /* Constants */
 
 const outputDirectory   = './docs/';
 const templateDirectory = './src-docs/templates';
-const websiteURL        = 'https://opena11y.github.io/toc-headings-landmarks-links/';
-const repositoryURL     = 'https://github.com/opena11y/toc-headings-landmarks-links';
+const websiteURL        = 'https://opena11y.github.io/h2l-side-panel/';
+const repositoryURL     = 'https://github.com/opena11y/h2l-side-panel';
 
 // setUseCodeTags(true);
 

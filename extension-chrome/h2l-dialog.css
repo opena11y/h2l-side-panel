@@ -1,0 +1,163 @@
+/* generated from h2l-dialog.scss */
+/* toc-base.scss */
+:root {
+  color-scheme: light dark;
+}
+
+dialog::backdrop {
+  background-color: light-dark(#000, #fff);
+  opacity: 0.25;
+}
+
+dialog.h2l-options {
+  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+  font-size: 11pt;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  margin: 0;
+  padding: 0;
+  border-width: 2px;
+  border-style: solid;
+  border-color: light-dark(#000, #fff);
+  border-radius: 5px;
+  z-index: 2000001;
+  color: light-dark(#000, #fff);
+  background-color: light-dark(#fff, #000);
+}
+
+dialog.h2l-options .header {
+  margin: 0;
+  margin-bottom: 0.5em;
+  padding: 4px;
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-style: solid;
+  border-color: light-dark(#000, #fff);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  font-weight: bold;
+  background-color: light-dark(#fff, #000);
+  color: light-dark(#000, #fff);
+  position: relative;
+  font-size: 11pt;
+}
+
+dialog.h2l-options .header h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 11pt;
+}
+
+dialog.h2l-options .header button {
+  position: absolute;
+  top: -0.25em;
+  right: 0;
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  color: light-dark(#000, #fff);
+}
+
+dialog.h2l-options .content {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+dialog.h2l-options fieldset {
+  margin: 0;
+  margin-top: 1em;
+  border: none;
+}
+
+dialog.h2l-options legend {
+  margin: 0;
+  padding: 0;
+  font-size: 11pt;
+  font-weight: bold;
+}
+
+dialog.h2l-options .grid {
+  margin: 0;
+  margin-bottom: 0.25em;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 25px 1fr;
+}
+
+dialog.h2l-options .select {
+  padding: 0;
+  margin: 0;
+  margin-left: 0.5em;
+  margin-top: 0.75em;
+}
+
+dialog.h2l-options .select label {
+  display: inline-block;
+}
+
+dialog.h2l-options .select select {
+  display: inline-block;
+}
+
+dialog.h2l-options label.grid span.label {
+  display: inline-block;
+}
+
+dialog.h2l-options .content .desc {
+  font-size: 90%;
+  font-style: italic;
+}
+
+dialog.h2l-options .content .version,
+dialog.h2l-options .content .copyright {
+  margin-top: 0.5em;
+  text-align: center;
+  font-weight: bold;
+  font-size: 90%;
+}
+
+dialog.h2l-options .buttons {
+  float: right;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+dialog.h2l-options button {
+  margin: 6px;
+}
+
+dialog.h2l-options .buttons button {
+  min-width: 5em;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+@media (forced-colors: active) {
+  dialog::backdrop {
+    background-color: CanvasText;
+    opacity: 0.25;
+  }
+  dialog.h2l-options .header button {
+    color: CanvasText;
+  }
+  dialog.h2l-options {
+    border-color: CanvasText;
+    color: CanvasText;
+    background-color: Canvas;
+  }
+  dialog.h2l-options .header {
+    border-color: CanvasText;
+    background-color: Canvas;
+    color: CanvasText;
+  }
+  dialog.h2l-options .header button {
+    color: CanvasText;
+  }
+}

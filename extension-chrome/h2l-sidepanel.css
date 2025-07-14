@@ -1,0 +1,23 @@
+/* generated from h2l-sidepanel.scss */
+/* toc-base.scss */
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  display: block;
+  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+  font-size: 11pt;
+}
+
+h2l-sidepanel,
+h2l-tablist,
+h2l-headings-tree,
+h2l-landmarks-list,
+h2l-link-grid {
+  margin: 0;
+  padding: 0;
+  display: block;
+}

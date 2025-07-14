@@ -1,0 +1,87 @@
+/* generated from h2l-links-grid.scss */
+/* toc-base.scss */
+:root {
+  color-scheme: light dark;
+}
+
+table[role=grid] {
+  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+  font-size: 11pt;
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: light-dark(#000, #fff);
+  background-color: light-dark(#fff, #000);
+  fill: light-dark(#000, #fff);
+  stroke: light-dark(#000, #fff);
+}
+
+table[role=grid] span.icon {
+  position: relative;
+  top: 2px;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+table[role=grid] [aria-sort=none] span.icon {
+  display: none;
+}
+
+table[role=grid] [aria-sort=descending] span.icon {
+  top: 0px;
+  transform: rotate(180deg);
+}
+
+table[role=grid] thead,
+table[role=grid] tbody {
+  display: table;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  table-layout: fixed;
+  width: 98%;
+}
+
+table[role=grid] tbody tr {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+table[role=grid] thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: light-dark(#fff, #000);
+}
+
+table[role=grid] tr th,
+table[role=grid] tr td {
+  padding: 4px;
+  border: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+table[role=grid] tr th {
+  text-align: left;
+}
+
+table[role=grid] tr:hover {
+  cursor: pointer;
+}
+
+@media (forced-colors: active) {
+  table[role=grid] {
+    color: CanvasText;
+    background-color: Canvas;
+  }
+  table[role=grid] thead {
+    background-color: Canvas;
+  }
+}
