@@ -22,7 +22,7 @@ debug.flag = false;
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
-<dialog class="h2l-options">
+<dialog class="h2l-dialog">
   <div class="header">
     <h2 data-i18n="options_dialog_title">TOC Options</h2>
     <button id="id-close-1"
@@ -89,8 +89,8 @@ template.innerHTML = `
     </fieldset>
 
     <fieldset>
-      <legend data-i18n="options_dialog_legend_heading">
-        Landmark Filters
+      <legend data-i18n="options_dialog_legend_landmarks">
+        ABC
       </legend>
 
         <label class="grid">
@@ -105,7 +105,7 @@ template.innerHTML = `
 
     <fieldset>
       <legend data-i18n="options_dialog_legend_link">
-        Link Filters
+        ABC
       </legend>
 
         <label class="grid">

@@ -43,7 +43,12 @@ const defaultOptions = {
   lastHeadingId: '',
   lastLandmarkId: '',
   lastLinkId: '',
-  lastTabId: ''
+  lastTabId: '',
+  exportHeadings: true,
+  exportLandmarks: true,
+  exportLinks: true,
+  exportFilename: 'h2l-export-',
+  exportIndex: 1
 };
 
 function hasAllProperties (refObj, srcObj) {

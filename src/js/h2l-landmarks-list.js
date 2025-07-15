@@ -20,7 +20,7 @@ import {
 
 /* Constants */
 
-const debug = new DebugLogging('tocLandmarksList', false);
+const debug = new DebugLogging('h2lLandmarksList', false);
 debug.flag = false;
 
 const MAX_LANDMARKS_WITHOUT_NAMES = 4;

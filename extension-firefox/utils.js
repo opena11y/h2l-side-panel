@@ -38,8 +38,8 @@ export function setI18nLabels (docNode, debug=false) {
         node.textContent = label + (debug ? ' (i18n)' : '');
       }
       else {
-        console.error(`[node][ textContent]: ${node.getAttribute('data-i18n')}`);
-        console.error(`[label][textContent]: ${label}`);
+        console.error(`[i18n][node][ textContent]: ${node.getAttribute('data-i18n')}`);
+        console.error(`[i18n][label][textContent]: ${label}`);
       }
     });
 

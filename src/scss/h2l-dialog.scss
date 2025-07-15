@@ -10,7 +10,7 @@ dialog::backdrop {
   opacity: 0.25;
 }
 
-dialog.h2l-options {
+dialog.h2l-dialog {
   font-family: h2l-base.$font-family;
   font-size: h2l-base.$font-size-content;
 
@@ -30,7 +30,7 @@ dialog.h2l-options {
   background-color: light-dark(h2l-base.$background-light, h2l-base.$background-dark);
 }
 
-dialog.h2l-options .header {
+dialog.h2l-dialog .header {
   margin: 0;
   margin-bottom: 0.5em;
   padding: 4px;
@@ -47,13 +47,13 @@ dialog.h2l-options .header {
   font-size: h2l-base.$font-size-content;;
 }
 
-dialog.h2l-options .header h2 {
+dialog.h2l-dialog .header h2 {
   margin: 0;
   padding: 0;
   font-size: h2l-base.$font-size-content;;
 }
 
-dialog.h2l-options .header button {
+dialog.h2l-dialog .header button {
   position: absolute;
   top: -0.25em;
   right: 0;
@@ -63,27 +63,41 @@ dialog.h2l-options .header button {
   color: light-dark(h2l-base.$color-light, h2l-base.$color-dark);
 }
 
-dialog.h2l-options .content {
+dialog.h2l-dialog .content {
   margin-left: 0.5em;
   margin-right: 0.5em;
   margin-top: 0;
   margin-bottom: 0.5em;
 }
 
-dialog.h2l-options fieldset {
+dialog.h2l-dialog fieldset {
   margin: 0;
   margin-top: 1em;
   border: none;
 }
 
-dialog.h2l-options legend {
+dialog.h2l-dialog legend {
   margin: 0;
   padding: 0;
   font-size: h2l-base.$font-size-content;;
   font-weight: bold;
 }
 
-dialog.h2l-options .grid {
+dialog.h2l-dialog .text {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 0.25em;
+}
+
+dialog.h2l-dialog .text label {
+  margin: 0;
+  padding: 0;
+  display: block;
+  text-overflow: ellipsis;
+  white-space: no-wrap;
+}
+
+dialog.h2l-dialog .grid {
   margin: 0;
   margin-bottom: 0.25em;
   padding: 0;
@@ -91,49 +105,49 @@ dialog.h2l-options .grid {
   grid-template-columns: 25px 1fr;
 }
 
-dialog.h2l-options .select {
+dialog.h2l-dialog .select {
   padding: 0;
   margin: 0;
   margin-left: 0.5em;
   margin-top: 0.75em;
 }
 
-dialog.h2l-options .select label {
+dialog.h2l-dialog .select label {
   display: inline-block;
 }
 
-dialog.h2l-options .select select {
+dialog.h2l-dialog .select select {
   display: inline-block;
 }
 
-dialog.h2l-options label.grid span.label {
+dialog.h2l-dialog label.grid span.label {
   display: inline-block;
 }
 
-dialog.h2l-options .content .desc {
+dialog.h2l-dialog .content .desc {
   font-size: 90%;
   font-style: italic;
 }
 
-dialog.h2l-options .content .version,
-dialog.h2l-options .content .copyright {
+dialog.h2l-dialog .content .version,
+dialog.h2l-dialog .content .copyright {
   margin-top: 0.5em;
   text-align: center;
   font-weight: bold;
   font-size: 90%;
 }
 
-dialog.h2l-options .buttons {
+dialog.h2l-dialog .buttons {
   float: right;
   margin-right: 0.5em;
   margin-bottom: 0.5em;
 }
 
-dialog.h2l-options button {
+dialog.h2l-dialog button {
   margin: 6px;
 }
 
-dialog.h2l-options .buttons button {
+dialog.h2l-dialog .buttons button {
   min-width: 5em;
 }
 
@@ -148,23 +162,23 @@ button:hover {
     opacity: 0.25;
   }
 
-  dialog.h2l-options .header button {
+  dialog.h2l-dialog .header button {
     color: h2l-base.$color-forced;
   }
 
-  dialog.h2l-options {
+  dialog.h2l-dialog {
     border-color:     h2l-base.$color-forced;
     color:            h2l-base.$color-forced;
     background-color: h2l-base.$background-forced;
   }
 
-  dialog.h2l-options .header {
+  dialog.h2l-dialog .header {
     border-color:     h2l-base.$color-forced;
     background-color: h2l-base.$background-forced;
     color:            h2l-base.$color-forced;
   }
 
-  dialog.h2l-options .header button {
+  dialog.h2l-dialog .header button {
     color: h2l-base.$color-forced;
   }
 

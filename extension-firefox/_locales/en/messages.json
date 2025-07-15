@@ -279,9 +279,53 @@
     "message": "Export to CSV",
     "description": "Export dialog title"
   },
+  "export_dialog_cancel": {
+    "message": "Cancel",
+    "description": "Export cancel button label"
+  },
+  "export_dialog_export": {
+    "message": "Export",
+    "description": "Export dialog export button label"
+  },
   "export_dialog_legend_info": {
     "message": "Information on",
     "description": "Export dialog title"
+  },
+  "export_dialog_label_headings": {
+    "message": "Headings",
+    "description": "Export dialog headings checkbox label"
+  },
+  "export_dialog_label_landmarks": {
+    "message": "Landmark Regions",
+    "description": "Export dialog landmarks checkbox label"
+  },
+  "export_dialog_label_links": {
+    "message": "Links",
+    "description": "Export dialog links checkbox label"
+  },
+  "export_dialog_label_landmarks": {
+    "message": "Landmarks",
+    "description": "Export dialog landmarks checkbox label"
+  },
+  "export_dialog_label_landmarks": {
+    "message": "Links",
+    "description": "Export dialog links checkbox label"
+  },
+  "export_dialog_legend_filename": {
+    "message": "Filename Options ",
+    "description": "Fieldset for export file name options"
+  },
+  "export_dialog_label_filename": {
+    "message": "Prefix for export file name (up to 16 characters long)",
+    "description": "Label for export file name"
+  },
+  "export_dialog_desc_filename": {
+    "message": "Note: Prefix cannot contain spaces or <>:\"/|?*[] characters. ",
+    "description": "Description for export file name restrictions"
+  },
+  "export_dialog_label_index": {
+    "message": "Index for file name",
+    "description": "Label for index for file name"
   },
   "protocol_not_supported": {
     "message": "Protocol not supported",
@@ -291,8 +335,5 @@
     "message": "Loading content, please wait...",
     "description": "Message if waiting for a page to complete loading"
   }
-
-
-
 }
 

@@ -18,7 +18,7 @@ import {
 
 /* Constants */
 
-const debug = new DebugLogging('tocHeadingsTree', false);
+const debug = new DebugLogging('h2lHeadingsTree', false);
 debug.flag = false;
 
 /* templates */
@@ -48,13 +48,13 @@ class H2LHeadingsTree extends HTMLElement {
     // Use external CSS stylesheet
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('href', './toc-headings-tree.css');
+    link.setAttribute('href', './h2l-headings-tree.css');
     this.shadowRoot.appendChild(link);
 
     // Use external CSS stylesheet for focus styling
     const linkFocus = document.createElement('link');
     linkFocus.setAttribute('rel', 'stylesheet');
-    linkFocus.setAttribute('href', './toc-focus-styled.css');
+    linkFocus.setAttribute('href', './h2l-focus-styled.css');
     linkFocus.id = 'focus-style';
     this.shadowRoot.appendChild(linkFocus);
 

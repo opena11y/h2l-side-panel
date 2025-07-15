@@ -18,7 +18,7 @@ import {
 
 /* Constants */
 
-const debug = new DebugLogging('tocTablist', false);
+const debug = new DebugLogging('h2lTablist', false);
 debug.flag = false;
 
 const sidepanelOffsetHeight = 55;
@@ -140,6 +140,7 @@ template.innerHTML = `
       </div>
     </footer>
     <h2l-options-dialog></h2l-options-dialog>
+    <h2l-export-dialog></h2l-export-dialog>
   </div>
 `;
 
@@ -169,10 +170,11 @@ class TOCTabList extends HTMLElement {
     this.divTablist      = this.shadowRoot.querySelector('[role="tablist"]');
     this.divTabpanels    = this.shadowRoot.querySelector('#tabpanels');
 
-    this.tocHeadingsTree   = this.shadowRoot.querySelector('h2l-headings-tree');
-    this.tocLandmarksList  = this.shadowRoot.querySelector('h2l-landmarks-list');
-    this.tocLinksGrid      = this.shadowRoot.querySelector('h2l-links-grid');
-    this.tocOptionsDialog  = this.shadowRoot.querySelector('h2l-options-dialog');
+    this.h2lHeadingsTree   = this.shadowRoot.querySelector('h2l-headings-tree');
+    this.h2lLandmarksList  = this.shadowRoot.querySelector('h2l-landmarks-list');
+    this.h2lLinksGrid      = this.shadowRoot.querySelector('h2l-links-grid');
+    this.h2lOptionsDialog  = this.shadowRoot.querySelector('h2l-options-dialog');
+    this.h2lExportDialog   = this.shadowRoot.querySelector('h2l-export-dialog');
 
     this.divSummary      = this.shadowRoot.querySelector('#summary');
 
@@ -184,6 +186,10 @@ class TOCTabList extends HTMLElement {
 
     const btnOptions      = this.shadowRoot.querySelector('#id-btn-options');
     btnOptions.addEventListener('click', this.handleOptionsClick.bind(this));
+
+    const btnExport      = this.shadowRoot.querySelector('#id-btn-export');
+    btnExport.addEventListener('click', this.handleExportClick.bind(this));
+
 
     this.footerNode      = this.shadowRoot.querySelector('footer');
 
@@ -292,9 +298,9 @@ class TOCTabList extends HTMLElement {
       tabpanel.node.style.width  = tabpanelWidth  + 'px';
     });
 
-    this.tocHeadingsTree.resize(tabpanelsRect.height, newWidth);
-    this.tocLandmarksList.resize(tabpanelsRect.height, newWidth);
-    this.tocLinksGrid.resize(tabpanelsRect.height, newWidth);
+    this.h2lHeadingsTree.resize(tabpanelsRect.height, newWidth);
+    this.h2lLandmarksList.resize(tabpanelsRect.height, newWidth);
+    this.h2lLinksGrid.resize(tabpanelsRect.height, newWidth);
   }
 
   setCount (id, count) {
@@ -322,9 +328,9 @@ class TOCTabList extends HTMLElement {
 
     if ((typeof message === 'string') && message.length) {
       this.divTitle.textContent = message;
-      this.tocHeadingsTree.clearContent(message);
-      this.tocLandmarksList.clearContent(message);
-      this.tocLinksGrid.clearContent(message);
+      this.h2lHeadingsTree.clearContent(message);
+      this.h2lLandmarksList.clearContent(message);
+      this.h2lLinksGrid.clearContent(message);
     }
   }
 
@@ -343,9 +349,9 @@ class TOCTabList extends HTMLElement {
       }
 
       saveOptions(options).then( () => {
-        tabListObj.tocHeadingsTree.updateContent(sameUrl, myResult);
-        tabListObj.tocLandmarksList.updateContent(sameUrl, myResult);
-        tabListObj.tocLinksGrid.updateContent(sameUrl, myResult);
+        tabListObj.h2lHeadingsTree.updateContent(sameUrl, myResult);
+        tabListObj.h2lLandmarksList.updateContent(sameUrl, myResult);
+        tabListObj.h2lLinksGrid.updateContent(sameUrl, myResult);
 
         tabListObj.resize();
       });
@@ -414,8 +420,13 @@ class TOCTabList extends HTMLElement {
   }
 
   handleOptionsClick () {
-    this.tocOptionsDialog.openDialog();
+    this.h2lOptionsDialog.openDialog();
   }
+
+  handleExportClick () {
+    this.h2lExportDialog.openDialog();
+  }
+
 
   handleTabKeydown(event) {
     const tgt = event.currentTarget;

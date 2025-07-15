@@ -20,7 +20,7 @@ import {
 
 /* Constants */
 
-const debug = new DebugLogging('tocLinksGrid', false);
+const debug = new DebugLogging('h2lLinksGrid', false);
 debug.flag = false;
 
 const isMozilla = typeof browser === 'object';

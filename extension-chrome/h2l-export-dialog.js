@@ -22,37 +22,90 @@ debug.flag = false;
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
-<dialog class="toc-dialog">
+<dialog class="h2l-dialog">
   <div class="header">
     <h2 data-i18n="export_dialog_title">ABC</h2>
-    <button id="id-close-1"
-            data-i18n-aria-label="options_dialog_close"
-            aria-label="Close" >✕</button>
+    <button id="id-cancel-1"
+            data-i18n-aria-label="export_dialog_cancel"
+            aria-label="Cancel" >✕</button>
   </div>
   <div class="content">
 
     <fieldset>
       <legend data-i18n="export_dialog_legend_info">
-        Export Data
+        ABC
       </legend>
 
         <label class="grid">
             <input type="checkbox"
                    data-group="info"
-                   data-option=""/>
+                   data-option="exportHeadings"/>
           <span class="label"
-                data-i18n="options_dialog_label_highlight">
+                data-i18n="export_dialog_label_headings">
           </span>
         </label>
+
+        <label class="grid">
+            <input type="checkbox"
+                   data-group="info"
+                   data-option="exportLandmarks"/>
+          <span class="label"
+                data-i18n="export_dialog_label_landmarks">
+          </span>
+        </label>
+        <label class="grid">
+            <input type="checkbox"
+                   data-group="info"
+                   data-option="exportLinks"/>
+          <span class="label"
+                data-i18n="export_dialog_label_links">
+          </span>
+        </label>
+
+    </fieldset>
+
+    <fieldset>
+      <legend data-i18n="export_dialog_legend_filename">
+        ABC
+      </legend>
+
+      <div class="text">
+        <label for="id-filename"
+               data-i18n="export_dialog_label_filename">
+        </label>
+        <input  id="id-filename"
+                type="text"
+                size="16"
+                data-option="exportFilename"
+                aria-describedby="id-filename-desc"/>
+        <div id="id-filename-desc"
+             class="desc"
+             data-i18n="export_dialog_desc_filename">
+        </div>
+      </div>
+
+      <div class="text">
+          <label for="id-index"
+                data-i18n="export_dialog_label_index">
+          </label>
+          <input id="id-index"
+                 type="number"
+                 size="6"
+                 data-option="exportIndex"/>
+      </div>
 
     </fieldset>
 
   </div>
 
   <div class="buttons">
-    <button id="id-close-2"
-             data-i18n="options_dialog_close">
-      Close
+    <button id="id-cancel-2"
+             data-i18n="export_dialog_cancel">
+      Can
+    </button>
+    <button id="id-export"
+             data-i18n="export_dialog_export">
+      Ex
     </button>
   </div>
 </dialog>
@@ -67,13 +120,13 @@ export default class H2LExportDialog extends HTMLElement {
     // Use external CSS stylesheet
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('href', './toc-dialog.css');
+    link.setAttribute('href', './h2l-dialog.css');
     this.shadowRoot.appendChild(link);
 
     // Use external CSS stylesheet for focus styling
     const linkFocus = document.createElement('link');
     linkFocus.setAttribute('rel', 'stylesheet');
-    linkFocus.setAttribute('href', './toc-focus-styled.css');
+    linkFocus.setAttribute('href', './h2l-focus-styled.css');
     linkFocus.id = 'focus-style';
     this.shadowRoot.appendChild(linkFocus);
 
@@ -84,20 +137,19 @@ export default class H2LExportDialog extends HTMLElement {
 
     this.infoDialog  = this.shadowRoot.querySelector('dialog');
 
-    this.closeButton1  = this.infoDialog.querySelector('#id-close-1');
-    this.closeButton1.addEventListener('click', this.handleCloseButtonClick.bind(this));
-    this.closeButton1.addEventListener('keydown', this.handleKeyDown.bind(this));
+    this.cancelButton1  = this.infoDialog.querySelector('#id-cancel-1');
+    this.cancelButton1.addEventListener('click', this.handleCancelButtonClick.bind(this));
+    this.cancelButton1.addEventListener('keydown', this.handleKeyDown.bind(this));
 
     this.contentElem  = this.infoDialog.querySelector('.content');
 
-    this.resetDefaultsButton  = this.infoDialog.querySelector('#id-reset-defaults');
-    this.resetDefaultsButton.addEventListener('click', () => {
-      resetDefaultOptions().then(this.updateOptions.bind(this));
-    });
+    this.cancelButton2  = this.infoDialog.querySelector('#id-cancel-2');
+    this.cancelButton2.addEventListener('click', this.handleCancelButtonClick.bind(this));
+    this.cancelButton2.addEventListener('keydown', this.handleKeyDown.bind(this));
 
-    this.closeButton2  = this.infoDialog.querySelector('#id-close-2');
-    this.closeButton2.addEventListener('click', this.handleCloseButtonClick.bind(this));
-    this.closeButton2.addEventListener('keydown', this.handleKeyDown.bind(this));
+    this.exportButton  = this.infoDialog.querySelector('#id-export');
+    this.exportButton.addEventListener('click', this.handleExportButtonClick.bind(this));
+    this.exportButton.addEventListener('keydown', this.handleKeyDown.bind(this));
 
     this.inputs = Array.from(this.shadowRoot.querySelectorAll('input, button, select'));
 
@@ -116,7 +168,7 @@ export default class H2LExportDialog extends HTMLElement {
 
   openDialog  () {
     this.infoDialog.showModal();
-    this.closeButton2.focus();
+    this.cancelButton2.focus();
   }
 
   updateOptions () {
@@ -152,7 +204,7 @@ export default class H2LExportDialog extends HTMLElement {
           });
         }
       });
-      atLeastOne('links');
+      atLeastOne('info');
     });
   }
 
@@ -246,10 +298,13 @@ export default class H2LExportDialog extends HTMLElement {
     });
   }
 
-  handleCloseButtonClick () {
+  handleCancelButtonClick () {
     this.saveOptions();
     this.infoDialog.close();
-    updateContent();
+  }
+
+  handleExportButtonClick () {
+    this.saveOptions();
   }
 
   handleKeyDown (event) {
@@ -260,15 +315,15 @@ export default class H2LExportDialog extends HTMLElement {
         !event.metaKey) {
 
       if (event.shiftKey &&
-          (event.currentTarget === this.closeButton1)) {
-        this.closeButton2.focus();
+          (event.currentTarget === this.cancelButton1)) {
+        this.exportButton.focus();
         event.preventDefault();
         event.stopPropagation();
       }
 
       if (!event.shiftKey &&
-          (event.currentTarget === this.closeButton2)) {
-        this.closeButton1.focus();
+          (event.currentTarget === this.exportButton)) {
+        this.cancelButton1.focus();
         event.preventDefault();
         event.stopPropagation();
       }
@@ -276,4 +331,4 @@ export default class H2LExportDialog extends HTMLElement {
   }
 }
 
-window.customElements.define('h2l-options-dialog', H2LOptionsDialog);
+window.customElements.define('h2l-export-dialog', H2LExportDialog);

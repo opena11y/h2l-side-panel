@@ -13,7 +13,7 @@ import {
 
 /* Constants */
 
-const debug = new DebugLogging('tocSidepanel', false);
+const debug = new DebugLogging('h2lSidepanel', false);
 debug.flag = false;
 
 // Browser Constants
