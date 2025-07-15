@@ -316,15 +316,15 @@
     "description": "Fieldset for export file name options"
   },
   "export_dialog_label_filename": {
-    "message": "Prefix for export file name (up to 16 characters long)",
+    "message": "File name",
     "description": "Label for export file name"
   },
   "export_dialog_desc_filename": {
-    "message": "Note: Prefix cannot contain spaces or <>:\"/|?*[] characters. ",
+    "message": "Note: File name prefix cannot be more than 16 characters or contain spaces or <>:\"/|?*[] characters. ",
     "description": "Description for export file name restrictions"
   },
   "export_dialog_label_index": {
-    "message": "Index for file name",
+    "message": "File name index",
     "description": "Label for index for file name"
   },
   "protocol_not_supported": {

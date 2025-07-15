@@ -90,7 +90,9 @@ template.innerHTML = `
           </label>
           <input id="id-index"
                  type="number"
+                 min="1"
                  size="6"
+                 pattern="\d*"
                  data-option="exportIndex"/>
       </div>
 

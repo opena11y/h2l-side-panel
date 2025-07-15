@@ -86,15 +86,19 @@ dialog.h2l-dialog legend {
 dialog.h2l-dialog .text {
   margin: 0;
   padding: 0;
-  margin-bottom: 0.25em;
+  margin-bottom: 1em;
 }
 
 dialog.h2l-dialog .text label {
   margin: 0;
   padding: 0;
   display: block;
-  text-overflow: ellipsis;
-  white-space: no-wrap;
+}
+
+dialog.h2l-dialog .text .desc {
+  margin: 0;
+  padding: 0;
+  margin-top: 0.25em;
 }
 
 dialog.h2l-dialog .grid {
