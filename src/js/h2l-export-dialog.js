@@ -75,7 +75,8 @@ template.innerHTML = `
         </label>
         <input  id="id-filename"
                 type="text"
-                size="16"
+                size="32"
+                maxlength="32"
                 data-option="exportFilename"
                 aria-describedby="id-filename-desc"/>
         <div id="id-filename-desc"
@@ -101,11 +102,18 @@ template.innerHTML = `
   </div>
 
   <div class="buttons">
-    <button id="id-cancel-2"
+    <button  class="first"
+             id="id-reset-defaults"
+             data-i18n="dialog_reset_defaults">
+      Def
+    </button>
+    <button  class="second"
+             id="id-cancel-2"
              data-i18n="export_dialog_cancel">
       Can
     </button>
-    <button id="id-export"
+    <button  class="third"
+             id="id-export"
              data-i18n="export_dialog_export">
       Ex
     </button>
@@ -148,6 +156,11 @@ export default class H2LExportDialog extends HTMLElement {
     this.cancelButton2  = this.infoDialog.querySelector('#id-cancel-2');
     this.cancelButton2.addEventListener('click', this.handleCancelButtonClick.bind(this));
     this.cancelButton2.addEventListener('keydown', this.handleKeyDown.bind(this));
+
+    this.resetDefaultsButton  = this.infoDialog.querySelector('#id-reset-defaults');
+    this.resetDefaultsButton.addEventListener('click', () => {
+      resetDefaultOptions().then(this.updateOptions.bind(this));
+    });
 
     this.exportButton  = this.infoDialog.querySelector('#id-export');
     this.exportButton.addEventListener('click', this.handleExportButtonClick.bind(this));
@@ -194,6 +207,10 @@ export default class H2LExportDialog extends HTMLElement {
               input.value = options[option];
               break;
 
+            case 'number':
+              input.value = options[option];
+              break;
+
             default:
               break;
           }
@@ -228,6 +245,10 @@ export default class H2LExportDialog extends HTMLElement {
 
             case 'text':
             case '':
+              options[option] = input.value;
+              break;
+
+            case 'number':
               options[option] = input.value;
               break;
 
@@ -303,6 +324,10 @@ export default class H2LExportDialog extends HTMLElement {
   handleCancelButtonClick () {
     this.saveOptions();
     this.infoDialog.close();
+  }
+
+  handleDefaultsButtonClick () {
+    this.saveOptions();
   }
 
   handleExportButtonClick () {

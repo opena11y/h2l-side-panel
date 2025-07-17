@@ -53,8 +53,8 @@ dialog.h2l-dialog .header h2 {
 
 dialog.h2l-dialog .header button {
   position: absolute;
-  top: -0.25em;
-  right: 0;
+  top: 0.25em;
+  right: 0.125em;
   border: none;
   background: transparent;
   font-weight: bold;
@@ -83,6 +83,7 @@ dialog.h2l-dialog legend {
 
 dialog.h2l-dialog .text {
   margin: 0;
+  margin-left: 0.25em;
   padding: 0;
   margin-bottom: 1em;
 }
@@ -139,18 +140,37 @@ dialog.h2l-dialog .content .copyright {
   font-size: 90%;
 }
 
-dialog.h2l-dialog .buttons {
-  float: right;
-  margin-right: 0.5em;
-  margin-bottom: 0.5em;
+.buttons {
+  display: grid;
+  grid-template-columns: 40% 30% 30%;
 }
 
-dialog.h2l-dialog button {
-  margin: 6px;
+.buttons button {
+  margin: 1em;
 }
 
-dialog.h2l-dialog .buttons button {
-  min-width: 5em;
+.buttons button.first {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  text-align: center;
+  vertical-align: center;
+  width: 8em;
+}
+
+.buttons button.second {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  text-align: center;
+  vertical-align: center;
+  width: 5em;
+}
+
+.buttons button.third {
+  grid-column-start: 3;
+  grid-column-end: 4;
+  text-align: center;
+  vertical-align: center;
+  width: 5em;
 }
 
 button:hover {

@@ -170,11 +170,13 @@ template.innerHTML = `
   </div>
 
   <div class="buttons">
-    <button id="id-reset-defaults"
-            data-i18n="options_dialog_reset_defaults">
+    <button  class="first"
+             id="id-reset-defaults"
+            data-i18n="dialog_reset_defaults">
       Reset Defaults
     </button>
-    <button id="id-close-2"
+    <button class="third"
+            id="id-close-2"
              data-i18n="options_dialog_close">
       Close
     </button>

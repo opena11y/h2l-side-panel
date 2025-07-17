@@ -179,7 +179,7 @@
     "message": "Options",
     "description": "Title for options dialog box"
   },
-  "options_dialog_reset_defaults": {
+  "dialog_reset_defaults": {
     "message": "Reset Defaults",
     "description": "Label for reset defaults button"
   },
@@ -296,18 +296,10 @@
     "description": "Export dialog headings checkbox label"
   },
   "export_dialog_label_landmarks": {
-    "message": "Landmark Regions",
+    "message": "Landmark regions",
     "description": "Export dialog landmarks checkbox label"
   },
   "export_dialog_label_links": {
-    "message": "Links",
-    "description": "Export dialog links checkbox label"
-  },
-  "export_dialog_label_landmarks": {
-    "message": "Landmarks",
-    "description": "Export dialog landmarks checkbox label"
-  },
-  "export_dialog_label_landmarks": {
     "message": "Links",
     "description": "Export dialog links checkbox label"
   },
@@ -320,11 +312,11 @@
     "description": "Label for export file name"
   },
   "export_dialog_desc_filename": {
-    "message": "Note: File name prefix cannot be more than 16 characters or contain spaces or <>:\"/|?*[] characters. ",
+    "message": "Note: File name prefix cannot be more than 32 characters or contain spaces or <>:\"/|?*[] characters. ",
     "description": "Description for export file name restrictions"
   },
   "export_dialog_label_index": {
-    "message": "File name index",
+    "message": "Index",
     "description": "Label for index for file name"
   },
   "protocol_not_supported": {
