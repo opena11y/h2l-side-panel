@@ -146,7 +146,7 @@ class H2LLinksGrid extends HTMLElement {
 
     setI18nLabels(this.shadowRoot, debug.flag);
 
-    this.renderedLinks = [];
+    this.links = [];
   }
 
  static get observedAttributes() {
@@ -217,6 +217,8 @@ class H2LLinksGrid extends HTMLElement {
 
   updateContent (sameUrl, links) {
     const linksObj = this;
+
+    this.links = links;
 
     if (links) {
 
@@ -468,24 +470,24 @@ class H2LLinksGrid extends HTMLElement {
     switch (sortColumn) {
       case 'name':
         direction === 'ascending' ?
-        this.renderedLinks.sort(nameCompare) :
-        this.renderedLinks.sort(nameCompareDescending);
+        this.links.sort(nameCompare) :
+        this.links.sort(nameCompareDescending);
         break;
 
       case 'type':
         direction === 'ascending' ?
-        this.renderedLinks.sort(typeCompare) :
-        this.renderedLinks.sort(typeCompareDescending);
+        this.links.sort(typeCompare) :
+        this.links.sort(typeCompareDescending);
         break;
 
       default:
         direction === 'ascending' ?
-        this.renderedLinks.sort(posCompare) :
-        this.renderedLinks.sort(posCompareDescending);
+        this.links.sort(posCompare) :
+        this.links.sort(posCompareDescending);
         break;
     }
 
-    this.updateLinkContent(this.renderedLinks);
+    this.updateLinkContent(this.links);
 
     // Update attributes with new sort information
 

@@ -493,7 +493,7 @@ class TOCTabList extends HTMLElement {
 
       content += `\nOrder,"Heading Level","Accessible Name"`;
       this.headings.forEach( (h, index) => {
-        content += `\n${index},${h.level},"${filterForCSV(h.name.trim())}"`;
+        content += `\n${index+1},${h.level},"${filterForCSV(h.name.trim())}"`;
       });
     }
 
@@ -502,7 +502,7 @@ class TOCTabList extends HTMLElement {
 
       content += `\nOrder,"Landmark Type","Accessible Name"`;
       this.landmarks.forEach( (r, index) => {
-        content += `\n${index},${r.role},${filterForCSV(r.name.trim()) ? '"' + filterForCSV(r.name.trim()) + '"' : ''}`;
+        content += `\n${index+1},${r.role},${filterForCSV(r.name.trim()) ? '"' + filterForCSV(r.name.trim()) + '"' : ''}`;
       });
 
     }
@@ -512,7 +512,7 @@ class TOCTabList extends HTMLElement {
 
       content += `\nOrder,"Link Type","Accessible Name","Accessible Description",URL`;
       this.links.forEach( (l, index) => {
-        content += `\n${index},${l.type},"${filterForCSV(l.name)}","${filterForCSV(l.desc)}", ${l.url}`;
+        content += `\n${index+1},${l.type},"${filterForCSV(l.name)}","${filterForCSV(l.desc)}", ${l.url}`;
       });
 
     }
