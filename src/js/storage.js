@@ -47,7 +47,7 @@ const defaultOptions = {
   exportHeadings: true,
   exportLandmarks: true,
   exportLinks: true,
-  exportFilename: 'h2l-export-',
+  exportFilename: 'h2l-export',
   exportIndex: 1
 };
 

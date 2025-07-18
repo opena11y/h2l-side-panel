@@ -5,6 +5,8 @@
 import DebugLogging from './debug.js';
 
 import {
+  filterForCSV,
+  getMessage,
   removeChildContent,
   setI18nLabels,
   updateContent
@@ -30,7 +32,13 @@ const tabpanelOffsetWidth  = 0;
 const minTabpanelHeight = 100;
 const minTabpanelWidth = 120;
 
-const URL_ABOUT = 'https://opena11y.github.io/headings-landmarks-links-side-panel';
+const URL_ABOUT = 'https://opena11y.github.io/h2l-side-panel';
+
+const MAX_LANDMARKS_WITHOUT_NAMES = 4;
+
+const browserDownloads   = typeof browser === 'object' ?
+                       browser.downloads :
+                       chrome.downloads;
 
 /* templates */
 const template = document.createElement('template');
@@ -190,6 +198,7 @@ class TOCTabList extends HTMLElement {
     const btnExport      = this.shadowRoot.querySelector('#id-btn-export');
     btnExport.addEventListener('click', this.handleExportClick.bind(this));
 
+    this.h2lExportDialog.exportDialog.addEventListener("close", this.handleExportDialogClose.bind(this));
 
     this.footerNode      = this.shadowRoot.querySelector('footer');
 
@@ -240,6 +249,8 @@ class TOCTabList extends HTMLElement {
         this.setSelectedTab(this.firstTab, false);
       }
     });
+
+    this.lastResult = {};
   }
 
   static get observedAttributes() {
@@ -335,8 +346,11 @@ class TOCTabList extends HTMLElement {
   }
 
   updateContent(myResult) {
+    this.lastResult = myResult;
+
     this.divTitle.textContent = myResult.title;
     const tabListObj = this;
+
 
     getOptions().then( (options) => {
       const sameUrl = options.lastUrl === myResult.url;
@@ -348,17 +362,55 @@ class TOCTabList extends HTMLElement {
         options.lastLinkId = '';
       }
 
+      // Determine Headings to render
+
+      tabListObj.headings = Array.from(myResult.headings).filter( (h) => {
+          return h.name.length &&     // heading must have a name
+                 ((h.level === 1) ||  // If a heading level 1, usually important
+                  h.isVisibleOnScreen);
+        });
+
+      // Determine Landmarks to render
+
+      const landmarkCounts = {};
+
+      myResult.regions.forEach( (r) => {
+        if (landmarkCounts[r.role]) {
+          landmarkCounts[r.role] += 1;
+        }
+        else {
+          landmarkCounts[r.role] = 1;
+        }
+      });
+
+      tabListObj.landmarks = Array.from(myResult.regions).filter( (r) => {
+          return (r.name ||
+              (landmarkCounts[r.role] <= MAX_LANDMARKS_WITHOUT_NAMES) ||
+              options.unNamedDuplicateRegions);
+      });
+
+      // Determine links to render
+
+      tabListObj.links= Array.from(myResult.links).filter( (l) => {
+        return (l.isVisibleOnScreen && l.name.length) &&
+               ((l.isInternal   && options.internalLinks) ||
+                (l.isExternal   && options.externalLinks) ||
+                (l.isSameDomain && options.sameDomainLinks && !l.isSameSubDomain) ||
+                (l.isSameSubDomain && options.sameSubDomainLinks && !l.isInternal) ||
+                (l.extensionType && options.nonHtmlExtensionLinks));
+      })
+
       saveOptions(options).then( () => {
-        tabListObj.h2lHeadingsTree.updateContent(sameUrl, myResult);
-        tabListObj.h2lLandmarksList.updateContent(sameUrl, myResult);
-        tabListObj.h2lLinksGrid.updateContent(sameUrl, myResult);
+        tabListObj.h2lHeadingsTree.updateContent(sameUrl, tabListObj.headings);
+        tabListObj.h2lLandmarksList.updateContent(sameUrl, tabListObj.landmarks);
+        tabListObj.h2lLinksGrid.updateContent(sameUrl, tabListObj.links);
 
         tabListObj.resize();
       });
     });
   }
 
-  // Tablist support functions and heandlers
+  // Tablist support functions and handlers
 
   setSelectedTab(currentTab, setFocus) {
     const tabListObj = this;
@@ -427,6 +479,82 @@ class TOCTabList extends HTMLElement {
     this.h2lExportDialog.openDialog();
   }
 
+  getCSVContent(options) {
+
+    const date = new Date();
+
+    let content = `${getMessage('export_title')}, ${this.lastResult.title}`;
+    content += `\n${getMessage('export_url')}, ${this.lastResult.url}`;
+    content += `\n${getMessage('export_date')}, ${date.toLocaleDateString()}`;
+    content += `\n${getMessage('export_time')}, ${date.toLocaleTimeString()}\n`;
+
+    if (options.exportHeadings) {
+      content += `\n${getMessage('headings_tree_label')}`;
+
+      content += `\nOrder,"Heading Level","Accessible Name"`;
+      this.headings.forEach( (h, index) => {
+        content += `\n${index},${h.level},"${filterForCSV(h.name.trim())}"`;
+      });
+    }
+
+    if (options.exportLandmarks) {
+      content += `\n\n${getMessage('landmarks_list_label')}`;
+
+      content += `\nOrder,"Landmark Type","Accessible Name"`;
+      this.landmarks.forEach( (r, index) => {
+        content += `\n${index},${r.role},${filterForCSV(r.name.trim()) ? '"' + filterForCSV(r.name.trim()) + '"' : ''}`;
+      });
+
+    }
+
+    if (options.exportLinks) {
+      content += `\n\n${getMessage('tab_links')}`;
+
+      content += `\nOrder,"Link Type","Accessible Name","Accessible Description",URL`;
+      this.links.forEach( (l, index) => {
+        content += `\n${index},${l.type},"${filterForCSV(l.name)}","${filterForCSV(l.desc)}", ${l.url}`;
+      });
+
+    }
+
+    return content;
+  }
+
+  handleExportDialogClose () {
+
+    function incrementIndex() {
+      getOptions().then( (options) => {
+        options.exportIndex = parseInt(options.exportIndex) + 1;
+        saveOptions(options);
+      });
+    }
+
+    function onFailed(error) {
+      console.error(`Download failed: ${error}`);
+    }
+
+    const tabListObj = this;
+
+    const returnValue = this.h2lExportDialog.exportDialog.returnValue;
+    if (returnValue === 'export') {
+      getOptions().then( (options) => {
+        const filename = options.exportFilename + '-' + options.exportIndex.padStart(4, "0") + '.csv';
+        const content = tabListObj.getCSVContent(options);
+
+        const blob = new Blob([content], {
+         type: "text/csv;charset=utf-8"
+        });
+
+        let downloading = browserDownloads.download({
+          url : URL.createObjectURL(blob),
+          filename : filename,
+          saveAs: true,
+          conflictAction : 'uniquify'
+        });
+        downloading.then(incrementIndex, onFailed);
+      });
+    }
+  }
 
   handleTabKeydown(event) {
     const tgt = event.currentTarget;

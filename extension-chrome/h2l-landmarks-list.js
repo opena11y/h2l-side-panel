@@ -23,8 +23,6 @@ import {
 const debug = new DebugLogging('h2lLandmarksList', false);
 debug.flag = false;
 
-const MAX_LANDMARKS_WITHOUT_NAMES = 4;
-
 /* templates */
 const template = document.createElement('template');
 template.innerHTML = `
@@ -100,7 +98,7 @@ class H2LLandmarksList extends HTMLElement {
      }
   }
 
-  updateContent(sameUrl, myResult) {
+  updateContent(sameUrl, regions) {
     let lastLandmarkNode = null;
     let index = 1;
 
@@ -108,19 +106,7 @@ class H2LLandmarksList extends HTMLElement {
 
     const listObj = this;
 
-    if (myResult.regions) {
-
-      const landmarkCounts = {};
-
-      myResult.regions.forEach( (r) => {
-        if (landmarkCounts[r.role]) {
-          landmarkCounts[r.role] += 1;
-        }
-        else {
-          landmarkCounts[r.role] = 1;
-        }
-      });
-
+    if (regions) {
       getOptions().then( (options) => {
 
         this.highlightFollowsFocus = options.highlightFollowsFocus;
@@ -128,11 +114,7 @@ class H2LLandmarksList extends HTMLElement {
         this.lastURL               = options.lastURL;
         this.lastLandmarkId        = options.lastLandmarkId;
 
-        myResult.regions.forEach( (r) => {
-          if (r.name ||
-              (landmarkCounts[r.role] <= MAX_LANDMARKS_WITHOUT_NAMES) ||
-              options.unNamedDuplicateRegions) {
-
+        regions.forEach( (r) => {
             const listitemNode = document.createElement('div');
             listitemNode.id = 'landmark-' + index;
             index += 1;
@@ -155,8 +137,6 @@ class H2LLandmarksList extends HTMLElement {
             listitemNode.addEventListener('blur',    listObj.handleBlur.bind(listObj));
 
             this.listboxNode.appendChild(listitemNode);
-          }
-
         });
 
         const firstListitem = this.listboxNode.querySelector('[role="listitem"]');

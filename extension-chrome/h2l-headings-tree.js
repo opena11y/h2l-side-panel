@@ -112,7 +112,7 @@ class H2LHeadingsTree extends HTMLElement {
      return null;
   }
 
-  updateContent(sameUrl, myResult) {
+  updateContent(sameUrl, headings) {
     let lastTreeitemNode = null;
 
     const handleIconClick = this.handleIconClick;
@@ -221,20 +221,14 @@ class H2LHeadingsTree extends HTMLElement {
 
     this.clearContent();
 
-    if (myResult.headings) {
+    if (headings) {
       getOptions().then( (options) => {
 
         this.highlightFollowsFocus = options.highlightFollowsFocus;
         this.enterKeyMovesFocus    = options.enterKeyMovesFocus;
         this.lastHeadingId         = options.lastHeadingId;
 
-        const headings = Array.from(myResult.headings).filter( (h) => {
-          return h.name.length &&     // heading must have a name
-                 ((h.level === 1) ||  // If a heading level 1, usually important
-                  h.isVisibleOnScreen);
-        });
-
-        processHeadings(this.treeNode, null, headings, 0);
+        processHeadings(this.treeNode, null, [...headings], 0);
 
         const firstTreeitem = this.treeNode.querySelector('[role="treeitem"]');
         const count = this.treeNode.querySelectorAll('[role="treeitem"]').length;

@@ -215,10 +215,10 @@ class H2LLinksGrid extends HTMLElement {
      }
   }
 
-  updateContent (sameUrl, myResult) {
+  updateContent (sameUrl, links) {
     const linksObj = this;
 
-    if (myResult.links) {
+    if (links) {
 
       getOptions().then( (options) => {
 
@@ -227,21 +227,12 @@ class H2LLinksGrid extends HTMLElement {
         linksObj.lastURL               = options.lastURL;
         linksObj.lastLinkId            = options.lastLinkId;
 
-        linksObj.renderedLinks = Array.from(myResult.links).filter( (l) => {
-          return (l.isVisibleOnScreen && l.name.length) &&
-                 ((l.isInternal   && options.internalLinks) ||
-                  (l.isExternal   && options.externalLinks) ||
-                  (l.isSameDomain && options.sameDomainLinks && !l.isSameSubDomain) ||
-                  (l.isSameSubDomain && options.sameSubDomainLinks && !l.isInternal) ||
-                  (l.extensionType && options.nonHtmlExtensionLinks));
-        })
-
-        linksObj.renderedLinks.forEach( (link, index) => {
+        links.forEach( (link, index) => {
           [link.type, link.typeDesc, link.typeSort] = linksObj.getTypeContentAndDescription(link);
           link.pos = index + 1;
         });
 
-        const lastGridNode = linksObj.updateLinkContent(linksObj.renderedLinks);
+        const lastGridNode = linksObj.updateLinkContent(links);
 
         const firstGridrow = linksObj.gridNode.querySelector('[role="grid"] tbody tr');
 

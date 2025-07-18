@@ -127,4 +127,20 @@ export function focusOrdinalPosition (ordinalPosition) {
   }
 }
 
+/*
+**  @function filterForCSV
+*/
+
+export function filterForCSV (str) {
+  let filteredStr = '';
+  if (typeof str === 'string') {
+    for(let i=0; i < str.length; i += 1) {
+      const c = str[i];
+      if (!'"\n\r'.includes(c)) {
+        filteredStr += c;
+      }
+    }
+  }
+  return filteredStr;
+}
 

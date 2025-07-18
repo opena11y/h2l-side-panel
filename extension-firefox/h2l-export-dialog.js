@@ -16,6 +16,8 @@ import {
 } from './storage.js';
 
 /* Constants */
+
+
 const debug = new DebugLogging('[optionsDialog]', false);
 debug.flag = false;
 
@@ -94,7 +96,12 @@ template.innerHTML = `
                  min="1"
                  size="6"
                  pattern="\d*"
-                 data-option="exportIndex"/>
+                 data-option="exportIndex"
+                aria-describedby="id-index-desc"/>
+        <div id="id-index-desc"
+             class="desc"
+             data-i18n="export_dialog_desc_index">
+        </div>
       </div>
 
     </fieldset>
@@ -145,24 +152,24 @@ export default class H2LExportDialog extends HTMLElement {
 
     // Get references
 
-    this.infoDialog  = this.shadowRoot.querySelector('dialog');
+    this.exportDialog  = this.shadowRoot.querySelector('dialog');
 
-    this.cancelButton1  = this.infoDialog.querySelector('#id-cancel-1');
+    this.cancelButton1  = this.exportDialog.querySelector('#id-cancel-1');
     this.cancelButton1.addEventListener('click', this.handleCancelButtonClick.bind(this));
     this.cancelButton1.addEventListener('keydown', this.handleKeyDown.bind(this));
 
-    this.contentElem  = this.infoDialog.querySelector('.content');
+    this.contentElem  = this.exportDialog.querySelector('.content');
 
-    this.cancelButton2  = this.infoDialog.querySelector('#id-cancel-2');
+    this.cancelButton2  = this.exportDialog.querySelector('#id-cancel-2');
     this.cancelButton2.addEventListener('click', this.handleCancelButtonClick.bind(this));
     this.cancelButton2.addEventListener('keydown', this.handleKeyDown.bind(this));
 
-    this.resetDefaultsButton  = this.infoDialog.querySelector('#id-reset-defaults');
+    this.resetDefaultsButton  = this.exportDialog.querySelector('#id-reset-defaults');
     this.resetDefaultsButton.addEventListener('click', () => {
       resetDefaultOptions().then(this.updateOptions.bind(this));
     });
 
-    this.exportButton  = this.infoDialog.querySelector('#id-export');
+    this.exportButton  = this.exportDialog.querySelector('#id-export');
     this.exportButton.addEventListener('click', this.handleExportButtonClick.bind(this));
     this.exportButton.addEventListener('keydown', this.handleKeyDown.bind(this));
 
@@ -182,8 +189,9 @@ export default class H2LExportDialog extends HTMLElement {
   }
 
   openDialog  () {
-    this.infoDialog.showModal();
-    this.cancelButton2.focus();
+    this.exportDialog.showModal();
+    this.updateOptions();
+    this.exportButton.focus();
   }
 
   updateOptions () {
@@ -227,9 +235,11 @@ export default class H2LExportDialog extends HTMLElement {
     });
   }
 
-  saveOptions () {
+  saveOptionsAndCloseDialog (value) {
 
     const optionControls = this.optionControls;
+
+    const dialog = this.exportDialog;
 
     getOptions().then( (options) => {
 
@@ -265,8 +275,9 @@ export default class H2LExportDialog extends HTMLElement {
         }
       });
 
-      updateHighlightConfig(options);
-      saveOptions(options);
+      saveOptions(options).then( () => {
+        dialog.close(value);
+      });
     });
   }
 
@@ -299,7 +310,6 @@ export default class H2LExportDialog extends HTMLElement {
     }
   }
 
-
   /*
   /   Event handlers
   */
@@ -322,16 +332,11 @@ export default class H2LExportDialog extends HTMLElement {
   }
 
   handleCancelButtonClick () {
-    this.saveOptions();
-    this.infoDialog.close();
-  }
-
-  handleDefaultsButtonClick () {
-    this.saveOptions();
+    this.exportDialog.close('cancel');
   }
 
   handleExportButtonClick () {
-    this.saveOptions();
+    this.saveOptionsAndCloseDialog('export');
   }
 
   handleKeyDown (event) {

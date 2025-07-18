@@ -315,9 +315,29 @@
     "message": "Note: File name prefix cannot be more than 32 characters or contain spaces or <>:\"/|?*[] characters. ",
     "description": "Description for export file name restrictions"
   },
+  "export_dialog_desc_index": {
+    "message": "Note: Index number is appended to file name and is automatically incremented after each export.",
+    "description": "Description for export file name restrictions"
+  },
   "export_dialog_label_index": {
     "message": "Index",
     "description": "Label for index for file name"
+  },
+  "export_title": {
+    "message": "Title",
+    "description": "Label page title in CSV file"
+  },
+  "export_url": {
+    "message": "URL",
+    "description": "Label page url in CSV file"
+  },
+  "export_date": {
+    "message": "Date",
+    "description": "Label date in CSV file"
+  },
+  "export_time": {
+    "message": "Time",
+    "description": "Label time in CSV file"
   },
   "protocol_not_supported": {
     "message": "Protocol not supported",
