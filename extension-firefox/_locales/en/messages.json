@@ -339,6 +339,34 @@
     "message": "Time",
     "description": "Label time in CSV file"
   },
+  "export_order": {
+    "message": "Order",
+    "description": "Label for order column in CSV files"
+  },
+  "export_heading_lavel": {
+    "message": "Heading Level",
+    "description": "Label for heading level column in CSV files"
+  },
+  "export_accessible_name": {
+    "message": "Accessible Name",
+    "description": "Label for accessible name column in CSV files"
+  },
+  "export_landmark_type": {
+    "message": "Landmark Type",
+    "description": "Label for landmark type column in CSV files"
+  },
+  "export_link_type": {
+    "message": "Link Type",
+    "description": "Label for link type column in CSV files"
+  },
+  "export_accessible_desc": {
+    "message": "Accessible Description",
+    "description": "Label for accessible description column in CSV files"
+  },
+  "export_url": {
+    "message": "URL",
+    "description": "Label for URL column in CSV files"
+  },
   "protocol_not_supported": {
     "message": "Protocol not supported",
     "description": "Message if a not HTML page is in the window"

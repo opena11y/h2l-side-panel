@@ -725,8 +725,8 @@
   *   Handles BOM and NBSP characters.
   */
   function normalize (s) {
-  //  const rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-    const rtrim = /[\u0000-\u001F\u007F-\u009F]/g;
+    const rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+  //  const rtrim = /[\u0000-\u001F\u007F-\u009F]/g;
     return s.replace(rtrim, '').replace(/\s+/g, ' ');
   }
 

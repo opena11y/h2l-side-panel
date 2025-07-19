@@ -488,10 +488,17 @@ class TOCTabList extends HTMLElement {
     content += `\n${getMessage('export_date')}, ${date.toLocaleDateString()}`;
     content += `\n${getMessage('export_time')}, ${date.toLocaleTimeString()}\n`;
 
+    const eo  = getMessage('export_order');
+    const ehl = getMessage('export_heading_lavel');
+    const ean = getMessage('export_accessible_name');
+    const elt1 = getMessage('export_landmark_type');
+    const elt2 = getMessage('export_link_type');
+    const ead = getMessage('export_accessible_desc');
+
     if (options.exportHeadings) {
       content += `\n${getMessage('headings_tree_label')}`;
 
-      content += `\nOrder,"Heading Level","Accessible Name"`;
+      content += `\n${eo},"${ehl}","${ean}"`;
       this.headings.forEach( (h, index) => {
         content += `\n${index+1},${h.level},"${filterForCSV(h.name.trim())}"`;
       });
@@ -500,7 +507,7 @@ class TOCTabList extends HTMLElement {
     if (options.exportLandmarks) {
       content += `\n\n${getMessage('landmarks_list_label')}`;
 
-      content += `\nOrder,"Landmark Type","Accessible Name"`;
+      content += `\n${eo},"${elt1}","${ean}"`;
       this.landmarks.forEach( (r, index) => {
         content += `\n${index+1},${r.role},${filterForCSV(r.name.trim()) ? '"' + filterForCSV(r.name.trim()) + '"' : ''}`;
       });
@@ -510,7 +517,7 @@ class TOCTabList extends HTMLElement {
     if (options.exportLinks) {
       content += `\n\n${getMessage('tab_links')}`;
 
-      content += `\nOrder,"Link Type","Accessible Name","Accessible Description",URL`;
+      content += `\n${eo},"${elt2}","${ean}","${ead}",URL`;
       this.links.forEach( (l, index) => {
         content += `\n${index+1},${l.type},"${filterForCSV(l.name)}","${filterForCSV(l.desc)}", ${l.url}`;
       });
