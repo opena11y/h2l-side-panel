@@ -3,7 +3,7 @@
   "name": "__MSG_extension_name_chrome__",
   "version": "1.1.0",
   "description": "__MSG_extension_description__",
-  "homepage_url": "https://opena11y.github.io/",
+  "homepage_url": "https://opena11y.github.io/h2l-side-panel",
   "default_locale": "en",
   "icons": {
     "32":  "icons/h2l-32-light.png",
