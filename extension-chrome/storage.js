@@ -23,7 +23,7 @@ const browserStorage = typeof browser === 'object' ?
                        browser.storage.local :
                        chrome.storage.sync;
 
-const defaultOptions = {
+const dialogOptions = {
   highlightSize: 'large',
   highlightStyle: 'dashed',
   highlightFollowsFocus: true,
@@ -44,12 +44,17 @@ const defaultOptions = {
   lastLandmarkId: '',
   lastLinkId: '',
   lastTabId: '',
+}
+
+const exportOptions = {
   exportHeadings: true,
   exportLandmarks: true,
   exportLinks: true,
   exportFilename: 'h2l-export',
   exportIndex: 1
 };
+
+const defaultOptions = Object.assign({}, dialogOptions, exportOptions);
 
 function hasAllProperties (refObj, srcObj) {
   for (const key of Object.keys(refObj)) {
@@ -134,6 +139,28 @@ export function saveOption (option, value) {
 export function resetDefaultOptions () {
   return new Promise (function (resolve) {
     browserStorage.set(defaultOptions, function () {
+      if (notLastError()) { resolve(); }
+    });
+  });
+}
+
+/*
+** resetDialogOptions
+*/
+export function resetDialogOptions () {
+  return new Promise (function (resolve) {
+    browserStorage.set(dialogOptions, function () {
+      if (notLastError()) { resolve(); }
+    });
+  });
+}
+
+/*
+** resetExportOptions
+*/
+export function resetExportOptions () {
+  return new Promise (function (resolve) {
+    browserStorage.set(exportOptions, function () {
       if (notLastError()) { resolve(); }
     });
   });

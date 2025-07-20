@@ -12,7 +12,7 @@ import {
 import {
   getOptions,
   saveOptions,
-  resetDefaultOptions
+  resetExportOptions
 } from './storage.js';
 
 /* Constants */
@@ -166,7 +166,7 @@ export default class H2LExportDialog extends HTMLElement {
 
     this.resetDefaultsButton  = this.exportDialog.querySelector('#id-reset-defaults');
     this.resetDefaultsButton.addEventListener('click', () => {
-      resetDefaultOptions().then(this.updateOptions.bind(this));
+      resetExportOptions().then(this.updateOptions.bind(this));
     });
 
     this.exportButton  = this.exportDialog.querySelector('#id-export');
