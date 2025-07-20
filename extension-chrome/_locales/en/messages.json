@@ -12,7 +12,7 @@
     "description": "Extension name for Opera browser"
   },
   "extension_description" : {
-    "message": "Shows the headings, landmarks and links on a web page.",
+    "message": "View the headings, landmarks and links from a web page in a side panel and export information to CSV formated file.",
     "description": "Extension description"
   },
   "toggle_menu" : {

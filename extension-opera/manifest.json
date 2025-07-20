@@ -11,19 +11,17 @@
     "64":  "icons/h2l-64-light.png",
     "128": "icons/h2l-128-light.png"
   },
-
   "sidebar_action": {
     "default_icon": {
-    "32":  "icons/h2l-32-light.png",
-    "48":  "icons/h2l-48-light.png",
-    "64":  "icons/h2l-64-light.png",
-    "128": "icons/h2l-128-light.png"
-  },
+      "32":  "icons/h2l-32-light.png",
+      "48":  "icons/h2l-48-light.png",
+      "64":  "icons/h2l-64-light.png",
+      "128": "icons/h2l-128-light.png"
+      },
     "default_title": "__MSG_extension_name_firefox__",
     "default_panel": "h2l-sidepanel.html",
     "open_at_install": false
   },
-
   "commands": {
     "_execute_sidebar_action": {
       "suggested_key": {
