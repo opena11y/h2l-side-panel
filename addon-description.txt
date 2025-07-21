@@ -1,6 +1,6 @@
 Title
 -----
-TOC: Headings, Landmark Regions and Links
+Headings, Landmark Regions and Links
 
 Summary
 -------
@@ -52,7 +52,7 @@ Side Panel Justification
 The side panel provides a persistent view of headings, landmark regions and links on a web page.  As the user changes tabs or updates the cureent tab the information is automatically updated.
 
 Downloads Justification
-Download headings, landmarks and link information for use in spreadhseets
+Download headings, landmarks and link information for use in spreadsheets
 
 Storage Justification
 User preferences on the items in the menu, styling and internationalization of menu labels.

@@ -363,10 +363,6 @@
     "message": "Accessible Description",
     "description": "Label for accessible description column in CSV files"
   },
-  "export_url": {
-    "message": "URL",
-    "description": "Label for URL column in CSV files"
-  },
   "protocol_not_supported": {
     "message": "Protocol not supported",
     "description": "Message if a not HTML page is in the window"
