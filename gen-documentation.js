@@ -50,6 +50,11 @@ const pages = [
     link: 'Options',
     filename: 'options.html'
   },
+  { template: './src-docs/templates/content-export.njk',
+    title: 'Export Data',
+    link: 'Export Data',
+    filename: 'export.html'
+  },
   { template: './src-docs/templates/content-faq.njk',
     title: 'Frequently Asked Questions',
     link: 'FAQ',

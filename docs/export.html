@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Frequently Asked Questions | Table of Contents Browser Extension</title>
+    <title>Export Data | Table of Contents Browser Extension</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 
     <!-- Choose Light or Dark Theme -->
@@ -20,10 +20,6 @@
 
 
 
-
-    <style>
-
-    </style>
   </head>
   <body>
             <header>
@@ -100,112 +96,87 @@
 
     <!-- Main section-->
     <div id="main-section" class="container px-4">
-
       <nav aria-label="Breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Frequently Asked Questions</li>
+          <li class="breadcrumb-item active">Export Data</li>
         </ol>
       </nav>
-
       <main class="row gx-4 justify-content-center">
         <div class="col-lg-10">
           
-          <h1>Frequently Asked Questions</h1>
+          <h1>Export Data</h1>
           
 
-          <div class="faq">
+          <div id="options">
 
-            <ul>
-              <li>
-                <details>
-                  <summary>What are Headings?</summary>
-                  <div class="content">
-                    <ul>
-                      <li>
-                        <a href="https://www.w3.org/WAI/tutorials/page-structure/headings/">Headings</a> are used to add structure to content and should describe the content in the next section or sub-section on the page.
-                      </li>
-                      <li>
-                        There are six levels of headings (e.g. <code>h1</code>-<code>h6</code> elements) in HTML to identify sub-sections in hierarchical content.
-                      </li>
-                      <li>
-                        Web browsers, plug-ins, and assistive technologies can use them to provide in-page navigation.
-                      </li>
-                     <li>
-                        SkipTo.js provides a means for everyone to use keyboard navigation to navigate to headings on page.
-                      </li>
-                    </ul>
-                  </div>
-                </details>
-              </li>
-              <li>
-                <details>
-                  <summary>What are Landmark Regions?</summary>
-                  <div class="content">
-                    <ul>
-                      <li>
-                        <a href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/">Landmark Regions</a> identify the major sections of a page that is usually conveyed visually with placement, spacing, color, or borders.
-                      </li>
-                      <li>
-                         Landmark regions enable assistive technology users to perceive the start and end of each section of a web page.
-                      </li>
-                      <li>
-                        There are eight types of landmark regions used to identify content on a page: Banner, Complementary, Contentinfo, Form, Main, Navigation, Region and Search.
-                      </li>
-                      <li>
-                        SkipTo.js provides a means for everyone to use keyboard navigation to navigate to landmark regions on page.
-                      </li>
-                    </ul>
-                  </div>
-                </details>
-              </li>
-              <li>
-                <details>
-                  <summary>How do I open and close the H2L side panel?</summary>
-                  <div class="content">
-                    <h2>Toolbar Icon</h2>
-                    <ul>
-                      <li>
-                        For Chrome and Firefox the extension icon (e.g. TOC) will be found near the address bar.  To make the icon easier to access pin the extension to the toolbar.
-                      </li>
-                      <li>
-                        For Opera the TOC icon in found on the bottom-left corner of the page window.
-                      </li>
-                      <li>
-                        Activating the toolbar icon will open and close the side panel.
-                      </li>
-                    </ul>
+            <figure class="image">
+               <img src="./images/feature-export.png"
+                    alt=""/>
+                    <figcaption>Screen Shot of Export Dialog Box in Side Panel</figcaption>
+            </figure>
 
-                    <h2>Menu Option</h2>
-                    <ul>
-                      <li>
-                        For Firefox the extension can also be opened and closed in "Tools" menu under sidebar.
-                      </li>
-                    </ul>
-                  </div>
-                </details>
+            <h2 id="info">Information On</h2>
 
-              <li>
-                <details>
-                  <summary>Changing the side panel to the left or right side in Chrome.</summary>
-                  <div class="content">
+            <table class="table table-striped shortcuts" aria-labelledby="info">
+               <thead>
+                  <tr>
+                     <th>Option</th>
+                     <th>Description</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                    <td>
+                      Headings
+                    </td>
+                    <td>
 
-                    <p>To change the side of the Chrome side panel, navigate to Chrome settings, then Appearance, and under the Side panel section, select your preferred location (left or right). </p>
-                    <p>Here's a step-by-step guide: </p>
-                    <ol>
-                      <li>Open Chrome browser.</li>
-                      <li>Activate (e.g. click) the three dots (More options) menu in the top right corner.</li>
-                      <li>Select "Settings".</li>
-                      <li>Go to the "Appearance" tab.</li>
-                      <li>Under the "Side panel" section, choose either "Show on left" or "Show on right".</li>
-                    </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Landmark Regions
+                    </td>
+                    <td>
 
-                  </div>
-                </details>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Links
+                    </td>
+                    <td>
 
-            </ul>
+                    </td>
+                  </tr>
+               </tbody>
+             </table>
 
-                         <section id="privacy" class="feedback" aria-label="Privacy and Feedback">
+            <h2 id="filename">Filename</h2>
+
+            <table class="table table-striped shortcuts" aria-labelledby="filename">
+               <thead>
+                  <tr>
+                     <th>Option</th>
+                     <th>Description</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                    <td>File Name</td>
+                    <td>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Index</td>
+                    <td>
+                    </td>
+                  </tr>
+               </tbody>
+             </table>
+
+                      <section id="privacy" class="feedback" aria-label="Privacy and Feedback">
 
               <h2 id="privacy">Privacy</h2>
              <p>Headings, Landmarks and Links Side Panel <em>does not</em> collect or store any information about users or work with any other parties to collect or share user browsing information.</p>
@@ -219,6 +190,7 @@
 
 
 
+          </div>
         </div>
       </main>
     </div>

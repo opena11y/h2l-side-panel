@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    {% include "./head.njk" %}
+  </head>
+  <body>
+    {% include "./header.njk" %}
+
+    <!-- Main section-->
+    <div id="main-section" class="container px-4">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">{{title | safe}}</li>
+        </ol>
+      </nav>
+      <main class="row gx-4 justify-content-center">
+        <div class="col-lg-10">
+          {% block title %}
+          <h1>{{title}}</h1>
+          {% endblock %}
+
+          <div id="options">
+
+            <figure class="image">
+               <img src="./images/feature-export.png"
+                    alt=""/>
+                    <figcaption>Screen Shot of Export Dialog Box in Side Panel</figcaption>
+            </figure>
+
+            <h2 id="info">Information On</h2>
+
+            <table class="table table-striped shortcuts" aria-labelledby="info">
+               <thead>
+                  <tr>
+                     <th>Option</th>
+                     <th>Description</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                    <td>
+                      Headings
+                    </td>
+                    <td>
+
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Landmark Regions
+                    </td>
+                    <td>
+
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Links
+                    </td>
+                    <td>
+
+                    </td>
+                  </tr>
+               </tbody>
+             </table>
+
+            <h2 id="filename">Filename</h2>
+
+            <table class="table table-striped shortcuts" aria-labelledby="filename">
+               <thead>
+                  <tr>
+                     <th>Option</th>
+                     <th>Description</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                    <td>File Name</td>
+                    <td>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Index</td>
+                    <td>
+                    </td>
+                  </tr>
+               </tbody>
+             </table>
+
+          {% include "./feedback.njk" %}
+
+          </div>
+        </div>
+      </main>
+    </div>
+    {% include "./footer.njk" %}
+    {% include "./scripts.njk" %}
+
+  </body>
+</html>
