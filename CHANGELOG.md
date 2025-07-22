@@ -1,5 +1,10 @@
 # Version history for Page Table of Contents
 
+## Version 1.1.0
+* Changed branding icon to H2L from TOC
+* Removed TOC from title, just Headings, Landmarks and Links
+* Added export to CSV feature
+
 ## Version 1.0.4
 * Removed heading filters option
 
