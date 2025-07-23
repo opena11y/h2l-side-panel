@@ -3,6 +3,10 @@
     "message": "Headings, Landmarks and Links",
     "description": "Extension name for Chrome browser"
   },
+"extension_name_edge" : {
+    "message": "Headings, Landmarks and Links",
+    "description": "Extension name for Microsoft Edge browser"
+  },
   "extension_name_firefox" : {
     "message": "Headings, Landmarks and Links",
     "description": "Extension name for Firefox browser"

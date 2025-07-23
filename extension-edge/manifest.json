@@ -1,0 +1,69 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extension_name_edge__",
+  "version": "1.1.0",
+  "description": "__MSG_extension_description__",
+  "homepage_url": "https://opena11y.github.io/h2l-side-panel",
+  "default_locale": "en",
+  "icons": {
+    "32":  "icons/h2l-32-light.png",
+    "48":  "icons/h2l-48-light.png",
+    "64":  "icons/h2l-64-light.png",
+    "128": "icons/h2l-128-light.png"
+  },
+  "action": {
+    "default_icon": {
+      "32":  "icons/h2l-32-light.png",
+      "48":  "icons/h2l-48-light.png",
+      "64":  "icons/h2l-64-light.png",
+      "128": "icons/h2l-128-light.png"
+    },
+    "default_title": "__MSG_toggle_menu__",
+    "theme_icons": [{
+      "light": "icons/h2l-32-light.png",
+      "dark": "icons/h2l-32-dark.png",
+      "size": 32
+    }, {
+      "light": "icons/h2l-48-light.png",
+      "dark": "icons/h2l-48-dark.png",
+      "size": 48
+    }, {
+      "light": "icons/h2l-64-light.png",
+      "dark": "icons/h2l-64-dark.png",
+      "size": 64
+    }, {
+      "light": "icons/h2l-128-light.png",
+      "dark": "icons/h2l-128-dark.png",
+      "size": 128
+    }]
+  },
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+ "side_panel": {
+    "default_path": "h2l-sidepanel.html"
+  },
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "permissions": [
+    "activeTab",
+    "downloads",
+    "sidePanel",
+    "storage"
+  ],
+  "web_accessible_resources": [{
+    "resources": ["h2l-highlight.js"],
+    "matches": ["<all_urls>"]
+  }],
+  "content_scripts": [
+    {
+      "js": [
+        "opena11y-for-h2l.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

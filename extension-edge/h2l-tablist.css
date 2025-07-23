@@ -1,0 +1,155 @@
+/* generated from h2l-tablist.scss */
+/* toc-base.scss */
+:root {
+  color-scheme: light dark;
+}
+
+.h2l-tablist {
+  padding: 0;
+  padding-left: 6px;
+  padding-right: 6px;
+  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+  font-size: 11pt;
+  color: light-dark(#000, #fff);
+  background-color: light-dark(#fff, #000);
+}
+
+h2 {
+  font-size: 12pt;
+  margin: 0;
+  padding: 0;
+  margin-top: 1em;
+  font-weight: bold;
+}
+
+#id-div-title {
+  font-size: 12pt;
+  display: block;
+  height: 2.2em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-bottom: 1em;
+}
+
+[role=tablist] {
+  min-width: 100%;
+}
+
+[role=tab] {
+  display: inline-block;
+  position: relative;
+  z-index: 2;
+  top: 0px;
+  margin: 0;
+  margin-top: 4px;
+  padding: 3px 3px 4px;
+  border-width: 2px;
+  border-style: solid;
+  border-bottom-width: 2px;
+  border-radius: 5px 5px 0 0;
+  outline: none;
+  font-weight: bold;
+  max-width: 8em;
+  text-align: left;
+  cursor: pointer;
+  border-color: light-dark(#bbb, #444);
+  color: light-dark(#000, #fff);
+  background-color: light-dark(#eee, #444);
+}
+
+[role=tab][aria-selected=true] {
+  top: 2px;
+  padding: 2px 2px 3px;
+  margin-top: 0;
+  border-width: 2px;
+  border-top-width: 6px;
+  border-bottom-width: 2px;
+  color: light-dark(#000, #fff);
+  background-color: light-dark(#fff, #000);
+  border-bottom-color: light-dark(#fff, #000);
+  border-top-color: light-dark(#13294b, #eee);
+}
+
+[role=tab][aria-selected=false] {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: light-dark(#eee, #444);
+}
+
+[role=tabpanel] {
+  padding: 5px;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 0 5px 5px;
+  overflow: hidden;
+  border-color: light-dark(#bbb, #444);
+  background: light-dark(#fff, #000);
+}
+
+[role=tabpanel].is-hidden {
+  display: none;
+}
+
+footer {
+  padding-top: 1.5em;
+  padding-bottom: 0.5em;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+}
+
+footer button {
+  font-size: 12pt;
+  width: 4.5em;
+}
+
+footer .first {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  text-align: center;
+  vertical-align: center;
+}
+
+footer .second {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  text-align: center;
+  vertical-align: center;
+}
+
+footer .third {
+  grid-column-start: 3;
+  grid-column-end: 4;
+  text-align: center;
+  vertical-align: center;
+}
+
+footer .fourth {
+  grid-column-start: 4;
+  grid-column-end: 5;
+  text-align: center;
+}
+
+@media (forced-colors: active) {
+  .h2l-lablist {
+    color: CanvasText;
+    background-color: Canvas;
+  }
+  [role=tab] {
+    border-color: ButtonBorder;
+    color: CanvasText;
+    background-color: ButtonFace;
+  }
+  [role=tab][aria-selected=true] {
+    color: CanvasText;
+    background-color: Canvas;
+    border-bottom-color: Canvas;
+    border-top-color: ActiveText;
+  }
+  [role=tab][aria-selected=false] {
+    border-bottom-color: ButtonBorder;
+  }
+  [role=tabpanel] {
+    border-color: ButtonBorder;
+    background: Canvas;
+  }
+}

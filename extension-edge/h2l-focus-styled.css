@@ -1,0 +1,125 @@
+/* generated from h2l-focus-styled.scss */
+/* toc-base.scss */
+:root {
+  color-scheme: light dark;
+}
+
+[role=tab] span.focus {
+  display: inline-block;
+  margin: 2px;
+  padding: 4px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[role=tab]:hover span.focus,
+[role=tab]:focus span.focus,
+[role=tab]:active span.focus {
+  padding: 2px 4px;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 3px;
+  border-color: light-dark(#13294b, #eee);
+}
+
+@media (forced-colors: active) {
+  [role=tab]:hover span.focus,
+  [role=tab]:focus span.focus,
+  [role=tab]:active span.focus {
+    border-color: ActiveText;
+  }
+}
+[role=tree] [role=treeitem][tabindex="0"] {
+  background-color: light-dark(#eee, #444);
+}
+
+[role=tree] [role=treeitem]:focus {
+  outline-offset: -2px;
+  outline-color: light-dark(#13294b, #eee);
+  outline-width: 2px;
+  outline-style: solid;
+  background-color: light-dark(#ecf2fa, #13294b) !important;
+  color: light-dark(#13294b, #ecf2fa);
+}
+
+[role=tree] [role=treeitem]:focus svg {
+  fill: light-dark(#13294b, #ecf2fa);
+  stroke: light-dark(#13294b, #ecf2fa);
+}
+
+@media (forced-colors: active) {
+  [role=tree] [role=treeitem]:focus {
+    outline-color: ActiveText;
+    background-color: ButtonFace !important;
+    color: ButtonFace;
+    stroke: ActiveText;
+    fill: ActiveText;
+  }
+}
+[role=listbox] [role=listitem][tabindex="0"] {
+  background-color: light-dark(#eee, #444);
+}
+
+[role=listbox] [role=listitem]:focus {
+  outline-offset: -2px;
+  outline-color: light-dark(#13294b, #eee);
+  outline-width: 2px;
+  outline-style: solid;
+  background-color: light-dark(#ecf2fa, #13294b) !important;
+  color: light-dark(#13294b, #ecf2fa);
+}
+
+@media (forced-colors: active) {
+  [role=listbox] [role=listitem]:focus {
+    outline-color: ActiveText;
+    background-color: ButtonFace !important;
+    color: ButtonFace;
+  }
+}
+table[role=grid] th[tabindex="0"],
+table[role=grid] td[tabindex="0"],
+table[role=grid] tr[tabindex="0"] {
+  background-color: light-dark(#eee, #444);
+}
+
+table[role=grid] th:focus,
+table[role=grid] td:focus,
+table[role=grid] tr:focus {
+  outline-offset: -2px;
+  outline-color: light-dark(#13294b, #eee);
+  outline-width: 2px;
+  outline-style: solid;
+  background-color: light-dark(#ecf2fa, #13294b) !important;
+  color: light-dark(#13294b, #ecf2fa);
+}
+
+@media (forced-colors: active) {
+  table[role=grid] th:focus,
+  table[role=grid] td:focus,
+  table[role=grid] tr:focus {
+    outline-color: ActiveText;
+    background-color: ButtonFace !important;
+    color: ButtonFace;
+  }
+}
+dialog .focus input {
+  outline: none;
+}
+
+dialog .focus,
+dialog button:focus,
+dialog select:focus {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-offset: 2px;
+  outline-color: light-dark(#13294b, #eee);
+}
+
+@media (forced-colors: active) {
+  dialog .focus,
+  dialog button:focus,
+  dialog select:focus {
+    outline-color: ActiveText;
+  }
+}
