@@ -131,7 +131,22 @@
                       Headings
                     </td>
                     <td>
-
+                      <ul>
+                        <li>Each row in the CSV file for headings includes:
+                          <ol>
+                            <li>
+                              <em>Order:</em> The document order of the heading in the web page.
+                              </li>
+                            <li>
+                              <em>Heading Level:</em> The heading level of the heading, values are 1, 2, 3, 4, 5 and 6.
+                              </li>
+                            <li>
+                              <em>Accessible Name:</em> The computed accessible name for the heading.  This is usually just the text content, but the use of images, <code>aria-label</code> or <code>aria-labelledby</code> will require use of the <a href="https://www.w3.org/TR/accname/">accessible name computation</a>.
+                              </li>
+                          </ol>
+                        </li>
+                        <li>Un-check the checkbox to <strong>not</strong> include heading information on the CSV file.
+                      </ul>
                     </td>
                   </tr>
                   <tr>
@@ -139,7 +154,32 @@
                       Landmark Regions
                     </td>
                     <td>
-
+                      <ul>
+                        <li>Each row in the CSV file for landmark regions includes:
+                          <ol>
+                            <li>
+                              <em>Order:</em> The document order of the landmark in the web page.
+                              </li>
+                            <li>
+                              <em>Landmark Type:</em> The type of landmark, values include:
+                              <ul>
+                                <li><code>banner</code></li>
+                                <li><code>complementary</code></li>
+                                <li><code>contentinfo</code></li>
+                                <li><code>form</code></li>
+                                <li><code>main</code></li>
+                                <li><code>navigation</code></li>
+                                <li><code>region</code></li>
+                                <li><code>search</code></li>
+                              </ul>
+                              </li>
+                            <li>
+                              <em>Accessible Name:</em> The computed accessible name for the landmark region using the <a href="https://www.w3.org/TR/accname/">accessible name computation</a>  Landmarks only need an accessible name when there is more than one of the same type on a web page.
+                              </li>
+                          </ol>
+                        </li>
+                        <li>Un-check the checkbox to <strong>not</strong> include landmark region information on the CSV file.
+                      </ul>
                     </td>
                   </tr>
                   <tr>
@@ -147,7 +187,53 @@
                       Links
                     </td>
                     <td>
+                      <ul>
+                        <li>Each row in the CSV file for links includes:
+                          <ol>
+                            <li>
+                              <em>Order:</em> The document order of the link in the web page.
+                            </li>
+                            <li>
+                              <em>Link Type:</em>  The link type identifies information about the domain name or the file name of the link.
 
+                                                  <div class="type">Domain Information:</div>
+                    <ul class="type">
+                      <li>
+                        <span class="extension">External:</span> Links that reference a different website (e.g. different domain name)
+                      </li>
+
+                      <li>
+                        <span class="extension">Internal:</span>  Links that reference a target element (e.g. typically using an <code>id</code> on the element) in the current web page.
+                      </li>
+
+                      <li>
+                        <span class="extension">ssd:</span> Links with the same domain and sub-domain, often indicating the page is developed using the same web technology and administered by the same person or group of people.
+                      </li>
+
+                      <li>
+                        <span class="extension">sd:</span> Links with the same domain identifies the page is part of the same organization, but might be using a different web technology and administered by people not associated with website with the same sub-domain.
+                        </li>
+                    </ul>
+
+                    <div class="type">File extensions:</div>
+                    <ul class="type">
+                      <li><span class="extension">pdf:</span> Adobe Portable Document</li>
+                      <li><span class="extension">docx:</span> Word document</li>
+                      <li><span class="extension">xslx:</span> Excel document</li>
+                      <li><span class="extension">png:</span> Image format</li>
+                      <li><span class="extension">jpeg:</span> Image format</li>
+                      <li><span class="extension">mpeg:</span> Movie format</li>
+                    </ul>
+
+
+                            </li>
+                            <li>
+                              <em>URL:</em>  The URL associated with the link.
+                            </ul>
+                          </ol>
+                        </li>
+                        <li>Un-check the checkbox to <strong>not</strong> include link information on the CSV file.
+                      </ul>
                     </td>
                   </tr>
                </tbody>
@@ -164,13 +250,15 @@
                </thead>
                <tbody>
                   <tr>
-                    <td>File Name</td>
+                    <td style="width: 7em">File Name</td>
                     <td>
+                      The file name for the CSV file.  There are file name restrictions to make sure file names are supported on Windows, macOS and Linux.
                     </td>
                   </tr>
                   <tr>
                     <td>Index</td>
                     <td>
+                      The index is appended to the CSV file name to make it easier to create unique file names if downloading multiple CSV files.
                     </td>
                   </tr>
                </tbody>

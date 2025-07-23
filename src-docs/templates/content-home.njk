@@ -47,9 +47,12 @@
 
                 <h2>Get Extension</h2>
                 <ul>
-                  <li><a href="https://chromewebstore.google.com/detail/toc-headings-landmarks-an/eoadlbcfkolkpigecddbdlbneekefkfa">Chrome</a></li>
-                  <li><a href="https://addons.mozilla.org/en-US/firefox/addon/headings-landmarks-links/">Firefox</a></li>
-                  <li><a href="#">Opera (Coming Soon!)</a></li>
+                  <li>
+                    <a href="https://chromewebstore.google.com/detail/toc-headings-landmarks-an/eoadlbcfkolkpigecddbdlbneekefkfa">H2L for Chrome</a>
+                    (Also runs on <a href="https://www.microsoft.com/en-us/edge/">Edge</a>, <a href="https://brave.com/">Brave</a> and <a href="https://vivaldi.com/   ">Vivaldi</a>)
+                  </li>
+                  <li><a href="https://addons.mozilla.org/en-US/firefox/addon/headings-landmarks-links/">H2L for Firefox</a></li>
+                  <li>H2L for Opera (Coming Soon!)</li>
                 </ul>
 
                 <h2>Features</h2>
@@ -249,23 +252,8 @@
                   <li>
                     Each row provides the position of the link on the page, the <a href="https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/">accessible name</a> and information on the URL or file extensions.  The following lists are the common values for the type column.
 
-                    <div class="type">URL Information:</div>
-                    <ul class="type">
-                      <li><span class="extension">Internal:</span> Links that scroll to a other content on the page.</li>
-                      <li><span class="extension">ssd:</span> Links to different page that shares the same domain and sub-domain name.</li>
-                      <li><span class="extension">sd:</span> Links to different page that shares only the same domain name.</li>
-                      <li><span class="extension">External:</span> Links to other websites.</li>
-                    </ul>
+                    {% include "./link-types.njk" %}
 
-                    <div class="type">File extensions:</div>
-                    <ul class="type">
-                      <li><span class="extension">pdf:</span> Adobe Portable Document</li>
-                      <li><span class="extension">docx:</span> Word document</li>
-                      <li><span class="extension">xslx:</span> Excel document</li>
-                      <li><span class="extension">png:</span> Image format</li>
-                      <li><span class="extension">jpeg:</span> Image format</li>
-                      <li><span class="extension">mpeg:</span> Movie format</li>
-                    </ul>
                   </li>
                   <li>
                     The grid consists of three columns (e.g. position, name and type) and each of the columns can be used to sort the gird rows.

@@ -135,9 +135,12 @@
 
                 <h2>Get Extension</h2>
                 <ul>
-                  <li><a href="https://chromewebstore.google.com/detail/toc-headings-landmarks-an/eoadlbcfkolkpigecddbdlbneekefkfa">Chrome</a></li>
-                  <li><a href="https://addons.mozilla.org/en-US/firefox/addon/headings-landmarks-links/">Firefox</a></li>
-                  <li><a href="#">Opera (Coming Soon!)</a></li>
+                  <li>
+                    <a href="https://chromewebstore.google.com/detail/toc-headings-landmarks-an/eoadlbcfkolkpigecddbdlbneekefkfa">H2L for Chrome</a>
+                    (Also runs on <a href="https://www.microsoft.com/en-us/edge/">Edge</a>, <a href="https://brave.com/">Brave</a> and <a href="https://vivaldi.com/   ">Vivaldi</a>)
+                  </li>
+                  <li><a href="https://addons.mozilla.org/en-US/firefox/addon/headings-landmarks-links/">H2L for Firefox</a></li>
+                  <li>H2L for Opera (Coming Soon!)</li>
                 </ul>
 
                 <h2>Features</h2>
@@ -337,12 +340,23 @@
                   <li>
                     Each row provides the position of the link on the page, the <a href="https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/">accessible name</a> and information on the URL or file extensions.  The following lists are the common values for the type column.
 
-                    <div class="type">URL Information:</div>
+                                        <div class="type">Domain Information:</div>
                     <ul class="type">
-                      <li><span class="extension">Internal:</span> Links that scroll to a other content on the page.</li>
-                      <li><span class="extension">ssd:</span> Links to different page that shares the same domain and sub-domain name.</li>
-                      <li><span class="extension">sd:</span> Links to different page that shares only the same domain name.</li>
-                      <li><span class="extension">External:</span> Links to other websites.</li>
+                      <li>
+                        <span class="extension">External:</span> Links that reference a different website (e.g. different domain name)
+                      </li>
+
+                      <li>
+                        <span class="extension">Internal:</span>  Links that reference a target element (e.g. typically using an <code>id</code> on the element) in the current web page.
+                      </li>
+
+                      <li>
+                        <span class="extension">ssd:</span> Links with the same domain and sub-domain, often indicating the page is developed using the same web technology and administered by the same person or group of people.
+                      </li>
+
+                      <li>
+                        <span class="extension">sd:</span> Links with the same domain identifies the page is part of the same organization, but might be using a different web technology and administered by people not associated with website with the same sub-domain.
+                        </li>
                     </ul>
 
                     <div class="type">File extensions:</div>
@@ -354,6 +368,8 @@
                       <li><span class="extension">jpeg:</span> Image format</li>
                       <li><span class="extension">mpeg:</span> Movie format</li>
                     </ul>
+
+
                   </li>
                   <li>
                     The grid consists of three columns (e.g. position, name and type) and each of the columns can be used to sort the gird rows.
