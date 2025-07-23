@@ -50,7 +50,6 @@
   ],
   "permissions": [
     "activeTab",
-    "clipboardWrite",
     "downloads",
     "sidePanel",
     "storage"
