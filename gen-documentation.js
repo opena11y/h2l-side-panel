@@ -9,7 +9,7 @@ const nunjucks  = require('nunjucks');
 /* Constants */
 
 const version     = "1.1";
-const tagLineName = "Heading, Landmark Region and Link Browser Extension";
+const tagLineName = "Headings, Landmarks and Links Browser Extension";
 const projectName   = "Headings, Landmarks and Links Side Panel";
 
 const issuesURL   = "https://github.com/opena11y/h2l-side-panel/issues";
