@@ -38,4 +38,4 @@ This project is licensed under the [Mozilla Public License 2.0](https://www.goog
 
 -----
 
-*Headings, Landmarks and Links (H2L) browser extension is developed by the [OpenA11y](https://github.com/opena11y) community in collaboration with the University of Illinois.*
+*Headings, Landmarks and Links (H2L) browser extension is developed by the [OpenA11y](https://github.com/opena11y) community in collaboration with the [University of Illinois](https:/illinois.edu).*
