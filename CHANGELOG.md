@@ -24,4 +24,4 @@
 
 ## Copyright and license
 
-Copyright 2025 Jon Gunderson under the [Mozilla Public License 2.0](LICENSE.md).
+Copyright 2025, 2026 Jon Gunderson under the [Mozilla Public License 2.0](LICENSE.md).

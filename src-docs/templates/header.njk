@@ -1,13 +1,13 @@
         <header>
           <!-- Navigation-->
           <nav class="navbar
-               navbar-expand-lg navbar-light bg-light"
+               navbar-expand-lg"
                aria-label="Primary"
                id="mainNav">
               <div class="container px-4">
                   <span class="brand">
                     <span class="icon">
-                      <img src ="./images/h2l-128-light.png" alt="Icon for {{extName}}">
+                      <img src="./images/h2l-128-light.png" alt="Icon for Headings, Landmarks and Links Side Panel">
                     </span>
                     <span class="version">
                       Version {{version}}
@@ -19,19 +19,15 @@
                           data-bs-toggle="collapse"
                           data-bs-target="#mainNavbar"
                           aria-controls="mainNavbar"
-                          aria-expanded="false" a
+                          aria-expanded="false"
                           aria-label="Toggle navigation">
                           <span class="navbar-toggler-icon"></span>
                   </button>
                   <div class="collapse navbar-collapse" id="mainNavbar">
                     <ul class="navbar-nav ms-auto">
-                      {% for p in pages %}
-                        {% if p.link %}
-                          <li class="nav-item">
-                            <a class="nav-link" href="{{p.filename}}">{{p.link}}</a>
-                          </li>
-                        {% endif %}
-                      {% endfor %}
+
+                    {{ navigation | safe }}
+
                     </ul>
                   </div>
               </div>
