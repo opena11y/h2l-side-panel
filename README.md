@@ -20,8 +20,22 @@ The Headings, Landmarks and Links (H2L) extension provides information on the he
 * Links filters based on domain name and file extensions
 * Export information to a CSV file
 
+## 📖 Documentation
 
-[Documentation](https://opena11y.github.io/h2l-side-panel/)
+For full user guides, concepts, and advanced usage, visit the official documentation:
+👉 **[https://opena11y.github.io/h2l-side-panel/](https://opena11y.github.io/h2l-side-panel/)**
 
-[Support](https://github.com/opena11y/h2l-side-panel/issues)
+## 🤝 Contributing & Feedback
 
+We welcome community feedback\!
+
+  * **Report Bugs:** If you find an issue or inconsistency, please [file a new issue](https://github.com/opena11y/h2l-side-panel/issues) in this repository.
+  * **Provide Details:** When reporting, please include the URL where the problem occurs, a description of the issue, and reproduction steps.
+
+## 📜 License
+
+This project is licensed under the [Mozilla Public License 2.0](https://www.google.com/search?q=LICENSE).
+
+-----
+
+*Headings, Landmarks and Links (H2L) is developed by the [OpenA11y](https://github.com/opena11y) community in collaboration with the University of Illinois.*
