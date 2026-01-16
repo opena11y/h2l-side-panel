@@ -55,6 +55,16 @@
           <a class="nav-link" href="index.html">Home</a>
         </li>
       
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle"
+             data-bs-toggle="dropdown"
+            href="#"
+            role="button"
+            aria-expanded="false">Features</a>
+          <ul class="dropdown-menu"><li><a class="dropdown-item" href="feature-title.html">Page Title</a></li><li><a class="dropdown-item" href="feature-headings.html">Headings Tab</a></li><li><a class="dropdown-item" href="feature-landmarks.html">Landmarks Tab</a></li><li><a class="dropdown-item" href="feature-links.html">Links Tab</a></li><li><a class="dropdown-item" href="feature-summary.html">Summary</a></li><li><a class="dropdown-item" href="feature-update.html">Update</a></li>
+          </ul>
+        </li>
+      
         <li class="nav-item">
           <a class="nav-link" href="options.html">Options</a>
         </li>
@@ -149,12 +159,12 @@
 
                 <h2>Features</h2>
                 <ul class="internal-links">
-                  <li><a href="#title">Page Title</a></li>
-                  <li><a href="#headings">Headings Tab</a></li>
-                  <li><a href="#landmarks">Landmarks Tab</a></li>
-                  <li><a href="#Links">Links Tab</a></li>
-                  <li><a href="#summary">Summary</a></li>
-                  <li><a href="#update">Update Button</a></li>
+                  <li><a href="feature-title.html">Page Title</a></li>
+                  <li><a href="feature-headings.html">Headings Tab</a></li>
+                  <li><a href="feature-landmarks.html">Landmarks Tab</a></li>
+                  <li><a href="feature-Links.html">Links Tab</a></li>
+                  <li><a href="feature-summary.html">Summary</a></li>
+                  <li><a href="feature-update.html">Update Button</a></li>
                   <li><a href="options.html">Options</a></li>
                   <li><a href="export.html">Export Data</a></li>
                 </ul>
@@ -162,279 +172,7 @@
 
               </section>
 
-              <section id="title" class="feature">
-                <h2>Page Title</h2>
-
-                <figure class="image">
-                   <img src="./images/feature-title.png"
-                        alt=""/>
-                        <figcaption>Screen Shot of showing location of page title</figcaption>
-                </figure>
-
-                <h3>Feature</h3>
-
-                <p>The first section of the side panel is labeled "Page Title" followed on the next line with the <em>title</em> of associated the web page.</p>
-
-                <h3>Accessibility Considerations</h3>
-
-                <ul>
-                  <li>
-                    Verify the <em>title</em> of a web page provides a description of both the website and the specific page.  The specific page information should be the first part of the title followed by the website information.
-                  </li>
-                  <li>
-                    People using screen readers hear the <em>title</em> first when the page is loading and using screen reader commands have the <em>title</em> read to them to understand which web page they are viewing.
-                  </li>
-                  <li>Related WCAG Requirement:
-                    <ul>
-                      <li>
-                        <a href="https://www.w3.org/WAI/WCAG22/Understanding/page-titled.html">
-                          2.4.2 Page Titled (Level A)
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a href="https://www.w3.org/WAI/test-evaluate/easy-checks/title/">W3C WAI Easy Checks for Page Title</a></li>
-                </ul>
-              </section>
-
-
-              <section id="headings" class="feature">
-                <h2>Headings Tab</h2>
-                <figure class="image">
-                   <img src="./images/feature-headings.png"
-                        alt=""/>
-                        <figcaption>Screen Shot of Headings Tab selected</figcaption>
-                </figure>
-
-                <h3>Feature</h3>
-
-                <ul>
-                  <li>
-                    The first tab provides a <a href="https://www.w3.org/WAI/ARIA/apg/patterns/treeview/">tree view</a> of the heading (e.d. the <code>h1</code>,  <code>h2</code>,  <code>h3</code>,  <code>h4</code>  <code>h5</code> and  <code>h6</code> elements) structure of a web page.
-                  </li>
-                  <li>
-                    Each tree item provides the heading level and the <a href="https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/">accessible name</a> used by screen readers.
-                  </li>
-                  <li>
-                    The tree items are indented based on their heading level.
-                  </li>
-                  <li>
-                    Headings level 3 and higher are initially hidden in the tree.
-                  </li>
-                  <li>
-                    Note: Some authors add hidden or off-screen headings that are intended only for screen reader users and cannot be seen in the graphical rendering.  These headings are not included in the list of headings by default.  This mimics the behavior of many screen readers to reduce the number of headings users have to navigate.  This feature can be disabled in <a href="./options.html">options</a>.</li>
-                  </li>
-                </ul>
-
-                <h3>Accessibility Considerations</h3>
-
-                <ul>
-                  <li>
-                    <em>Descriptive:</em> Verify <a href="https://www.w3.org/WAI/tutorials/page-structure/headings/">headings</a> accurately reflect the content they introduce. For example, a heading "Ingredients" should be followed by a list of ingredients, not instructions on how to prepare them.
-                  </li>
-                  <li>
-                    <em>Logical Hierarchy:</em>  Verify headings are used in a hierarchical order, typically starting with <code>h1</code> for the main page title, followed by <code>h2</code> for main sections, <code>h3</code> for subsections, and so on. Avoid skipping heading levels (e.g., going directly from <code>h1</code> to <code>h3</code>).
-                  </li>
-                  <li>
-                    <em>Unique Headings:</em>  Verify headings in the same sub-section are unique. This prevents confusion for users, especially those using screen readers, who rely on headings for navigation.
-                  </li>
-                  <li>
-                    <em>Concise and Clear:</em>  Verify headings are relatively short and to the point, avoiding overly long or complex phrasing.
-                  </li>
-                  <li>Related WCAG Requirements:
-                    <ul>
-                      <li>
-                        <a href="https://www.w3.org/WAI/WCAG22/quickref/#qr-content-structure-separation-programmatic"><strong>1.3.1</strong> Info and Relationships:</a> Information, structure, and relationships conveyed through presentation can be programmatically determined or are available in text. (Level&nbsp;A)
-                      </li>
-                      <li>
-                        <a href="https://www.w3.org/WAI/WCAG22/quickref/#qr-navigation-mechanisms-skip"><strong>2.4.1</strong> Bypass Blocks:</a> A mechanism is available to bypass blocks of content that are repeated on multiple Web pages. (Level&nbsp;A)
-                      </li>
-                      <li>
-                        <a href="https://www.w3.org/WAI/WCAG22/quickref/#qr-navigation-mechanisms-descriptive"><strong>2.4.6</strong> Headings and Labels:</a> Headings and labels describe topic or purpose. (Level&nbsp;AA)
-                      </li>
-                      <li>
-                        <a href="https://www.w3.org/WAI/WCAG22/quickref/#qr-navigation-mechanisms-headings"><strong>2.4.10</strong> Section Headings:</a> Section headings are used to organize the content. (Level&nbsp;AAA)
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a href="https://www.w3.org/WAI/tutorials/page-structure/headings/">W3C WAI Tutorials on Headings</a></li>
-                </ul>
-
-              </section>
-
-              <section id="landmarks" class="feature">
-                <h2>Landmarks Tab</h2>
-                <figure class="image">
-                   <img src="./images/feature-landmarks.png"
-                        alt=""/>
-                        <figcaption>Screen Shot of Landmark Tab selected</figcaption>
-                </figure>
-
-                <h3>Feature</h3>
-                <ul>
-                  <li>
-                    The second tab provides a <a href="https://www.w3.org/WAI/ARIA/apg/patterns/listbox/">list view</a> of the landmark regions of a web page.
-                  </li>
-                  <li>
-                    Each list item provides the type of landmark region (e.g. <code>main</code>, <code>navigation</code>...) and the <a href="https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/">accessible name</a> when defined.
-                  </li>
-                  <li>
-                    Note: If there are more than one landmark regions of the same type without accessible names, the landmarks are not included in the list by default.  This mimics the behavior of many screen readers.  This feature can be disabled in <a href="./options.html">options</a>.
-                  </li>
-                </ul>
-
-                <h3>Accessibility Considerations</h3>
-
-                <ul>
-                  <li>
-                    <em>Identify Regions:</em> Verify <a href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/">landmark regions</a> accurately identify all of the logical areas of the web page.  The visual layout and styling of the page, including spacing, borders, background colors and alignment can be used in identifying landmark regions.
-                  </li>
-                  <li>
-                    <em>Appropriate Type:</em> Verify the type of landmark represents the content in the region.  For example the main region contains the primary content of the wbe page.
-                  </li>
-                  <li>
-                    <em>Unique and Concise Names:</em> Landmark regions only need accessible names when there is more than one landmark of the same.  For example, if their are two navigation regions, each region should have an accessible name that describes the types of navigation links in the region.
-                  </li>
-                  <li>Related WCAG Requirements:
-                    <ul>
-                      <li>
-                        <a href="https://www.w3.org/TR/WCAG22/#info-and-relationships" target="_spec">
-                        Success Criterion 1.3.1 Info and Relationships
-                        </a>
-                      </li>
-                      <li>
-                        <a href="https://www.w3.org/TR/WCAG22/#bypass-blocks" target="_spec">
-                          Success Criterion 2.4.1 Bypass Blocks
-                        </a>
-                      </li>
-                      <li>
-                        <a href="https://www.w3.org/TR/WCAG22/#headings-and-labels" target="_spec">
-                          Success Criterion 2.4.6 Headings and Labels
-                        </a>
-                      </li>
-                      <li>
-                        <a href="https://www.w3.org/TR/WCAG22/#section-headings" target="_spec">
-                          Success Criterion 2.4.10 Section Headings
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/">W3C ARIA Authoring Practices for Landmark Regions</a>.
-                  </li>
-
-                </ul>
-
-
-              </section>
-
-              <section id="links" class="feature">
-                <h2>Links Tab</h2>
-                <figure class="image">
-                   <img src="./images/feature-links.png"
-                        alt=""/>
-                        <figcaption>Screen Shot of Links Tab selected</figcaption>
-                </figure>
-
-                <h3>Feature</h3>
-                <ul>
-                  <li>
-                    The third tab provides a <a href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/">grid view</a> of the links of a web page.
-                  </li>
-                  <li>
-                    Each row provides the position of the link on the page, the <a href="https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/">accessible name</a> and information on the URL or file extensions.  The following lists are the common values for the type column.
-
-                                        <div class="type">Domain Information:</div>
-                    <ul class="type">
-                      <li>
-                        <span class="extension">External:</span> Links that reference a different website (e.g. different domain name)
-                      </li>
-
-                      <li>
-                        <span class="extension">Internal:</span>  Links that reference a target element (e.g. typically using an <code>id</code> on the element) in the current web page.
-                      </li>
-
-                      <li>
-                        <span class="extension">ssd:</span> Links with the same domain and sub-domain, often indicating the page is developed using the same web technology and administered by the same person or group of people.
-                      </li>
-
-                      <li>
-                        <span class="extension">sd:</span> Links with the same domain identifies the page is part of the same organization, but might be using a different web technology and administered by people not associated with website with the same sub-domain.
-                        </li>
-                    </ul>
-
-                    <div class="type">File extensions:</div>
-                    <ul class="type">
-                      <li><span class="extension">pdf:</span> Adobe Portable Document</li>
-                      <li><span class="extension">docx:</span> Word document</li>
-                      <li><span class="extension">xslx:</span> Excel document</li>
-                      <li><span class="extension">png:</span> Image format</li>
-                      <li><span class="extension">jpeg:</span> Image format</li>
-                      <li><span class="extension">mpeg:</span> Movie format</li>
-                    </ul>
-
-
-                  </li>
-                  <li>
-                    The grid consists of three columns (e.g. position, name and type) and each of the columns can be used to sort the gird rows.
-                  </li>
-                  <li>In the <a href="options.html">Options</a> their are a number of filters to only show links with a certain type.</li>
-                  </li>
-                </ul>
-
-                <h3>Accessibility Considerations</h3>
-
-                <ul>
-                  <li><em>Avoid generic phrases:</em> Verify links do not use phrases like "click here," "read more," or "learn more." or the URL as the link text.</li>
-                  <li><em>Provide context:</em> Verify the link text clearly indicates the link's destination or purpose.  For example instead of "click here," use "Download the report" or "Register for the event".</li>
-                  <li><em>Concise and unique:</em> Verify link text is short but still informative. Each link should have unique text, especially if it leads to different locations.</li>
-                  <li>Related WCAG Requirements:
-                    <ul>
-                      <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-in-context.html">2.4.4: Link Purpose (In Context) (Level A)</a></li>
-                      <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/link-purpose-link-only">2.4.9: Link Purpose (Link Only) (Level AAA)</a></li>
-                    </ul>
-                  </li>
-                  <li><a href="https://webaim.org/techniques/hypertext/">WebAim: Links and Hypertext</a></li>
-                </ul>
-
-
-              </section>
-
-              <section id="summary" class="feature">
-                <h2>Summary</h2>
-
-                <figure class="image">
-                   <img src="./images/feature-summary.png"
-                        alt=""/>
-                        <figcaption>Screen Shot of showing location of summary information on the number of links, landmarks and links</figcaption>
-                </figure>
-
-                <h3>Feature</h3>
-
-                <p>
-                  The summary section provides information on the number of headings, landmarks and links on the web page.
-                </p>
-
-              </section>
-
-              <section id="update" class="feature">
-                <h2>Update Button</h2>
-
-                <figure class="image">
-                   <img src="./images/feature-update.png"
-                        alt=""/>
-                        <figcaption>Screen Shot of showing location of update button</figcaption>
-                </figure>
-
-                <h3>Feature</h3>
-
-                <p>
-                  Activating the button udpates the side panel information from the current web page.  This is useful when the page content updated automatically or through user interaction and the side panel does not represent the current information on the page.
-                </p>
-
-              </section>
-
-
+              <secti
 
 
             

@@ -49,8 +49,42 @@ const mainPages = [
     link: 'Home',
     filename: 'index.html'
   },
+  { dropdown: 'Features',
+    pages: [
+      { content: 'content-feature-title.njk',
+        title: 'Page Title',
+        link: 'Page Title',
+        filename: 'feature-title.html'
+      },
+      { content: 'content-feature-headings.njk',
+        title: 'Headings Tab',
+        link: 'Headings Tab',
+        filename: 'feature-headings.html'
+      },
+      { content: 'content-feature-landmarks.njk',
+        title: 'Landmarks Tab',
+        link: 'Landmarks Tab',
+        filename: 'feature-landmarks.html'
+      },
+      { content: 'content-feature-links.njk',
+        title: 'Links Tab',
+        link: 'Links Tab',
+        filename: 'feature-links.html'
+      },
+      { content: 'content-feature-summary.njk',
+        title: 'Summary Information',
+        link: 'Summary',
+        filename: 'feature-summary.html'
+      },
+      { content: 'content-feature-update.njk',
+        title: 'Update Button',
+        link: 'Update',
+        filename: 'feature-update.html'
+      }
+    ]
+  },
   { content: 'content-options.njk',
-    title: 'Options',
+    title: 'Options Dialog Box',
     link: 'Options',
     filename: 'options.html'
   },
