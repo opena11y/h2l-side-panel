@@ -1,0 +1,126 @@
+/* defs.css */
+
+:root {
+  color-scheme: light dark;
+
+/* Primary Colors */
+
+  --orange: hsl(21.6, 100%, 50.98%);      /* Illini Blue */
+  --orange-dark: hsl(21.6, 100%, 49.02%);
+
+  --blue: hsl(216, 59.57%, 18.43%);       /* Illini Orange */
+  --blue-dark: hsl(216, 59.57%, 81.57%);
+
+  --industrial-blue: hsl(214.3, 70.4%, 38.4%);   /* Industrial blue */
+  --industrial-blue-dark: hsl(214.3, 70.4%, 61.6%);
+
+  --silver: hsl(330, 1.8%, 78%);
+  --silver-dark: hsl(330, 1.8%, 22%);
+
+  --light-gray: hsl(0, 0%, 93.3%);
+  --light-gray-dark: hsl(0, 0%, 6.7%);
+
+  --inert-background: hsl(0, 0%, 50%);
+
+
+/* Theme Colors */
+
+  --primary-color-light: var(--blue);
+  --primary-color-dark: var(--blue-dark);
+  --primary-focus-light: var(--orange);
+  --primary-focus-dark: var(--orange-dark);
+
+  --primary-color-text-light: #FFF;
+  --primary-color-text-dark: #222;
+
+  --code-color-light: hsl(19, 77%, 43%);
+  --code-color-dark:  hsl(19, 77%, 57%);
+  --code-font-weight: bold;
+
+  --error-red-light:            hsl(355, 84%, 55%);
+  --error-red-dark:             hsl(355, 84%, 45%);
+
+  --violations-color-light:     hsl(0, 100%, 84%);
+  --violations-color-dark:      hsl(0, 100%, 16%);
+
+  --warnings-color-light:       hsl(49, 100%, 79%);
+  --warnings-color-dark:        hsl(49, 100%, 21%);
+
+  --manual-checks-color-light:  hsl(198, 52%, 81%);
+  --manual-checks-color-dark:   hsl(198, 52%, 19%);
+
+  --passed-color-light:         hsl(90, 67%, 69%);
+  --passed-color-dark:          hsl(90, 67%, 31%);
+
+  --hidden-color-light:         hsl(0, 0%, 87%);
+  --hidden-color-dark:          hsl(0, 0%, 13%);
+
+  --not-applicable-color-light: hsl(0, 0%, 87%);
+  --not-applicable-color-dark:  hsl(0, 0%, 13%);
+/* Setting Content Variables */
+
+
+  --main-font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
+  --code-font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+
+  --title-font-size: 12pt;
+  --buttons-font-size: 10pt;
+  --legend-font-size: 12pt;
+  --options-font-size: 10pt;
+  --main-font-size: 10pt;
+
+  --main-color-light: black;
+  --main-color-dark: white;
+  --main-background-light: white;
+  --main-background-dark: black;
+
+  --link-outline-offset: 1px;
+  --link-outline-width: 2px;
+  --link-outline-style: solid;
+  --link-color-light: var(--industrial-blue);
+  --link-color-dark: var(--industrial-blue-dark);
+  --link-outline-color-light: var(--primary-focus-light);
+  --link-outline-color-dark: var(--primary-focus-dark);
+
+  --button-border: 1px;
+  --button-radius: 4px;
+  --button-padding: 3px;
+  --button-margin: 3px;
+  --button-color-light: var(--primary-color-light);
+  --button-color-dark: var(--primary-color-dark);
+  --button-background-light: var(--light-gray);
+  --button-background-dark: var(--light-gray-dark);
+
+  --input-outline-offset: 1px;
+  --input-outline-width: 2px;
+  --input-outline-style: solid;
+  --input-outline-color-light: var(--primary-focus-light);
+  --input-outline-color-dark: var(--primary-focus-dark);
+  --input-background-light: var(--light-gray);
+  --input-background-dark: var(--light-gray-dark);
+
+  --info-icon-light:var(--primary-color-light);
+  --info-icon-dark: var(--primary-color-dark);
+  --info-border-light:var(--primary-color-light);
+  --info-border-dark: var(--primary-color-dark);
+
+  // tablist
+
+  --tab-color-light: var(--primary-color-light);
+  --tab-color-dark: var(--primary-color-dark);
+  --tab-background-light: var(--light-gray);
+  --tab-background-dark: var(--light-gray-dark);
+  --tab-border-color-light: var(--silver);
+  --tab-border-color-dark:  var(--silver-dark);
+
+  --tab-selected-color-light: var(--primary-color-light);
+  --tab-selected-color-dark: var(--primary-color-dark);
+  --tab-selected-background-light: var(--main-background-light);
+  --tab-selected-background-dark: var(--main-background-dark);
+
+// Dialog
+
+  --dialog-border-light: var(--primary-color-light);
+  --dialog-border-dark: var(--primary-color-dark);
+
+}
