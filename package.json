@@ -1,7 +1,7 @@
 {
-  "name": "Web Page Table of Contents",
+  "name": "Headings, Landmarks and Links",
   "description": "This plugin provides a dynamically-generated drop-down menu that allows keyboard and screen reader users to quickly skip to the most important places on the webpage.",
-  "version": "0.9",
+  "version": "1.2",
   "keywords": [
     "Web Page",
     "Navigation",

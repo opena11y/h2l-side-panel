@@ -1,17 +1,16 @@
-/* generated from h2l-dialog.scss */
-/* toc-base.scss */
+/* toc-dialog.css */
 :root {
   color-scheme: light dark;
 }
 
 dialog::backdrop {
-  background-color: light-dark(#000, #fff);
+  background-color: light-dark(var(--main-background-light), var(--main-background-dark));
   opacity: 0.25;
 }
 
 dialog.h2l-dialog {
-  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
-  font-size: 11pt;
+  font-family: var(--main-font-family);
+  font-size: var(--main-font-size);
   position: fixed;
   top: 50%;
   left: 50%;
@@ -21,11 +20,11 @@ dialog.h2l-dialog {
   padding: 0;
   border-width: 2px;
   border-style: solid;
-  border-color: light-dark(#000, #fff);
+  border-color: light-dark(var(--dialog-border-light), var(--dialog-border-dark));
   border-radius: 5px;
   z-index: 2000001;
-  color: light-dark(#000, #fff);
-  background-color: light-dark(#fff, #000);
+  color: light-dark(var(--main-color-light), var(--main-color-dark));
+  background-color: light-dark(var(--main-background-light), var(--main-background-dark));
 }
 
 dialog.h2l-dialog .header {
@@ -35,12 +34,12 @@ dialog.h2l-dialog .header {
   border-width: 0;
   border-bottom-width: 1px;
   border-style: solid;
-  border-color: light-dark(#000, #fff);
+  border-color: light-dark(var(--dialog-border-light), var(--dialog-border-dark));
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   font-weight: bold;
-  background-color: light-dark(#fff, #000);
-  color: light-dark(#000, #fff);
+  color: light-dark(var(--main-color-light), var(--main-color-dark));
+  background-color: light-dark(var(--main-background-light), var(--main-background-dark));
   position: relative;
   font-size: 11pt;
 }
@@ -58,7 +57,7 @@ dialog.h2l-dialog .header button {
   border: none;
   background: transparent;
   font-weight: bold;
-  color: light-dark(#000, #fff);
+  color: light-dark(var(--main-color-light), var(--main-color-dark));
 }
 
 dialog.h2l-dialog .content {
@@ -177,25 +176,3 @@ button:hover {
   cursor: pointer;
 }
 
-@media (forced-colors: active) {
-  dialog::backdrop {
-    background-color: CanvasText;
-    opacity: 0.25;
-  }
-  dialog.h2l-dialog .header button {
-    color: CanvasText;
-  }
-  dialog.h2l-dialog {
-    border-color: CanvasText;
-    color: CanvasText;
-    background-color: Canvas;
-  }
-  dialog.h2l-dialog .header {
-    border-color: CanvasText;
-    background-color: Canvas;
-    color: CanvasText;
-  }
-  dialog.h2l-dialog .header button {
-    color: CanvasText;
-  }
-}

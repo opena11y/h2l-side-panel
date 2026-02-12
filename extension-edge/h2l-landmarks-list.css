@@ -1,17 +1,18 @@
-/* generated from h2l-landmarks-list.scss */
-/* toc-base.scss */
+/* h2l-landmarks-list.css */
+
 :root {
   color-scheme: light dark;
 }
 
-[role=listbox] {
+[role="listbox"] {
   overflow-y: auto;
   height: 100%;
 }
 
-[role=listbox] [role=listitem] {
-  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
-  font-size: 11pt;
+[role="listbox"] [role="listitem"] {
+  font-family: var(--main-font-family);
+  font-size: var(--main-font-size);
+
   display: block;
   margin: 0;
   padding: 3px;
@@ -19,17 +20,11 @@
   overflow: hidden;
   white-space: nowrap;
   outline: none;
-  color: light-dark(#000, #fff);
-  background-color: light-dark(#fff, #000);
+  color: light-dark(var(--main-color-light), var(--main-color-dark));
+  background-color: light-dark(var(--main-background-light), var(--main-background-dark));
 }
 
-[role=listbox] [role=listitem]:hover {
+[role="listbox"] [role="listitem"]:hover {
   cursor: pointer;
 }
 
-@media (forced-colors: active) {
-  [role=listbox] [role=listitem] {
-    color: CanvasText;
-    background-color: Canvas;
-  }
-}

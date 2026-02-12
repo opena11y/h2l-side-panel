@@ -11,6 +11,7 @@ Options
 
 * Highlight follows focus
 * Highlight border size and style
+* Highlight all headings, landmarks and links
 * Showing hidden headings and landmarks without names
 * Links filters based on domain name and file extensions
 * Export information to a CSV file
@@ -32,9 +33,9 @@ Opera: recommended 612×408, maximum 800x600
 
 Creating Zip Files
 ------------------
-zip -r ../docs/dist/h2l-side-panel-firefox-1.1.0.zip . -x ".*" -x "__MACOSX"
-zip -r ../docs/dist/h2l-side-panel-edge-1.1.0.zip . -x ".*" -x "__MACOSX"
-zip -r ../docs/dist/h2l-side-panel-chrome-1.1.0.zip . -x ".*" -x "__MACOSX"
+zip -r ../docs/dist/h2l-side-panel-firefox-1.2.0.zip . -x ".*" -x "__MACOSX"
+zip -r ../docs/dist/h2l-side-panel-edge-1.2.0.zip . -x ".*" -x "__MACOSX"
+zip -r ../docs/dist/h2l-side-panel-chrome-1.2.0.zip . -x ".*" -x "__MACOSX"
 
 
 Questions

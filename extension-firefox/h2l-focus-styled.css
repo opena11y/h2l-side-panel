@@ -1,10 +1,13 @@
-/* generated from h2l-focus-styled.scss */
-/* toc-base.scss */
+/* h2l-focus-styled.css */
+
+
 :root {
   color-scheme: light dark;
 }
 
-[role=tab] span.focus {
+// Tablist
+
+[role="tab"] span.focus {
   display: inline-block;
   margin: 2px;
   padding: 4px 6px;
@@ -13,96 +16,81 @@
   text-overflow: ellipsis;
 }
 
-[role=tab]:hover span.focus,
-[role=tab]:focus span.focus,
-[role=tab]:active span.focus {
+[role="tab"]:hover span.focus,
+[role="tab"]:focus span.focus,
+[role="tab"]:active span.focus {
   padding: 2px 4px;
-  border-width: 2px;
-  border-style: solid;
-  border-radius: 3px;
-  border-color: light-dark(#13294b, #eee);
+  border-width: var(--tab-border-width);
+  border-style:  var(--tab-border-style);
+  border-radius:  var(--tab-border-radius);
+  border-color: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
 }
 
 @media (forced-colors: active) {
-  [role=tab]:hover span.focus,
-  [role=tab]:focus span.focus,
-  [role=tab]:active span.focus {
-    border-color: ActiveText;
+  [role="tab"]:hover span.focus,
+  [role="tab"]:focus span.focus,
+  [role="tab"]:active span.focus {
+    border-color: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
   }
 }
-[role=tree] [role=treeitem][tabindex="0"] {
-  background-color: light-dark(#eee, #444);
+
+// Headings tree
+
+[role="tree"] [role="treeitem"][tabindex="0"] {
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark));
 }
 
-[role=tree] [role=treeitem]:focus {
-  outline-offset: -2px;
-  outline-color: light-dark(#13294b, #eee);
-  outline-width: 2px;
-  outline-style: solid;
-  background-color: light-dark(#ecf2fa, #13294b) !important;
-  color: light-dark(#13294b, #ecf2fa);
+[role="tree"] [role="treeitem"]:focus {
+  outline-offset:   var(--input-outline-offset);
+  outline-width:    var(--input-outline-width);
+  outline-style:    var(--input-outline-style);
+  outline-color:    light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark)) !important;
+  color:  light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
 }
 
-[role=tree] [role=treeitem]:focus svg {
-  fill: light-dark(#13294b, #ecf2fa);
-  stroke: light-dark(#13294b, #ecf2fa);
+[role="tree"] [role="treeitem"]:focus svg {
+  fill:   light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  stroke: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
 }
 
-@media (forced-colors: active) {
-  [role=tree] [role=treeitem]:focus {
-    outline-color: ActiveText;
-    background-color: ButtonFace !important;
-    color: ButtonFace;
-    stroke: ActiveText;
-    fill: ActiveText;
-  }
-}
-[role=listbox] [role=listitem][tabindex="0"] {
-  background-color: light-dark(#eee, #444);
+
+// Landmark Regions list
+
+[role="listbox"] [role="listitem"][tabindex="0"] {
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark));
 }
 
-[role=listbox] [role=listitem]:focus {
-  outline-offset: -2px;
-  outline-color: light-dark(#13294b, #eee);
-  outline-width: 2px;
-  outline-style: solid;
-  background-color: light-dark(#ecf2fa, #13294b) !important;
-  color: light-dark(#13294b, #ecf2fa);
+[role="listbox"] [role="listitem"]:focus {
+  outline-offset:   var(--input-outline-offset);
+  outline-width:    var(--input-outline-width);
+  outline-style:    var(--input-outline-style);
+  outline-color:    light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark)) !important;
+  color:            light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
 }
 
-@media (forced-colors: active) {
-  [role=listbox] [role=listitem]:focus {
-    outline-color: ActiveText;
-    background-color: ButtonFace !important;
-    color: ButtonFace;
-  }
-}
-table[role=grid] th[tabindex="0"],
-table[role=grid] td[tabindex="0"],
-table[role=grid] tr[tabindex="0"] {
-  background-color: light-dark(#eee, #444);
+// Links Grid
+
+table[role="grid"] th[tabindex="0"],
+table[role="grid"] td[tabindex="0"],
+table[role="grid"] tr[tabindex="0"] {
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark));
 }
 
-table[role=grid] th:focus,
-table[role=grid] td:focus,
-table[role=grid] tr:focus {
-  outline-offset: -2px;
-  outline-color: light-dark(#13294b, #eee);
-  outline-width: 2px;
-  outline-style: solid;
-  background-color: light-dark(#ecf2fa, #13294b) !important;
-  color: light-dark(#13294b, #ecf2fa);
+table[role="grid"] th:focus,
+table[role="grid"] td:focus,
+table[role="grid"] tr:focus {
+  outline-offset:   var(--input-outline-offset);
+  outline-width:    var(--input-outline-width);
+  outline-style:    var(--input-outline-style);
+  outline-color:    light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark)) !important;
+  color:  light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
 }
 
-@media (forced-colors: active) {
-  table[role=grid] th:focus,
-  table[role=grid] td:focus,
-  table[role=grid] tr:focus {
-    outline-color: ActiveText;
-    background-color: ButtonFace !important;
-    color: ButtonFace;
-  }
-}
+// Options Dialog
+
 dialog .focus input {
   outline: none;
 }
@@ -110,16 +98,10 @@ dialog .focus input {
 dialog .focus,
 dialog button:focus,
 dialog select:focus {
-  outline-width: 2px;
-  outline-style: solid;
-  outline-offset: 2px;
-  outline-color: light-dark(#13294b, #eee);
+  outline-offset:   var(--input-outline-offset);
+  outline-width:    var(--input-outline-width);
+  outline-style:    var(--input-outline-style);
+  outline-color:    light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark)) !important;
 }
 
-@media (forced-colors: active) {
-  dialog .focus,
-  dialog button:focus,
-  dialog select:focus {
-    outline-color: ActiveText;
-  }
-}

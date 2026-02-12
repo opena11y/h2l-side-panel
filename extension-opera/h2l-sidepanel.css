@@ -1,5 +1,5 @@
-/* generated from h2l-sidepanel.scss */
-/* toc-base.scss */
+/* h2l-sidepanel.css */
+
 :root {
   color-scheme: light dark;
 }
@@ -8,8 +8,8 @@ body {
   margin: 0;
   padding: 0;
   display: block;
-  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
-  font-size: 11pt;
+  font-family: var( --main-font-family);
+  font-size: var( --main-font-size);
 }
 
 h2l-sidepanel,

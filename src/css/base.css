@@ -1,0 +1,131 @@
+/* base.css */
+
+body {
+  font-family: var(--main-font-family);
+  font-size: var(--main-font-size);
+  color: light-dark(var(--main-color-light), var(--main-color-dark));
+  background: light-dark(var(--main-background-light), var(--main-background-dark));
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: light-dark(var(--primary-color), var(--primary-color-dark));;
+}
+
+a[href],
+a[href]:link,
+a[href]:visited {
+  color: light-dark(var(--link-color-light), var(--link-color-dark));
+}
+
+/* focus styling */
+
+a[href]:focus {
+  outline-style: var(--link-outline-style);
+  outline-offset: var(--link-outline-offset);
+  outline-width: var(--link-outline-width);
+  outline-color: light-dark(var(--link-outline-color-light), var(--link-outline-color-dark));
+}
+
+button:focus {
+  outline-offset: var(--input-outline-offset);
+  outline-width: var( --input-outline-width);
+  outline-style: var( --input-outline-style);
+  outline-color: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+input[type=text]:focus,
+input[type=number]:focus {
+  outline-offset: var(--input-outline-offset);
+  outline-width: var(--input-outline-width);
+  outline-style:  var(--input-outline-style);
+  outline-color: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  background: light-dark(var(--input-background-light), var(--input-background-dark));
+}
+
+label  {
+  margin: 0;
+  padding: 0;
+  font-size: var(--input-font-size);
+  display:  block;
+  margin-top: 0.125em;
+  margin-bottom: 0.125em;
+  padding-top: 0.125em;
+  padding-bottom: 0.125em;
+}
+
+label[for] {
+  margin-left: 0.5em;
+  margin-bottom: none;
+}
+
+fieldset label.input {
+  display: block;
+  margin: 0;
+  padding: 0;
+  margin-top: 0.5em;
+  margin-left: 0.75em;
+}
+
+fieldset input[type="text"],
+fieldset input[type="number"] {
+  margin: 4px;
+  margin-left: 0.75em;
+}
+
+fieldset input[type="checkbox"] {
+  margin-left: 0.75em;
+}
+
+fieldset div.note {
+  margin:  0;
+  padding: 0;
+  margin-left:  0.75em;
+  font-style: italic;
+}
+
+
+
+tr input[type=text]:focus {
+  outline: none;
+}
+
+label:has(input[type=radio]):hover,
+label:has(input[type=checkbox]):hover,
+tr:has(input):hover {
+  background: light-dark(var(--input-background-light), var(--input-background-dark));
+}
+
+tr:has(input:focus),
+label.focus {
+  outline-offset: 1px;
+  outline-width: var(--input-outline-width);
+  outline-style:  var(--input-outline-style);
+  outline-color: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  background: light-dark(var(--input-background-light), var(--input-background-dark));
+}
+
+label.focus {
+  outline-offset: var(--input-outline-offset);
+  outline-width: var(--input-outline-width);
+  outline-style:  var(--input-outline-style);
+  outline-color: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+}
+
+select:focus,
+button:focus {
+  outline-offset: var(--input-outline-offset);
+  outline-width: var(--input-outline-width);
+  outline-style:  var(--input-outline-style);
+  outline-color: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+}
+
+select:hover,
+button:hover {
+  cursor: pointer;
+}
+
+

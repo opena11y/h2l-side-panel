@@ -1,5 +1,5 @@
-/* generated from h2l-tablist.scss */
-/* toc-base.scss */
+/* h2l-tablist.css */
+
 :root {
   color-scheme: light dark;
 }
@@ -8,14 +8,14 @@
   padding: 0;
   padding-left: 6px;
   padding-right: 6px;
-  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
-  font-size: 11pt;
-  color: light-dark(#000, #fff);
-  background-color: light-dark(#fff, #000);
+  font-family: var( --main-font-family);
+  font-size: var( --main-font-size);
+  color:  light-dark(var(--main-color-light), var(--main-color-dark));
+  background-color: light-dark(var(--main-background-light), var(--main-background-dark));
 }
 
 h2 {
-  font-size: 12pt;
+  font-size: var( --legend-font-size);
   margin: 0;
   padding: 0;
   margin-top: 1em;
@@ -23,7 +23,7 @@ h2 {
 }
 
 #id-div-title {
-  font-size: 12pt;
+  font-size: var( --title-font-size);
   display: block;
   height: 2.2em;
   text-overflow: ellipsis;
@@ -31,11 +31,11 @@ h2 {
   margin-bottom: 1em;
 }
 
-[role=tablist] {
+[role="tablist"] {
   min-width: 100%;
 }
 
-[role=tab] {
+[role="tab"] {
   display: inline-block;
   position: relative;
   z-index: 2;
@@ -52,41 +52,41 @@ h2 {
   max-width: 8em;
   text-align: left;
   cursor: pointer;
-  border-color: light-dark(#bbb, #444);
-  color: light-dark(#000, #fff);
-  background-color: light-dark(#eee, #444);
+  border-color:    light-dark(h2l-base.$border-tablist-light, h2l-base.$border-tablist-dark);
+  color: light-dark(h2l-base.$color-light, h2l-base.$color-dark);
+  background-color: light-dark(h2l-base.$background-tab-light, h2l-base.$background-tab-dark);
 }
 
-[role=tab][aria-selected=true] {
+[role="tab"][aria-selected="true"] {
   top: 2px;
   padding: 2px 2px 3px;
   margin-top: 0;
   border-width: 2px;
   border-top-width: 6px;
   border-bottom-width: 2px;
-  color: light-dark(#000, #fff);
-  background-color: light-dark(#fff, #000);
-  border-bottom-color: light-dark(#fff, #000);
-  border-top-color: light-dark(#13294b, #eee);
+  color: light-dark(h2l-base.$color-light, h2l-base.$color-dark);
+  background-color: light-dark(h2l-base.$background-light, h2l-base.$background-dark);
+  border-bottom-color: light-dark(h2l-base.$background-light, h2l-base.$background-dark);
+  border-top-color: light-dark(h2l-base.$outline-color-focus-light, h2l-base.$outline-color-focus-dark);
 }
 
-[role=tab][aria-selected=false] {
+[role="tab"][aria-selected="false"] {
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: light-dark(#eee, #444);
+  border-bottom-color: light-dark(h2l-base.$border-color-light, h2l-base.$border-color-dark);
 }
 
-[role=tabpanel] {
+[role="tabpanel"] {
   padding: 5px;
   border-width: 2px;
   border-style: solid;
   border-radius: 0 5px 5px;
   overflow: hidden;
-  border-color: light-dark(#bbb, #444);
-  background: light-dark(#fff, #000);
+  border-color: light-dark(var(--tab-border-color-light), var(--tab-border-color-dark));
+  background-color: light-dark(var(--main-background-light), var(--main-background-dark));
 }
 
-[role=tabpanel].is-hidden {
+[role="tabpanel"].is-hidden {
   display: none;
 }
 
@@ -98,7 +98,7 @@ footer {
 }
 
 footer button {
-  font-size: 12pt;
+  font-size: var(--main-font-size);
   width: 4.5em;
 }
 
@@ -127,29 +127,4 @@ footer .fourth {
   grid-column-start: 4;
   grid-column-end: 5;
   text-align: center;
-}
-
-@media (forced-colors: active) {
-  .h2l-lablist {
-    color: CanvasText;
-    background-color: Canvas;
-  }
-  [role=tab] {
-    border-color: ButtonBorder;
-    color: CanvasText;
-    background-color: ButtonFace;
-  }
-  [role=tab][aria-selected=true] {
-    color: CanvasText;
-    background-color: Canvas;
-    border-bottom-color: Canvas;
-    border-top-color: ActiveText;
-  }
-  [role=tab][aria-selected=false] {
-    border-bottom-color: ButtonBorder;
-  }
-  [role=tabpanel] {
-    border-color: ButtonBorder;
-    background: Canvas;
-  }
 }

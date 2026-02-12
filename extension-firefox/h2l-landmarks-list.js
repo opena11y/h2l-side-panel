@@ -36,10 +36,20 @@ class H2LLandmarksList extends HTMLElement {
     this.attachShadow({ mode: 'open' });
 
     // Use external CSS stylesheet
-    const link = document.createElement('link');
-    link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('href', './h2l-landmarks-list.css');
-    this.shadowRoot.appendChild(link);
+    const linkDefs = document.createElement('link');
+    linkDefs.setAttribute('rel', 'stylesheet');
+    linkDefs.setAttribute('href', './defs.css');
+    this.shadowRoot.appendChild(linkDefs);
+
+    const linkBase = document.createElement('link');
+    linkBase.setAttribute('rel', 'stylesheet');
+    linkBase.setAttribute('href', './base.css');
+    this.shadowRoot.appendChild(linkBase);
+
+    const linkList = document.createElement('link');
+    linkList.setAttribute('rel', 'stylesheet');
+    linkList.setAttribute('href', './h2l-landmarks-list.css');
+    this.shadowRoot.appendChild(linkList);
 
     // Use external CSS stylesheet for focus styling
     const linkFocus = document.createElement('link');

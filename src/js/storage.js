@@ -1,4 +1,4 @@
- /* storage.js */
+/* storage.js */
 
 /* imports */
 
@@ -54,7 +54,15 @@ const exportOptions = {
   exportIndex: 1
 };
 
-const defaultOptions = Object.assign({}, dialogOptions, exportOptions);
+const ariaOptions = {
+  ariaRoles: true,
+  ariaProps: true,
+  ariaNames: true,
+  ariaKeyboard: true
+
+};
+
+const defaultOptions = Object.assign({}, dialogOptions, exportOptions, ariaOptions);
 
 function hasAllProperties (refObj, srcObj) {
   for (const key of Object.keys(refObj)) {
@@ -165,6 +173,19 @@ export function resetExportOptions () {
     });
   });
 }
+
+
+/*
+** resetAriaOptions
+*/
+export function resetAriaOptions () {
+  return new Promise (function (resolve) {
+    browserStorage.set(ariaOptions, function () {
+      if (notLastError()) { resolve(); }
+    });
+  });
+}
+
 
 /*
 **  logOptions

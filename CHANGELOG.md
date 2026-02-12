@@ -1,5 +1,10 @@
 # Version history for Page Table of Contents
 
+## Version 1.2.0
+* Changed CSS to use variable instead of SASS
+* Updated highlighting, adding a highlight all button
+* Added configuration options for demonstrating accessibility features
+
 ## Version 1.1.0
 * Changed branding icon to H2L from TOC
 * Removed TOC from title, just Headings, Landmarks and Links
