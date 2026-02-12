@@ -135,16 +135,6 @@ export default class H2LExportDialog extends HTMLElement {
     this.attachShadow({ mode: 'open' });
 
     // Use external CSS stylesheet
-    const linkDefs = document.createElement('link');
-    linkDefs.setAttribute('rel', 'stylesheet');
-    linkDefs.setAttribute('href', './defs.css');
-    this.shadowRoot.appendChild(linkDefs);
-
-    const linkBase = document.createElement('link');
-    linkBase.setAttribute('rel', 'stylesheet');
-    linkBase.setAttribute('href', './base.css');
-    this.shadowRoot.appendChild(linkBase);
-
     const linkDialog = document.createElement('link');
     linkDialog.setAttribute('rel', 'stylesheet');
     linkDialog.setAttribute('href', './h2l-dialog.css');

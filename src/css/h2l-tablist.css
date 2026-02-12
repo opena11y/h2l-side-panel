@@ -23,7 +23,7 @@ h2 {
 }
 
 #id-div-title {
-  font-size: var( --title-font-size);
+  font-size: var( --main-font-size);
   display: block;
   height: 2.2em;
   text-overflow: ellipsis;
@@ -52,9 +52,10 @@ h2 {
   max-width: 8em;
   text-align: left;
   cursor: pointer;
-  border-color:    light-dark(h2l-base.$border-tablist-light, h2l-base.$border-tablist-dark);
-  color: light-dark(h2l-base.$color-light, h2l-base.$color-dark);
-  background-color: light-dark(h2l-base.$background-tab-light, h2l-base.$background-tab-dark);
+
+  color: light-dark(var(--tab-color-light), var(--tab-color-dark));
+  background-color: light-dark(var(--tab-background-light), var(--tab-background-dark));
+  border-color: light-dark(var(--tab-border-color-light), var(--tab-border-color-dark));
 }
 
 [role="tab"][aria-selected="true"] {
@@ -64,16 +65,17 @@ h2 {
   border-width: 2px;
   border-top-width: 6px;
   border-bottom-width: 2px;
-  color: light-dark(h2l-base.$color-light, h2l-base.$color-dark);
-  background-color: light-dark(h2l-base.$background-light, h2l-base.$background-dark);
-  border-bottom-color: light-dark(h2l-base.$background-light, h2l-base.$background-dark);
-  border-top-color: light-dark(h2l-base.$outline-color-focus-light, h2l-base.$outline-color-focus-dark);
+
+  color: light-dark(var(--tab-color-light), var(--tab-color-dark));
+  background-color: light-dark(var(--main-background-light), var(--main-background-dark));
+  border-bottom-color: light-dark(var(--main-background-light), var(--main-background-dark));
+  border-top-color: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
 }
 
 [role="tab"][aria-selected="false"] {
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: light-dark(h2l-base.$border-color-light, h2l-base.$border-color-dark);
+  border-bottom-color: light-dark(var(--tab-border-color-light), var(--tab-border-color-dark));
 }
 
 [role="tabpanel"] {

@@ -5,7 +5,7 @@
   color-scheme: light dark;
 }
 
-// Tablist
+/* Tablist */
 
 [role="tab"] span.focus {
   display: inline-block;
@@ -26,27 +26,19 @@
   border-color: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
 }
 
-@media (forced-colors: active) {
-  [role="tab"]:hover span.focus,
-  [role="tab"]:focus span.focus,
-  [role="tab"]:active span.focus {
-    border-color: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
-  }
-}
-
-// Headings tree
+/* Headings tree */
 
 [role="tree"] [role="treeitem"][tabindex="0"] {
   background-color: light-dark(var(--input-background-light), var(--input-background-dark));
 }
 
 [role="tree"] [role="treeitem"]:focus {
-  outline-offset:   var(--input-outline-offset);
+  outline-offset:   -2px;
   outline-width:    var(--input-outline-width);
   outline-style:    var(--input-outline-style);
   outline-color:    light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
   background-color: light-dark(var(--input-background-light), var(--input-background-dark)) !important;
-  color:  light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  color:  light-dark(var(--main-color-light), var(--main-color-dark));
 }
 
 [role="tree"] [role="treeitem"]:focus svg {
@@ -55,22 +47,22 @@
 }
 
 
-// Landmark Regions list
+/* Landmark Regions list */
 
 [role="listbox"] [role="listitem"][tabindex="0"] {
   background-color: light-dark(var(--input-background-light), var(--input-background-dark));
 }
 
 [role="listbox"] [role="listitem"]:focus {
-  outline-offset:   var(--input-outline-offset);
+  outline-offset:   -2px;
   outline-width:    var(--input-outline-width);
   outline-style:    var(--input-outline-style);
   outline-color:    light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
   background-color: light-dark(var(--input-background-light), var(--input-background-dark)) !important;
-  color:            light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  color:  light-dark(var(--main-color-light), var(--main-color-dark));
 }
 
-// Links Grid
+/* Links Grid */
 
 table[role="grid"] th[tabindex="0"],
 table[role="grid"] td[tabindex="0"],
@@ -81,23 +73,29 @@ table[role="grid"] tr[tabindex="0"] {
 table[role="grid"] th:focus,
 table[role="grid"] td:focus,
 table[role="grid"] tr:focus {
-  outline-offset:   var(--input-outline-offset);
+  outline-offset:   -2px;
   outline-width:    var(--input-outline-width);
   outline-style:    var(--input-outline-style);
   outline-color:    light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
   background-color: light-dark(var(--input-background-light), var(--input-background-dark)) !important;
-  color:  light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  color:  light-dark(var(--main-color-light), var(--main-color-dark));
 }
 
-// Options Dialog
+table[role="grid"] th:focus svg {
+  fill:   light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  stroke: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+}
 
-dialog .focus input {
+
+/* Options Dialog */
+
+.focus:has(input) {
   outline: none;
 }
 
-dialog .focus,
-dialog button:focus,
-dialog select:focus {
+.focus:has(input),
+button:focus,
+select:focus {
   outline-offset:   var(--input-outline-offset);
   outline-width:    var(--input-outline-width);
   outline-style:    var(--input-outline-style);

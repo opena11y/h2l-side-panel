@@ -46,16 +46,6 @@ class H2LHeadingsTree extends HTMLElement {
     this.attachShadow({ mode: 'open' });
 
     // Use external CSS stylesheet
-    const linkDefs = document.createElement('link');
-    linkDefs.setAttribute('rel', 'stylesheet');
-    linkDefs.setAttribute('href', './defs.css');
-    this.shadowRoot.appendChild(linkDefs);
-
-    const linkBase = document.createElement('link');
-    linkBase.setAttribute('rel', 'stylesheet');
-    linkBase.setAttribute('href', './base.css');
-    this.shadowRoot.appendChild(linkBase);
-
     const linkTree = document.createElement('link');
     linkTree.setAttribute('rel', 'stylesheet');
     linkTree.setAttribute('href', './h2l-headings-tree.css');
