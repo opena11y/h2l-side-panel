@@ -50460,7 +50460,7 @@
 
   /* opena11y-for-h2l.js */
 
-  const HIGHLIGHT_ELEMENT_NAME = 'h2l-highlight';
+  const HIGHLIGHT_ELEMENT_NAME = 'opena11y-h2l-highlight';
 
   const browserRuntime = typeof browser === 'object' ?
                 browser.runtime :
@@ -50485,42 +50485,34 @@
 
       // Highlight elements
       if(request.highlight) {
-        const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
 
-        if (he) {
-          he.setAttribute('data-attr', 'data-opena11y-id');
-          he.setAttribute('highlight-position', request.highlight.position + ';' + request.highlight.info);
-        }
+        console.log(`[highlight][position]: ${request.highlight.position}`);
+        console.log(`[highlight][    info]: ${request.highlight.info}`);
+
       }
 
       // Removed highlight
       if(request.removeHighlight) {
-        const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
 
-        if (he) {
-          he.setAttribute('highlight-position', '');
-        }
+        const hes = Array.from(document.querySelectorAll(HIGHLIGHT_ELEMENT_NAME));
+
+        console.log(`[removeHighlight]: ${hes.length}`);
+
+        hes.forEach( (he) => {
+          he.removed();
+        });
+
       }
 
       // Update Highlight configuration
       if(request.updateHighlightConfig) {
         const hc = request.updateHighlightConfig;
-
-        const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
-
-        if (he) {
-          he.setAttribute('highlight-config', `${hc.size} ${hc.style}`);
-        }
+        console.log(`[updateHighlightConfig]: ${hc}`);
       }
 
       // Focus elements
       if(request.focusPosition) {
-        const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
-
-        if (he) {
-          he.setAttribute('data-attr', 'data-opena11y-id');
-          he.setAttribute('focus-position', request.focusPosition);
-        }
+        console.log(`[focusPosition]: ${request.focusPosition}`);
       }
 
       // Update heading, region and link information
@@ -50533,7 +50525,7 @@
                                   '',
                                   '',
                                   '',
-                                  true);
+                                  false);
 
         sendResponse({title: evaluationResult.getTitle(),
                       url: evaluationResult.getURL(),
