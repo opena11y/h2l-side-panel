@@ -95,13 +95,13 @@ export function updateContent () {
 }
 
 /*
-**  @function highlightOrdinalPosition
+**  @function highlightItems
 */
 
-export function highlightOrdinalPosition (ordinalPosition, info='') {
+export function highlightItems (selectedItem=false, allItems=[]) {
   const sidepanelNode = document.querySelector('h2l-sidepanel');
   if (sidepanelNode) {
-    sidepanelNode.highlightOrdinalPosition(ordinalPosition, info);
+    sidepanelNode.highlightItems(selectedItem, allItems);
   }
 }
 
@@ -116,16 +116,6 @@ export function updateHighlightConfig (options) {
   }
 }
 
-/*
-**  @function focusOrdinalPosition
-*/
-
-export function focusOrdinalPosition (ordinalPosition) {
-  const sidepanelNode = document.querySelector('h2l-sidepanel');
-  if (sidepanelNode) {
-    sidepanelNode.focusOrdinalPosition(ordinalPosition);
-  }
-}
 
 /*
 **  @function filterForCSV

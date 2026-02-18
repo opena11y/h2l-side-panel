@@ -11,8 +11,7 @@ import {
 
 import {
   getMessage,
-  focusOrdinalPosition,
-  highlightOrdinalPosition,
+  highlightItems,
   removeChildContent,
   setI18nLabels,
   setTablistAttr
@@ -168,26 +167,25 @@ class H2LLandmarksList extends HTMLElement {
     return Array.from(this.listboxNode.querySelectorAll('[role="listitem"]'));
   }
 
-  focusLandmark(listitem) {
-    const op = listitem.getAttribute('data-ordinal-position');
-    if (op) {
-      focusOrdinalPosition(op);
-    }
-  }
-
   highlightLandmark(listitem) {
     const op   = listitem.getAttribute('data-ordinal-position') ?
                  listitem.getAttribute('data-ordinal-position') :
                  '';
     const info = listitem.getAttribute('data-info');
     if (op) {
-      highlightOrdinalPosition(op, info);
+      highlightItems(
+        { type: 'landmark',
+          position: op,
+          info: info
+        },
+        []
+      );
       saveOption('lastLandmarkId', listitem.id);
     }
   }
 
   removeHighlight() {
-    highlightOrdinalPosition('', '');
+    highlightItems();
   }
 
   setFocusByFirstCharacter(listitem, char){
@@ -268,7 +266,7 @@ class H2LLandmarksList extends HTMLElement {
   handleFocus(event) {
     const tgt = event.currentTarget;
     if (this.highlightFollowsFocus) {
-      this.highlightHeading(tgt);
+      this.highlightLandmark(tgt);
     }
   }
 

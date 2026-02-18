@@ -6,8 +6,7 @@ import DebugLogging   from './debug.js';
 
 import {
   getMessage,
-  focusOrdinalPosition,
-  highlightOrdinalPosition,
+  highlightItems,
   removeChildContent,
   setI18nLabels,
   setTablistAttr
@@ -528,14 +527,6 @@ class H2LLinksGrid extends HTMLElement {
     return Array.from(this.gridNode.querySelectorAll('tr, th, td'));
   }
 
-  focusGridrow(gridrow) {
-    const op = gridrow.getAttribute('data-ordinal-position');
-    if (op) {
-      focusOrdinalPosition(op);
-    }
-  }
-
-
   highlightGriditem(griditem) {
     const op   = griditem.hasAttribute('data-ordinal-position') ?
                      griditem.getAttribute('data-ordinal-position') :
@@ -547,13 +538,19 @@ class H2LLinksGrid extends HTMLElement {
                      griditem.getAttribute('data-info') :
                      griditem.parentNode.hasAttribute('data-info') ?
                      griditem.parentNode.getAttribute('data-info') :
-                     '';
-    highlightOrdinalPosition(op, info);
+                     'Link';
+    highlightItems(
+      { type: 'links',
+        position: op,
+        info: info
+      },
+      []
+    );
     saveOption('lastLinkId', griditem.id);
   }
 
   removeHighlight() {
-    highlightOrdinalPosition('', '');
+    highlightItems();
   }
 
   setFocusByFirstCharacter(gridrow, char){

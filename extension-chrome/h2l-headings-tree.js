@@ -9,8 +9,7 @@ import {
 
 import {
   getMessage,
-  focusOrdinalPosition,
-  highlightOrdinalPosition,
+  highlightItems,
   removeChildContent,
   setI18nLabels,
   setTablistAttr
@@ -70,6 +69,7 @@ class H2LHeadingsTree extends HTMLElement {
     this.enterKeyMovesFocus    = false;
     this.isVisible = true;
     this.lastHeadingId = '';
+    this.headingItems = [];
 
     setI18nLabels(this.shadowRoot, debug.flag);
   }
@@ -113,6 +113,10 @@ class H2LHeadingsTree extends HTMLElement {
   }
 
   updateContent(sameUrl, headings) {
+
+    const headingsTreeObj = this;
+    this.headingsItems = [];
+
     let lastTreeitemNode = null;
 
     const handleIconClick = this.handleIconClick;
@@ -121,7 +125,15 @@ class H2LHeadingsTree extends HTMLElement {
 
     const levelLabel = getMessage('headings_level_label');
 
-    function addTreeitem (parentNode, heading) {
+    function addTreeitem (parentNode, heading, incName) {
+      const infoNoName   = `${levelLabel}${heading.level}`;
+      const infoWithName = `${levelLabel}${heading.level}: ${heading.name}`;
+      headingsTreeObj.headingItems.push({
+        type: 'headings',
+        position: heading.ordinalPosition,
+        info: incName ? infoWithName : infoNoName
+      });
+
       const treeitemNode = document.createElement('div');
       treeitemNode.addEventListener('keydown', treeObj.handleKeydown.bind(treeObj));
       treeitemNode.addEventListener('click',   treeObj.handleClick.bind(treeObj));
@@ -149,8 +161,8 @@ class H2LHeadingsTree extends HTMLElement {
       const nameNode = document.createElement('span');
       nameNode.classList.add('name');
       nameNode.textContent = `${heading.level}: ${heading.name}`;
-      treeitemNode.setAttribute('data-info', levelLabel + nameNode.textContent);
-      treeitemNode.setAttribute('aria-label', levelLabel + nameNode.textContent);
+      treeitemNode.setAttribute('data-info', incName ? infoWithName : infoNoName);
+      treeitemNode.setAttribute('aria-label', infoWithName);
       treeitemNode.appendChild(nameNode);
       treeitemNode.addEventListener('click', treeObj.handleClick.bind(treeObj));
       parentNode.appendChild(treeitemNode);
@@ -165,16 +177,16 @@ class H2LHeadingsTree extends HTMLElement {
       return groupNode;
     }
 
-    function processHeadings (parentNode, lastHeadingNode, headings, lastLevel) {
+    function processHeadings (parentNode, lastHeadingNode, headings, lastLevel, incName) {
       while (headings[0]) {
         const heading = headings[0];
 
         if ((heading.level === lastLevel) ||
             (lastLevel === 0) ||
             (lastLevel === 1)) {
-          const headingNode1 = addTreeitem(parentNode, heading);
+          const headingNode1 = addTreeitem(parentNode, heading, incName);
           headings.shift();
-          processHeadings (parentNode, headingNode1, headings, heading.level);
+          processHeadings (parentNode, headingNode1, headings, heading.level, incName);
         }
         else {
           if (heading.level > lastLevel) {
@@ -195,10 +207,10 @@ class H2LHeadingsTree extends HTMLElement {
             const groupNode = addGroup(parentNode, id);
             let count = headings.length;
 
-            const headingNode2 = addTreeitem(groupNode, heading);
+            const headingNode2 = addTreeitem(groupNode, heading, incName);
             headings.shift();
 
-            headings = processHeadings (groupNode, headingNode2, headings, heading.level);
+            headings = processHeadings (groupNode, headingNode2, headings, heading.level, incName);
 
             count = count - headings.length;
 
@@ -225,10 +237,9 @@ class H2LHeadingsTree extends HTMLElement {
       getOptions().then( (options) => {
 
         this.highlightFollowsFocus = options.highlightFollowsFocus;
-        this.enterKeyMovesFocus    = options.enterKeyMovesFocus;
         this.lastHeadingId         = options.lastHeadingId;
 
-        processHeadings(this.treeNode, null, [...headings], 0);
+        processHeadings(this.treeNode, null, [...headings], 0, options.incNamesHeadings);
 
         const firstTreeitem = this.treeNode.querySelector('[role="treeitem"]');
         const count = this.treeNode.querySelectorAll('[role="treeitem"]').length;
@@ -252,6 +263,11 @@ class H2LHeadingsTree extends HTMLElement {
     else {
       this.clearContent(getMessage('protocol_not_supported', debug.flag));
     }
+    getOptions().then( (options) => {
+      if (options.highlightAllHeadings) {
+        highlightItems({}, this.headingItems);
+      }
+    });
   }
 
   // Tree keyboard navigation methods
@@ -275,26 +291,32 @@ class H2LHeadingsTree extends HTMLElement {
     return Array.from(this.treeNode.querySelectorAll('[role="treeitem"]:not([role="treeitem"][aria-expanded="false"] + [role="group"] > [role="treeitem"]'));
   }
 
-  focusHeading(treeitem) {
-    const op = treeitem.getAttribute('data-ordinal-position');
-    if (op) {
-      focusOrdinalPosition(op);
-    }
-  }
-
   highlightHeading(treeitem) {
     const op   = treeitem.getAttribute('data-ordinal-position') ?
                  treeitem.getAttribute('data-ordinal-position') :
                  '';
     const info = treeitem.getAttribute('data-info');
     if (op) {
-      highlightOrdinalPosition(op, info);
-      saveOption('lastHeadingId', treeitem.id);
+      getOptions().then( (options) => {
+        highlightItems(
+          { type: 'headings',
+            position: op,
+            info: info
+           },
+          options.highlightAllHeadings ? this.headingItems : []
+        );
+        saveOption('lastHeadingId', treeitem.id);
+      });
     }
   }
 
   removeHighlight() {
-    highlightOrdinalPosition('', '');
+      getOptions().then( (options) => {
+        highlightItems(
+          {},
+          options.highlightAllHeadings ? this.headingItems : []
+        );
+      });
   }
 
   isExpandable(treeitem) {
