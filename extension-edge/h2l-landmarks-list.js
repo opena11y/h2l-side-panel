@@ -128,7 +128,9 @@ class H2LLandmarksList extends HTMLElement {
             const roleName = r.role[0].toUpperCase() + r.role.slice(1);
 
             listitemNode.textContent = r.name ? `${roleName}: ${r.name}` : roleName;
-            listitemNode.setAttribute('data-info', listitemNode.textContent);
+            listitemNode.setAttribute('data-role', roleName);
+            listitemNode.setAttribute('data-name', r.name);
+            listitemNode.setAttribute('data-name-src', r.nameSource);
             listitemNode.setAttribute('data-first-char', r.role.toLowerCase()[0]);
             listitemNode.addEventListener('click', listObj.handleClick.bind(listObj));
             listitemNode.addEventListener('keydown', listObj.handleKeydown.bind(listObj));
@@ -171,12 +173,16 @@ class H2LLandmarksList extends HTMLElement {
     const op   = listitem.getAttribute('data-ordinal-position') ?
                  listitem.getAttribute('data-ordinal-position') :
                  '';
-    const info = listitem.getAttribute('data-info');
+    const role    = listitem.getAttribute('data-role');
+    const name    = listitem.getAttribute('data-name');
+    const namesrc = listitem.getAttribute('data-name-src');
     if (op) {
       highlightItems(
-        { type: 'landmark',
-          position: op,
-          info: info
+        { position: op,
+          role: role,
+          name: name,
+          namesrc: namesrc,
+          msgHidden: 'Region is hidden'
         },
         []
       );

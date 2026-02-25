@@ -125,13 +125,16 @@ class H2LHeadingsTree extends HTMLElement {
 
     const levelLabel = getMessage('headings_level_label');
 
-    function addTreeitem (parentNode, heading, incName) {
-      const infoNoName   = `${levelLabel}${heading.level}`;
-      const infoWithName = `${levelLabel}${heading.level}: ${heading.name}`;
+    function addTreeitem (parentNode, heading) {
+      const role   = `${levelLabel}${heading.level}`;
+      const accname = `${role}: ${heading.name}`
+
       headingsTreeObj.headingItems.push({
-        type: 'headings',
         position: heading.ordinalPosition,
-        info: incName ? infoWithName : infoNoName
+        role: role,
+        name: heading.name,
+        namesrc: heading.nameSrc,
+        msgHidden: 'Heading is hidden'
       });
 
       const treeitemNode = document.createElement('div');
@@ -161,8 +164,10 @@ class H2LHeadingsTree extends HTMLElement {
       const nameNode = document.createElement('span');
       nameNode.classList.add('name');
       nameNode.textContent = `${heading.level}: ${heading.name}`;
-      treeitemNode.setAttribute('data-info', incName ? infoWithName : infoNoName);
-      treeitemNode.setAttribute('aria-label', infoWithName);
+      treeitemNode.setAttribute('data-role', role);
+      treeitemNode.setAttribute('data-name', heading.name);
+      treeitemNode.setAttribute('data-name-src', heading.nameSource);
+      treeitemNode.setAttribute('aria-label', accname);
       treeitemNode.appendChild(nameNode);
       treeitemNode.addEventListener('click', treeObj.handleClick.bind(treeObj));
       parentNode.appendChild(treeitemNode);
@@ -177,16 +182,16 @@ class H2LHeadingsTree extends HTMLElement {
       return groupNode;
     }
 
-    function processHeadings (parentNode, lastHeadingNode, headings, lastLevel, incName) {
+    function processHeadings (parentNode, lastHeadingNode, headings, lastLevel) {
       while (headings[0]) {
         const heading = headings[0];
 
         if ((heading.level === lastLevel) ||
             (lastLevel === 0) ||
             (lastLevel === 1)) {
-          const headingNode1 = addTreeitem(parentNode, heading, incName);
+          const headingNode1 = addTreeitem(parentNode, heading);
           headings.shift();
-          processHeadings (parentNode, headingNode1, headings, heading.level, incName);
+          processHeadings (parentNode, headingNode1, headings, heading.level);
         }
         else {
           if (heading.level > lastLevel) {
@@ -207,10 +212,10 @@ class H2LHeadingsTree extends HTMLElement {
             const groupNode = addGroup(parentNode, id);
             let count = headings.length;
 
-            const headingNode2 = addTreeitem(groupNode, heading, incName);
+            const headingNode2 = addTreeitem(groupNode, heading);
             headings.shift();
 
-            headings = processHeadings (groupNode, headingNode2, headings, heading.level, incName);
+            headings = processHeadings (groupNode, headingNode2, headings, heading.level);
 
             count = count - headings.length;
 
@@ -239,7 +244,7 @@ class H2LHeadingsTree extends HTMLElement {
         this.highlightFollowsFocus = options.highlightFollowsFocus;
         this.lastHeadingId         = options.lastHeadingId;
 
-        processHeadings(this.treeNode, null, [...headings], 0, options.incNamesHeadings);
+        processHeadings(this.treeNode, null, [...headings], 0);
 
         const firstTreeitem = this.treeNode.querySelector('[role="treeitem"]');
         const count = this.treeNode.querySelectorAll('[role="treeitem"]').length;
@@ -295,13 +300,17 @@ class H2LHeadingsTree extends HTMLElement {
     const op   = treeitem.getAttribute('data-ordinal-position') ?
                  treeitem.getAttribute('data-ordinal-position') :
                  '';
-    const info = treeitem.getAttribute('data-info');
+    const role    = treeitem.getAttribute('data-role');
+    const name    = treeitem.getAttribute('data-name');
+    const namesrc = treeitem.getAttribute('data-name-src');
     if (op) {
       getOptions().then( (options) => {
         highlightItems(
-          { type: 'headings',
-            position: op,
-            info: info
+          { position: op,
+            role: role,
+            name: name,
+            namesrc: namesrc,
+            msgHidden: 'Heading is hidden'
            },
           options.highlightAllHeadings ? this.headingItems : []
         );

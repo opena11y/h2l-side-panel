@@ -33,6 +33,7 @@ const dialogOptions = {
   highlightAllLandmarks: true,
   incNamesLandmarks: true,
   highlightAllLinks: false,
+  scrollBehavior: 'instant',
   incNamesLinks: false,
   unNamedDuplicateRegions: false,
   internalLinks: true,

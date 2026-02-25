@@ -107,6 +107,10 @@ class H2LSidePanel extends HTMLElement {
       }
     }
 
+    function onError(error) {
+      console.error(`[highlightItems][Error]: ${error}`);
+    }
+
     myBrowser.tabs
       .query({
         currentWindow: true,
@@ -125,26 +129,8 @@ class H2LSidePanel extends HTMLElement {
       }
     }
 
-    myBrowser.tabs
-      .query({
-        currentWindow: true,
-        active: true,
-      })
-      .then(sendHighlightConfigMessage)
-      .catch(onError);
-  }
-
-  highlightItems(selectedItem={}, allItems=[]) {
-
-    async function sendHighlightItemsMessage(tabs) {
-      for (const tab of tabs) {
-        const myResult = await myBrowser.tabs
-          .sendMessage(tab.id, { highlightItems : {
-            selectedItem: selectedItem,
-            allItems: allItems
-          }
-        });
-      }
+    function onError(error) {
+      console.error(`[updateHighlightConfig][Error]: ${error}`);
     }
 
     myBrowser.tabs
@@ -152,7 +138,7 @@ class H2LSidePanel extends HTMLElement {
         currentWindow: true,
         active: true,
       })
-      .then(sendHighlightItemsMessage)
+      .then(sendHighlightConfigMessage)
       .catch(onError);
   }
 
@@ -165,6 +151,7 @@ class H2LSidePanel extends HTMLElement {
       spObj.clearContent(getMessage('protocol_not_supported'));
       onError()
     }
+
     myBrowser.tabs
       .query({
         currentWindow: true,
@@ -176,6 +163,10 @@ class H2LSidePanel extends HTMLElement {
 
   handleGetInformationClick () {
     this.clearContent(getMessage('loading_content'));
+
+    function onError(error) {
+      console.error(`[handleGetInformationClick][Error]: ${error}`);
+    }
 
     myBrowser.tabs
       .query({
@@ -242,6 +233,8 @@ class H2LSidePanel extends HTMLElement {
     this.logTabUrl(activeInfo);
 
     const that = this;
+
+
 
     function onErrorPotocol(error) {
       that.clearContent(getMessage('protocol_not_supported'));

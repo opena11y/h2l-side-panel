@@ -262,7 +262,7 @@ class H2LLinksGrid extends HTMLElement {
     const linksObj = this;
     let lastGridNode = null;
 
-    function addRow (pos, ordinalPos, name, desc, url, typeContent, typeDesc, typeSort) {
+    function addRow (pos, ordinalPos, name, nameSource, desc, descSource, url, typeContent, typeDesc, typeSort) {
 
       function getDataCell(id, cname, content, title, sortValue, width) {
 
@@ -303,6 +303,11 @@ class H2LLinksGrid extends HTMLElement {
       trNode.setAttribute('tabindex', '-1');
       const firstChar = name.length ? name[0].toLowerCase() : '';
       trNode.setAttribute('data-first-char', firstChar);
+      trNode.setAttribute('data-role', 'link');
+      trNode.setAttribute('data-name', name);
+      trNode.setAttribute('data-name-src', nameSource);
+      trNode.setAttribute('data-desc', desc);
+      trNode.setAttribute('data-desc-src', descSource);
       trNode.addEventListener('click',   linksObj.handleGridrowClick.bind(linksObj));
       trNode.addEventListener('keydown', linksObj.handleGridrowKeydown.bind(linksObj));
       trNode.addEventListener('focus',   linksObj.handleFocus.bind(linksObj));
@@ -341,7 +346,9 @@ class H2LLinksGrid extends HTMLElement {
       const rowNode = addRow(link.pos,
                              link.ordinalPosition,
                              link.name,
+                             link.nameSource,
                              link.desc,
+                             link.descSource,
                              link.url,
                              link.type,
                              link.typeDesc,
@@ -528,21 +535,23 @@ class H2LLinksGrid extends HTMLElement {
   }
 
   highlightGriditem(griditem) {
-    const op   = griditem.hasAttribute('data-ordinal-position') ?
-                     griditem.getAttribute('data-ordinal-position') :
-                     griditem.parentNode.getAttribute('data-ordinal-position') ?
-                     griditem.parentNode.getAttribute('data-ordinal-position') :
-                     '';
 
-    const info = griditem.hasAttribute('data-info') ?
-                     griditem.getAttribute('data-info') :
-                     griditem.parentNode.hasAttribute('data-info') ?
-                     griditem.parentNode.getAttribute('data-info') :
-                     'Link';
+    function getProp (elem, prop, defaultValue='') {
+      return elem.hasAttribute(prop) ?
+              elem.getAttribute(prop) :
+              elem.parentNode.getAttribute(prop) ?
+                elem.parentNode.getAttribute(prop) :
+                defaultValue;
+    }
+
     highlightItems(
-      { type: 'links',
-        position: op,
-        info: info
+      { position: getProp(griditem, 'data-ordinal-position'),
+        role:     getProp(griditem, 'data-role', 'link'),
+        name:     getProp(griditem, 'data-name'),
+        namesrc:  getProp(griditem, 'data-name-src'),
+        desc:     getProp(griditem, 'data-desc'),
+        descsrc:  getProp(griditem, 'data-desc-src'),
+        msgHidden: 'Link is hidden'
       },
       []
     );

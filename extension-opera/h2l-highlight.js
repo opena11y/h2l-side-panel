@@ -215,12 +215,11 @@ class H2LHighlightElement extends HTMLElement {
 
     this.dataAttr = 'data-opena11y-id';
 
-    this.msgHeadingIsHidden = 'Heading is hidden';
-    this.msgRegionIsHidden = 'Region is hidden';
-    this.msgElementIsHidden = 'Element is hidden';
+    this.msgIsHidden = 'Element is hidden';
 
-    this.lastElem = false;
-    this.lastinfo = '';
+    this.lastElemRect = false;
+    this.lastInfo = '';
+    this.lastScrollBehavior = 'none';
 
     this.configStyle(highlightSize['medium']);
 
@@ -244,19 +243,19 @@ class H2LHighlightElement extends HTMLElement {
 
         if (parts.length >= 5) {
 
-          const type = parseInt(parts[0]);
-
           const rect = {};
-          rect.left   = parseInt(parts[1]);
-          rect.top    = parseInt(parts[2]);
-          rect.width  = parseInt(parts[3]);
-          rect.height = parseInt(parts[4]);
+          rect.left   = parseInt(parts[0]);
+          rect.top    = parseInt(parts[1]);
+          rect.width  = parseInt(parts[2]);
+          rect.height = parseInt(parts[3]);
           rect.right  = rect.left + rect.width;
           rect.bottom = rect.top + rect.height;
 
-          const info  = parts.length === 6 ? parts[5].trim() : '';
+          const info      = parts.length > 4 ? parts[4].trim() : '';
+          const msgHidden = parts.length > 5 ? parts[5].trim() : '';
+          const scrollto  = parts.length > 6 ? parts[6].trim() : 'none';
 
-          this.highlight(type, rect, info);
+          this.highlight(rect, info, msgHidden, scrollto);
         }
         else {
           this.removeHighlight();
@@ -265,7 +264,6 @@ class H2LHighlightElement extends HTMLElement {
         return;
 
       case "highlight-config":
-        console.log(`[highlight-config]: ${newValue}`);
 
         const values = newValue.split(';');
 
@@ -336,8 +334,8 @@ class H2LHighlightElement extends HTMLElement {
     styleNode.textContent = styleContent;
     this.shadowRoot.appendChild(styleNode);
 
-    if (this.lastElem) {
-      this.highlight(this.lastElem, this.lastinfo);
+    if (this.lastElemRect) {
+      this.highlight(this.lastElemRect, this.lastInfo, '', this.lastScrollBehavior);
     }
 
   }
@@ -348,36 +346,44 @@ class H2LHighlightElement extends HTMLElement {
    *
    *   @desc  Highlights the element on the page
    *
-   *   @param {String}  type           : Type of element: 'heading' | 'landmark' | 'link'
    *   @param {Object}  elemRect       : Rect of element to highlight
    *   @param {String}  info           : Information about target
-   *   @param {String}  scrollBehavior : 'instant', 'auto', 'smooth'
+   *   @param {String}  hiddenMsg      : Description of hidden element
+   *   @param {String}  scrollBehavior : 'instant', 'auto', 'smooth', 'none'
    *   @param {Boolean} force          : If true override isRduced
    */
 
-  highlight(type, elemRect, info='', scrollBehavior='instant', force=false) {
+  highlight(elemRect, info='', msgHidden='', scrollBehavior='none', force=false) {
     let scrollElement;
     const mediaQuery = window.matchMedia(`(prefers-reduced-motion: reduce)`);
     const isReduced = !mediaQuery || mediaQuery.matches;
 
+    this.setHiddenMessage(msgHidden ? msgHidden : this.getHiddenMessage());
+
     if (elemRect && scrollBehavior) {
 
       this.lastElemRect = elemRect;
-      this.lastinfo = info;
+      this.lastInfo = info;
+      this.lastScrollBehavior = scrollBehavior;
+
+      debug && console.log(`[ elemRect]: ${elemRect}`);
+      debug && console.log(`[     info]: ${info}`);
+      debug && console.log(`[msgHidden]: ${msgHidden}`);
+      debug && console.log(`[   scroll]: ${scrollBehavior}`);
 
       if (this.isElementHidden(elemRect)) {
         // If element is hidden make hidden element message visible
         // and use for highlighing
-        this.hiddenElem.textContent = this.getHiddenMessage(type);
+        this.hiddenElem.textContent = this.getHiddenMessage();
         this.hiddenElem.style.display = 'block';
 
         const minValue = this.highlightSize.borderOffset + 2 * this.highlightSize.contrastWidth;
 
         const left = elemRect.left > minValue ?
-                            elemRect.left + window.scrollX :
+                            elemRect.left :
                             minValue;
         const top  = elemRect.top > minValue ?
-                            elemRect.top + window.scrollY :
+                            elemRect.top :
                             minValue;
 
         this.hiddenElem.style.left = left + 'px';
@@ -399,14 +405,16 @@ class H2LHighlightElement extends HTMLElement {
                                                     this.highlightSize.overlayAdjust);
       }
 
-      if (this.isElementInHeightLarge(elemRect)) {
-        if (!this.isElementStartInViewport(elemRect) && (!isReduced || force)) {
-          scrollElement.scrollIntoView({ behavior: scrollBehavior, block: 'start', inline: 'nearest' });
+      if (scrollBehavior !== 'none') {
+        if (this.isElementInHeightLarge(elemRect)) {
+          if (!this.isElementStartInViewport(elemRect) && (!isReduced || force)) {
+            scrollElement.scrollIntoView({ behavior: scrollBehavior, block: 'start', inline: 'nearest' });
+          }
         }
-      }
-      else {
-        if (!this.isElementInViewport(elemRect)  && (!isReduced || force)) {
-          scrollElement.scrollIntoView({ behavior: scrollBehavior, block: 'center', inline: 'nearest' });
+        else {
+          if (!this.isElementInViewport(elemRect)  && (!isReduced || force)) {
+            scrollElement.scrollIntoView({ behavior: scrollBehavior, block: 'center', inline: 'nearest' });
+          }
         }
       }
     }
@@ -620,28 +628,26 @@ class H2LHighlightElement extends HTMLElement {
   }
 
   /*
+   *   @method setHiddenMessage
+   *
+   *   @desc  Sets a string describing the hidden element
+   *
+   *   @param {String}  msg : A string describing the hidden element
+   *
+   */
+  setHiddenMessage(msg) {
+    this.msgIsHidden = msg;
+  }
+
+  /*
    *   @method getHiddenMessage
    *
    *   @desc  Returns string describing the hidden element
    *
-   *   @param  {String}  type   : 'heading' | 'landmark' | 'link'
-   *
    *   @returns see @desc
    */
   getHiddenMessage(type) {
-
-    switch (type) {
-      case 'heading':
-        return this.msgHeadingIsHidden;
-
-      case 'landmark':
-      return this.msgRegionIsHidden;
-
-      default:
-        break;
-    }
-
-    return this.msgElementIsHidden;
+    return this.msgIsHidden;
   }
 
   /*
