@@ -373,7 +373,7 @@ class H2LHighlightElement extends HTMLElement {
 
       if (this.isElementHidden(elemRect)) {
         // If element is hidden make hidden element message visible
-        // and use for highlighing
+        // and use for highlighting
         this.hiddenElem.textContent = this.getHiddenMessage();
         this.hiddenElem.style.display = 'block';
 
@@ -531,14 +531,14 @@ class H2LHighlightElement extends HTMLElement {
     const minOffset = borderOffset + 2 * contrastWidth + borderWidth;
 
     adjRect.left    = elemRect.left > minOffset ?
-                      Math.round(elemRect.left + (-1 * minOffset) + window.scrollX) :
-                      Math.round(elemRect.left + window.scrollX);
+                      Math.round(elemRect.left + (-1 * minOffset)) :
+                      Math.round(elemRect.left);
 
     adjRect.width   = Math.round(Math.max(elemRect.width  + (2 * minOffset), minWidth));
 
     adjRect.top     = elemRect.top > minOffset ?
-                      Math.round(elemRect.top  + (-1 * minOffset) + window.scrollY) :
-                      Math.round(elemRect.top + window.scrollY);
+                      Math.round(elemRect.top  + (-1 * minOffset)) :
+                      Math.round(elemRect.top);
 
     adjRect.height  = Math.round(Math.max(elemRect.height + (2 * minOffset), minHeight));
 

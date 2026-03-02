@@ -99,6 +99,8 @@ class H2LHeadingsTree extends HTMLElement {
 
   clearContent(message = '') {
 
+     this.headingItems = [];
+
      removeChildContent(this.treeNode);
 
      if ((typeof message === 'string') && message.length) {
@@ -115,7 +117,7 @@ class H2LHeadingsTree extends HTMLElement {
   updateContent(sameUrl, headings) {
 
     const headingsTreeObj = this;
-    this.headingsItems = [];
+    this.headingItems = [];
 
     let lastTreeitemNode = null;
 
