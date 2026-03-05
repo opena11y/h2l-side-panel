@@ -16,103 +16,113 @@ const highlightSize = {
     fontSize: '12pt',
     borderRadius: 5,
     borderWidth: 1,
-    contrastWidth: 1,
+    contrastWidth: 3,
     borderOffset: 2,
-    overlayAdjust: 2
+    overlayAdjust: 0
   },
   'medium' : {
     fontSize: '13pt',
     borderRadius: 5,
     borderWidth: 2,
-    contrastWidth: 1,
+    contrastWidth: 4,
     borderOffset: 3,
-    overlayAdjust: 2
+    overlayAdjust: 1
   },
   'large' : {
     fontSize: '14pt',
     borderRadius: 7,
     borderWidth: 3,
-    contrastWidth: 2,
+    contrastWidth: 7,
     borderOffset: 4,
-    overlayAdjust: 5
+    overlayAdjust: 2
   },
   'x-large' : {
     fontSize: '16pt',
     borderRadius: 7,
     borderWidth: 4,
-    contrastWidth: 2,
+    contrastWidth: 8,
     borderOffset: 5,
-    overlayAdjust: 6
+    overlayAdjust: 3
   },
   'xx-large' : {
     fontSize: '18pt',
     borderRadius: 9,
     borderWidth: 5,
-    contrastWidth: 3,
+    contrastWidth: 11,
     borderOffset: 5,
-    overlayAdjust: 7
+    overlayAdjust: 4
   }
 };
 
-const fontFamily = 'arial, verdana, tahoma, "trebuchet MS", sans-serif';
+const styleTemplate = document.createElement('template');
+styleTemplate.innerHTML = `
+<style>
 
-const colorLightTextColor    = '#000000';
-const colorLightBorderColor  = '#13294b';
-const colorLightBackground   = '#dddddd';
-
-const colorDarkTextColor     = '#ffffff';
-const colorDarkBorderColor   = '#dddddd';
-const colorDarkBackground    = '#13294b';
-
-const colorLightHiddenText        = '#000000';
-const colorLightHiddenBackground  = '#ffcc00';
-
-const colorDarkHiddenText       = '#ffcc00';
-const colorDarkHiddenBackground = '#000000';
-
-const zIndexHighlight = '1999900';
-const scrollBehavior = 'instant';
-
-const styleHighlightTemplate = document.createElement('template');
-styleHighlightTemplate.textContent = `
-:root {
+.h2l-highlight,
+.hidden-elem-msg {
   color-scheme: light dark;
+
+  --info-font-family: 'arial, verdana, tahoma, "trebuchet MS", sans-serif';
+  --role-font-family: courier, monospace;
+
+  --color-light-text-color:   #000000;
+  --color-light-border-color: hsl(21.6, 100%, 50.98%);
+  --color-light-background:  #dddddd;
+
+  --color-dark-text-color:    #ffffff;
+  --color-dark-border-color:  #dddddd;
+  --color-dark-background:   hsl(21.6, 100%, 49.02%);
+
+  --color-light-hidden-text:       #000000;
+  --color-light-hidden-background: #ffcc00;
+
+  --color-dark-hidden-text:       #ffcc00;
+  --color-dark-hidden-background: #000000;
+
+  --font-size:      14pt;
+  --border-radius:  7px;
+  --border-width:   3px;
+  --border-style:   solid;
+  --contrast-width: 7px;
+
+  --scroll-behavior:  instant;
+  --z-index-highlight: auto;
 }
 
-.${HIGHLIGHT_CLASS} {
+.h2l-highlight {
   margin: 0;
   padding: 0;
   position: absolute;
   background: transparent;
-  border-radius: $borderRadiuspx;
-  border-width: $contrastWidthpx;
+  border-radius: var(--border-radius);
+  border-width: var(--contrast-width);
   border-style: solid;
-  border-color: light-dark(${colorLightBackground}, ${colorDarkBackground});
+  border-color: light-dark(var(--color-light-background), var(--color-dark-background));
   box-sizing: border-box;
   pointer-events:none;
-  z-index: ${zIndexHighlight};
+  z-index: auto;
   display: none;
 }
 
-.${HIGHLIGHT_CLASS}.hasInfoBottom,
-.${HIGHLIGHT_CLASS} .overlay-border.hasInfoBottom {
-  border-radius: $borderRadiuspx $borderRadiuspx $borderRadiuspx 0;
+.h2l-highlight.hasInfoBottom,
+.h2l-highlight .overlay-border.hasInfoBottom {
+  border-radius: var(--border-radius) var(--border-radius) var(--border-radius) 0;
 }
 
-.${HIGHLIGHT_CLASS}.hasInfoTop,
-.${HIGHLIGHT_CLASS} .overlay-border.hasInfoTop {
-    border-radius: 0 $borderRadiuspx $borderRadiuspx $borderRadiuspx;
+.h2l-highlight.hasInfoTop,
+.h2l-highlight .overlay-border.hasInfoTop {
+    border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
 }
 
-.${HIGHLIGHT_CLASS} .overlay-border {
+.h2l-highlight .overlay-border {
   margin: 0;
   padding: 0;
   position: relative;
-  border-radius: $borderRadiuspx;
-  border-width: $borderWidthpx;
-  border-style: $borderStyle;
-  border-color: light-dark(${colorLightBorderColor}, ${colorDarkBorderColor});
-  z-index: ${zIndexHighlight};
+  border-radius: var(--border-radius);
+  border-width: var(--border-width);
+  border-style: var(--border-style);
+  border-color: light-dark(var(--color-light-border-color), var(--color-dark-border-color));
+  z-index: auto;
   box-sizing: border-box;
   pointer-events:none;
   background: transparent;
@@ -128,44 +138,67 @@ styleHighlightTemplate.textContent = `
   margin: 0;
   padding: .25em;
   border: none;
-  color: light-dark(${colorLightHiddenText}, ${colorDarkHiddenText});
-  background-color: light-dark(${colorLightHiddenBackground}, ${colorDarkHiddenBackground});
-  font-family: ${fontFamily};
-  font-size: $fontSize;
+  color: light-dark(var(--color-light-hidden-text), var(--color-dark-hidden-text));
+  background-color: light-dark(var(--color-light-hidden-background), var(--color-dark-hidden-background));
+  font-family: var(--info-font-family);
+  font-size: var(--font-size);
   font-style: italic;
   font-weight: bold;
   text-align: center;
   animation: fadeIn 1.5s;
-  z-index: ${zIndexHighlight};
+  z-index: auto;
   display: none;
 }
 
-.${HIGHLIGHT_CLASS} .overlay-info {
+.h2l-highlight .overlay-info {
   margin: 0;
   padding: 2px;
   position: relative;
+  display: inline-block;
   text-align: left;
-  font-size: $fontSize;
-  font-family: ${fontFamily};
-  border-width: $borderWidthpx;
-  border-style: $borderStyle;
-  border-color: light-dark(${colorLightBackground}, ${colorDarkBackground});
-  background-color: light-dark(${colorLightBackground}, ${colorDarkBackground});
-  color: light-dark(${colorLightTextColor}, ${colorDarkTextColor});
-  z-index: ${zIndexHighlight};
+  font-size: var(--font-size);
+  font-family: var(--info-font-family);
+  border-width: var(--border-width);
+  border-style: var(--border-style);
+  border-color: light-dark(var(--color-light-background), var(--color-dark-background));
+  background-color: light-dark(var(--color-light-background), var(--color-dark-background));
+  color: light-dark(var(--color-light-text-color), var(--color-dark-text-color));
+  z-index: auto;
   overflow: hidden;
   text-overflow: ellipsis;
   pointer-events:none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.${HIGHLIGHT_CLASS} .overlay-info.hasInfoTop {
-  border-radius: $borderRadiuspx $borderRadiuspx 0 0;
+.h2l-highlight .overlay-info.hasInfoTop {
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
-.${HIGHLIGHT_CLASS} .overlay-info.hasInfoBottom {
-  border-radius: 0 0 $borderRadiuspx $borderRadiuspx;
+.h2l-highlight .overlay-info.hasInfoBottom {
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
+.h2l-highlight .overlay-info span {
+  margin: 0;
+  padding: 0;
+  display: inline;
+}
+
+.h2l-highlight .overlay-info span.elem-role {
+  font-weight: bold;
+  font-family: var(--role-font-family);
+  }
+
+.h2l-highlight .overlay-info span.name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--info-font-family);
+
+  }
+</style>
 `;
 
 /*
@@ -190,6 +223,9 @@ class H2LHighlightElement extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
 
+    // Add style element
+    this.shadowRoot.appendChild(styleTemplate.content.cloneNode(true));
+
     // Get references
 
     this.overlayElem  = document.createElement('div');
@@ -205,29 +241,50 @@ class H2LHighlightElement extends HTMLElement {
     this.infoElem.className = 'overlay-info';
     this.overlayElem.appendChild(this.infoElem);
 
+    this.elemRoleElem = document.createElement('span');
+    this.elemRoleElem.className = 'elem-role';
+    this.infoElem.appendChild(this.elemRoleElem);
+
+    this.nameElem = document.createElement('span');
+    this.nameElem.className = 'name';
+    this.infoElem.appendChild(this.nameElem);
+
     this.hiddenElem = document.createElement('div');
     this.hiddenElem.className = 'hidden-elem-msg';
     this.shadowRoot.appendChild(this.hiddenElem);
     this.hiddenElem.style.display = 'none';
 
-    this.highlightSize = highlightSize['medium'];
-    this.highlightStyle = 'solid';
+    this.highlightSize = highlightSize[HIGHLIGHT_SIZES[2]];
+    this.highlightStyle = HIGHLIGHT_STYLE[0];
 
     this.dataAttr = 'data-opena11y-id';
+
+    this.elemRole = '??';
+    this.name       = '';
+    this.nameHasAlt = false;
+    this.nameSrc    = '';
+
+    this.desc    = '';
+    this.descSrc = '';
 
     this.msgIsHidden = 'Element is hidden';
 
     this.lastElemRect = false;
-    this.lastInfo = '';
+    this.lastElemRole = this.elemRole;
+    this.lastName = '';
     this.lastScrollBehavior = 'none';
-
-    this.configStyle(highlightSize['medium']);
-
 
   }
 
   static get observedAttributes() {
     return [
+      "name",
+      "name-has-alt",
+      "name-src",
+      "desc",
+      "desc-src",
+      "elem-role",
+      "msg-hidden",
       "highlight",
       "highlight-config"
       ];
@@ -237,6 +294,34 @@ class H2LHighlightElement extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
 
     switch (name) {
+
+      case "name":
+        this.name = newValue;
+        break;
+
+      case "name-has-alt":
+        this.nameHasAlt = newValue.trim().toLowerCase() === 'true';
+        break;
+
+      case "name-src":
+        this.nameSrc = newValue;
+        break;
+
+      case "desc":
+        this.desc = newValue;
+        break;
+
+      case "desc-src":
+        this.descSrc = newValue;
+        break;
+
+      case "elem-role":
+        this.elemRole = newValue;
+        break;
+
+      case "msg-hidden":
+        this.setHiddenMessage(newValue ? newValue : this.getHiddenMessage());
+        break;
 
       case "highlight":
         const parts = newValue.split(';');
@@ -250,12 +335,9 @@ class H2LHighlightElement extends HTMLElement {
           rect.height = parseInt(parts[3]);
           rect.right  = rect.left + rect.width;
           rect.bottom = rect.top + rect.height;
+          const scrollto  = parts.length > 4 ? parts[4].trim() : 'none';
 
-          const info      = parts.length > 4 ? parts[4].trim() : '';
-          const msgHidden = parts.length > 5 ? parts[5].trim() : '';
-          const scrollto  = parts.length > 6 ? parts[6].trim() : 'none';
-
-          this.highlight(rect, info, msgHidden, scrollto);
+          this.highlight(rect, scrollto);
         }
         else {
           this.removeHighlight();
@@ -272,10 +354,13 @@ class H2LHighlightElement extends HTMLElement {
 
         values.forEach( (v) => {
           const value = v.toLowerCase().trim();
+          console.log(`[value]: ${value}`);
           if (HIGHLIGHT_SIZES.includes(value)) {
+            console.log(`[highlightSize]: ${value}`);
             newSize = highlightSize[value];
           }
           if (HIGHLIGHT_STYLE.includes(value)) {
+            console.log(`[highlightStyle]: ${value}`);
             newStyle = value;
           }
         });
@@ -293,53 +378,28 @@ class H2LHighlightElement extends HTMLElement {
    *
    * @desc Updates style sheet based on border size and style
    *
-   * @param {Object}  bSize   - Object with border dimension information
-   * @param {String}  bStyle  - CSS border style property values (e.g. solid, dashed, dotted)
+   * @param {Object}  hSize   - Object with border dimension information
+   * @param {String}  hStyle  - CSS border style property values (e.g. solid, dashed, dotted)
    *
    * @returns (Object) @desc
    */
 
-  configStyle (hSize, hStyle) {
+  configStyle (hSize, hStyle="solid") {
 
-    if (!hSize || !hSize.fontSize) {
-      hSize = this.highlightSize;
-    }
+    this.highlightSize = hSize;
+    console.log(`[configStyle][overlayAdjust]: [${hSize.overlayAdjust}] ${this.highlightSize.overlayAdjust}`);
 
-    if (!hStyle) {
-      hStyle = this.highlightStyle;
-    }
+    const elems = Array.from(this.shadowRoot.querySelectorAll('.h2l-highlight, .hidden-elem-msg'));
 
-    // Copy style template
-    let styleContent = styleHighlightTemplate.textContent.slice(0);
-
-    const contrastWidth = hSize.borderWidth + 2 * hSize.contrastWidth;
-
-    styleContent = styleContent.replaceAll('$fontSize',      hSize.fontSize);
-    styleContent = styleContent.replaceAll('$borderRadius',  hSize.borderRadius);
-    styleContent = styleContent.replaceAll('$borderWidth',   hSize.borderWidth);
-    styleContent = styleContent.replaceAll('$contrastWidth', contrastWidth);
-
-    styleContent = styleContent.replaceAll('$borderStyle', hStyle);
-
-    this.highlightSize  = hSize;
-    this.highlightStyle = hStyle;
-
-    let styleNode = this.shadowRoot.querySelector('style');
-
-    if (styleNode) {
-      styleNode.remove();
-    }
-
-    styleNode = document.createElement('style');
-    styleNode.textContent = styleContent;
-    this.shadowRoot.appendChild(styleNode);
-
-    if (this.lastElemRect) {
-      this.highlight(this.lastElemRect, this.lastInfo, '', this.lastScrollBehavior);
-    }
+    elems.forEach( (elem) => {
+      elem.style.setProperty('--font-size',      hSize.fontSize);
+      elem.style.setProperty('--border-radius',  hSize.borderRadius  + 'px');
+      elem.style.setProperty('--border-width',   hSize.borderWidth   + 'px');
+      elem.style.setProperty('--contrast-width', hSize.contrastWidth + 'px');
+      elem.style.setProperty('--border-style',   hStyle);
+    });
 
   }
-
 
   /*
    *   @method highlight
@@ -347,28 +407,21 @@ class H2LHighlightElement extends HTMLElement {
    *   @desc  Highlights the element on the page
    *
    *   @param {Object}  elemRect       : Rect of element to highlight
-   *   @param {String}  info           : Information about target
-   *   @param {String}  hiddenMsg      : Description of hidden element
    *   @param {String}  scrollBehavior : 'instant', 'auto', 'smooth', 'none'
    *   @param {Boolean} force          : If true override isRduced
    */
 
-  highlight(elemRect, info='', msgHidden='', scrollBehavior='none', force=false) {
+  highlight(elemRect, scrollBehavior='none', force=false) {
     let scrollElement;
     const mediaQuery = window.matchMedia(`(prefers-reduced-motion: reduce)`);
     const isReduced = !mediaQuery || mediaQuery.matches;
 
-    this.setHiddenMessage(msgHidden ? msgHidden : this.getHiddenMessage());
-
     if (elemRect && scrollBehavior) {
 
       this.lastElemRect = elemRect;
-      this.lastInfo = info;
       this.lastScrollBehavior = scrollBehavior;
 
       debug && console.log(`[ elemRect]: ${elemRect}`);
-      debug && console.log(`[     info]: ${info}`);
-      debug && console.log(`[msgHidden]: ${msgHidden}`);
       debug && console.log(`[   scroll]: ${scrollBehavior}`);
 
       if (this.isElementHidden(elemRect)) {
@@ -377,7 +430,7 @@ class H2LHighlightElement extends HTMLElement {
         this.hiddenElem.textContent = this.getHiddenMessage();
         this.hiddenElem.style.display = 'block';
 
-        const minValue = this.highlightSize.borderOffset + 2 * this.highlightSize.contrastWidth;
+        const minValue = this.highlightSize.contrastWidth;
 
         const left = elemRect.left > minValue ?
                             elemRect.left :
@@ -388,17 +441,36 @@ class H2LHighlightElement extends HTMLElement {
 
         this.hiddenElem.style.left = left + 'px';
         this.hiddenElem.style.top = top + 'px';
+
+        this.lastElemRole = this.getHiddenMessage();
+        this.lastName     = '';
+
         scrollElement = this.updateHighlightElement(this.hiddenElem.getBoundingClientRect(),
-                                                    info,
+                                                    this.getHiddenMessage(),
+                                                    '',
                                                     0,
+                                                    this.highlightSize.borderOffset,
                                                     this.highlightSize.borderWidth,
                                                     this.highlightSize.contrastWidth,
                                                     this.highlightSize.overlayAdjust);
       }
       else {
         this.hiddenElem.style.display = 'none';
+        const elemRole = this.nameSrc !== 'contents' || this.nameHasAlt ?
+                         `${this.elemRole}: ` :
+                         this.elemRole;
+
+        const name =  this.nameSrc !== 'contents' || this.nameHasAlt ?
+                      this.name :
+                      '';
+
+        this.lastElemRole = elemRole;
+        this.lastName = name;
+
+
         scrollElement = this.updateHighlightElement(elemRect,
-                                                    info,
+                                                    elemRole,
+                                                    name,
                                                     this.highlightSize.borderOffset,
                                                     this.highlightSize.borderWidth,
                                                     this.highlightSize.contrastWidth,
@@ -426,44 +498,61 @@ class H2LHighlightElement extends HTMLElement {
    *  @desc  Create an overlay element and set its position on the page.
    *
    *  @param  {Object}  elemRect       -  Rect of element node to highlight
-   *  @param  {String}  info           -  Description of the element
+   *  @param  {String}  elemRole       -  Description of the element
+   *  @param  {String}  name           -  Accessible name
    *  @param  {Number}  borderOffset   -  Number of pixels for offset
    *  @param  {Number}  borderWidth    -  Number of pixels for border width
    *  @param  {Number}  contrastWidth  -  Number of pixels to provide border contrast
    *
    */
 
-   updateHighlightElement (elemRect, info, borderOffset, borderWidth, contrastWidth, overlayAdjust) {
+   updateHighlightElement (elemRect, elemRole, name, borderOffset, borderWidth, contrastWidth, overlayAdjust) {
+    console.log(`\n[     elemRole]: ${elemRole}`);
+    console.log(`[         name]: ${name}`);
+
+    console.log(`[ borderOffset]: ${borderOffset}`);
+    console.log(`[  borderWidth]: ${borderWidth}`);
+    console.log(`[contrastWidth]: ${contrastWidth}`);
+    console.log(`[overlayAdjust]: ${overlayAdjust}`);
+    consoleRect('elemRect', elemRect);
 
     const adjRect = this.getAdjustedRect(elemRect, borderOffset, borderWidth, contrastWidth);
+    consoleRect('adjRect', adjRect);
 
-    const a = -1 * overlayAdjust;
-    const b = 2 * contrastWidth;
+    const a = -1 * (contrastWidth);
+    const b = (contrastWidth - borderWidth) / 2;
 
-//    elem.style.outline               = '1px dotted red';
 //    this.overlayElem.style.outline   = '1px dotted green';
 //    this.borderElem.style.outline    = '1px dashed blue';
 
     this.overlayElem.style.left   = adjRect.left   + 'px';
     this.overlayElem.style.top    = adjRect.top    + 'px';
-    this.borderElem.style.left    = a + 'px';
-    this.borderElem.style.top     = a + 'px';
 
+    this.borderElem.style.left    = a + b + 'px';
+    this.borderElem.style.top     = a + b + 'px';
 
     this.overlayElem.style.width  = adjRect.width  + 'px';
     this.overlayElem.style.height = adjRect.height + 'px';
-    this.borderElem.style.width   = (adjRect.width - b) + 'px';
-    this.borderElem.style.height  = (adjRect.height - b) + 'px';
+
+    this.borderElem.style.width   = (adjRect.width - 2 * b) + 'px';
+    this.borderElem.style.height  = (adjRect.height - 2 * b) + 'px';
+
+    this.infoElem.style.maxWidth  = (adjRect.width - 6 * contrastWidth) + 'px';
 
     this.overlayElem.style.display = 'block';
-    this.borderElem.style.display = 'block';
+    this.borderElem.style.display  = 'block';
 
-    if (info) {
+    if (elemRole) {
 
-      this.infoElem.style.display = 'inline-block';
-      this.infoElem.textContent   = info;
+      this.infoElem.style.display    = 'inline-block';
+      this.infoElem.title            = name ?
+                                       `${elemRole}: ${name}` :
+                                       '';
 
-      const infoElemOffsetLeft = -1 * (borderWidth + 2 * contrastWidth);
+      this.elemRoleElem.textContent  = elemRole;
+      this.nameElem.textContent      = name;
+
+      const infoElemOffsetLeft = -1 * contrastWidth;
       this.infoElem.style.left = infoElemOffsetLeft + 'px';
 
       const infoElemRect    = this.infoElem.getBoundingClientRect();
@@ -479,13 +568,11 @@ class H2LHighlightElement extends HTMLElement {
         this.infoElem.classList.add('hasInfoTop');
         this.infoElem.style.top =  (-1 * (adjRect.height +
                                          infoElemRect.height +
-                                         borderWidth))  + 'px';
+                                         overlayAdjust))  + 'px';
       }
       else {
         // Info is displayed below the highlighted element when it is at the top of
         // the window
-
-        const infoElemOffsetTop  = -1 * (borderWidth + contrastWidth);
 
         this.overlayElem.classList.remove('hasInfoTop');
         this.borderElem.classList.remove('hasInfoTop');
@@ -493,7 +580,7 @@ class H2LHighlightElement extends HTMLElement {
         this.overlayElem.classList.add('hasInfoBottom');
         this.borderElem.classList.add('hasInfoBottom');
         this.infoElem.classList.add('hasInfoBottom');
-        this.infoElem.style.top  = infoElemOffsetTop + 'px';
+        this.infoElem.style.top  = (-1 * borderWidth) + 'px';
       }
       return this.infoElem;
     }
@@ -528,7 +615,7 @@ class H2LHighlightElement extends HTMLElement {
       height: 0
     };
 
-    const minOffset = borderOffset + 2 * contrastWidth + borderWidth;
+    const minOffset = borderOffset + contrastWidth;
 
     adjRect.left    = elemRect.left > minOffset ?
                       Math.round(elemRect.left + (-1 * minOffset)) :

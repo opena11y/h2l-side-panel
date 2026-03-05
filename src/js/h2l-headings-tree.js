@@ -128,15 +128,14 @@ class H2LHeadingsTree extends HTMLElement {
     const levelLabel = getMessage('headings_level_label');
 
     function addTreeitem (parentNode, heading) {
-      const role   = `${levelLabel}${heading.level}`;
-      const accname = `${role}: ${heading.name}`
+      const level    = `${levelLabel}${heading.level}`;
+      const accname  = `${level}: ${heading.name}`
 
       headingsTreeObj.headingItems.push({
         position: heading.ordinalPosition,
-        role: role,
-        name: heading.name,
-        namesrc: heading.nameSrc,
-        msgHidden: 'Heading is hidden'
+        elemRole: `h${heading.level}`,
+        msgHidden: 'Heading is hidden',
+        scrollBehavior: 'none'
       });
 
       const treeitemNode = document.createElement('div');
@@ -166,9 +165,7 @@ class H2LHeadingsTree extends HTMLElement {
       const nameNode = document.createElement('span');
       nameNode.classList.add('name');
       nameNode.textContent = `${heading.level}: ${heading.name}`;
-      treeitemNode.setAttribute('data-role', role);
-      treeitemNode.setAttribute('data-name', heading.name);
-      treeitemNode.setAttribute('data-name-src', heading.nameSource);
+      treeitemNode.setAttribute('data-elem-role', `h${heading.level}`);
       treeitemNode.setAttribute('aria-label', accname);
       treeitemNode.appendChild(nameNode);
       treeitemNode.addEventListener('click', treeObj.handleClick.bind(treeObj));
@@ -302,17 +299,14 @@ class H2LHeadingsTree extends HTMLElement {
     const op   = treeitem.getAttribute('data-ordinal-position') ?
                  treeitem.getAttribute('data-ordinal-position') :
                  '';
-    const role    = treeitem.getAttribute('data-role');
-    const name    = treeitem.getAttribute('data-name');
-    const namesrc = treeitem.getAttribute('data-name-src');
+    const elemRole    = treeitem.getAttribute('data-elem-role');
     if (op) {
       getOptions().then( (options) => {
         highlightItems(
           { position: op,
-            role: role,
-            name: name,
-            namesrc: namesrc,
-            msgHidden: 'Heading is hidden'
+            elemRole: elemRole,
+            msgHidden: 'Heading is hidden',
+            scrollBehavior: options.scrollBehavior
            },
           options.highlightAllHeadings ? this.headingItems : []
         );

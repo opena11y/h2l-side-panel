@@ -96,50 +96,66 @@ class H2LSidePanel extends HTMLElement {
 
   highlightItems(selectedItem, allItems) {
 
-    async function sendHighlightItemsMessage(tabs) {
-      for (const tab of tabs) {
-        const myResult = await myBrowser.tabs
-          .sendMessage(tab.id, {highlightItems: {
-                                    selectedItem: selectedItem,
-                                    allItems: allItems
-                                  }
-                                });
+    getOptions().then( (options) => {
+
+      async function sendHighlightItemsMessage(tabs) {
+        for (const tab of tabs) {
+          const myResult = await myBrowser.tabs
+            .sendMessage(tab.id, {highlightItems: {
+                                      selectedItem: selectedItem,
+                                      allItems: allItems,
+                                      highlightSize: options.highlightSize,
+                                      highlightStyle: options.highlightStyle,
+                                      highlightStyleSelected: options.highlightStyleSelected
+                                    }
+                                  });
+        }
       }
-    }
 
-    function onError(error) {
-      console.error(`[highlightItems][Error]: ${error}`);
-    }
+      function onError(error) {
+        console.error(`[highlightItems][Error]: ${error}`);
+      }
 
-    myBrowser.tabs
-      .query({
-        currentWindow: true,
-        active: true,
-      })
-      .then(sendHighlightItemsMessage)
-      .catch(onError);
+      myBrowser.tabs
+        .query({
+          currentWindow: true,
+          active: true,
+        })
+        .then(sendHighlightItemsMessage)
+        .catch(onError);
+    });
   }
 
   updateHighlightConfig(options) {
 
-    async function sendHighlightConfigMessage(tabs) {
-      for (const tab of tabs) {
-        const myResult = await myBrowser.tabs
-          .sendMessage(tab.id, { updateHighlightConfig: true});
+
+    getOptions().then( (options) => {
+
+      async function sendHighlightConfigMessage(tabs) {
+        for (const tab of tabs) {
+          const myResult = await myBrowser.tabs
+            .sendMessage(tab.id, { updateHighlightConfig: {
+                highlightSize: options.highlightSize,
+                highlightStyle: options.highlightStyle,
+                highlightStyleSelected: options.highlightStyleSelected
+              }
+            });
+        }
       }
-    }
 
-    function onError(error) {
-      console.error(`[updateHighlightConfig][Error]: ${error}`);
-    }
+      function onError(error) {
+        console.error(`[updateHighlightConfig][Error]: ${error}`);
+      }
 
-    myBrowser.tabs
-      .query({
-        currentWindow: true,
-        active: true,
-      })
-      .then(sendHighlightConfigMessage)
-      .catch(onError);
+      myBrowser.tabs
+        .query({
+          currentWindow: true,
+          active: true,
+        })
+        .then(sendHighlightConfigMessage)
+        .catch(onError);
+
+    });
   }
 
   updateContent() {
