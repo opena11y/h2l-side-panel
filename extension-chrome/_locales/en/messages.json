@@ -374,6 +374,18 @@
   "loading_content": {
     "message": "Loading content, please wait...",
     "description": "Message if waiting for a page to complete loading"
+  },
+  "msg_heading_hidden": {
+    "message": "Heading is hidden",
+    "description": "Message for highlighting when heading is hidden"
+  },
+  "msg_landmark_hidden": {
+    "message": "Region is hidden",
+    "description": "Message for highlighting when region is hidden"
+  },
+  "msg_link_hidden": {
+    "message": "Link is hidden",
+    "description": "Message for highlighting when link is hidden"
   }
 }
 

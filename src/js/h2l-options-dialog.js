@@ -73,7 +73,7 @@ template.innerHTML = `
                  data-i18n="options_dialog_label_highlight_style">
           </label>
           <select id="id-highlight-style"
-                   data-option="highlightStyle">
+                   data-option="highlightStyleSelected">
             <option value="solid"
                     data-i18n="options_dialog_highlight_style_solid">
             </option>
@@ -305,6 +305,22 @@ export default class H2LOptionsDialog extends HTMLElement {
 
             default:
               break;
+          }
+
+          if (option == 'highlightStyleSelected') {
+            switch (option) {
+              case 'solid':
+                option['highlightStyle'] = 'dashed';
+                break;
+
+              case 'dashed':
+              case 'dotted':
+                option['highlightStyle'] = 'solid';
+                break;
+
+              default:
+                break;
+            }
           }
         }
 

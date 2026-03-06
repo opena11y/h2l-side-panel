@@ -142,6 +142,7 @@ class H2LLinksGrid extends HTMLElement {
     this.enterKeyMovesFocus    = false;
     this.isVisible = false;
     this.lastLinkId = '';
+    this.linkItems = [];
 
     setI18nLabels(this.shadowRoot, debug.flag);
 
@@ -229,6 +230,13 @@ class H2LLinksGrid extends HTMLElement {
         linksObj.lastLinkId            = options.lastLinkId;
 
         links.forEach( (link, index) => {
+
+          linksObj.linkItems.push({
+            position: link.ordinalPosition,
+            elemRole: 'link'
+          });
+
+
           [link.type, link.typeDesc, link.typeSort] = linksObj.getTypeContentAndDescription(link);
           link.pos = index + 1;
         });
@@ -252,10 +260,19 @@ class H2LLinksGrid extends HTMLElement {
           linksObj.clearContent(getMessage('links_none_found', debug.flag));
         }
       });
+
+      getOptions().then( (options) => {
+        if (options.highlightAllLinks) {
+          highlightItems({}, this.linkItems, getMessage('msg_link_hidden'));
+        }
+      });
+
     }
     else {
       this.clearContent(getMessage('protocol_not_supported', debug.flag));
     }
+
+
   }
 
   updateLinkContent (links) {
@@ -544,22 +561,29 @@ class H2LLinksGrid extends HTMLElement {
                 defaultValue;
     }
 
-    highlightItems(
-      { position: getProp(griditem, 'data-ordinal-position'),
-        role:     getProp(griditem, 'data-role', 'link'),
-        name:     getProp(griditem, 'data-name'),
-        namesrc:  getProp(griditem, 'data-name-src'),
-        desc:     getProp(griditem, 'data-desc'),
-        descsrc:  getProp(griditem, 'data-desc-src'),
-        msgHidden: 'Link is hidden'
-      },
-      []
-    );
-    saveOption('lastLinkId', griditem.id);
+    const op = getProp(griditem, 'data-ordinal-position');
+
+    getOptions().then( (options) => {
+      highlightItems(
+        { position: op,
+          elemRole: 'link'
+         },
+        options.highlightAllLinks ? this.linkItems : [],
+        getMessage('msg_link_hidden')
+      );
+      saveOption('lastLinkId', griditem.id);
+    });
+
   }
 
   removeHighlight() {
-    highlightItems();
+    getOptions().then( (options) => {
+      highlightItems(
+        {},
+        [],
+        getMessage('msg_link_hidden')
+      );
+    });
   }
 
   setFocusByFirstCharacter(gridrow, char){

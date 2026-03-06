@@ -188,7 +188,7 @@ styleTemplate.innerHTML = `
 
 .h2l-highlight .overlay-info span.elem-role {
   font-weight: bold;
-  font-family: var(--role-font-family);
+  font-family: var(--info-font-family);
   }
 
 .h2l-highlight .overlay-info span.name {
@@ -424,6 +424,17 @@ class H2LHighlightElement extends HTMLElement {
       debug && console.log(`[ elemRect]: ${elemRect}`);
       debug && console.log(`[   scroll]: ${scrollBehavior}`);
 
+      const elemRole = (this.nameSrc === 'contents' || this.nameSrc === 'none') && !this.nameHasAlt ?
+                       this.elemRole :
+                       `${this.elemRole}: `;
+
+      const name =  this.nameSrc !== 'contents' || this.nameHasAlt ?
+                    this.name :
+                    '';
+
+      this.lastElemRole = elemRole;
+      this.lastName = name;
+
       if (this.isElementHidden(elemRect)) {
         // If element is hidden make hidden element message visible
         // and use for highlighting
@@ -442,13 +453,9 @@ class H2LHighlightElement extends HTMLElement {
         this.hiddenElem.style.left = left + 'px';
         this.hiddenElem.style.top = top + 'px';
 
-        this.lastElemRole = this.getHiddenMessage();
-        this.lastName     = '';
-
         scrollElement = this.updateHighlightElement(this.hiddenElem.getBoundingClientRect(),
-                                                    this.getHiddenMessage(),
-                                                    '',
-                                                    0,
+                                                    elemRole,
+                                                    name,
                                                     this.highlightSize.borderOffset,
                                                     this.highlightSize.borderWidth,
                                                     this.highlightSize.contrastWidth,
@@ -456,17 +463,6 @@ class H2LHighlightElement extends HTMLElement {
       }
       else {
         this.hiddenElem.style.display = 'none';
-        const elemRole = this.nameSrc !== 'contents' || this.nameHasAlt ?
-                         `${this.elemRole}: ` :
-                         this.elemRole;
-
-        const name =  this.nameSrc !== 'contents' || this.nameHasAlt ?
-                      this.name :
-                      '';
-
-        this.lastElemRole = elemRole;
-        this.lastName = name;
-
 
         scrollElement = this.updateHighlightElement(elemRect,
                                                     elemRole,
@@ -537,7 +533,7 @@ class H2LHighlightElement extends HTMLElement {
     this.borderElem.style.width   = (adjRect.width - 2 * b) + 'px';
     this.borderElem.style.height  = (adjRect.height - 2 * b) + 'px';
 
-    this.infoElem.style.maxWidth  = (adjRect.width - 6 * contrastWidth) + 'px';
+    this.infoElem.style.maxWidth  = (adjRect.width - 2 * contrastWidth) + 'px';
 
     this.overlayElem.style.display = 'block';
     this.borderElem.style.display  = 'block';

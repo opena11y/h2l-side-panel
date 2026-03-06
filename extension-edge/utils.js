@@ -98,10 +98,10 @@ export function updateContent () {
 **  @function highlightItems
 */
 
-export function highlightItems (selectedItem=false, allItems=[]) {
+export function highlightItems (selectedItem=false, allItems=[], msgHidden) {
   const sidepanelNode = document.querySelector('h2l-sidepanel');
   if (sidepanelNode) {
-    sidepanelNode.highlightItems(selectedItem, allItems);
+    sidepanelNode.highlightItems(selectedItem, allItems, msgHidden);
   }
 }
 

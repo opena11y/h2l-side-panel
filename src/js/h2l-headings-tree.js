@@ -133,9 +133,7 @@ class H2LHeadingsTree extends HTMLElement {
 
       headingsTreeObj.headingItems.push({
         position: heading.ordinalPosition,
-        elemRole: `h${heading.level}`,
-        msgHidden: 'Heading is hidden',
-        scrollBehavior: 'none'
+        elemRole: `h${heading.level}`
       });
 
       const treeitemNode = document.createElement('div');
@@ -269,7 +267,7 @@ class H2LHeadingsTree extends HTMLElement {
     }
     getOptions().then( (options) => {
       if (options.highlightAllHeadings) {
-        highlightItems({}, this.headingItems);
+        highlightItems({}, this.headingItems, getMessage('msg_heading_hidden'));
       }
     });
   }
@@ -304,11 +302,10 @@ class H2LHeadingsTree extends HTMLElement {
       getOptions().then( (options) => {
         highlightItems(
           { position: op,
-            elemRole: elemRole,
-            msgHidden: 'Heading is hidden',
-            scrollBehavior: options.scrollBehavior
+            elemRole: elemRole
            },
-          options.highlightAllHeadings ? this.headingItems : []
+          options.highlightAllHeadings ? this.headingItems : [],
+          getMessage('msg_heading_hidden')
         );
         saveOption('lastHeadingId', treeitem.id);
       });
@@ -316,12 +313,13 @@ class H2LHeadingsTree extends HTMLElement {
   }
 
   removeHighlight() {
-      getOptions().then( (options) => {
-        highlightItems(
-          {},
-          options.highlightAllHeadings ? this.headingItems : []
-        );
-      });
+    getOptions().then( (options) => {
+      highlightItems(
+        {},
+        [],
+        getMessage('msg_heading_hidden')
+      );
+    });
   }
 
   isExpandable(treeitem) {

@@ -55,6 +55,7 @@ class H2LLandmarksList extends HTMLElement {
     this.highlightFollowsFocus = false;
     this.enterKeyMovesFocus    = false;
     this.isVisible = false;
+    this.landmarkItems = [];
 
     this.lastLandmarkId = '';
 
@@ -102,6 +103,7 @@ class H2LLandmarksList extends HTMLElement {
     let index = 1;
 
     this.clearContent();
+    this.landmarkItems = [];
 
     const listObj = this;
 
@@ -114,6 +116,13 @@ class H2LLandmarksList extends HTMLElement {
         this.lastLandmarkId        = options.lastLandmarkId;
 
         regions.forEach( (r) => {
+            const roleName = r.role[0].toUpperCase() + r.role.slice(1);
+
+            listObj.landmarkItems.push({
+              position: r.ordinalPosition,
+              elemRole: roleName
+            });
+
             const listitemNode = document.createElement('div');
             listitemNode.id = 'landmark-' + index;
             index += 1;
@@ -125,7 +134,6 @@ class H2LLandmarksList extends HTMLElement {
             listitemNode.setAttribute('role', 'listitem');
             listitemNode.setAttribute('data-ordinal-position', r.ordinalPosition);
 
-            const roleName = r.role[0].toUpperCase() + r.role.slice(1);
 
             listitemNode.textContent = r.name ? `${roleName}: ${r.name}` : roleName;
             listitemNode.setAttribute('data-role', roleName);
@@ -162,6 +170,11 @@ class H2LLandmarksList extends HTMLElement {
     else {
       this.clearContent(getMessage('protocol_not_supported', debug.flag));
     }
+    getOptions().then( (options) => {
+      if (options.highlightAllLandmarks) {
+        highlightItems({}, this.landmarkItems, getMessage('msg_landmark_hidden'));
+      }
+    });
 
   }
 
@@ -176,22 +189,29 @@ class H2LLandmarksList extends HTMLElement {
     const role    = listitem.getAttribute('data-role');
     const name    = listitem.getAttribute('data-name');
     const namesrc = listitem.getAttribute('data-name-src');
+
     if (op) {
-      highlightItems(
-        { position: op,
-          role: role,
-          name: name,
-          namesrc: namesrc,
-          msgHidden: 'Region is hidden'
-        },
-        []
-      );
-      saveOption('lastLandmarkId', listitem.id);
+      getOptions().then( (options) => {
+        highlightItems(
+          { position: op,
+            elemRole: role
+           },
+          options.highlightAllLandmarks ? this.landmarkItems : [],
+          getMessage('msg_landmark_hidden')
+        );
+        saveOption('lastLandmarkId', listitem.id);
+      });
     }
   }
 
   removeHighlight() {
-    highlightItems();
+    getOptions().then( (options) => {
+      highlightItems(
+        {},
+        [],
+        getMessage('msg_landmark_hidden')
+      );
+    });
   }
 
   setFocusByFirstCharacter(listitem, char){

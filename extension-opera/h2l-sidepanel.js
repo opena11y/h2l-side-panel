@@ -94,7 +94,7 @@ class H2LSidePanel extends HTMLElement {
   }
 
 
-  highlightItems(selectedItem, allItems) {
+  highlightItems(selectedItem, allItems, msgHidden) {
 
     getOptions().then( (options) => {
 
@@ -103,10 +103,12 @@ class H2LSidePanel extends HTMLElement {
           const myResult = await myBrowser.tabs
             .sendMessage(tab.id, {highlightItems: {
                                       selectedItem: selectedItem,
-                                      allItems: allItems,
-                                      highlightSize: options.highlightSize,
-                                      highlightStyle: options.highlightStyle,
-                                      highlightStyleSelected: options.highlightStyleSelected
+                                      allItems:     allItems,
+                                      msgHidden:    msgHidden,
+                                      highlightSize:          options.highlightSize,
+                                      highlightStyle:         options.highlightStyle,
+                                      highlightStyleSelected: options.highlightStyleSelected,
+                                      scrollBehavior:         options.scrollBehavior
                                     }
                                   });
         }
