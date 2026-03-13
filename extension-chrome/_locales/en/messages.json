@@ -27,6 +27,10 @@
     "message": "Options",
     "description": "Label options button"
   },
+  "buttons_options_link_filter": {
+    "message": "Link Filter Options",
+    "description": "Label link filter options button"
+  },
   "buttons_about": {
     "message": "About",
     "description": "Label About button"
@@ -66,6 +70,14 @@
   "links_grid_name": {
     "message": "Name",
     "description": "Label for name column in links grid"
+  },
+  "links_grid_desc": {
+    "message": "Desc",
+    "description": "Label for description column in links grid"
+  },
+  "links_grid_desc_name": {
+    "message": "Description",
+    "description": "Label for description column in links grid"
   },
   "links_grid_type": {
     "message": "Type",
@@ -183,6 +195,14 @@
     "message": "Options",
     "description": "Title for options dialog box"
   },
+  "options_dialog_title_highlight": {
+    "message": "Highlight Options",
+    "description": "Title for options dialog box for highlight options"
+  },
+  "options_dialog_title_link_filter": {
+    "message": "Link Filter Options",
+    "description": "Title for options dialog box for link filter option"
+  },
   "dialog_reset_defaults": {
     "message": "Reset Defaults",
     "description": "Label for reset defaults button"
@@ -278,6 +298,30 @@
   "options_dialog_highlight_style_dotted": {
     "message": "dotted",
     "description": "Dotted option for highlight style"
+  },
+  "options_highlight_headings_all": {
+    "message": "Highlight all headings",
+    "description": "Message for highlighting all headings"
+  },
+  "options_highlight_heading_names": {
+    "message": "Highlight shows accessible name",
+    "description": "Message for highlight to always include accessible name for headings"
+  },
+  "options_highlight_landmarks_all": {
+    "message": "Highlight all landmark regions",
+    "description": "Message for highlighting all headings"
+  },
+  "options_highlight_landmarks_emulate_screen_reader": {
+    "message": "Emulate how screen readers filter landmark regions",
+    "description": "Message for screen reader view of landmarks"
+  },
+  "options_highlight_links_all": {
+    "message": "Highlight all links",
+    "description": "Message for highlighting all links"
+  },
+  "options_highlight_link_names": {
+    "message": "Highlight shows accessible name",
+    "description": "Message for highlight to always include accessible name for links"
   },
   "export_dialog_title": {
     "message": "Export to CSV",

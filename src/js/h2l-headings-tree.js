@@ -15,6 +15,11 @@ import {
   setTablistAttr
 } from './utils.js';
 
+import {
+  TabpanelOptions
+} from './h2l-tabpanel-options.js';
+
+
 /* Constants */
 
 const debug = new DebugLogging('h2lHeadingsTree', false);
@@ -26,6 +31,21 @@ template.innerHTML = `
   <div role="tree"
        aria-label="XYZ"
        data-i18n-aria-label="headings_tree_label">
+  </div>
+
+  <div id="options">
+    <label for="highlight-all">
+      <input id="highlight-all"
+             type="checkbox"
+             data-option="highlightAllHeadings"/>
+      <span data-i18n="options_highlight_headings_all"></span>
+    </label>
+    <label for="show-name">
+      <input id="show-name"
+             type="checkbox"
+             data-option="highlightNamesHeadings"/>
+      <span data-i18n="options_highlight_heading_names"></span>
+    </label>
   </div>
 `;
 
@@ -53,15 +73,21 @@ class H2LHeadingsTree extends HTMLElement {
     // Use external CSS stylesheet for focus styling
     const linkFocus = document.createElement('link');
     linkFocus.setAttribute('rel', 'stylesheet');
-    linkFocus.setAttribute('href', './h2l-focus-styled.css');
+    linkFocus.setAttribute('href', './h2l-focus-style.css');
     linkFocus.id = 'focus-style';
     this.shadowRoot.appendChild(linkFocus);
 
+    // Use external CSS stylesheet for options styling
+    const linkOptions = document.createElement('link');
+    linkOptions.setAttribute('rel', 'stylesheet');
+    linkOptions.setAttribute('href', './h2l-tabpanel-options.css');
+    linkOptions.id = 'tabpanel-options';
+    this.shadowRoot.appendChild(linkOptions);
 
     // Add DOM tree from template
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.treeNode = this.shadowRoot.querySelector("[role=tree]");
+    this.treeNode    = this.shadowRoot.querySelector("[role=tree]");
 
     this.treeitems = [];
 
@@ -72,6 +98,9 @@ class H2LHeadingsTree extends HTMLElement {
     this.headingItems = [];
 
     setI18nLabels(this.shadowRoot, debug.flag);
+
+    this.tabpanelOptions = new TabpanelOptions(this.shadowRoot);
+
   }
 
  static get observedAttributes() {
@@ -95,6 +124,11 @@ class H2LHeadingsTree extends HTMLElement {
 
   resize (height, width) {
     debug.flag && debug.log(`height: ${height} x ${width}`);
+
+    const optionsNode = this.shadowRoot.querySelector("#options");
+    const optionsRect = optionsNode.getBoundingClientRect();
+
+    this.treeNode.style.height = (height - 1 * 1.2 * optionsRect.height) + 'px';
   }
 
   clearContent(message = '') {
@@ -132,7 +166,7 @@ class H2LHeadingsTree extends HTMLElement {
       const accname  = `${level}: ${heading.name}`
 
       headingsTreeObj.headingItems.push({
-        position: heading.ordinalPosition,
+        position: parseInt(heading.ordinalPosition),
         elemRole: `h${heading.level}`
       });
 
@@ -267,7 +301,7 @@ class H2LHeadingsTree extends HTMLElement {
     }
     getOptions().then( (options) => {
       if (options.highlightAllHeadings) {
-        highlightItems({}, this.headingItems, getMessage('msg_heading_hidden'));
+        highlightItems({}, this.headingItems, getMessage('msg_heading_hidden'), options.highlightNamesHeadings);
       }
     });
   }
@@ -297,15 +331,16 @@ class H2LHeadingsTree extends HTMLElement {
     const op   = treeitem.getAttribute('data-ordinal-position') ?
                  treeitem.getAttribute('data-ordinal-position') :
                  '';
-    const elemRole    = treeitem.getAttribute('data-elem-role');
+    const elemRole    = treeitem.getAttribute('data-elem-role');0
     if (op) {
       getOptions().then( (options) => {
         highlightItems(
-          { position: op,
+          { position: parseInt(op),
             elemRole: elemRole
            },
           options.highlightAllHeadings ? this.headingItems : [],
-          getMessage('msg_heading_hidden')
+          getMessage('msg_heading_hidden'),
+          options.highlightNamesHeadings
         );
         saveOption('lastHeadingId', treeitem.id);
       });
@@ -317,7 +352,8 @@ class H2LHeadingsTree extends HTMLElement {
       highlightItems(
         {},
         [],
-        getMessage('msg_heading_hidden')
+        getMessage('msg_heading_hidden'),
+        false
       );
     });
   }

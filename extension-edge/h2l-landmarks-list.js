@@ -17,6 +17,10 @@ import {
   setTablistAttr
 } from './utils.js';
 
+import {
+  TabpanelOptions
+} from './h2l-tabpanel-options.js';
+
 /* Constants */
 
 const debug = new DebugLogging('h2lLandmarksList', false);
@@ -27,6 +31,20 @@ const template = document.createElement('template');
 template.innerHTML = `
   <div role="listbox" data-i18n-aria-label="landmarks_list_label">
   </div>
+
+  <div id="options">
+    <label for="highlight-all">
+      <input id="highlight-all"
+             type="checkbox"
+             data-option="highlightAllLandmarks"/>
+      <span data-i18n="options_highlight_landmarks_all"></span>
+    </label>
+    <label for="show-name">
+      <input id="show-name"
+             type="checkbox"
+             data-option="emulateScreenReaderForLandmarks"/>
+      <span data-i18n="options_highlight_landmarks_emulate_screen_reader"></span>
+    </label>
 `;
 
 class H2LLandmarksList extends HTMLElement {
@@ -43,9 +61,16 @@ class H2LLandmarksList extends HTMLElement {
     // Use external CSS stylesheet for focus styling
     const linkFocus = document.createElement('link');
     linkFocus.setAttribute('rel', 'stylesheet');
-    linkFocus.setAttribute('href', './h2l-focus-styled.css');
+    linkFocus.setAttribute('href', './h2l-focus-style.css');
     linkFocus.id = 'focus-style';
     this.shadowRoot.appendChild(linkFocus);
+
+    // Use external CSS stylesheet for options styling
+    const linkOptions = document.createElement('link');
+    linkOptions.setAttribute('rel', 'stylesheet');
+    linkOptions.setAttribute('href', './h2l-tabpanel-options.css');
+    linkOptions.id = 'tabpanel-options';
+    this.shadowRoot.appendChild(linkOptions);
 
     // Add DOM listboxfrom template
     this.shadowRoot.appendChild(template.content.cloneNode(true));
@@ -60,6 +85,8 @@ class H2LLandmarksList extends HTMLElement {
     this.lastLandmarkId = '';
 
     setI18nLabels(this.shadowRoot, debug.flag);
+
+    this.tabpanelOptions = new TabpanelOptions(this.shadowRoot);
 
   }
 
@@ -84,6 +111,12 @@ class H2LLandmarksList extends HTMLElement {
 
   resize (height, width) {
     debug.flag && debug.log(`height: ${height} x ${width}`);
+
+    const optionsNode = this.shadowRoot.querySelector("#options");
+    const optionsRect = optionsNode.getBoundingClientRect();
+
+    this.listboxNode.style.height = (height - 1 * 1.2 * optionsRect.height) + 'px';
+
   }
 
   clearContent(message='') {
@@ -170,11 +203,14 @@ class H2LLandmarksList extends HTMLElement {
     else {
       this.clearContent(getMessage('protocol_not_supported', debug.flag));
     }
+
     getOptions().then( (options) => {
       if (options.highlightAllLandmarks) {
-        highlightItems({}, this.landmarkItems, getMessage('msg_landmark_hidden'));
+        highlightItems({}, this.landmarkItems, getMessage('msg_landmark_hidden'), true);
       }
     });
+
+    this.tabpanelOptions.updateOptions();
 
   }
 
@@ -185,7 +221,7 @@ class H2LLandmarksList extends HTMLElement {
   highlightLandmark(listitem) {
     const op   = listitem.getAttribute('data-ordinal-position') ?
                  listitem.getAttribute('data-ordinal-position') :
-                 '';
+                 0;
     const role    = listitem.getAttribute('data-role');
     const name    = listitem.getAttribute('data-name');
     const namesrc = listitem.getAttribute('data-name-src');
@@ -193,11 +229,12 @@ class H2LLandmarksList extends HTMLElement {
     if (op) {
       getOptions().then( (options) => {
         highlightItems(
-          { position: op,
+          { position: parseInt(op),
             elemRole: role
            },
           options.highlightAllLandmarks ? this.landmarkItems : [],
-          getMessage('msg_landmark_hidden')
+          getMessage('msg_landmark_hidden'),
+          true
         );
         saveOption('lastLandmarkId', listitem.id);
       });
@@ -209,7 +246,8 @@ class H2LLandmarksList extends HTMLElement {
       highlightItems(
         {},
         [],
-        getMessage('msg_landmark_hidden')
+        getMessage('msg_landmark_hidden'),
+        false
       );
     });
   }

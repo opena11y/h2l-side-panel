@@ -143,7 +143,7 @@ export default class H2LExportDialog extends HTMLElement {
     // Use external CSS stylesheet for focus styling
     const linkFocus = document.createElement('link');
     linkFocus.setAttribute('rel', 'stylesheet');
-    linkFocus.setAttribute('href', './h2l-focus-styled.css');
+    linkFocus.setAttribute('href', './h2l-focus-style.css');
     linkFocus.id = 'focus-style';
     this.shadowRoot.appendChild(linkFocus);
 

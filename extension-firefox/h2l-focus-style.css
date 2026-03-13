@@ -1,0 +1,105 @@
+/* h2l-focus-styled.css */
+
+
+:root {
+  color-scheme: light dark;
+}
+
+/* Tablist */
+
+[role="tab"] span.focus {
+  display: inline-block;
+  margin: 2px;
+  padding: 4px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[role="tab"]:hover span.focus,
+[role="tab"]:focus span.focus,
+[role="tab"]:active span.focus {
+  padding: 2px 4px;
+  border-width: var(--tab-border-width);
+  border-style:  var(--tab-border-style);
+  border-radius:  var(--tab-border-radius);
+  border-color: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+}
+
+/* Headings tree */
+
+[role="tree"] [role="treeitem"][tabindex="0"] {
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark));
+}
+
+[role="tree"] [role="treeitem"]:focus {
+  outline-offset:   -2px;
+  outline-width:    var(--input-outline-width);
+  outline-style:    var(--input-outline-style);
+  outline-color:    light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark)) !important;
+  color:  light-dark(var(--main-color-light), var(--main-color-dark));
+}
+
+[role="tree"] [role="treeitem"]:focus svg {
+  fill:   light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  stroke: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+}
+
+
+/* Landmark Regions list */
+
+[role="listbox"] [role="listitem"][tabindex="0"] {
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark));
+}
+
+[role="listbox"] [role="listitem"]:focus {
+  outline-offset:   -2px;
+  outline-width:    var(--input-outline-width);
+  outline-style:    var(--input-outline-style);
+  outline-color:    light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark)) !important;
+  color:  light-dark(var(--main-color-light), var(--main-color-dark));
+}
+
+/* Links Grid */
+
+table[role="grid"] th[tabindex="0"],
+table[role="grid"] td[tabindex="0"],
+table[role="grid"] tr[tabindex="0"] {
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark));
+}
+
+table[role="grid"] th:focus,
+table[role="grid"] td:focus,
+table[role="grid"] tr:focus {
+  outline-offset:   -2px;
+  outline-width:    var(--input-outline-width);
+  outline-style:    var(--input-outline-style);
+  outline-color:    light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark)) !important;
+  color:  light-dark(var(--main-color-light), var(--main-color-dark));
+}
+
+table[role="grid"] th:focus svg {
+  fill:   light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  stroke: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+}
+
+
+/* Options Dialog */
+
+.focus:has(input) {
+  outline: none;
+}
+
+.focus:has(input),
+button:focus,
+select:focus {
+  outline-offset:   var(--input-outline-offset);
+  outline-width:    var(--input-outline-width);
+  outline-style:    var(--input-outline-style);
+  outline-color:    light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
+  background-color: light-dark(var(--input-background-light), var(--input-background-dark)) !important;
+}
+

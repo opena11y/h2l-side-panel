@@ -12,6 +12,7 @@
   font-size: var( --main-font-size);
   color:  light-dark(var(--main-color-light), var(--main-color-dark));
   background-color: light-dark(var(--main-background-light), var(--main-background-dark));
+
 }
 
 h2 {
@@ -33,6 +34,7 @@ h2 {
 
 [role="tablist"] {
   min-width: 100%;
+  white-space: nowrap;
 }
 
 [role="tab"] {
@@ -49,13 +51,18 @@ h2 {
   border-radius: 5px 5px 0 0;
   outline: none;
   font-weight: bold;
-  max-width: 8em;
+  max-width: 10em;
   text-align: left;
   cursor: pointer;
 
   color: light-dark(var(--tab-color-light), var(--tab-color-dark));
   background-color: light-dark(var(--tab-background-light), var(--tab-background-dark));
   border-color: light-dark(var(--tab-border-color-light), var(--tab-border-color-dark));
+
+  white-space: nowrap;
+  overflow: clip;
+  text-overflow: ellipsis;
+
 }
 
 [role="tab"][aria-selected="true"] {
@@ -76,6 +83,10 @@ h2 {
   border-bottom-width: 1px;
   border-bottom-style: solid;
   border-bottom-color: light-dark(var(--tab-border-color-light), var(--tab-border-color-dark));
+}
+
+[role="tab"] .value {
+  font-weight: normal;
 }
 
 [role="tabpanel"] {

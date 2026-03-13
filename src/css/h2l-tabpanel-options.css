@@ -1,0 +1,40 @@
+/* h2l-tabpanel-options.css */
+
+#options {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+label:has(input) {
+  margin: 0;
+  padding: 0;
+  padding-top: 0.125em;
+  padding-bottom: 0.125em;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  display: block;
+}
+
+#options div.flex {
+  display: flex;
+}
+
+#options div.column {
+  position: relative;
+}
+
+#options div.column:has(input) {
+  width: 70%;
+}
+
+#options div.column:has(button) {
+  width: 30%;
+}
+
+#options div.column button {
+  position: absolute;
+  display: block;
+  right: 0px;
+  top: 0.375em;
+}
+

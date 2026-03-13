@@ -50504,10 +50504,6 @@
 
   // Load element highlight custom element
 
-  console.log(`[content.js]: loading...`);
-  // Imports
-
-
   const scriptNode = document.createElement('script');
   scriptNode.type = 'text/javascript';
   scriptNode.id = 'id-h2l-highlight';
@@ -50601,7 +50597,7 @@
 
   function highlightItems(dataObj) {
 
-    function highlightPosition(position, elemRole, selected) {
+    function highlightPosition(position, elemRole, selected, showName) {
 
       const de = evaluationResult.getDomElementByPosition(position);
 
@@ -50615,7 +50611,6 @@
         const highlightConfig = selected ?
                               `${highlightSize};${highlightStyleSelected}` :
                               `${highlightSize};${highlightStyle}`;
-        console.log(`[updateHighlightConfig]: ${highlightConfig}`);
         he.setAttribute('highlight-config', highlightConfig);
 
         highlightElements.push(he);
@@ -50630,6 +50625,8 @@
         he.setAttribute('desc',         de.accDescription.name);
         he.setAttribute('desc-src',     de.accDescription.source);
         he.setAttribute('msg-hidden',   msgHidden);
+        he.setAttribute('show-name',    showName);
+        he.setAttribute('selected',     selected);
 
         let attrValue = `${Math.round(rect.left)}`;
         attrValue += `;${Math.round(rect.top)}`;
@@ -50648,19 +50645,20 @@
     const highlightStyleSelected = dataObj.highlightStyleSelected;
     const msgHidden              = dataObj.msgHidden;
     const scrollBehavior         = dataObj.scrollBehavior;
+    const showName               = dataObj.showName;
+
+    console.log(`[showName]: ${showName}`);
 
     removeHighlightElements();
 
-    console.log(`[highlightItems][selectedItem]: ${selectedItem}`);
-    console.log(`[highlightItems][       count]: ${allItems.count}`);
-
-    if (allItems.count) {
+    if (allItems.length) {
       allItems.forEach( (item) => {
-        highlightPosition(item.position, item.elemRole, item.position === selectedItem.position);
+        const selected = item.position == selectedItem.position;
+        highlightPosition(item.position, item.elemRole, selected, showName || selected);
       });
     }
     else {
-      highlightPosition(selectedItem.position, selectedItem.elemRole, true);
+      highlightPosition(selectedItem.position, selectedItem.elemRole, true, true);
     }
 
 
@@ -50671,25 +50669,24 @@
     function(request, sender, sendResponse) {
       // Highlight selected and/or all elements on a page
       if(request.highlightItems) {
+        console.log(`[highlightItems]`);
         highlightItems(request.highlightItems);
       }
 
       // Remove highlights
       if(request.removeHighlight) {
+        console.log(`[removeHighlight]`);
         removeHighlightElements();
       }
 
       // Update Highlight configuration
       if(request.updateHighlightConfig) {
-        console.log(`[updateHighlightConfig][count]: ${highlightElements.length}`);
-
         const config= request.updateHighlightConfig;
 
         highlightElements.forEach( (he) => {
           const highlightConfig = he.hasAttribute('selected') ?
                                   `${config.highlightSize};${config.highlightStyleSelected}` :
                                   `${config.highlightSize};${config.highlightStyle}`;
-           console.log(`[updateHighlightConfig]: ${highlightConfig}`);
            he.setAttribute('highlight-config', highlightConfig);
         });
       }
@@ -50714,7 +50711,6 @@
                       regions: evaluationResult.landmarkRegions.data,
                       links: evaluationResult.links.data});
       }
-      return true;
     }
   );
 

@@ -55,9 +55,9 @@ template.innerHTML = `
            role="tab"
            aria-controls="id-tabpanel-headings">
         <span class="focus">
-          <span id="id-tab-headings"
-                data-i18n="tab_headings">
-            XYZ
+          <span id="id-headings-count">
+            <span class="plural" data-i18n="tab_headings">XYZ</span>
+            <span class="value"></span>
           </span>
         </span>
       </div>
@@ -65,9 +65,9 @@ template.innerHTML = `
            role="tab"
            aria-controls="id-tabpanel-landmarks">
         <span class="focus">
-          <span id="id-tab-landmarks"
-              data-i18n="tab_landmarks">
-            XYZ
+          <span id="id-landmarks-count">
+            <span class="plural" data-i18n="tab_landmarks">XYZ</span>
+            <span class="value"></span>
           </span>
         </span>
       </div>
@@ -75,9 +75,9 @@ template.innerHTML = `
            role="tab"
            aria-controls="id-tabpanel-links">
         <span class="focus">
-          <span id="id-tab-links"
-              data-i18n="tab_links">
-            XYZ
+          <span id="id-links-count">
+            <span class="plural" data-i18n="tab_links">XYZ</span>
+            <span class="value"></span>
           </span>
         </span>
       </div>
@@ -103,27 +103,6 @@ template.innerHTML = `
       </div>
     </div>
 
-    <div id="summary" role="group" aria-label="Summary">
-      <div role="status">
-        <span id="id-headings-count">
-          <span class="value"></span>
-          <span class="single"> Heading</span>
-          <span class="plural"> Headings</span>
-        </span>
-        <span class="divider" aria-hidden="true">•</span>
-        <span id="id-landmarks-count">
-          <span class="value"></span>
-          <span class="single"> Landmark</span>
-          <span class="plural"> Landmarks</span>
-        </span>
-        <span class="divider" aria-hidden="true">•</span>
-        <span id="id-links-count">
-          <span class="value"></span>
-          <span class="single"> Link</span>
-          <span class="plural"> Links</span>
-        </span>
-      </div>
-    </div>
 
     <footer>
       <div class="first">
@@ -166,7 +145,7 @@ class TOCTabList extends HTMLElement {
     // Use external CSS stylesheet for focus styling
     const linkFocus = document.createElement('link');
     linkFocus.setAttribute('rel', 'stylesheet');
-    linkFocus.setAttribute('href', './h2l-focus-styled.css');
+    linkFocus.setAttribute('href', './h2l-focus-style.css');
     linkFocus.id = 'focus-style';
     this.shadowRoot.appendChild(linkFocus);
 
@@ -183,8 +162,6 @@ class TOCTabList extends HTMLElement {
     this.h2lLinksGrid      = this.shadowRoot.querySelector('h2l-links-grid');
     this.h2lOptionsDialog  = this.shadowRoot.querySelector('h2l-options-dialog');
     this.h2lExportDialog   = this.shadowRoot.querySelector('h2l-export-dialog');
-
-    this.divSummary      = this.shadowRoot.querySelector('#summary');
 
     const btnGetInfo      = this.shadowRoot.querySelector('#id-btn-update-info');
     btnGetInfo.addEventListener('click', this.handleUpdateClick.bind(this));
@@ -234,7 +211,7 @@ class TOCTabList extends HTMLElement {
     });
 
     setI18nLabels(this.shadowRoot, debug.flag);
-    this.resize(window.innerHeight, window.innerWidth);
+    this.resize();
 
     getOptions().then((options) => {
 
@@ -286,12 +263,10 @@ class TOCTabList extends HTMLElement {
     const titleRect     = this.divTitle.getBoundingClientRect();
     const tablistRect   = this.divTablist.getBoundingClientRect();
     const tabpanelsRect = this.divTabpanels.getBoundingClientRect();
-    const summaryRect   = this.divSummary.getBoundingClientRect();
     const footerRect    = this.footerNode.getBoundingClientRect();
 
     const baseComponentsHeight = titleRect.height +
                                  tablistRect.height +
-                                 summaryRect.height +
                                  footerRect.height +
                                  sidepanelOffsetHeight;
 
@@ -317,25 +292,21 @@ class TOCTabList extends HTMLElement {
   setCount (id, count) {
     const countNode = this.shadowRoot.querySelector(`#${id}`);
     const valueNode = countNode.querySelector('.value');
-    const singleNode = countNode.querySelector('.single');
-    const pluralNode = countNode.querySelector('.plural');
 
-    valueNode.textContent = count;
-    if (count === '1') {
-      singleNode.style.display = 'inline-block';
-      pluralNode.style.display = 'none';
+    if (count >= 0) {
+      valueNode.textContent = `(${count})`;
     }
     else {
-      pluralNode.style.display = 'inline-block';
-      singleNode.style.display = 'none';
+      valueNode.textContent = ``;
     }
+
   }
 
   clearContent(message='') {
     this.divTitle.textContent = '';
-    this.setCount('id-headings-count', '');
-    this.setCount('id-landmarks-count', '');
-    this.setCount('id-links-count', '');
+    this.setCount('id-headings-count',  -1);
+    this.setCount('id-landmarks-count', -1);
+    this.setCount('id-links-count',     -1);
 
     if ((typeof message === 'string') && message.length) {
       this.divTitle.textContent = message;
@@ -385,8 +356,8 @@ class TOCTabList extends HTMLElement {
 
       tabListObj.landmarks = Array.from(myResult.regions).filter( (r) => {
           return (r.name ||
-              (landmarkCounts[r.role] <= MAX_LANDMARKS_WITHOUT_NAMES) ||
-              options.unNamedDuplicateRegions);
+                (landmarkCounts[r.role] <= MAX_LANDMARKS_WITHOUT_NAMES) ||
+                !options.emulateScreenReaderForLandmarks);
       });
 
       // Determine links to render
@@ -419,13 +390,14 @@ class TOCTabList extends HTMLElement {
     }
 
     saveOption('lastTabId', currentTab.id).then( () => {
-      for (var i = 0; i < this.tabNodes.length; i += 1) {
-        var tab = this.tabNodes[i];
+      for (let i = 0; i < this.tabNodes.length; i += 1) {
+        const tab = this.tabNodes[i];
         if (currentTab === tab) {
           tab.setAttribute('aria-selected', 'true');
           tab.tabIndex = 0;
           tabListObj.tabpanels[i].node.classList.remove('is-hidden');
           tabListObj.tabpanels[i].contentNode.setAttribute('visible', 'true');
+          tabListObj.resize();
           if (setFocus) {
             tab.focus();
           }
@@ -437,10 +409,11 @@ class TOCTabList extends HTMLElement {
         }
       }
     });
+    updateContent();
   }
 
   setSelectedToPreviousTab(currentTab) {
-    var index;
+    let index;
 
     if (currentTab === this.firstTab) {
       this.setSelectedTab(this.lastTab);
@@ -451,7 +424,7 @@ class TOCTabList extends HTMLElement {
   }
 
   setSelectedToNextTab(currentTab) {
-    var index;
+    let index;
 
     if (currentTab === this.lastTab) {
       this.setSelectedTab(this.firstTab);
@@ -472,7 +445,7 @@ class TOCTabList extends HTMLElement {
   }
 
   handleOptionsClick () {
-    this.h2lOptionsDialog.openDialog();
+    this.h2lOptionsDialog.openDialog('highlight');
   }
 
   handleExportClick () {

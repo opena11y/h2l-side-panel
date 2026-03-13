@@ -62,7 +62,7 @@ styleTemplate.innerHTML = `
 .hidden-elem-msg {
   color-scheme: light dark;
 
-  --info-font-family: 'arial, verdana, tahoma, "trebuchet MS", sans-serif';
+  --info-font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
   --role-font-family: courier, monospace;
 
   --color-light-text-color:   #000000;
@@ -249,6 +249,10 @@ class H2LHighlightElement extends HTMLElement {
     this.nameElem.className = 'name';
     this.infoElem.appendChild(this.nameElem);
 
+    this.descElem = document.createElement('span');
+    this.descElem.className = 'desc';
+    this.infoElem.appendChild(this.descElem);
+
     this.hiddenElem = document.createElement('div');
     this.hiddenElem.className = 'hidden-elem-msg';
     this.shadowRoot.appendChild(this.hiddenElem);
@@ -263,6 +267,8 @@ class H2LHighlightElement extends HTMLElement {
     this.name       = '';
     this.nameHasAlt = false;
     this.nameSrc    = '';
+    this.showName = false;
+    this.selected = false;
 
     this.desc    = '';
     this.descSrc = '';
@@ -284,12 +290,13 @@ class H2LHighlightElement extends HTMLElement {
       "desc",
       "desc-src",
       "elem-role",
-      "msg-hidden",
       "highlight",
-      "highlight-config"
+      "highlight-config",
+      "msg-hidden",
+      "selected",
+      "show-name",
       ];
   }
-
 
   attributeChangedCallback(name, oldValue, newValue) {
 
@@ -305,6 +312,16 @@ class H2LHighlightElement extends HTMLElement {
 
       case "name-src":
         this.nameSrc = newValue;
+        break;
+
+      case "show-name":
+        this.showName = newValue.trim().toLowerCase() === 'true';
+        break;
+
+      case "selected":
+          newValue.trim().toLowerCase() === 'true' ?
+          this.infoElem.classList.add('selected') :
+          this.infoElem.classList.remove('selected');
         break;
 
       case "desc":
@@ -354,13 +371,10 @@ class H2LHighlightElement extends HTMLElement {
 
         values.forEach( (v) => {
           const value = v.toLowerCase().trim();
-          console.log(`[value]: ${value}`);
           if (HIGHLIGHT_SIZES.includes(value)) {
-            console.log(`[highlightSize]: ${value}`);
             newSize = highlightSize[value];
           }
           if (HIGHLIGHT_STYLE.includes(value)) {
-            console.log(`[highlightStyle]: ${value}`);
             newStyle = value;
           }
         });
@@ -387,7 +401,6 @@ class H2LHighlightElement extends HTMLElement {
   configStyle (hSize, hStyle="solid") {
 
     this.highlightSize = hSize;
-    console.log(`[configStyle][overlayAdjust]: [${hSize.overlayAdjust}] ${this.highlightSize.overlayAdjust}`);
 
     const elems = Array.from(this.shadowRoot.querySelectorAll('.h2l-highlight, .hidden-elem-msg'));
 
@@ -424,13 +437,15 @@ class H2LHighlightElement extends HTMLElement {
       debug && console.log(`[ elemRect]: ${elemRect}`);
       debug && console.log(`[   scroll]: ${scrollBehavior}`);
 
-      const elemRole = (this.nameSrc === 'contents' || this.nameSrc === 'none') && !this.nameHasAlt ?
+      const elemRole = (this.nameSrc === 'contents' || this.nameSrc === 'none') && !this.nameHasAlt && !this.showName ?
                        this.elemRole :
                        `${this.elemRole}: `;
 
-      const name =  this.nameSrc !== 'contents' || this.nameHasAlt ?
+      const name =  this.nameSrc !== 'contents' || this.nameHasAlt || this.showName ?
                     this.name :
                     '';
+
+      const desc = this.desc;
 
       this.lastElemRole = elemRole;
       this.lastName = name;
@@ -456,7 +471,8 @@ class H2LHighlightElement extends HTMLElement {
         scrollElement = this.updateHighlightElement(this.hiddenElem.getBoundingClientRect(),
                                                     elemRole,
                                                     name,
-                                                    this.highlightSize.borderOffset,
+                                                    desc,
+                                                    0,
                                                     this.highlightSize.borderWidth,
                                                     this.highlightSize.contrastWidth,
                                                     this.highlightSize.overlayAdjust);
@@ -467,6 +483,7 @@ class H2LHighlightElement extends HTMLElement {
         scrollElement = this.updateHighlightElement(elemRect,
                                                     elemRole,
                                                     name,
+                                                    desc,
                                                     this.highlightSize.borderOffset,
                                                     this.highlightSize.borderWidth,
                                                     this.highlightSize.contrastWidth,
@@ -496,24 +513,26 @@ class H2LHighlightElement extends HTMLElement {
    *  @param  {Object}  elemRect       -  Rect of element node to highlight
    *  @param  {String}  elemRole       -  Description of the element
    *  @param  {String}  name           -  Accessible name
+   *  @param  {String}  desc           -  Accessible description
    *  @param  {Number}  borderOffset   -  Number of pixels for offset
    *  @param  {Number}  borderWidth    -  Number of pixels for border width
    *  @param  {Number}  contrastWidth  -  Number of pixels to provide border contrast
    *
    */
 
-   updateHighlightElement (elemRect, elemRole, name, borderOffset, borderWidth, contrastWidth, overlayAdjust) {
-    console.log(`\n[     elemRole]: ${elemRole}`);
-    console.log(`[         name]: ${name}`);
+   updateHighlightElement (elemRect, elemRole, name, desc, borderOffset, borderWidth, contrastWidth, overlayAdjust) {
+    debug && console.log(`\n[     elemRole]: ${elemRole}`);
+    debug && console.log(`[         name]: ${name}`);
+    debug && console.log(`[  description]: ${desc}`);
 
-    console.log(`[ borderOffset]: ${borderOffset}`);
-    console.log(`[  borderWidth]: ${borderWidth}`);
-    console.log(`[contrastWidth]: ${contrastWidth}`);
-    console.log(`[overlayAdjust]: ${overlayAdjust}`);
-    consoleRect('elemRect', elemRect);
+    debug && console.log(`[ borderOffset]: ${borderOffset}`);
+    debug && console.log(`[  borderWidth]: ${borderWidth}`);
+    debug && console.log(`[contrastWidth]: ${contrastWidth}`);
+    debug && console.log(`[overlayAdjust]: ${overlayAdjust}`);
+    debug && consoleRect('elemRect', elemRect);
 
     const adjRect = this.getAdjustedRect(elemRect, borderOffset, borderWidth, contrastWidth);
-    consoleRect('adjRect', adjRect);
+    debug && consoleRect('adjRect', adjRect);
 
     const a = -1 * (contrastWidth);
     const b = (contrastWidth - borderWidth) / 2;
@@ -542,11 +561,12 @@ class H2LHighlightElement extends HTMLElement {
 
       this.infoElem.style.display    = 'inline-block';
       this.infoElem.title            = name ?
-                                       `${elemRole}: ${name}` :
+                                       `${elemRole}: ${name}${ desc ? `; ${desc}` : ``}` :
                                        '';
 
       this.elemRoleElem.textContent  = elemRole;
       this.nameElem.textContent      = name;
+      this.descElem.textContent      = desc ? `Desc: ${desc}` : '';
 
       const infoElemOffsetLeft = -1 * contrastWidth;
       this.infoElem.style.left = infoElemOffsetLeft + 'px';
@@ -749,6 +769,5 @@ class H2LHighlightElement extends HTMLElement {
 
 // Create highlight element
 window.customElements.define(HIGHLIGHT_ELEMENT_NAME, H2LHighlightElement);
-document.body.appendChild(document.createElement(HIGHLIGHT_ELEMENT_NAME));
 
 

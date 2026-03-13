@@ -16,6 +16,11 @@ import {
 } from './storage.js';
 
 /* Constants */
+
+const browserI18n = typeof browser === 'object' ?
+            browser.i18n :
+            chrome.i18n;
+
 const debug = new DebugLogging('[optionsDialog]', false);
 debug.flag = false;
 
@@ -24,14 +29,14 @@ const template = document.createElement('template');
 template.innerHTML = `
 <dialog class="h2l-dialog">
   <div class="header">
-    <h2 data-i18n="options_dialog_title">TOC Options</h2>
+    <h2 data-i18n="options_dialog_title"></h2>
     <button id="id-close-1"
             data-i18n-aria-label="options_dialog_close"
             aria-label="Close" >✕</button>
   </div>
   <div class="content">
 
-    <fieldset>
+    <fieldset id="highlight">
       <legend data-i18n="options_dialog_legend_highlight">
         Highlight/Focus
       </legend>
@@ -88,85 +93,72 @@ template.innerHTML = `
 
     </fieldset>
 
-    <fieldset>
-      <legend data-i18n="options_dialog_legend_landmarks">
-        ABC
-      </legend>
+    <div id="link-filter">
+      <fieldset >
+        <legend data-i18n="options_dialog_legend_link">
+          ABC
+        </legend>
 
-        <label class="grid">
-          <input type="checkbox"
-                 data-option="unNamedDuplicateRegions"/>
-          <span class="label"
-                data-i18n="options_dialog_label_un_named">
-          </span>
-        </label>
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="internalLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_internal_links">
+            </span>
+          </label>
 
-    </fieldset>
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="sameSubDomainLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_same_sub_domain">
+            </span>
+          </label>
 
-    <fieldset>
-      <legend data-i18n="options_dialog_legend_link">
-        ABC
-      </legend>
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="sameDomainLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_same_domain">
+            </span>
+          </label>
 
-        <label class="grid">
-          <input type="checkbox"
-                 data-group="links"
-                 data-option="internalLinks"
-                 aria-describedby="id-link-desc"/>
-          <span class="label"
-                data-i18n="options_dialog_label_internal_links">
-          </span>
-        </label>
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="externalLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_external_links">
+            </span>
+          </label>
 
-        <label class="grid">
-          <input type="checkbox"
-                 data-group="links"
-                 data-option="sameSubDomainLinks"
-                 aria-describedby="id-link-desc"/>
-          <span class="label"
-                data-i18n="options_dialog_label_same_sub_domain">
-          </span>
-        </label>
-
-        <label class="grid">
-          <input type="checkbox"
-                 data-group="links"
-                 data-option="sameDomainLinks"
-                 aria-describedby="id-link-desc"/>
-          <span class="label"
-                data-i18n="options_dialog_label_same_domain">
-          </span>
-        </label>
-
-        <label class="grid">
-          <input type="checkbox"
-                 data-group="links"
-                 data-option="externalLinks"
-                 aria-describedby="id-link-desc"/>
-          <span class="label"
-                data-i18n="options_dialog_label_external_links">
-          </span>
-        </label>
-
-        <label class="grid">
-          <input type="checkbox"
-                 data-group="links"
-                 data-option="nonHtmlExtensionLinks"
-                 aria-describedby="id-link-desc"/>
-          <span class="label"
-                data-i18n="options_dialog_label_non_html_links">
-          </span>
-        </label>
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="nonHtmlExtensionLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_non_html_links">
+            </span>
+          </label>
 
 
-        <div class="grid">
-          <div></div>
-          <div id="id-link-desc"
-             class="desc"
-             data-i18n="options_dialog_links_desc">
+          <div class="grid">
+            <div></div>
+            <div id="id-link-desc"
+               class="desc"
+               data-i18n="options_dialog_links_desc">
+            </div>
           </div>
-        </div>
-    </fieldset>
+      </fieldset>
+    </div>
   </div>
 
   <div class="buttons">
@@ -199,7 +191,7 @@ export default class H2LOptionsDialog extends HTMLElement {
     // Use external CSS stylesheet for focus styling
     const linkFocus = document.createElement('link');
     linkFocus.setAttribute('rel', 'stylesheet');
-    linkFocus.setAttribute('href', './h2l-focus-styled.css');
+    linkFocus.setAttribute('href', './h2l-focus-style.css');
     linkFocus.id = 'focus-style';
     this.shadowRoot.appendChild(linkFocus);
 
@@ -209,6 +201,10 @@ export default class H2LOptionsDialog extends HTMLElement {
     // Get references
 
     this.infoDialog  = this.shadowRoot.querySelector('dialog');
+
+    this.h2Title       = this.shadowRoot.querySelector('h2');
+    this.divHighlight  = this.shadowRoot.querySelector('#highlight');
+    this.divLinkFilter = this.shadowRoot.querySelector('#link-filter');
 
     this.closeButton1  = this.infoDialog.querySelector('#id-close-1');
     this.closeButton1.addEventListener('click', this.handleCloseButtonClick.bind(this));
@@ -237,10 +233,22 @@ export default class H2LOptionsDialog extends HTMLElement {
     setI18nLabels(this.shadowRoot, debug.flag);
 
     this.optionControls =  Array.from(this.shadowRoot.querySelectorAll('[data-option]'));
-    this.updateOptions();
   }
 
-  openDialog  () {
+  openDialog  (option="highlight") {
+    this.updateOptions();
+
+    if (option === 'highlight') {
+      this.h2Title.textContent = browserI18n.getMessage('options_dialog_title_highlight');
+      this.divHighlight.removeAttribute('hidden');
+      this.divLinkFilter.setAttribute('hidden', '');
+    }
+    else {
+      this.h2Title.textContent = browserI18n.getMessage('options_dialog_title_link_filter');
+      this.divHighlight.setAttribute('hidden', '');
+      this.divLinkFilter.removeAttribute('hidden', '');
+    }
+
     this.infoDialog.showModal();
     this.closeButton2.focus();
   }

@@ -4,6 +4,7 @@
 
 import DebugLogging   from './debug.js';
 
+
 import {
   getMessage,
   highlightItems,
@@ -17,6 +18,10 @@ import {
   saveOption
 } from './storage.js';
 
+import {
+  TabpanelOptions
+} from './h2l-tabpanel-options.js';
+
 /* Constants */
 
 const debug = new DebugLogging('h2lLinksGrid', false);
@@ -28,6 +33,8 @@ const isWin     = navigator.userAgent.includes('Windows');
 const gridOffsetWidth = ( isWin && !isMozilla) ?
                             40 :
                             25;
+
+const LINK_ROLE = 'A';
 
 /* templates */
 const template = document.createElement('template');
@@ -70,6 +77,24 @@ template.innerHTML = `
               </svg>
             </span>
           </th>
+          <th id="id-th-desc"
+              tabindex="-1"
+              class="desc"
+              data-sort="desc"
+              aria-sort="none"
+              aria-label="links_grid_desc_name">
+            <span class="label"
+                  data-i18n="links_grid_desc">
+            </span>
+            <span class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="1em"
+                   height="1em"
+                   viewbox="0 0 32 32">
+                  <polygon points="4,8 28,8 16,28"/>
+              </svg>
+            </span>
+          </th>
           <th id="id-th-type"
               tabindex="-1"
               class="type"
@@ -92,6 +117,32 @@ template.innerHTML = `
     <tbody id="id-grid-data">
     </tbody>
   </table>
+
+  <div id="options">
+    <div class="flex">
+      <div class="column">
+        <label for="highlight-all">
+          <input id="highlight-all"
+                 type="checkbox"
+                 data-option="highlightAllLinks"/>
+          <span data-i18n="options_highlight_links_all"></span>
+        </label>
+        <label for="show-name">
+          <input id="show-name"
+                 type="checkbox"
+                 data-option="highlightNamesLinks"/>
+          <span data-i18n="options_highlight_link_names"></span>
+        </label>
+      </div>
+      <div class="column">
+            <button id="id-btn-options"
+                    data-i18n="buttons_options_link_filter">
+            </button>
+      </div>
+    </div>
+  </div>
+
+  <h2l-options-dialog></h2l-options-dialog>
 `;
 
 class H2LLinksGrid extends HTMLElement {
@@ -108,9 +159,16 @@ class H2LLinksGrid extends HTMLElement {
     // Use external CSS stylesheet for focus styling
     const linkFocus = document.createElement('link');
     linkFocus.setAttribute('rel', 'stylesheet');
-    linkFocus.setAttribute('href', './h2l-focus-styled.css');
+    linkFocus.setAttribute('href', './h2l-focus-style.css');
     linkFocus.id = 'focus-style';
     this.shadowRoot.appendChild(linkFocus);
+
+    // Use external CSS stylesheet for options styling
+    const linkOptions = document.createElement('link');
+    linkOptions.setAttribute('rel', 'stylesheet');
+    linkOptions.setAttribute('href', './h2l-tabpanel-options.css');
+    linkOptions.id = 'tabpanel-options';
+    this.shadowRoot.appendChild(linkOptions);
 
 
     // Add DOM tree from template
@@ -134,19 +192,27 @@ class H2LLinksGrid extends HTMLElement {
 
     this.gridTbodyNode = this.shadowRoot.querySelector('[role="grid"] tbody');
 
+    this.h2lOptionsDialog  = this.shadowRoot.querySelector('h2l-options-dialog');
+
+    const btnOptions      = this.shadowRoot.querySelector('#id-btn-options');
+    btnOptions.addEventListener('click', this.handleOptionsClick.bind(this));
+
     this.posWidth  = 0;
     this.nameWidth = 0;
+    this.descWidth  = 0;
     this.typeWidth  = 0;
 
     this.highlightFollowsFocus = false;
     this.enterKeyMovesFocus    = false;
     this.isVisible = false;
     this.lastLinkId = '';
+    this.links = [];
     this.linkItems = [];
 
     setI18nLabels(this.shadowRoot, debug.flag);
 
-    this.links = [];
+    this.tabpanelOptions = new TabpanelOptions(this.shadowRoot);
+
   }
 
  static get observedAttributes() {
@@ -168,18 +234,19 @@ class H2LLinksGrid extends HTMLElement {
     }
   }
 
-
   resize (height, width) {
     const tableWidth = width;
 
     this.gridNode.style.width = tableWidth + 'px';
 
-    const posWidth = 50;
-    const typeWidth = 55;
-    const nameWidth = tableWidth - posWidth - typeWidth - gridOffsetWidth;
+    const posWidth  = 50;
+    const descWidth = 45;
+    const typeWidth = 58;
+    const nameWidth = tableWidth - posWidth - descWidth - typeWidth - gridOffsetWidth;
 
     this.posWidth   = posWidth + 'px';
     this.nameWidth  = nameWidth + 'px';
+    this.descWidth  = descWidth + 'px';
     this.typeWidth  = typeWidth + 'px';
 
     const posNodes = Array.from(this.gridNode.querySelectorAll('.position'));
@@ -192,12 +259,20 @@ class H2LLinksGrid extends HTMLElement {
       n.style.width = this.nameWidth;
     });
 
+    const descNodes = Array.from(this.gridNode.querySelectorAll('.desc'));
+    descNodes.forEach( (n) => {
+      n.style.width = this.descWidth;
+    });
+
     const typeNodes = Array.from(this.gridNode.querySelectorAll('.type'));
     typeNodes.forEach( (n) => {
       n.style.width = this.typeWidth;
     });
 
-    this.gridNode.style.height = height - 20 + 'px';
+    const optionsNode = this.shadowRoot.querySelector("#options");
+    const optionsRect = optionsNode.getBoundingClientRect();
+
+    this.gridNode.style.height = (height - 1.2 * optionsRect.height) + 'px';
 
   }
 
@@ -207,7 +282,7 @@ class H2LLinksGrid extends HTMLElement {
      if ((typeof message === 'string') && message.length) {
        const trNode = document.createElement('tr');
        const msgNode =  document.createElement('td');
-       msgNode.setAttribute('colspan', 3);
+       msgNode.setAttribute('colspan', 4);
        msgNode.textContent = message;
        trNode.appendChild(msgNode);
        trNode.tabIndex = 0;
@@ -233,9 +308,8 @@ class H2LLinksGrid extends HTMLElement {
 
           linksObj.linkItems.push({
             position: link.ordinalPosition,
-            elemRole: 'link'
+            elemRole: LINK_ROLE
           });
-
 
           [link.type, link.typeDesc, link.typeSort] = linksObj.getTypeContentAndDescription(link);
           link.pos = index + 1;
@@ -259,12 +333,11 @@ class H2LLinksGrid extends HTMLElement {
         else {
           linksObj.clearContent(getMessage('links_none_found', debug.flag));
         }
-      });
 
-      getOptions().then( (options) => {
         if (options.highlightAllLinks) {
-          highlightItems({}, this.linkItems, getMessage('msg_link_hidden'));
+          highlightItems({}, linksObj.linkItems, getMessage('msg_link_hidden'), options.highlightNamesLinks);
         }
+
       });
 
     }
@@ -272,7 +345,7 @@ class H2LLinksGrid extends HTMLElement {
       this.clearContent(getMessage('protocol_not_supported', debug.flag));
     }
 
-
+    this.tabpanelOptions.updateOptions();
   }
 
   updateLinkContent (links) {
@@ -320,7 +393,7 @@ class H2LLinksGrid extends HTMLElement {
       trNode.setAttribute('tabindex', '-1');
       const firstChar = name.length ? name[0].toLowerCase() : '';
       trNode.setAttribute('data-first-char', firstChar);
-      trNode.setAttribute('data-role', 'link');
+      trNode.setAttribute('data-role', LINK_ROLE);
       trNode.setAttribute('data-name', name);
       trNode.setAttribute('data-name-src', nameSource);
       trNode.setAttribute('data-desc', desc);
@@ -338,7 +411,7 @@ class H2LLinksGrid extends HTMLElement {
                                      linksObj.posWidth));
 
       const nameDesc = desc ?
-                       `${name}: ${desc}` :
+                       `${name}; ${desc}` :
                        name;
 
       trNode.appendChild(getDataCell(trNode.id + '-name',
@@ -347,6 +420,13 @@ class H2LLinksGrid extends HTMLElement {
                                      '',
                                      '',
                                      linksObj.nameWidth));
+
+      trNode.appendChild(getDataCell(trNode.id + '-desc',
+                                     'desc',
+                                     desc ? 'Yes' : ' ',
+                                     '',
+                                     '',
+                                     linksObj.descWidth));
 
       trNode.appendChild(getDataCell(trNode.id + '-type',
                                      'type',
@@ -372,6 +452,8 @@ class H2LLinksGrid extends HTMLElement {
                              link.typeSort);
 
       this.gridTbodyNode.appendChild(rowNode);
+
+      link.descValue = link.desc.length === 0;
     });
 
     return lastGridNode;
@@ -490,11 +572,26 @@ class H2LLinksGrid extends HTMLElement {
       return b.pos - a.pos;
     }
 
+    function descCompare(a, b) {
+      return a.descValue - b.descValue;
+    }
+
+    function descCompareDescending(a, b) {
+      return b.descValue - a.descValue;
+    }
+
+
     switch (sortColumn) {
       case 'name':
         direction === 'ascending' ?
         this.links.sort(nameCompare) :
         this.links.sort(nameCompareDescending);
+        break;
+
+      case 'desc':
+        direction === 'ascending' ?
+        this.links.sort(descCompare) :
+        this.links.sort(descCompareDescending);
         break;
 
       case 'type':
@@ -563,13 +660,16 @@ class H2LLinksGrid extends HTMLElement {
 
     const op = getProp(griditem, 'data-ordinal-position');
 
+
     getOptions().then( (options) => {
+
       highlightItems(
-        { position: op,
-          elemRole: 'link'
+        { position: parseInt(op),
+          elemRole: LINK_ROLE
          },
         options.highlightAllLinks ? this.linkItems : [],
-        getMessage('msg_link_hidden')
+        getMessage('msg_link_hidden'),
+        options.highlightNamesLinks
       );
       saveOption('lastLinkId', griditem.id);
     });
@@ -581,7 +681,8 @@ class H2LLinksGrid extends HTMLElement {
       highlightItems(
         {},
         [],
-        getMessage('msg_link_hidden')
+        getMessage('msg_link_hidden'),
+        false
       );
     });
   }
@@ -894,7 +995,12 @@ class H2LLinksGrid extends HTMLElement {
     }
   }
 
+  handleOptionsClick () {
+    this.h2lOptionsDialog.openDialog('link-filter');
+  }
+
 }
+
 
 window.customElements.define('h2l-links-grid', H2LLinksGrid);
 

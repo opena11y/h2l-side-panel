@@ -7,6 +7,9 @@
 [role="listbox"] {
   overflow-y: auto;
   height: 100%;
+  border-width: 2px;
+  border-style: solid;
+  border-color:light-dark(var(--tab-border-color-light), var(--tab-border-color-dark));
 }
 
 [role="listbox"] [role="listitem"] {

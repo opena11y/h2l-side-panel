@@ -15,7 +15,7 @@ dialog.h2l-dialog {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
+  width: 75%;
   margin: 0;
   padding: 0;
   border-width: 2px;

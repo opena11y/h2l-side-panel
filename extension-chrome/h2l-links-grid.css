@@ -18,6 +18,11 @@ table[role="grid"] {
   background-color: light-dark(var(--main-background-light), var(--main-background-dark));
   fill: light-dark(var(--main-color-light), var(--main-color-dark));
   stroke: light-dark(var(--main-color-light), var(--main-color-dark));
+
+  border-width: 2px;
+  border-style: solid;
+  border-color:light-dark(var(--tab-border-color-light), var(--tab-border-color-dark));
+
 }
 
 table[role="grid"] span.icon {

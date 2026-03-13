@@ -1,10 +1,18 @@
 /* utils.js */
 
+/* imports */
+
+import DebugLogging   from './debug.js';
+
+
 /* Utility functions */
 
 const browserI18n = typeof browser === 'object' ?
             browser.i18n :
             chrome.i18n;
+
+const debug = new DebugLogging('utils', false);
+debug.flag = false;
 
 /*
 **  @function removeChildContent
@@ -98,10 +106,10 @@ export function updateContent () {
 **  @function highlightItems
 */
 
-export function highlightItems (selectedItem=false, allItems=[], msgHidden) {
+export function highlightItems (selectedItem={}, allItems=[], msgHidden, showName) {
   const sidepanelNode = document.querySelector('h2l-sidepanel');
   if (sidepanelNode) {
-    sidepanelNode.highlightItems(selectedItem, allItems, msgHidden);
+    sidepanelNode.highlightItems(selectedItem, allItems, msgHidden, showName);
   }
 }
 

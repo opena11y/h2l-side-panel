@@ -94,7 +94,7 @@ class H2LSidePanel extends HTMLElement {
   }
 
 
-  highlightItems(selectedItem, allItems, msgHidden) {
+  highlightItems(selectedItem, allItems, msgHidden, showName=true) {
 
     getOptions().then( (options) => {
 
@@ -108,7 +108,8 @@ class H2LSidePanel extends HTMLElement {
                                       highlightSize:          options.highlightSize,
                                       highlightStyle:         options.highlightStyle,
                                       highlightStyleSelected: options.highlightStyleSelected,
-                                      scrollBehavior:         options.scrollBehavior
+                                      scrollBehavior:         options.scrollBehavior,
+                                      showName: showName
                                     }
                                   });
         }
@@ -292,7 +293,7 @@ class H2LSidePanel extends HTMLElement {
   **  focused window, save the new window ID and update the sidebar content.
   */
   handleWindowFocusChanged (windowId) {
-    debug && console.log('handleWindowFocusChanged');
+    debug.flag && debug.log('handleWindowFocusChanged');
 
     if (windowId !== myWindowId) {
       if (isMozilla) {
