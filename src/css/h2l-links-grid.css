@@ -82,6 +82,20 @@ table[role="grid"] tr:hover {
   cursor: pointer;
 }
 
+table[role="grid"] td.message,
+table[role="grid"] td.filtered,
+table[role="grid"] td.hidden {
+  padding-left: 1em;
+  font-style: italic;
+  opacity: 90%;
+}
+
+table[role="grid"] td.hidden {
+  color: light-dark(var(--hidden-color-light), var(--hidden-color-dark));
+  background-color: light-dark(var(--hidden-background-light), var(--hidden-background-dark));
+}
+
+
 table[role="grid"] td span.desc {
   font-style: italic;
 }

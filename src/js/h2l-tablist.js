@@ -362,19 +362,20 @@ class TOCTabList extends HTMLElement {
 
       // Determine links to render
 
-      tabListObj.links= Array.from(myResult.links).filter( (l) => {
-        return (l.isVisibleOnScreen && l.name.length) &&
-               ((l.isInternal   && options.internalLinks) ||
+      tabListObj.links = Array.from(myResult.links).filter( (l) => {
+        return ((l.isInternal   && options.internalLinks) ||
                 (l.isExternal   && options.externalLinks) ||
                 (l.isSameDomain && options.sameDomainLinks && !l.isSameSubDomain) ||
                 (l.isSameSubDomain && options.sameSubDomainLinks && !l.isInternal) ||
                 (l.extensionType && options.nonHtmlExtensionLinks));
       })
 
+      const filteredLinks = myResult.links.length - tabListObj.links.length;
+
       saveOptions(options).then( () => {
         tabListObj.h2lHeadingsTree.updateContent(sameUrl, tabListObj.headings);
         tabListObj.h2lLandmarksList.updateContent(sameUrl, tabListObj.landmarks);
-        tabListObj.h2lLinksGrid.updateContent(sameUrl, tabListObj.links);
+        tabListObj.h2lLinksGrid.updateContent(sameUrl, tabListObj.links, filteredLinks);
 
         tabListObj.resize();
       });

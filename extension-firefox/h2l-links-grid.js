@@ -278,22 +278,40 @@ class H2LLinksGrid extends HTMLElement {
 
   }
 
-  clearContent (message = '') {
-     removeChildContent(this.gridTbodyNode);
-
+  addMessage (message, tabindexValue=0, className='message') {
      if ((typeof message === 'string') && message.length) {
+
        const trNode = document.createElement('tr');
+       trNode.tabIndex = tabindexValue;
+       trNode.addEventListener('click',   this.handleMessageGridrowClick.bind(this));
+       trNode.addEventListener('keydown', this.handleGridrowKeydown.bind(this));
+       trNode.addEventListener('focus',   this.handleFocus.bind(this));
+       trNode.addEventListener('blur',    this.handleBlur.bind(this));
+
+       this.gridTbodyNode.appendChild(trNode);
+
        const msgNode =  document.createElement('td');
        msgNode.setAttribute('colspan', 4);
        msgNode.textContent = message;
+       msgNode.className = className;
+       msgNode.setAttribute('tabindex', '-1');
+       msgNode.addEventListener('keydown', this.handleMessageGridcellKeydown.bind(this));
+       msgNode.addEventListener('focus',   this.handleFocus.bind(this));
+       msgNode.addEventListener('blur',    this.handleBlur.bind(this));
+
        trNode.appendChild(msgNode);
-       trNode.tabIndex = 0;
-       this.gridTbodyNode.appendChild(trNode);
+
      }
   }
 
-  updateContent (sameUrl, links) {
+  clearContent (message = '') {
+     removeChildContent(this.gridTbodyNode);
+     this.addMessage(message);
+  }
+
+  updateContent (sameUrl, links, filteredLinks) {
     const linksObj = this;
+    let hiddenCount = 0;
 
     this.links = links;
 
@@ -308,15 +326,21 @@ class H2LLinksGrid extends HTMLElement {
 
         links.forEach( (link, index) => {
 
-          linksObj.linkItems.push({
-            position: link.ordinalPosition,
-            isVisibleOnScreen: link.isVisibleOnScreen,
-            isVisibleToAT:     link.isVisibleToAT,
-            elemRole: LINK_ROLE
-          });
+          if (link.isVisibleOnScreen || link.isVisibleToAT) {
 
-          [link.type, link.typeDesc, link.typeSort] = linksObj.getTypeContentAndDescription(link);
-          link.pos = index + 1;
+            linksObj.linkItems.push({
+              position: link.ordinalPosition,
+              isVisibleOnScreen: link.isVisibleOnScreen,
+              isVisibleToAT:     link.isVisibleToAT,
+              elemRole: LINK_ROLE
+            });
+
+            [link.type, link.typeDesc, link.typeSort] = linksObj.getTypeContentAndDescription(link);
+            link.pos = index + 1;
+          }
+          else {
+            hiddenCount += 1;
+          }
         });
 
         const lastGridNode = linksObj.updateLinkContent(links);
@@ -325,6 +349,18 @@ class H2LLinksGrid extends HTMLElement {
 
         const count = linksObj.gridNode.querySelectorAll('[role="grid"] tbody tr').length;
         setTablistAttr('links-count', count);
+
+        if (filteredLinks > 0) {
+          filteredLinks === 1 ?
+            this.addMessage(getMessage('msg_filtered_link'), (count ? -1 : 0), 'filtered') :
+            this.addMessage(`${filteredLinks} ${getMessage('msg_filtered_links')}`, (count ? -1 : 0), 'filtered');
+        }
+
+        if (hiddenCount) {
+          hiddenCount === 1 ?
+            this.addMessage(getMessage('msg_hidden_link'), (count ? -1 : 0), 'hidden') :
+            this.addMessage(`${hiddenCount} ${getMessage('msg_hidden_links')}`, (count ? -1 : 0), 'hidden');
+        }
 
         if (firstGridrow) {
           if (sameUrl && lastGridNode) {
@@ -672,8 +708,6 @@ class H2LLinksGrid extends HTMLElement {
     }
   }
 
-
-
   // Tree keyboard navigation methods
 
   getGridrows () {
@@ -1008,6 +1042,58 @@ class H2LLinksGrid extends HTMLElement {
 
       case 'ArrowLeft':
         this.setFocusToPreviousGridcell(tgt);
+        flag = true;
+        break;
+
+      case 'Home':
+        this.setFocusToFirstGridcell(tgt);
+        flag = true;
+        break;
+
+      case 'End':
+        this.setFocusToLastGridcell(tgt);
+        flag = true;
+        break;
+
+      default:
+        break;
+    }
+
+    if (flag) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
+  handleMessageGridrowClick (event) {
+    const tgt = event.currentTarget;
+    this.setFocusToGriditem(tgt);
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+ handleMessageGridcellKeydown(event) {
+    const tgt = event.currentTarget;
+    const key = event.key;
+    let flag  = false;
+
+    if (event.shiftKey || event.altKey || event.ctrlKey || event.metaKey) {
+      return;
+    }
+
+    switch (key) {
+      case 'ArrowUp':
+        this.setFocusToPreviousGridrowAndCell(tgt);
+        flag = true;
+        break;
+
+      case 'ArrowDown':
+        this.setFocusToNextGridrowAndCell(tgt);
+        flag = true;
+        break;
+
+      case 'ArrowRight':
+        this.setFocusToNextGridcell(tgt);
         flag = true;
         break;
 

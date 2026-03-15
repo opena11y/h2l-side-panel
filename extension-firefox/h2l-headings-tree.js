@@ -310,7 +310,7 @@ class H2LHeadingsTree extends HTMLElement {
         const firstTreeitem = this.treeNode.querySelector('[role="treeitem"]');
         const count = this.treeNode.querySelectorAll('[role="treeitem"]').length;
 
-        if (hiddenCount || true) {
+        if (hiddenCount) {
           hiddenCount === 1 ?
             this.addMessage(getMessage('msg_hidden_heading'), (count ? -1 : 0), 'hidden') :
             this.addMessage(`${hiddenCount} ${getMessage('msg_hidden_headings')}`, (count ? -1 : 0), 'hidden');

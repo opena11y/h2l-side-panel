@@ -91,6 +91,11 @@
   opacity: 90%;
 }
 
+[role="tree"] [role="treeitem"].hidden {
+  color: light-dark(var(--hidden-color-light), var(--hidden-color-dark));
+  background-color: light-dark(var(--hidden-background-light), var(--hidden-background-dark));
+}
+
 [role="tree"] [role="treeitem"] span.brackets {
   padding-left: 0.25em;
 }

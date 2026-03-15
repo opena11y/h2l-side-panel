@@ -446,6 +446,22 @@
   "msg_hidden_landmarks": {
     "message": "hidden landmark regions",
     "description": "Message for when there is more than one hidden landmark regions"
+  },
+  "msg_hidden_link": {
+    "message": "1 hidden link",
+    "description": "Message for when there is one hidden link"
+  },
+  "msg_hidden_links": {
+    "message": "hidden links",
+    "description": "Message for when there is more than one hidden links"
+  },
+  "msg_filtered_link": {
+    "message": "1 filtered link",
+    "description": "Message for when there is one filtered link"
+  },
+  "msg_filtered_links": {
+    "message": "filtered links",
+    "description": "Message for when there is more than one filtered links"
   }
 }
 

@@ -34,6 +34,11 @@
   opacity: 90%;
 }
 
+[role="listbox"] [role="listitem"].hidden {
+  color: light-dark(var(--hidden-color-light), var(--hidden-color-dark));
+  background-color: light-dark(var(--hidden-background-light), var(--hidden-background-dark));
+}
+
 [role="listbox"] [role="listitem"] span.brackets {
   padding-left: 0.25em;
 }
