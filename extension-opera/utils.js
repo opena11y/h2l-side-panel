@@ -15,6 +15,45 @@ const debug = new DebugLogging('utils', false);
 debug.flag = false;
 
 /*
+**  @function getSpan
+*/
+
+export function getSpanBrackets(content, cName="", ariaLabel="", lb="(", rb=")") {
+  const span1 =  document.createElement('span');
+  span1.className = 'brackets';
+  if (ariaLabel) {
+    span1.ariaLabel = ariaLabel;
+  }
+
+  const left = document.createTextNode(lb);
+  span1.appendChild(left);
+
+  const span2 =  document.createElement('span');
+  span2.textContent = content;
+  span2.className = cName;
+  span1.appendChild(span2)
+
+  const right = document.createTextNode(rb);
+  span1.appendChild(right);
+
+  return span1;
+}
+
+/*
+**  @function getSpan
+*/
+
+export function getSpan(content, cName="", ariaLabel="") {
+  const span =  document.createElement('span');
+  span.textContent = content;
+  span.className = cName;
+  if (ariaLabel) {
+    span.ariaLabel = ariaLabel;
+  }
+  return span;
+}
+
+/*
 **  @function removeChildContent
 */
 

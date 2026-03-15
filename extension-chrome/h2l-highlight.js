@@ -166,10 +166,8 @@ styleTemplate.innerHTML = `
   z-index: auto;
   overflow: hidden;
   text-overflow: ellipsis;
-  pointer-events:none;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  pointer-events:none;
 }
 
 .h2l-highlight .overlay-info.hasInfoTop {
@@ -186,18 +184,27 @@ styleTemplate.innerHTML = `
   display: inline;
 }
 
-.h2l-highlight .overlay-info span.elem-role {
+.h2l-highlight .overlay-info span.elem-role,
+.h2l-highlight .overlay-info span.desc-label {
   font-weight: bold;
   font-family: var(--info-font-family);
   }
 
-.h2l-highlight .overlay-info span.name {
+.h2l-highlight .overlay-info span.name,
+.h2l-highlight .overlay-info span.desc {
+  padding-left: 0.25em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: var(--info-font-family);
+}
 
-  }
+.h2l-highlight .overlay-info span.desc-label,
+.h2l-highlight .overlay-info span.desc {
+  font-style: italic;
+  padding-left: 0.25em;
+}
+
 </style>
 `;
 
@@ -275,6 +282,8 @@ class H2LHighlightElement extends HTMLElement {
 
     this.msgIsHidden = 'Element is hidden';
 
+    this.zIndex = 0;
+
     this.lastElemRect = false;
     this.lastElemRole = this.elemRole;
     this.lastName = '';
@@ -295,6 +304,7 @@ class H2LHighlightElement extends HTMLElement {
       "msg-hidden",
       "selected",
       "show-name",
+      "z-index"
       ];
   }
 
@@ -319,9 +329,7 @@ class H2LHighlightElement extends HTMLElement {
         break;
 
       case "selected":
-          newValue.trim().toLowerCase() === 'true' ?
-          this.infoElem.classList.add('selected') :
-          this.infoElem.classList.remove('selected');
+        this.selected = newValue.trim().toLowerCase() === 'true';
         break;
 
       case "desc":
@@ -338,6 +346,10 @@ class H2LHighlightElement extends HTMLElement {
 
       case "msg-hidden":
         this.setHiddenMessage(newValue ? newValue : this.getHiddenMessage());
+        break;
+
+      case "z-index":
+        this.zIndex = parseInt(newValue);
         break;
 
       case "highlight":
@@ -437,11 +449,17 @@ class H2LHighlightElement extends HTMLElement {
       debug && console.log(`[ elemRect]: ${elemRect}`);
       debug && console.log(`[   scroll]: ${scrollBehavior}`);
 
-      const elemRole = (this.nameSrc === 'contents' || this.nameSrc === 'none') && !this.nameHasAlt && !this.showName ?
+      const elemRole = (this.nameSrc === 'contents' || this.nameSrc === 'none') &&
+                       !this.nameHasAlt &&
+                       !this.showName &&
+                       !this.selected ?
                        this.elemRole :
                        `${this.elemRole}: `;
 
-      const name =  this.nameSrc !== 'contents' || this.nameHasAlt || this.showName ?
+      const name =  this.nameSrc !== 'contents' ||
+                    this.nameHasAlt ||
+                    this.showName ||
+                    this.selected ?
                     this.name :
                     '';
 
@@ -542,17 +560,25 @@ class H2LHighlightElement extends HTMLElement {
 
     this.overlayElem.style.left   = adjRect.left   + 'px';
     this.overlayElem.style.top    = adjRect.top    + 'px';
+    this.overlayElem.style.zIndex = this.zIndex + 1;
 
     this.borderElem.style.left    = a + b + 'px';
     this.borderElem.style.top     = a + b + 'px';
 
-    this.overlayElem.style.width  = adjRect.width  + 'px';
     this.overlayElem.style.height = adjRect.height + 'px';
+    this.overlayElem.style.width  = adjRect.width  + 'px';
 
     this.borderElem.style.width   = (adjRect.width - 2 * b) + 'px';
     this.borderElem.style.height  = (adjRect.height - 2 * b) + 'px';
 
-    this.infoElem.style.maxWidth  = (adjRect.width - 2 * contrastWidth) + 'px';
+
+    if (this.selected) {
+      this.infoElem.classList.add('selected');
+    }
+    else {
+      this.infoElem.classList.remove('selected');
+      this.infoElem.style.maxWidth  = (adjRect.width - 2 * contrastWidth) + 'px';
+    }
 
     this.overlayElem.style.display = 'block';
     this.borderElem.style.display  = 'block';
@@ -566,7 +592,7 @@ class H2LHighlightElement extends HTMLElement {
 
       this.elemRoleElem.textContent  = elemRole;
       this.nameElem.textContent      = name;
-      this.descElem.textContent      = desc ? `Desc: ${desc}` : '';
+      this.descElem.textContent = desc ? `; ${desc}` : '';
 
       const infoElemOffsetLeft = -1 * contrastWidth;
       this.infoElem.style.left = infoElemOffsetLeft + 'px';

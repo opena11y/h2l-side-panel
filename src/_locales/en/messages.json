@@ -430,6 +430,22 @@
   "msg_link_hidden": {
     "message": "Link is hidden",
     "description": "Message for highlighting when link is hidden"
+  },
+  "msg_hidden_heading": {
+    "message": "1 hidden heading",
+    "description": "Message for when there is one hidden heading"
+  },
+  "msg_hidden_headings": {
+    "message": "hidden headings",
+    "description": "Message for when there is more than one hidden heading"
+  },
+  "msg_hidden_landmark": {
+    "message": "1 hidden landmark region",
+    "description": "Message for when there is one hidden landmark region"
+  },
+  "msg_hidden_landmarks": {
+    "message": "hidden landmark regions",
+    "description": "Message for when there is more than one hidden landmark regions"
   }
 }
 

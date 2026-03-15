@@ -7,6 +7,8 @@ import DebugLogging   from './debug.js';
 
 import {
   getMessage,
+  getSpan,
+  getSpanBrackets,
   highlightItems,
   removeChildContent,
   setI18nLabels,
@@ -308,6 +310,8 @@ class H2LLinksGrid extends HTMLElement {
 
           linksObj.linkItems.push({
             position: link.ordinalPosition,
+            isVisibleOnScreen: link.isVisibleOnScreen,
+            isVisibleToAT:     link.isVisibleToAT,
             elemRole: LINK_ROLE
           });
 
@@ -352,14 +356,31 @@ class H2LLinksGrid extends HTMLElement {
     const linksObj = this;
     let lastGridNode = null;
 
-    function addRow (pos, ordinalPos, name, nameSource, desc, descSource, url, typeContent, typeDesc, typeSort) {
+    function addRow (pos, ordinalPos, name, nameSource, desc, descSource, url, typeContent, typeDesc, typeSort, isVisibleOnScreen, isVisibleToAT) {
 
-      function getDataCell(id, cname, content, title, sortValue, width) {
+      // Adding row helper function
+
+      function getDataCell(id, cname, content, desc, title, sortValue, width, isVisScr=true, isVisAT=true) {
+
 
         const cellNode =  document.createElement('td');
         cellNode.id = id;
         cellNode.className = cname;
-        cellNode.textContent = content;
+
+        cellNode.appendChild(getSpan(content, 'content'));
+
+        if (desc) {
+          cellNode.appendChild(getSpan(`; ${desc}`, 'desc'));
+        }
+
+        if (!isVisScr) {
+          cellNode.appendChild(getSpanBrackets(`hidden`, 'hidden', '; hidden'));
+        }
+
+        if (!isVisAT) {
+          cellNode.appendChild(getSpanBrackets(`hidden to AT`, 'hidden', '; hidden from AT'));
+        }
+
         if (title) {
           cellNode.title = title;
         }
@@ -376,6 +397,14 @@ class H2LLinksGrid extends HTMLElement {
           lastGridNode = cellNode;
         }
         return cellNode;
+      }
+
+      // Start adding new row
+
+      if ((name && desc) &&
+          (name.trim().toLowerCase() === desc.trim().toLowerCase())) {
+        desc = '';
+        descSource = '';
       }
 
       const trNode = document.createElement('tr');
@@ -398,6 +427,9 @@ class H2LLinksGrid extends HTMLElement {
       trNode.setAttribute('data-name-src', nameSource);
       trNode.setAttribute('data-desc', desc);
       trNode.setAttribute('data-desc-src', descSource);
+      trNode.setAttribute('data-visible-screen', isVisibleOnScreen);
+      trNode.setAttribute('data-visible-at', isVisibleToAT);
+
       trNode.addEventListener('click',   linksObj.handleGridrowClick.bind(linksObj));
       trNode.addEventListener('keydown', linksObj.handleGridrowKeydown.bind(linksObj));
       trNode.addEventListener('focus',   linksObj.handleFocus.bind(linksObj));
@@ -408,22 +440,23 @@ class H2LLinksGrid extends HTMLElement {
                                      pos,
                                      '',
                                      '',
+                                     '',
                                      linksObj.posWidth));
-
-      const nameDesc = desc ?
-                       `${name}; ${desc}` :
-                       name;
 
       trNode.appendChild(getDataCell(trNode.id + '-name',
                                      'name',
-                                     nameDesc,
+                                     name,
+                                     desc,
                                      '',
                                      '',
-                                     linksObj.nameWidth));
+                                     linksObj.nameWidth,
+                                     isVisibleOnScreen,
+                                     isVisibleToAT));
 
       trNode.appendChild(getDataCell(trNode.id + '-desc',
                                      'desc',
                                      desc ? 'Yes' : ' ',
+                                     '',
                                      '',
                                      '',
                                      linksObj.descWidth));
@@ -431,6 +464,7 @@ class H2LLinksGrid extends HTMLElement {
       trNode.appendChild(getDataCell(trNode.id + '-type',
                                      'type',
                                      typeContent,
+                                     '',
                                      typeDesc,
                                      typeSort,
                                      linksObj.typeWidth));
@@ -449,7 +483,9 @@ class H2LLinksGrid extends HTMLElement {
                              link.url,
                              link.type,
                              link.typeDesc,
-                             link.typeSort);
+                             link.typeSort,
+                             link.isVisibleOnScreen,
+                             link.isVisibleToAT);
 
       this.gridTbodyNode.appendChild(rowNode);
 

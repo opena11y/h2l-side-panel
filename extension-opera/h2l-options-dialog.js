@@ -239,7 +239,7 @@ export default class H2LOptionsDialog extends HTMLElement {
     this.updateOptions();
 
     if (option === 'highlight') {
-      this.h2Title.textContent = browserI18n.getMessage('options_dialog_title_highlight');
+      this.h2Title.textContent = browserI18n.getMessage('options_dialog_title');
       this.divHighlight.removeAttribute('hidden');
       this.divLinkFilter.setAttribute('hidden', '');
     }

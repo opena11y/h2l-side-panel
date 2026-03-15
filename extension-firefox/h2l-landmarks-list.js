@@ -11,6 +11,8 @@ import {
 
 import {
   getMessage,
+  getSpan,
+  getSpanBrackets,
   highlightItems,
   removeChildContent,
   setI18nLabels,
@@ -119,21 +121,32 @@ class H2LLandmarksList extends HTMLElement {
 
   }
 
+  addMessage(message, tabindexValue=0, className='') {
+    if ((typeof message === 'string') && message.length) {
+      const listitemNode = document.createElement('div');
+      listitemNode.setAttribute('role', 'listitem');
+      listitemNode.tabIndex    = tabindexValue;
+      listitemNode.textContent = message;
+      listitemNode.className   = className;
+
+      listitemNode.addEventListener('keydown', this.handleMessageKeydown.bind(this));
+      listitemNode.addEventListener('click',   this.handleMessageClick.bind(this));
+      listitemNode.addEventListener('focus',   this.handleFocus.bind(this));
+      listitemNode.addEventListener('blur',    this.handleBlur.bind(this));
+
+      this.listboxNode.appendChild(listitemNode);
+    }
+  }
+
   clearContent(message='') {
      removeChildContent(this.listboxNode);
-
-     if ((typeof message === 'string') && message.length) {
-        const listitemNode = document.createElement('div');
-        listitemNode.setAttribute('role', 'listbox');
-        listitemNode.tabIndex = 0;
-        listitemNode.textContent = message;
-        this.listboxNode.appendChild(listitemNode);
-     }
+     this.addMessage(message);
   }
 
   updateContent(sameUrl, regions) {
     let lastLandmarkNode = null;
     let index = 1;
+    let hiddenCount = 0;
 
     this.clearContent();
     this.landmarkItems = [];
@@ -149,11 +162,15 @@ class H2LLandmarksList extends HTMLElement {
         this.lastLandmarkId        = options.lastLandmarkId;
 
         regions.forEach( (r) => {
+
+          if (r.isVisibleOnScreen || r.isVisibleToAT) {
             const roleName = r.role[0].toUpperCase() + r.role.slice(1);
 
             listObj.landmarkItems.push({
-              position: r.ordinalPosition,
-              elemRole: roleName
+              position:          r.ordinalPosition,
+              isVisibleOnScreen: r.isVisibleOnScreen,
+              isVisibleToAT:     r.isVisibleToAT,
+              elemRole:          roleName
             });
 
             const listitemNode = document.createElement('div');
@@ -168,22 +185,42 @@ class H2LLandmarksList extends HTMLElement {
             listitemNode.setAttribute('data-ordinal-position', r.ordinalPosition);
 
 
-            listitemNode.textContent = r.name ? `${roleName}: ${r.name}` : roleName;
-            listitemNode.setAttribute('data-role', roleName);
-            listitemNode.setAttribute('data-name', r.name);
-            listitemNode.setAttribute('data-name-src', r.nameSource);
+            listitemNode.appendChild(getSpan(r.name ? `${roleName}: ${r.name}` : roleName, 'content'));
+            if (!r.isVisibleOnScreen) {
+              listitemNode.appendChild(getSpanBrackets(`hidden`, 'hidden'));
+            }
+            if (!r.isVisibleToAT) {
+              listitemNode.appendChild(getSpanBrackets(`hidden from AT`, 'hidden'));
+            }
+
+            listitemNode.setAttribute('data-role',           roleName);
+            listitemNode.setAttribute('data-name',           r.name);
+            listitemNode.setAttribute('data-name-src',       r.nameSource);
+            listitemNode.setAttribute('data-visible-screen', r.isVisibleOnScreen);
+            listitemNode.setAttribute('data-visible-at',     r.isVisibleToAT);
+
             listitemNode.setAttribute('data-first-char', r.role.toLowerCase()[0]);
-            listitemNode.addEventListener('click', listObj.handleClick.bind(listObj));
+            listitemNode.addEventListener('click',   listObj.handleClick.bind(listObj));
             listitemNode.addEventListener('keydown', listObj.handleKeydown.bind(listObj));
             listitemNode.addEventListener('focus',   listObj.handleFocus.bind(listObj));
             listitemNode.addEventListener('blur',    listObj.handleBlur.bind(listObj));
 
             this.listboxNode.appendChild(listitemNode);
+          }
+          else {
+            hiddenCount += 1;
+          }
         });
 
         const firstListitem = this.listboxNode.querySelector('[role="listitem"]');
 
         const count = this.listboxNode.querySelectorAll('[role="listitem"]').length;
+
+        if (hiddenCount) {
+          hiddenCount === 1 ?
+            this.addMessage(getMessage('msg_hidden_landmark'), (count ? -1 : 0), 'hidden') :
+            this.addMessage(`${hiddenCount} ${getMessage('msg_hidden_landmarks')}`, (count ? -1 : 0), 'hidden');
+        }
 
         setTablistAttr('landmarks-count', count);
 
@@ -408,6 +445,71 @@ class H2LLandmarksList extends HTMLElement {
       event.preventDefault();
     }
   }
+
+  handleMessageClick (event) {
+    const tgt = event.currentTarget;
+    this.setFocusToListitem(tgt);
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  handleMessageKeydown(event) {
+    const tgt = event.currentTarget;
+    const key = event.key;
+    let flag  = false;
+
+    function isPrintableCharacter(str) {
+      return str.length === 1 && str.match(/\S/);
+    }
+
+    if (event.altKey || event.ctrlKey || event.metaKey) {
+      return;
+    }
+
+    if (event.shift) {
+      if (
+        event.keyCode == this.keyCode.SPACE ||
+        event.keyCode == this.keyCode.RETURN
+      ) {
+        event.stopPropagation();
+      }
+    } else {
+      switch (key) {
+
+        case 'ArrowUp':
+          this.setFocusToPreviousListitem(tgt);
+          flag = true;
+          break;
+
+        case 'ArrowDown':
+          this.setFocusToNextListitem(tgt);
+          flag = true;
+          break;
+
+        case 'Home':
+          this.setFocusToFirstListitem();
+          flag = true;
+          break;
+
+        case 'End':
+          this.setFocusToLastListitem();
+          flag = true;
+          break;
+
+        default:
+          if (isPrintableCharacter(key)) {
+            this.setFocusByFirstCharacter(tgt, key);
+          }
+          break;
+      }
+    }
+
+    if (flag) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
 }
 
 

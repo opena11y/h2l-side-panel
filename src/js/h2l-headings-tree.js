@@ -9,6 +9,8 @@ import {
 
 import {
   getMessage,
+  getSpan,
+  getSpanBrackets,
   highlightItems,
   removeChildContent,
   setI18nLabels,
@@ -131,24 +133,32 @@ class H2LHeadingsTree extends HTMLElement {
     this.treeNode.style.height = (height - 1 * 1.2 * optionsRect.height) + 'px';
   }
 
+  addMessage(message, tabindexValue=0, className='message') {
+    if ((typeof message === 'string') && message.length) {
+      const treeitemNode = document.createElement('div');
+      treeitemNode.setAttribute('role', 'treeitem');
+      treeitemNode.tabIndex = tabindexValue;
+      treeitemNode.textContent = message;
+      treeitemNode.className = className;
+      this.treeNode.appendChild(treeitemNode);
+      treeitemNode.addEventListener('keydown', this.handleMessageKeydown.bind(this));
+      treeitemNode.addEventListener('click',   this.handleMessageClick.bind(this));
+      treeitemNode.addEventListener('focus',   this.handleFocus.bind(this));
+      treeitemNode.addEventListener('blur',    this.handleBlur.bind(this));
+      return treeitemNode;
+    }
+    return null;
+  }
+
   clearContent(message = '') {
-
      this.headingItems = [];
-
      removeChildContent(this.treeNode);
-
-     if ((typeof message === 'string') && message.length) {
-        const treeitemNode = document.createElement('div');
-        treeitemNode.setAttribute('role', 'treeitem');
-        treeitemNode.tabIndex = 0;
-        treeitemNode.textContent = message;
-        this.treeNode.appendChild(treeitemNode);
-        return treeitemNode;
-     }
-     return null;
+     return this.addMessage(message);
   }
 
   updateContent(sameUrl, headings) {
+
+    let hiddenCount = 0;
 
     const headingsTreeObj = this;
     this.headingItems = [];
@@ -162,11 +172,14 @@ class H2LHeadingsTree extends HTMLElement {
     const levelLabel = getMessage('headings_level_label');
 
     function addTreeitem (parentNode, heading) {
+
       const level    = `${levelLabel}${heading.level}`;
       const accname  = `${level}: ${heading.name}`
 
       headingsTreeObj.headingItems.push({
-        position: parseInt(heading.ordinalPosition),
+        position:          heading.ordinalPosition,
+        isVisibleOnScreen: heading.isVisibleOnScreen,
+        isVisibleToAT:     heading.isVisibleToAT,
         elemRole: `h${heading.level}`
       });
 
@@ -188,7 +201,8 @@ class H2LHeadingsTree extends HTMLElement {
 
       const firstChar = heading.name[0] ? heading.name[0].toLowerCase() : '';
       treeitemNode.setAttribute('data-first-char', firstChar);
-      treeitemNode.setAttribute('data-visible', heading.isVisibleOnScreen);
+      treeitemNode.setAttribute('data-visible-screen', heading.isVisibleOnScreen);
+      treeitemNode.setAttribute('data-visible-at', heading.isVisibleToAT);
       if (heading.level > 1) {
         const iconNode = document.createElement('span');
         iconNode.className = 'no-icon';
@@ -196,7 +210,16 @@ class H2LHeadingsTree extends HTMLElement {
       }
       const nameNode = document.createElement('span');
       nameNode.classList.add('name');
-      nameNode.textContent = `${heading.level}: ${heading.name}`;
+      nameNode.appendChild(getSpan(`${heading.level}: ${heading.name}`, 'content'));
+
+      if (!heading.isVisibleOnScreen) {
+        nameNode.appendChild(getSpanBrackets(`hidden`, 'hidden'));
+      }
+
+      if (!heading.isVisibleToAT) {
+        nameNode.appendChild(getSpanBrackets(`hidden from AT`, 'hidden'));
+      }
+
       treeitemNode.setAttribute('data-elem-role', `h${heading.level}`);
       treeitemNode.setAttribute('aria-label', accname);
       treeitemNode.appendChild(nameNode);
@@ -215,53 +238,60 @@ class H2LHeadingsTree extends HTMLElement {
 
     function processHeadings (parentNode, lastHeadingNode, headings, lastLevel) {
       while (headings[0]) {
+
         const heading = headings[0];
 
-        if ((heading.level === lastLevel) ||
-            (lastLevel === 0) ||
-            (lastLevel === 1)) {
-          const headingNode1 = addTreeitem(parentNode, heading);
-          headings.shift();
-          processHeadings (parentNode, headingNode1, headings, heading.level);
-        }
-        else {
-          if (heading.level > lastLevel) {
-            const id = `heading-${heading.ordinalPosition}`;
-            if (lastHeadingNode) {
-              lastHeadingNode.setAttribute('aria-owns', id);
-              const iconNode = lastHeadingNode.querySelector(`.no-icon`);
-              if (iconNode) {
-                iconNode.className = 'expand-icon';
-                iconNode.appendChild(icon.content.cloneNode(true));
-                lastHeadingNode.setAttribute('aria-expanded', 'false');
-                iconNode.addEventListener('click', handleIconClick.bind(treeObj));
-              }
-              else {
-                lastHeadingNode.setAttribute('aria-expanded', 'true');
-              }
-            }
-            const groupNode = addGroup(parentNode, id);
-            let count = headings.length;
-
-            const headingNode2 = addTreeitem(groupNode, heading);
+        if (heading.isVisibleOnScreen || heading.isVisibleToAT) {
+          if ((heading.level === lastLevel) ||
+              (lastLevel === 0) ||
+              (lastLevel === 1)) {
+            const headingNode1 = addTreeitem(parentNode, heading);
             headings.shift();
-
-            headings = processHeadings (groupNode, headingNode2, headings, heading.level);
-
-            count = count - headings.length;
-
-            lastHeadingNode.setAttribute('data-children', count);
-            const nameSpan = lastHeadingNode.querySelector('.name');
-            nameSpan.textContent += ` (${count})`;
-            let ariaLabel = lastHeadingNode.getAttribute('aria-label');
-            ariaLabel += count === 1 ?
-                         `, ${count} ${getMessage('headings_descendant')}` :
-                         `, ${count} ${getMessage('headings_descendants')}`;
-            lastHeadingNode.setAttribute('aria-label', ariaLabel);
+            processHeadings (parentNode, headingNode1, headings, heading.level);
           }
           else {
-            return headings;
+            if (heading.level > lastLevel) {
+              const id = `heading-${heading.ordinalPosition}`;
+              if (lastHeadingNode) {
+                lastHeadingNode.setAttribute('aria-owns', id);
+                const iconNode = lastHeadingNode.querySelector(`.no-icon`);
+                if (iconNode) {
+                  iconNode.className = 'expand-icon';
+                  iconNode.appendChild(icon.content.cloneNode(true));
+                  lastHeadingNode.setAttribute('aria-expanded', 'false');
+                  iconNode.addEventListener('click', handleIconClick.bind(treeObj));
+                }
+                else {
+                  lastHeadingNode.setAttribute('aria-expanded', 'true');
+                }
+              }
+              const groupNode = addGroup(parentNode, id);
+              let count = headings.length;
+
+              const headingNode2 = addTreeitem(groupNode, heading);
+              headings.shift();
+
+              headings = processHeadings (groupNode, headingNode2, headings, heading.level);
+
+              count = count - headings.length;
+
+              lastHeadingNode.setAttribute('data-children', count);
+              const nameSpan = lastHeadingNode.querySelector('.name');
+              nameSpan.appendChild(getSpan(` (${count})`), 'count');
+              let ariaLabel = lastHeadingNode.getAttribute('aria-label');
+              ariaLabel += count === 1 ?
+                           `, ${count} ${getMessage('headings_descendant')}` :
+                           `, ${count} ${getMessage('headings_descendants')}`;
+              lastHeadingNode.setAttribute('aria-label', ariaLabel);
+            }
+            else {
+              return headings;
+            }
           }
+        }
+        else {
+          headings.shift();
+          hiddenCount += 1;
         }
       }
       return headings;
@@ -279,6 +309,12 @@ class H2LHeadingsTree extends HTMLElement {
 
         const firstTreeitem = this.treeNode.querySelector('[role="treeitem"]');
         const count = this.treeNode.querySelectorAll('[role="treeitem"]').length;
+
+        if (hiddenCount) {
+          hiddenCount === 1 ?
+            this.addMessage(getMessage('msg_hidden_heading'), (count ? -1 : 0), 'hidden') :
+            this.addMessage(`${hiddenCount} ${getMessage('msg_hidden_headings')}`, (count ? -1 : 0), 'hidden');
+        }
 
         setTablistAttr('headings-count', count);
 
@@ -588,7 +624,81 @@ class H2LHeadingsTree extends HTMLElement {
       event.preventDefault();
     }
   }
+
+  handleMessageClick (event) {
+    const tgt = event.currentTarget;
+    this.setFocusToTreeitem(tgt);
+    event.stopPropagation();
+    event.preventDefault();
 }
+
+ handleMessageKeydown(event) {
+    const tgt = event.currentTarget;
+    const key = event.key;
+    let flag  = false;
+
+    function isPrintableCharacter(str) {
+      return str.length === 1 && str.match(/\S/);
+    }
+
+    if (event.altKey || event.ctrlKey || event.metaKey) {
+      return;
+    }
+
+    if (event.shift) {
+      if (
+        event.keyCode == this.keyCode.SPACE ||
+        event.keyCode == this.keyCode.RETURN
+      ) {
+        event.stopPropagation();
+        event.preventDefault();
+      } else {
+        if (isPrintableCharacter(key)) {
+          if (key == '*') {
+            this.expandAllSiblingTreeitems(tgt);
+            flag = true;
+          } else {
+            this.setFocusByFirstCharacter(tgt, key);
+          }
+        }
+      }
+    } else {
+      switch (key) {
+        case 'ArrowUp':
+          this.setFocusToPreviousTreeitem(tgt);
+          flag = true;
+          break;
+
+        case 'Home':
+          this.setFocusToFirstTreeitem();
+          flag = true;
+          break;
+
+        case 'End':
+          this.setFocusToLastTreeitem();
+          flag = true;
+          break;
+
+        default:
+          if (isPrintableCharacter(key)) {
+            if (key == '*') {
+              this.expandAllSiblingTreeitems(tgt);
+              flag = true;
+            } else {
+              this.setFocusByFirstCharacter(tgt, key);
+            }
+          }
+          break;
+      }
+    }
+
+    if (flag) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+}
+
 
 window.customElements.define('h2l-headings-tree', H2LHeadingsTree);
 

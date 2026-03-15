@@ -58,6 +58,19 @@
   --not-applicable-color-light: hsl(0, 0%, 87%);
   --not-applicable-color-dark:  hsl(0, 0%, 13%);
 
+  --hidden-color-light:      hsl(60, 100%, 70%);
+  --hidden-background-light: hsl(60, 100%, 70%);
+
+  --hidden-color-dark:      hsl(60, 100%, 30%);
+  --hidden-background-dark: hsl(60, 100%, 30%);
+
+  --hidden-color-light:      #111;
+  --hidden-background-light: hsl(48, 100%, 85%);
+
+  --hidden-color-dark:       hsl(48, 100%, 15%);
+  --hidden-background-dark:  #eee;
+
+
   /* Setting Content Variables */
 
   --main-font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;

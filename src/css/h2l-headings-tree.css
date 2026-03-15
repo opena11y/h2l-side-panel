@@ -85,6 +85,23 @@
     }
 }
 
+[role="tree"] [role="treeitem"].message,
+[role="tree"] [role="treeitem"].hidden {
+  font-style: italic;
+  opacity: 90%;
+}
+
+[role="tree"] [role="treeitem"] span.brackets {
+  padding-left: 0.25em;
+}
+
+[role="tree"] [role="treeitem"] span.hidden {
+  padding-left: 0.25em;
+  font-style: italic;
+  color: light-dark(var(--hidden-color-light), var(--hidden-color-dark));
+  background-color: light-dark(var(--hidden-background-light), var(--hidden-background-dark));
+}
+
 [role="tree"] [role="treeitem"]:hover {
   cursor: pointer;
 }
