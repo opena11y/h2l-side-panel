@@ -31,7 +31,8 @@
 [role="listbox"] [role="listitem"].hidden {
   padding-left: 1em;
   font-style: italic;
-  opacity: 90%;
+  font-weight: bold;
+  font-size: 90%;
 }
 
 [role="listbox"] [role="listitem"].hidden {

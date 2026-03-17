@@ -82,29 +82,34 @@ table[role="grid"] tr:hover {
   cursor: pointer;
 }
 
-table[role="grid"] td.message,
-table[role="grid"] td.filtered,
-table[role="grid"] td.hidden {
+table[role="grid"] tr td.message,
+table[role="grid"] tr td.filtered,
+table[role="grid"] tr td.hidden {
   padding-left: 1em;
   font-style: italic;
-  opacity: 90%;
+  font-weight: bold;
+  font-size: 90%;
 }
 
-table[role="grid"] td.hidden {
+table[role="grid"] tr td.hidden {
   color: light-dark(var(--hidden-color-light), var(--hidden-color-dark));
   background-color: light-dark(var(--hidden-background-light), var(--hidden-background-dark));
 }
 
 
-table[role="grid"] td span.desc {
+table[role="grid"] tr td span.noname {
   font-style: italic;
 }
 
-table[role="grid"] td span.brackets {
+table[role="grid"] tr td span.desc {
+  font-style: italic;
+}
+
+table[role="grid"] tr td span.brackets {
   padding-left: 0.25em;
 }
 
-table[role="grid"] td span.hidden {
+table[role="grid"] tr td span.hidden {
   font-style: italic;
   color: light-dark(var(--hidden-color-light), var(--hidden-color-dark));
   background-color: light-dark(var(--hidden-background-light), var(--hidden-background-dark));

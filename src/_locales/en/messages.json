@@ -462,6 +462,10 @@
   "msg_filtered_links": {
     "message": "filtered links",
     "description": "Message for when there is more than one filtered links"
+  },
+  "msg_no_acc_name": {
+    "message": "no name",
+    "description": "Message for when there is no accessible name"
   }
 }
 

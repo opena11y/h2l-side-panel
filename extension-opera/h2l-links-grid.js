@@ -211,6 +211,10 @@ class H2LLinksGrid extends HTMLElement {
     this.links = [];
     this.linkItems = [];
 
+    this.filteredCount = 0;
+    this.hiddenCount   = 0;
+    this.visibleCount  = 0;
+
     setI18nLabels(this.shadowRoot, debug.flag);
 
     this.tabpanelOptions = new TabpanelOptions(this.shadowRoot);
@@ -309,13 +313,32 @@ class H2LLinksGrid extends HTMLElement {
      this.addMessage(message);
   }
 
-  updateContent (sameUrl, links, filteredLinks) {
+  updateMessages(filteredCount, hiddenCount, visibleCount) {
+    if (filteredCount > 0) {
+      filteredCount === 1 ?
+        this.addMessage(getMessage('msg_filtered_link'), (visibleCount ? -1 : 0), 'filtered') :
+        this.addMessage(`${filteredCount} ${getMessage('msg_filtered_links')}`, (visibleCount ? -1 : 0), 'filtered');
+    }
+
+    if (hiddenCount) {
+      hiddenCount === 1 ?
+        this.addMessage(getMessage('msg_hidden_link'), (visibleCount ? -1 : 0), 'hidden') :
+        this.addMessage(`${hiddenCount} ${getMessage('msg_hidden_links')}`, (visibleCount ? -1 : 0), 'hidden');
+    }
+
+  }
+
+  updateContent (sameUrl, links, filteredCount) {
     const linksObj = this;
-    let hiddenCount = 0;
+    this.filteredCount = filteredCount;
 
-    this.links = links;
+    this.links = links.filter( (link) => {
+      return link.isVisibleOnScreen || link.isVisibleToAT;
+    });
 
-    if (links) {
+    this.hiddenCount = links.length - this.links.length;
+
+    if (this.links) {
 
       getOptions().then( (options) => {
 
@@ -324,43 +347,36 @@ class H2LLinksGrid extends HTMLElement {
         linksObj.lastURL               = options.lastURL;
         linksObj.lastLinkId            = options.lastLinkId;
 
-        links.forEach( (link, index) => {
+        linksObj.links.forEach( (link, index) => {
 
-          if (link.isVisibleOnScreen || link.isVisibleToAT) {
+          linksObj.linkItems.push({
+            position: link.ordinalPosition,
+            isVisibleOnScreen: link.isVisibleOnScreen,
+            isVisibleToAT:     link.isVisibleToAT,
+            elemRole: LINK_ROLE
+          });
 
-            linksObj.linkItems.push({
-              position: link.ordinalPosition,
-              isVisibleOnScreen: link.isVisibleOnScreen,
-              isVisibleToAT:     link.isVisibleToAT,
-              elemRole: LINK_ROLE
-            });
+          [link.type, link.typeDesc, link.typeSort] = linksObj.getTypeContentAndDescription(link);
+          link.pos = index + 1;
 
-            [link.type, link.typeDesc, link.typeSort] = linksObj.getTypeContentAndDescription(link);
-            link.pos = index + 1;
+          if ((link.name && link.desc) &&
+              (link.name.trim().toLowerCase() === link.desc.trim().toLowerCase())) {
+            link.desc = '';
+            link.descSource = '';
           }
-          else {
-            hiddenCount += 1;
+
+          if (link.name !== link.desc) {
+            link.descValue = link.desc.length === 0 ? 1 : 2;
           }
+
         });
 
-        const lastGridNode = linksObj.updateLinkContent(links);
+        const lastGridNode = linksObj.updateLinkContent(this.links);
 
         const firstGridrow = linksObj.gridNode.querySelector('[role="grid"] tbody tr');
 
-        const count = linksObj.gridNode.querySelectorAll('[role="grid"] tbody tr').length;
-        setTablistAttr('links-count', count);
-
-        if (filteredLinks > 0) {
-          filteredLinks === 1 ?
-            this.addMessage(getMessage('msg_filtered_link'), (count ? -1 : 0), 'filtered') :
-            this.addMessage(`${filteredLinks} ${getMessage('msg_filtered_links')}`, (count ? -1 : 0), 'filtered');
-        }
-
-        if (hiddenCount) {
-          hiddenCount === 1 ?
-            this.addMessage(getMessage('msg_hidden_link'), (count ? -1 : 0), 'hidden') :
-            this.addMessage(`${hiddenCount} ${getMessage('msg_hidden_links')}`, (count ? -1 : 0), 'hidden');
-        }
+        this.visibleCount = linksObj.gridNode.querySelectorAll('[role="grid"] tbody tr').length;
+        setTablistAttr('links-count', this.visibleCount);
 
         if (firstGridrow) {
           if (sameUrl && lastGridNode) {
@@ -373,7 +389,6 @@ class H2LLinksGrid extends HTMLElement {
         else {
           linksObj.clearContent(getMessage('links_none_found', debug.flag));
         }
-
         if (options.highlightAllLinks) {
           highlightItems({}, linksObj.linkItems, getMessage('msg_link_hidden'), options.highlightNamesLinks);
         }
@@ -391,19 +406,25 @@ class H2LLinksGrid extends HTMLElement {
   updateLinkContent (links) {
     const linksObj = this;
     let lastGridNode = null;
+    let hiddenLinks = 0;
 
-    function addRow (pos, ordinalPos, name, nameSource, desc, descSource, url, typeContent, typeDesc, typeSort, isVisibleOnScreen, isVisibleToAT) {
+    function addRow (pos, ordinalPos, name, nameSource, desc, descSource, descValue, url, typeContent, typeDesc, typeSort, isVisibleOnScreen, isVisibleToAT) {
 
       // Adding row helper function
 
-      function getDataCell(id, cname, content, desc, title, sortValue, width, isVisScr=true, isVisAT=true) {
+      function getDataCell(id, cname, content, desc, title, sortValue, width, isVisScr=true, isVisAT=true, noNameMessage='') {
 
 
         const cellNode =  document.createElement('td');
         cellNode.id = id;
         cellNode.className = cname;
 
-        cellNode.appendChild(getSpan(content, 'content'));
+        if (noNameMessage && !content) {
+          cellNode.appendChild(getSpan(noNameMessage, 'content noname'));
+        }
+        else {
+          cellNode.appendChild(getSpan(content, 'content'));
+        }
 
         if (desc) {
           cellNode.appendChild(getSpan(`; ${desc}`, 'desc'));
@@ -436,12 +457,6 @@ class H2LLinksGrid extends HTMLElement {
       }
 
       // Start adding new row
-
-      if ((name && desc) &&
-          (name.trim().toLowerCase() === desc.trim().toLowerCase())) {
-        desc = '';
-        descSource = '';
-      }
 
       const trNode = document.createElement('tr');
       trNode.id = 'row-' + pos;
@@ -487,14 +502,15 @@ class H2LLinksGrid extends HTMLElement {
                                      '',
                                      linksObj.nameWidth,
                                      isVisibleOnScreen,
-                                     isVisibleToAT));
+                                     isVisibleToAT,
+                                     getMessage(`msg_no_acc_name`)));
 
       trNode.appendChild(getDataCell(trNode.id + '-desc',
                                      'desc',
                                      desc ? 'Yes' : ' ',
                                      '',
                                      '',
-                                     '',
+                                     descValue,
                                      linksObj.descWidth));
 
       trNode.appendChild(getDataCell(trNode.id + '-type',
@@ -516,6 +532,7 @@ class H2LLinksGrid extends HTMLElement {
                              link.nameSource,
                              link.desc,
                              link.descSource,
+                             link.descValue,
                              link.url,
                              link.type,
                              link.typeDesc,
@@ -524,9 +541,9 @@ class H2LLinksGrid extends HTMLElement {
                              link.isVisibleToAT);
 
       this.gridTbodyNode.appendChild(rowNode);
-
-      link.descValue = link.desc.length === 0;
     });
+
+    this.updateMessages(this.filteredCount, this.hiddenCount, this.visibleCount);
 
     return lastGridNode;
   }
@@ -615,7 +632,7 @@ class H2LLinksGrid extends HTMLElement {
       const bStr = b.name.toLowerCase().trim();
       const result = bStr.localeCompare(aStr);
       if (result === 0) {
-        return posCompare(a, b);
+        return posCompareDescending(a, b);
       }
       return result;
     }
@@ -631,7 +648,7 @@ class H2LLinksGrid extends HTMLElement {
     function typeCompareDescending(a, b) {
       const result = b.typeSort - a.typeSort;
       if (result === 0) {
-        return posCompare(a, b);
+        return posCompareDescending(a, b);
       }
       return result;
     }
@@ -645,11 +662,19 @@ class H2LLinksGrid extends HTMLElement {
     }
 
     function descCompare(a, b) {
-      return a.descValue - b.descValue;
+      const result = a.descValue - b.descValue;
+      if (result === 0) {
+        return posCompare(a, b);
+      }
+      return result;
     }
 
     function descCompareDescending(a, b) {
-      return b.descValue - a.descValue;
+      const result = b.descValue - a.descValue;
+      if (result === 0) {
+        return posCompareDescending(a, b);
+      }
+      return result;
     }
 
 

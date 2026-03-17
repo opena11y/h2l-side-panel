@@ -89,6 +89,8 @@
 [role="tree"] [role="treeitem"].hidden {
   font-style: italic;
   opacity: 90%;
+  font-weight: bold;
+  font-size: 90%;
 }
 
 [role="tree"] [role="treeitem"].hidden {
