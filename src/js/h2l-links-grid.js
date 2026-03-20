@@ -33,7 +33,7 @@ const isMozilla = typeof browser === 'object';
 const isWin     = navigator.userAgent.includes('Windows');
 
 const gridOffsetWidth = ( isWin && !isMozilla) ?
-                            45 :
+                            51 :
                             36;
 
 const LINK_ROLE = 'A';
