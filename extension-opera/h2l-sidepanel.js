@@ -213,7 +213,7 @@ class H2LSidePanel extends HTMLElement {
   //-----------------------------------------------
 
   handleWindowLoad () {
-    debug && console.log('Window Loaded');
+    debug.flag && console.log('Window Loaded');
     browserTabs.onUpdated.addListener(this.handleTabUpdated.bind(this));
     browserTabs.onActivated.addListener(this.handleTabActivated.bind(this));
     myBrowser.windows.onFocusChanged.addListener(this.handleWindowFocusChanged.bind(this));
@@ -228,7 +228,7 @@ class H2LSidePanel extends HTMLElement {
   **  Handle tabs.onUpdated event when status is 'complete'
   */
   handleTabUpdated (tabId, changeInfo, tab) {
-    debug && console.log('handleTabUpdated');
+    debug.flag && console.log('handleTabUpdated');
     // Skip content update when new page is loaded in background tab
     if (!tab.active) return;
 
@@ -248,7 +248,7 @@ class H2LSidePanel extends HTMLElement {
   **  Handle tabs.onActivated event
   */
   handleTabActivated (activeInfo) {
-    debug && console.log('handleTabActivated');
+    debug.flag && console.log('handleTabActivated');
     this.logTabUrl(activeInfo);
 
     const that = this;

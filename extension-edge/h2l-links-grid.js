@@ -33,8 +33,8 @@ const isMozilla = typeof browser === 'object';
 const isWin     = navigator.userAgent.includes('Windows');
 
 const gridOffsetWidth = ( isWin && !isMozilla) ?
-                            40 :
-                            25;
+                            45 :
+                            36;
 
 const LINK_ROLE = 'A';
 
@@ -246,7 +246,7 @@ class H2LLinksGrid extends HTMLElement {
     this.gridNode.style.width = tableWidth + 'px';
 
     const posWidth  = 50;
-    const descWidth = 45;
+    const descWidth = 58;
     const typeWidth = 58;
     const nameWidth = tableWidth - posWidth - descWidth - typeWidth - gridOffsetWidth;
 

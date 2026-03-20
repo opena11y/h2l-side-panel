@@ -43,6 +43,10 @@
     "message": "Export",
     "description": "Label for export information"
   },
+  "buttons_show_all_headings": {
+    "message": "Show All Headings",
+    "description": "Label for show all headings button"
+  },
   "tablist_title": {
     "message": "Page Title",
     "description": "Label for title of the page"

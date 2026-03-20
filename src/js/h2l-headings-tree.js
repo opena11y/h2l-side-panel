@@ -36,18 +36,29 @@ template.innerHTML = `
   </div>
 
   <div id="options">
-    <label for="highlight-all">
-      <input id="highlight-all"
-             type="checkbox"
-             data-option="highlightAllHeadings"/>
-      <span data-i18n="options_highlight_headings_all"></span>
-    </label>
-    <label for="show-name">
-      <input id="show-name"
-             type="checkbox"
-             data-option="highlightNamesHeadings"/>
-      <span data-i18n="options_highlight_heading_names"></span>
-    </label>
+
+    <div class="flex">
+      <div class="column">
+        <label for="highlight-all">
+          <input id="highlight-all"
+                 type="checkbox"
+                 data-option="highlightAllHeadings"/>
+          <span data-i18n="options_highlight_headings_all"></span>
+        </label>
+        <label for="show-name">
+          <input id="show-name"
+                 type="checkbox"
+                 data-option="highlightNamesHeadings"/>
+          <span data-i18n="options_highlight_heading_names"></span>
+        </label>
+      </div>
+
+      <div class="column">
+            <button id="id-btn-show-all-headings"
+                    data-i18n="buttons_show_all_headings">
+            </button>
+      </div>
+    </div>
   </div>
 `;
 
@@ -89,7 +100,9 @@ class H2LHeadingsTree extends HTMLElement {
     // Add DOM tree from template
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.treeNode    = this.shadowRoot.querySelector("[role=tree]");
+    this.treeNode = this.shadowRoot.querySelector("[role=tree]");
+    this.buttonAllHeadings = this.shadowRoot.querySelector("#id-btn-show-all-headings");
+    this.buttonAllHeadings.addEventListener('click', this.handleAllHeadingsClick.bind(this));
 
     this.treeitems = [];
 
@@ -131,6 +144,11 @@ class H2LHeadingsTree extends HTMLElement {
     const optionsRect = optionsNode.getBoundingClientRect();
 
     this.treeNode.style.height = (height - 1 * 1.2 * optionsRect.height) + 'px';
+  }
+
+  checkButtonDisabled () {
+    const treeitem = this.treeNode.querySelector('[role="treeitem"][aria-expanded="false"]');
+    this.buttonAllHeadings.disabled = treeitem === null;
   }
 
   addMessage(message, tabindexValue=0, className='message') {
@@ -335,6 +353,8 @@ class H2LHeadingsTree extends HTMLElement {
     else {
       this.clearContent(getMessage('protocol_not_supported', debug.flag));
     }
+    this.checkButtonDisabled();
+
     getOptions().then( (options) => {
       if (options.highlightAllHeadings) {
         highlightItems({}, this.headingItems, getMessage('msg_heading_hidden'), options.highlightNamesHeadings);
@@ -475,6 +495,7 @@ class H2LHeadingsTree extends HTMLElement {
     if (this.isVisible) {
       treeitem.focus();
     }
+    this.checkButtonDisabled();
   }
 
   setTabindex(treeitem) {
@@ -508,6 +529,8 @@ class H2LHeadingsTree extends HTMLElement {
     else {
       ti.setAttribute('aria-expanded', 'false');
     }
+    this.checkButtonDisabled();
+
     event.stopPropagation();
     event.preventDefault();
   }
@@ -630,7 +653,7 @@ class H2LHeadingsTree extends HTMLElement {
     this.setFocusToTreeitem(tgt);
     event.stopPropagation();
     event.preventDefault();
-}
+  }
 
  handleMessageKeydown(event) {
     const tgt = event.currentTarget;
@@ -697,6 +720,15 @@ class H2LHeadingsTree extends HTMLElement {
       event.preventDefault();
     }
   }
+
+  handleAllHeadingsClick(event) {
+    const treeitem = this.treeNode.querySelector('[role="treeitem"]');
+    if (treeitem) {
+      this.expandAllSiblingTreeitems(treeitem);
+      event.currentTarget.disabled = true;
+    }
+  }
+
 }
 
 
