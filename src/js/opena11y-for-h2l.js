@@ -50763,13 +50763,11 @@
     function(request, sender, sendResponse) {
       // Highlight selected and/or all elements on a page
       if(request.highlightItems) {
-        console.log(`[highlightItems]`);
         highlightItems(request.highlightItems);
       }
 
       // Remove highlights
       if(request.removeHighlight) {
-        console.log(`[removeHighlight]`);
         removeHighlightElements();
       }
 
@@ -50787,7 +50785,6 @@
 
       // Update heading, region and link information
       if(request.runEvaluation) {
-        console.log(`[runEvaluation]`);
         removeHighlightElements();
         const doc = window.document;
         evaluationResult  = evaluationLibrary.evaluateWCAG(doc,

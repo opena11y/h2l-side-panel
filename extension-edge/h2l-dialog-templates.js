@@ -155,19 +155,53 @@ aboutTemplate.innerHTML = `
       The <em>Headings, Landmarks and Links Side Panel</em> (H2L) provides a
        view of the headings, landmark regions and links on a web page.
     <p>
-    <p>
-      It can be used to verify:
-    </p>
-    <ul>
-      <li>The proper use of headings.</li>
-      <li>The proper use of landmarks.</li>
-      <li>Link names describe the target of a link.</li>
-      <li>Sorting links by their name.</li>
-      <li>Filtering links based on URL properties.</li>
-      <li>Identifying links with accessible descriptions.</li>
-      <li>Identifying links to non-html documents.</li>
-      <li>Identifying hidden headings, landmarks and links.</li>
-    <ul>
+    <table class="info">
+      <thead>
+        <tr>
+          <th>Elements</th>
+          <th>Features</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Headings (<code>h1-h6</code>)</td>
+          <td>
+            <ul class="info">
+              <li>Proper use of headings.</li>
+              <li>Highlighting headings.</li>
+              <li>Export to CSV.</li>
+              <li>Identify hidden headings.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Landmark Regions</td>
+          <td>
+            <ul class="info">
+              <li>Proper use of landmarks.</li>
+              <li>Highlighting landmarks.</li>
+              <li>Export to CSV.</li>
+              <li>Identify hidden landmarks.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Links</td>
+          <td>
+            <ul class="info">
+              <li>Verify link name describes the target of link.</li>
+              <li>Highlighting links.</li>
+              <li>Filtering links based on URL properties.</li>
+              <li>Identify links with accessible descriptions.</li>
+              <li>Identify links to non-html documents.</li>
+              <li>Identify links with no name.</li>
+              <li>Export to CSV.</li>
+              <li>Identify hidden links.</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 `;
 
 /* Buttons */

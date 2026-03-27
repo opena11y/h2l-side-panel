@@ -41,7 +41,8 @@ const dialogTemplate = document.createElement('template');
 dialogTemplate.innerHTML = `
 <dialog class="h2l-dialog">
   <div class="header">
-    <h2 id="title" data-i18n="options_dialog_title">
+    <h2 id="title">
+      No title
     </h2>
     <button id="id-close-1"
             data-i18n-aria-label="options_dialog_close"
@@ -143,7 +144,7 @@ class H2LDialog extends HTMLElement {
 
     this.updateOptions();
     this.dialogElem.showModal();
-    this.closeButton2.focus();
+    this.lastButton.focus();
   }
 
   updateOptions () {
@@ -399,7 +400,7 @@ export class H2LExportDialog extends H2LDialog {
 
 export class H2LAboutDialog extends H2LDialog {
   constructor () {
-    super(getMessage('export_dialog_title'),
+    super(getMessage('about_dialog_title'),
           [aboutTemplate],
           buttonsInfoCloseTemplate);
 
