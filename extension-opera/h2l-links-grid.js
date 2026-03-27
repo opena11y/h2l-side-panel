@@ -144,7 +144,78 @@ template.innerHTML = `
     </div>
   </div>
 
-  <h2l-options-dialog></h2l-options-dialog>
+  <h2l-options-dialog>
+    <span slot="title"
+          data-i18n="options_dialog_title_link_filter">
+    </span>
+
+    <div slot="options">
+      <fieldset >
+        <legend data-i18n="options_dialog_legend_link">
+          ABC
+        </legend>
+
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="internalLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_internal_links">
+            </span>
+          </label>
+
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="sameSubDomainLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_same_sub_domain">
+            </span>
+          </label>
+
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="sameDomainLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_same_domain">
+            </span>
+          </label>
+
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="externalLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_external_links">
+            </span>
+          </label>
+
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="nonHtmlExtensionLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_non_html_links">
+            </span>
+          </label>
+
+
+          <div class="grid">
+            <div></div>
+            <div id="id-link-desc"
+               class="desc"
+               data-i18n="options_dialog_links_desc">
+            </div>
+          </div>
+      </fieldset>
+    </div>
+  </h2l-options-dialog>
 `;
 
 class H2LLinksGrid extends HTMLElement {

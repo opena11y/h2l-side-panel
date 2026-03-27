@@ -20,7 +20,7 @@ dialog.h2l-dialog {
   padding: 0;
   border-width: 2px;
   border-style: solid;
-  border-color: light-dark(var(--dialog-border-light), var(--dialog-border-dark));
+  border-color: light-dark(var(--dialog-border-light),var(--dialog-border-dark));
   border-radius: 5px;
   z-index: 2000001;
   color: light-dark(var(--main-color-light), var(--main-color-dark));
@@ -39,7 +39,7 @@ dialog.h2l-dialog .header {
   border-top-right-radius: 5px;
   font-weight: bold;
   color: light-dark(var(--main-color-light), var(--main-color-dark));
-  background-color: light-dark(var(--main-background-light), var(--main-background-dark));
+  background-color: light-dark(var(--light-gray), var(--light-gray-dark));
   position: relative;
   font-size: 11pt;
 }
@@ -47,13 +47,14 @@ dialog.h2l-dialog .header {
 dialog.h2l-dialog .header h2 {
   margin: 0;
   padding: 0;
-  font-size: 11pt;
+  padding-left: 0.25em;
+  font-size: 12pt;
 }
 
 dialog.h2l-dialog .header button {
   position: absolute;
-  top: 0.25em;
-  right: 0.125em;
+  top: 0.375em;
+  right: 0.25em;
   border: none;
   background: transparent;
   font-weight: bold;
@@ -139,16 +140,16 @@ dialog.h2l-dialog .content .copyright {
   font-size: 90%;
 }
 
-.buttons {
+.row {
   display: grid;
   grid-template-columns: 40% 30% 30%;
 }
 
-.buttons button {
+.row button {
   margin: 1em;
 }
 
-.buttons button.first {
+.row button.first {
   grid-column-start: 1;
   grid-column-end: 2;
   text-align: center;
@@ -156,7 +157,7 @@ dialog.h2l-dialog .content .copyright {
   width: 8em;
 }
 
-.buttons button.second {
+.row button.second {
   grid-column-start: 2;
   grid-column-end: 3;
   text-align: center;
@@ -164,12 +165,17 @@ dialog.h2l-dialog .content .copyright {
   width: 5em;
 }
 
-.buttons button.third {
+.row button.third {
   grid-column-start: 3;
   grid-column-end: 4;
   text-align: center;
   vertical-align: center;
   width: 5em;
+}
+
+#buttons .center {
+  width: 100%;
+  text-align: center;
 }
 
 button:hover {

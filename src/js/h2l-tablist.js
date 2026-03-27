@@ -127,6 +127,7 @@ template.innerHTML = `
       </div>
     </footer>
     <h2l-options-dialog></h2l-options-dialog>
+    <h2l-about-dialog></h2l-about-dialog>
     <h2l-export-dialog></h2l-export-dialog>
   </div>
 `;
@@ -161,6 +162,7 @@ class TOCTabList extends HTMLElement {
     this.h2lLandmarksList  = this.shadowRoot.querySelector('h2l-landmarks-list');
     this.h2lLinksGrid      = this.shadowRoot.querySelector('h2l-links-grid');
     this.h2lOptionsDialog  = this.shadowRoot.querySelector('h2l-options-dialog');
+    this.h2lAboutDialog    = this.shadowRoot.querySelector('h2l-about-dialog');
     this.h2lExportDialog   = this.shadowRoot.querySelector('h2l-export-dialog');
 
     const btnGetInfo      = this.shadowRoot.querySelector('#id-btn-update-info');
@@ -175,7 +177,7 @@ class TOCTabList extends HTMLElement {
     const btnExport      = this.shadowRoot.querySelector('#id-btn-export');
     btnExport.addEventListener('click', this.handleExportClick.bind(this));
 
-    this.h2lExportDialog.exportDialog.addEventListener("close", this.handleExportDialogClose.bind(this));
+    this.h2lExportDialog.dialogElem.addEventListener("close", this.handleExportDialogClose.bind(this));
 
     this.footerNode      = this.shadowRoot.querySelector('footer');
 
@@ -442,7 +444,7 @@ class TOCTabList extends HTMLElement {
   }
 
   handleAboutClick () {
-    window.open(URL_ABOUT);
+    this.h2lAboutDialog.openDialog();
   }
 
   handleOptionsClick () {
@@ -450,7 +452,14 @@ class TOCTabList extends HTMLElement {
   }
 
   handleExportClick () {
-    this.h2lExportDialog.openDialog();
+    getOptions().then ( (options) => {
+      if (options.promptForExportOptions) {
+        this.h2lExportDialog.openDialog();
+      }
+      else {
+        this.handleExportDialogClose('export');
+      }
+    });
   }
 
   getCSVContent(options) {
@@ -504,7 +513,7 @@ class TOCTabList extends HTMLElement {
     return content;
   }
 
-  handleExportDialogClose () {
+  handleExportDialogClose (value='') {
 
     function incrementIndex() {
       getOptions().then( (options) => {
@@ -519,10 +528,10 @@ class TOCTabList extends HTMLElement {
 
     const tabListObj = this;
 
-    const returnValue = this.h2lExportDialog.exportDialog.returnValue;
-    if (returnValue === 'export') {
+    const returnValue = this.h2lExportDialog.dialogElem.returnValue;
+    if (returnValue === 'export' || value === 'export') {
       getOptions().then( (options) => {
-        const filename = options.exportFilename + '-' + options.exportIndex.padStart(4, "0") + '.csv';
+        const filename = options.exportFilename + '-' + `${options.exportIndex}`.padStart(4, "0") + '.csv';
         const content = tabListObj.getCSVContent(options);
 
         const blob = new Blob([content], {

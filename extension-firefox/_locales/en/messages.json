@@ -199,6 +199,18 @@
     "message": "Options",
     "description": "Title for options dialog box"
   },
+  "about_dialog_title": {
+    "message": "About",
+    "description": "Title for about dialog box"
+  },
+  "options_dialog_about": {
+    "message": "About",
+    "description": "Title for about dialog box"
+  },
+  "dialog_about_more_information": {
+    "message": "More Information",
+    "description": "Title for more information button in about dialog"
+  },
   "options_dialog_title_highlight": {
     "message": "Highlight Options",
     "description": "Title for options dialog box for highlight options"
@@ -374,6 +386,10 @@
   "export_dialog_label_index": {
     "message": "Index",
     "description": "Label for index for file name"
+  },
+  "export_prompt_for_export_options": {
+    "message": "Prompt for export options",
+    "description": "Label prompting for export options"
   },
   "export_title": {
     "message": "Title",

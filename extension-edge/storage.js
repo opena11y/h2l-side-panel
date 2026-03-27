@@ -40,10 +40,6 @@ const dialogOptions = {
   sameSubDomainLinks: true,
   sameDomainLinks: true,
   nonHtmlExtensionLinks: true,
-  ariaRoles: true,
-  ariaProps: true,
-  accessibleNames: true,
-  keyboardSupport: true,
   keyboardFocus: 'styled',  // options 'styled', 'default' and 'none'
   lastUrl: '',
   lastHeadingId: '',
@@ -57,7 +53,8 @@ const exportOptions = {
   exportLandmarks: true,
   exportLinks: true,
   exportFilename: 'h2l-export',
-  exportIndex: 1
+  exportIndex: 1,
+  promptForExportOptions: true
 };
 
 const ariaOptions = {
