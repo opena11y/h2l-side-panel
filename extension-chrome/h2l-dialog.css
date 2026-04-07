@@ -226,3 +226,19 @@ ul.info li {
   text-overflow: ellipsis;
 }
 
+.about-icon {
+  padding: 0;
+  margin: 0;
+  display: block;
+  text-align: center;
+}
+
+.version {
+  padding: 0;
+  margin: 0;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  display: block;
+  text-align: center;
+  font-size: 125%;
+}

@@ -31841,6 +31841,7 @@
 
   /* Constants */
   const debug$_ = new DebugLogging('EventInfo', false);
+  debug$_.flag = false;
 
   /**
    * @class EventInfo
@@ -33478,6 +33479,8 @@
 
   /* Constants */
   const debug$Z = new DebugLogging('ariaInHtml', false);
+  debug$Z.flag = false;
+
   const higherLevelElements = [
     'article',
     'aside',
@@ -33490,19 +33493,22 @@
     ];
 
   const asideNotAllowedContextElements = [
-    'article',
-    'aside',
+    'footer',
     'form',
-    'nav',
-    'section'
+    'header'
     ];
 
   const asideNotAllowedContextRoles = [
+    'banner',
+    'contentinfo',
+    'form'
+    ];
+
+  const sectioningElements = [
     'article',
-    'complementary',
-    'form',
-    'navigation',
-    'region',
+    'aside',
+    'nav',
+    'section'
     ];
 
 
@@ -33524,9 +33530,10 @@
   *       role restriction information
   *
   * @param  {Object}  node        - Element node from a browser DOM
+  * @param  {String}  name - Accessible name
   */
 
-  function getAriaInHTMLInfo (node) {
+  function getAriaInHTMLInfo (node, name) {
     let elemInfo, type, selector;
 
     let tagName = node.tagName.toLowerCase();
@@ -33550,7 +33557,7 @@
         break;
 
       case 'aside':
-        if (isInContextForComplementary(node)) {
+        if (isInContextForComplementary(node, name)) {
           elemInfo = elementInfo['aside[complementary]'];
         } else {
           elemInfo = elementInfo['aside'];
@@ -33763,10 +33770,11 @@
   *       elements with default landmark roles or is the descendant
   *       of an element with a main landmark role
   *
-  * @param  {Object}  node        - Element node from a browser DOM
+  * @param  {Object}  node - Element node from a browser DOM
+  * @param  {String}  name - Accessible name
   */
 
-  function isInContextForComplementary (node) {
+  function isInContextForComplementary (node, name='') {
     node = node && node.parentNode;
     while (node && (node.nodeType === Node.ELEMENT_NODE)) {
       const tagName = getString(node.tagName);
@@ -33778,6 +33786,11 @@
       if (asideNotAllowedContextElements.includes(tagName)) {
         return false;
       }
+
+      if (sectioningElements.includes(tagName)) {
+        return name.length ? true : false;
+      }
+
       node = node.parentNode;
     }
     return true;
@@ -35316,7 +35329,9 @@
         elementNode.dataset.opena11yPosition = ordinalPosition.toString();
       }
 
-      this.ariaInHTMLInfo  = getAriaInHTMLInfo(elementNode);
+      this.accName        = getAccessibleName(accNameDoc, elementNode);
+
+      this.ariaInHTMLInfo  = getAriaInHTMLInfo(elementNode, this.accName.name);
       const defaultRole = this.ariaInHTMLInfo.defaultRole;
 
       this.hasRole = elementNode.hasAttribute('role');
@@ -35759,6 +35774,7 @@
 
   /* Constants */
   const debug$U = new DebugLogging('domText', false);
+  debug$U.flag = false;
 
   /**
    * @class DOMText
@@ -35842,6 +35858,7 @@
 
   /* Constants */
   const debug$T = new DebugLogging('iframeInfo', false);
+  debug$T.flag = false;
 
   /**
    * @class IFrameElement
@@ -35910,6 +35927,7 @@
 
   /* Constants */
   const debug$S = new DebugLogging('idInfo', false);
+  debug$S.flag = false;
 
   /**
    * @class idInfo

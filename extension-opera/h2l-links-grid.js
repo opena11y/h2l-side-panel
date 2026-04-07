@@ -144,78 +144,8 @@ template.innerHTML = `
     </div>
   </div>
 
-  <h2l-options-dialog>
-    <span slot="title"
-          data-i18n="options_dialog_title_link_filter">
-    </span>
-
-    <div slot="options">
-      <fieldset >
-        <legend data-i18n="options_dialog_legend_link">
-          ABC
-        </legend>
-
-          <label class="grid">
-            <input type="checkbox"
-                   data-group="links"
-                   data-option="internalLinks"
-                   aria-describedby="id-link-desc"/>
-            <span class="label"
-                  data-i18n="options_dialog_label_internal_links">
-            </span>
-          </label>
-
-          <label class="grid">
-            <input type="checkbox"
-                   data-group="links"
-                   data-option="sameSubDomainLinks"
-                   aria-describedby="id-link-desc"/>
-            <span class="label"
-                  data-i18n="options_dialog_label_same_sub_domain">
-            </span>
-          </label>
-
-          <label class="grid">
-            <input type="checkbox"
-                   data-group="links"
-                   data-option="sameDomainLinks"
-                   aria-describedby="id-link-desc"/>
-            <span class="label"
-                  data-i18n="options_dialog_label_same_domain">
-            </span>
-          </label>
-
-          <label class="grid">
-            <input type="checkbox"
-                   data-group="links"
-                   data-option="externalLinks"
-                   aria-describedby="id-link-desc"/>
-            <span class="label"
-                  data-i18n="options_dialog_label_external_links">
-            </span>
-          </label>
-
-          <label class="grid">
-            <input type="checkbox"
-                   data-group="links"
-                   data-option="nonHtmlExtensionLinks"
-                   aria-describedby="id-link-desc"/>
-            <span class="label"
-                  data-i18n="options_dialog_label_non_html_links">
-            </span>
-          </label>
-
-
-          <div class="grid">
-            <div></div>
-            <div id="id-link-desc"
-               class="desc"
-               data-i18n="options_dialog_links_desc">
-            </div>
-          </div>
-      </fieldset>
-    </div>
-  </h2l-options-dialog>
+  <h2l-link-filter-dialog>
+  </h2l-link-filter-dialog>
 `;
 
 class H2LLinksGrid extends HTMLElement {
@@ -265,10 +195,15 @@ class H2LLinksGrid extends HTMLElement {
 
     this.gridTbodyNode = this.shadowRoot.querySelector('[role="grid"] tbody');
 
-    this.h2lOptionsDialog  = this.shadowRoot.querySelector('h2l-options-dialog');
+    this.h2lLinkFilterDialog  = this.shadowRoot.querySelector('h2l-link-filter-dialog');
 
     const btnOptions      = this.shadowRoot.querySelector('#id-btn-options');
     btnOptions.addEventListener('click', this.handleOptionsClick.bind(this));
+
+    this.checkboxHighlightAll = this.shadowRoot.querySelector("#highlight-all");
+    this.checkboxHighlightAll.addEventListener('click', this.handleHighlightAllChange.bind(this));
+
+    this.checkboxShowNames    = this.shadowRoot.querySelector("#show-name");
 
     this.posWidth  = 0;
     this.nameWidth = 0;
@@ -290,6 +225,9 @@ class H2LLinksGrid extends HTMLElement {
 
     this.tabpanelOptions = new TabpanelOptions(this.shadowRoot);
 
+    getOptions().then( (options) => {
+      this.checkboxShowNames.disabled = !options.highlightAllLinks;
+    });
   }
 
  static get observedAttributes() {
@@ -502,11 +440,11 @@ class H2LLinksGrid extends HTMLElement {
         }
 
         if (!isVisScr) {
-          cellNode.appendChild(getSpanBrackets(`hidden`, 'hidden', '; hidden'));
+          cellNode.appendChild(getSpanBrackets(getMessage('msg_link_hidden_from_screen'), 'hidden', '; hidden'));
         }
 
         if (!isVisAT) {
-          cellNode.appendChild(getSpanBrackets(`hidden to AT`, 'hidden', '; hidden from AT'));
+          cellNode.appendChild(getSpanBrackets(getMessage('msg_link_hidden_from_at'), 'hidden', '; hidden from AT'));
         }
 
         if (title) {
@@ -1214,7 +1152,11 @@ class H2LLinksGrid extends HTMLElement {
   }
 
   handleOptionsClick () {
-    this.h2lOptionsDialog.openDialog('link-filter');
+    this.h2lLinkFilterDialog.openDialog();
+  }
+
+  handleHighlightAllChange() {
+    this.checkboxShowNames.disabled = !this.checkboxHighlightAll.checked;
   }
 
 }

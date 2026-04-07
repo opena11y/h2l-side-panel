@@ -17,9 +17,10 @@ import {
 } from './storage.js';
 
 import {
-  highlightTemplate,
-  exportTemplate,
   aboutTemplate,
+  exportTemplate,
+  highlightTemplate,
+  linkFilterTemplate,
   buttonsDefaultsCloseTemplate,
   buttonsDefaultsCloseExportTemplate,
   buttonsInfoCloseTemplate
@@ -407,15 +408,44 @@ export class H2LAboutDialog extends H2LDialog {
     this.moreInfo  = this.dialogElem.querySelector('#id-more-info');
     this.moreInfo.addEventListener('click', this.handleMoreInfoButtonClick.bind(this));
 
+    this.version = 'x.y.z';
+  }
+
+  static get observedAttributes() {
+    return [
+      "version"
+      ];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+
+    if (name === "version") {
+      this.version = newValue;
+    }
+
+  }
+
+  openDialog() {
+    super.openDialog();
+    const versionElem = this.shadowRoot.querySelector(`#version`);
+    versionElem.textContent = this.version;
   }
 
   handleMoreInfoButtonClick () {
     window.open(URL_ABOUT);
   }
+}
 
+export class H2LLinkFilterDialog extends H2LDialog {
+  constructor () {
+    super(getMessage('options_dialog_title_link_filter'),
+          [linkFilterTemplate],
+          buttonsDefaultsCloseTemplate);
+  }
 
 }
 
-window.customElements.define('h2l-options-dialog', H2LOptionsDialog);
-window.customElements.define('h2l-export-dialog',  H2LExportDialog);
-window.customElements.define('h2l-about-dialog',   H2LAboutDialog);
+window.customElements.define('h2l-options-dialog',     H2LOptionsDialog);
+window.customElements.define('h2l-export-dialog',      H2LExportDialog);
+window.customElements.define('h2l-link-filter-dialog', H2LLinkFilterDialog);
+window.customElements.define('h2l-about-dialog',       H2LAboutDialog);

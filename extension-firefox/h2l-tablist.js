@@ -230,6 +230,8 @@ class TOCTabList extends HTMLElement {
     });
 
     this.lastResult = {};
+
+    this.version = "a.b.c";
   }
 
   static get observedAttributes() {
@@ -253,6 +255,10 @@ class TOCTabList extends HTMLElement {
 
     if (name === "links-count") {
       this.setCount('id-links-count', newValue);
+    }
+
+    if (name === "version") {
+      this.version = newValue;
     }
 
   }
@@ -444,6 +450,7 @@ class TOCTabList extends HTMLElement {
   }
 
   handleAboutClick () {
+    this.h2lAboutDialog.setAttribute('version', this.version);
     this.h2lAboutDialog.openDialog();
   }
 

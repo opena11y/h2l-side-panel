@@ -106,10 +106,15 @@ table[role="grid"] tr td span.noname {
 
 table[role="grid"] tr td span.desc {
   font-style: italic;
+
 }
 
 table[role="grid"] tr td span.brackets {
   padding-left: 0.25em;
+}
+
+table[role="grid"] tr td.filtered {
+  background-color: light-dark(var(--light-gray), var(--light-gray-dark));
 }
 
 table[role="grid"] tr td span.hidden {

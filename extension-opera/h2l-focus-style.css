@@ -5,6 +5,10 @@
   color-scheme: light dark;
 }
 
+label:has(input[disabled]) {
+  color: light-dark(lightgray, darkgray);
+}
+
 /* Tablist */
 
 [role="tab"] span.focus {
@@ -85,7 +89,6 @@ table[role="grid"] th:focus svg {
   fill:   light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
   stroke: light-dark(var(--input-outline-color-light), var(--input-outline-color-dark));
 }
-
 
 /* Options Dialog */
 

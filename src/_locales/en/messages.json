@@ -203,6 +203,10 @@
     "message": "About H2L",
     "description": "Title for about dialog box"
   },
+  "about_version": {
+    "message": "Version",
+    "description": "Version information in about dialog box"
+  },
   "options_dialog_about": {
     "message": "About",
     "description": "Title for about dialog box"
@@ -451,6 +455,14 @@
     "message": "Link is hidden",
     "description": "Message for highlighting when link is hidden"
   },
+  "msg_link_hidden_from_screen": {
+    "message": "hidden from screen",
+    "description": "Message for when link is hidden from screen"
+  },
+  "msg_link_hidden_from_at": {
+    "message": "hidden from assistive technologies",
+    "description": "Message for when link is hidden from assistive technologies"
+  },
   "msg_hidden_heading": {
     "message": "1 hidden heading",
     "description": "Message for when there is one hidden heading"
@@ -468,11 +480,11 @@
     "description": "Message for when there is more than one hidden landmark regions"
   },
   "msg_hidden_link": {
-    "message": "1 hidden link",
+    "message": "1 link hidden from screen and assistive technologies",
     "description": "Message for when there is one hidden link"
   },
   "msg_hidden_links": {
-    "message": "hidden links",
+    "message": "hidden links hidden from screen and assistive technologies",
     "description": "Message for when there is more than one hidden links"
   },
   "msg_filtered_link": {

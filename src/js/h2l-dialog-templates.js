@@ -146,11 +146,83 @@ exportTemplate.innerHTML = `
     </label>
 `;
 
+export const linkFilterTemplate = document.createElement('template');
+linkFilterTemplate.innerHTML = `
+
+    <div slot="options">
+      <fieldset >
+        <legend data-i18n="options_dialog_legend_link">
+          ABC
+        </legend>
+
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="internalLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_internal_links">
+            </span>
+          </label>
+
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="sameSubDomainLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_same_sub_domain">
+            </span>
+          </label>
+
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="sameDomainLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_same_domain">
+            </span>
+          </label>
+
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="externalLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_external_links">
+            </span>
+          </label>
+
+          <label class="grid">
+            <input type="checkbox"
+                   data-group="links"
+                   data-option="nonHtmlExtensionLinks"
+                   aria-describedby="id-link-desc"/>
+            <span class="label"
+                  data-i18n="options_dialog_label_non_html_links">
+            </span>
+          </label>
+
+
+          <div class="grid">
+            <div></div>
+            <div id="id-link-desc"
+               class="desc"
+               data-i18n="options_dialog_links_desc">
+            </div>
+          </div>
+      </fieldset>
+    </div>
+`
+
 export const aboutTemplate = document.createElement('template');
 aboutTemplate.innerHTML = `
-    <p style="text-align: center">
+    <div class="about-icon">
       <img src="icons/h2l-64-light.png" alt="headings, landmarks and links logo">
-    </p>
+    </div>
+    <div class="version"><span data-i18n="about_version"></span> <span id="version"></span></div>
     <p>
       The <em>Headings, Landmarks and Links Side Panel</em> (H2L) provides a
        view of the headings, landmark regions and links on a web page.
