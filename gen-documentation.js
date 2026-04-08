@@ -8,7 +8,7 @@ const nunjucks  = require('nunjucks');
 
 /* Constants */
 
-const version     = "1.1";
+const version     = "2.0";
 const tagLineName = "Headings, Landmarks and Links Browser Extension";
 const projectName   = "Headings, Landmarks and Links Side Panel";
 

@@ -11,6 +11,7 @@ table[role="grid"] {
   display: block;
   margin: 0;
   padding: 0;
+  margin-bottom: 4px;
   overflow-y: auto;
   border-collapse: collapse;
   table-layout: fixed;

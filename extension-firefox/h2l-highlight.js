@@ -451,15 +451,15 @@ class H2LHighlightElement extends HTMLElement {
 
       const elemRole = (this.nameSrc === 'contents' || this.nameSrc === 'none') &&
                        !this.nameHasAlt &&
-                       !this.showName &&
-                       !this.selected ?
+//                       !this.selected &&
+                       !this.showName ?
                        this.elemRole :
                        `${this.elemRole}: `;
 
       const name =  this.nameSrc !== 'contents' ||
                     this.nameHasAlt ||
-                    this.showName ||
-                    this.selected ?
+//                    this.selected ||
+                    this.showName ?
                     this.name :
                     '';
 

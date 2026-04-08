@@ -48,8 +48,7 @@ template.innerHTML = `
         <label for="show-name">
           <input id="show-name"
                  type="checkbox"
-                 data-option="highlightNamesHeadings"
-                 disabled/>
+                 data-option="highlightNamesHeadings"/>
           <span data-i18n="options_highlight_heading_names"></span>
         </label>
       </div>
@@ -105,8 +104,8 @@ class H2LHeadingsTree extends HTMLElement {
     this.buttonAllHeadings = this.shadowRoot.querySelector("#id-btn-show-all-headings");
     this.buttonAllHeadings.addEventListener('click', this.handleAllHeadingsClick.bind(this));
 
-    this.checkboxHighlightAll = this.shadowRoot.querySelector("#highlight-all");
-    this.checkboxHighlightAll.addEventListener('click', this.handleHighlightAllChange.bind(this));
+//    this.checkboxHighlightAll = this.shadowRoot.querySelector("#highlight-all");
+//    this.checkboxHighlightAll.addEventListener('click', this.handleHighlightAllChange.bind(this));
 
     this.checkboxShowNames    = this.shadowRoot.querySelector("#show-name");
 
@@ -122,10 +121,9 @@ class H2LHeadingsTree extends HTMLElement {
 
     this.tabpanelOptions = new TabpanelOptions(this.shadowRoot);
 
-    getOptions().then( (options) => {
-      this.checkboxShowNames.disabled = !options.highlightAllHeadings;
-    });
-
+//    getOptions().then( (options) => {
+//      this.checkboxShowNames.disabled = !options.highlightAllHeadings;
+//    });
   }
 
  static get observedAttributes() {

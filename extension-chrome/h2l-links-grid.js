@@ -200,8 +200,8 @@ class H2LLinksGrid extends HTMLElement {
     const btnOptions      = this.shadowRoot.querySelector('#id-btn-options');
     btnOptions.addEventListener('click', this.handleOptionsClick.bind(this));
 
-    this.checkboxHighlightAll = this.shadowRoot.querySelector("#highlight-all");
-    this.checkboxHighlightAll.addEventListener('click', this.handleHighlightAllChange.bind(this));
+//    this.checkboxHighlightAll = this.shadowRoot.querySelector("#highlight-all");
+//    this.checkboxHighlightAll.addEventListener('click', this.handleHighlightAllChange.bind(this));
 
     this.checkboxShowNames    = this.shadowRoot.querySelector("#show-name");
 
@@ -225,9 +225,9 @@ class H2LLinksGrid extends HTMLElement {
 
     this.tabpanelOptions = new TabpanelOptions(this.shadowRoot);
 
-    getOptions().then( (options) => {
-      this.checkboxShowNames.disabled = !options.highlightAllLinks;
-    });
+//    getOptions().then( (options) => {
+//      this.checkboxShowNames.disabled = !options.highlightAllLinks;
+//    });
   }
 
  static get observedAttributes() {

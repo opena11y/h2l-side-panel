@@ -121,7 +121,7 @@ class H2LLandmarksList extends HTMLElement {
 
   }
 
-  addMessage(message, tabindexValue=0, className='') {
+  addMessage(message, tabindexValue=0, className='message') {
     if ((typeof message === 'string') && message.length) {
       const listitemNode = document.createElement('div');
       listitemNode.setAttribute('role', 'listitem');

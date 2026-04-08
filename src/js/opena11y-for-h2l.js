@@ -50770,7 +50770,7 @@
       });
     }
     else {
-      highlightPosition(selectedItem.position, selectedItem.elemRole, true, true);
+      highlightPosition(selectedItem.position, selectedItem.elemRole, true, showName);
     }
 
 
