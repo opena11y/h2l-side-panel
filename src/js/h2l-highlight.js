@@ -592,7 +592,7 @@ class H2LHighlightElement extends HTMLElement {
 
       this.elemRoleElem.textContent  = elemRole;
       this.nameElem.textContent      = name;
-      this.descElem.textContent = desc ? `; ${desc}` : '';
+      this.descElem.textContent      = name && desc ? `; ${desc}` : '';
 
       const infoElemOffsetLeft = -1 * contrastWidth;
       this.infoElem.style.left = infoElemOffsetLeft + 'px';
