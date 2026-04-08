@@ -29,7 +29,7 @@ import {
 const debug = new DebugLogging('h2lLinksGrid', false);
 debug.flag = false;
 
-const isMozilla = typeof browser === 'object';
+const isMozilla = !navigator.userAgent.includes('Chrome');
 const isWin     = navigator.userAgent.includes('Windows');
 
 const gridOffsetWidth = ( isWin && !isMozilla) ?
