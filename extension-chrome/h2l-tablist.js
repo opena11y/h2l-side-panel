@@ -55,9 +55,9 @@ template.innerHTML = `
            role="tab"
            aria-controls="id-tabpanel-headings">
         <span class="focus">
-          <span id="id-tab-headings"
-                data-i18n="tab_headings">
-            XYZ
+          <span id="id-headings-count">
+            <span class="plural" data-i18n="tab_headings">XYZ</span>
+            <span class="value"></span>
           </span>
         </span>
       </div>
@@ -65,9 +65,9 @@ template.innerHTML = `
            role="tab"
            aria-controls="id-tabpanel-landmarks">
         <span class="focus">
-          <span id="id-tab-landmarks"
-              data-i18n="tab_landmarks">
-            XYZ
+          <span id="id-landmarks-count">
+            <span class="plural" data-i18n="tab_landmarks">XYZ</span>
+            <span class="value"></span>
           </span>
         </span>
       </div>
@@ -75,9 +75,9 @@ template.innerHTML = `
            role="tab"
            aria-controls="id-tabpanel-links">
         <span class="focus">
-          <span id="id-tab-links"
-              data-i18n="tab_links">
-            XYZ
+          <span id="id-links-count">
+            <span class="plural" data-i18n="tab_links">XYZ</span>
+            <span class="value"></span>
           </span>
         </span>
       </div>
@@ -103,27 +103,6 @@ template.innerHTML = `
       </div>
     </div>
 
-    <div id="summary" role="group" aria-label="Summary">
-      <div role="status">
-        <span id="id-headings-count">
-          <span class="value"></span>
-          <span class="single"> Heading</span>
-          <span class="plural"> Headings</span>
-        </span>
-        <span class="divider" aria-hidden="true">•</span>
-        <span id="id-landmarks-count">
-          <span class="value"></span>
-          <span class="single"> Landmark</span>
-          <span class="plural"> Landmarks</span>
-        </span>
-        <span class="divider" aria-hidden="true">•</span>
-        <span id="id-links-count">
-          <span class="value"></span>
-          <span class="single"> Link</span>
-          <span class="plural"> Links</span>
-        </span>
-      </div>
-    </div>
 
     <footer>
       <div class="first">
@@ -148,6 +127,7 @@ template.innerHTML = `
       </div>
     </footer>
     <h2l-options-dialog></h2l-options-dialog>
+    <h2l-about-dialog></h2l-about-dialog>
     <h2l-export-dialog></h2l-export-dialog>
   </div>
 `;
@@ -158,15 +138,15 @@ class TOCTabList extends HTMLElement {
     this.attachShadow({ mode: 'open' });
 
     // Use external CSS style sheet
-    const link = document.createElement('link');
-    link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('href', './h2l-tablist.css');
-    this.shadowRoot.appendChild(link);
+    const linkTablist = document.createElement('link');
+    linkTablist.setAttribute('rel', 'stylesheet');
+    linkTablist.setAttribute('href', './h2l-tablist.css');
+    this.shadowRoot.appendChild(linkTablist);
 
     // Use external CSS stylesheet for focus styling
     const linkFocus = document.createElement('link');
     linkFocus.setAttribute('rel', 'stylesheet');
-    linkFocus.setAttribute('href', './h2l-focus-styled.css');
+    linkFocus.setAttribute('href', './h2l-focus-style.css');
     linkFocus.id = 'focus-style';
     this.shadowRoot.appendChild(linkFocus);
 
@@ -182,9 +162,8 @@ class TOCTabList extends HTMLElement {
     this.h2lLandmarksList  = this.shadowRoot.querySelector('h2l-landmarks-list');
     this.h2lLinksGrid      = this.shadowRoot.querySelector('h2l-links-grid');
     this.h2lOptionsDialog  = this.shadowRoot.querySelector('h2l-options-dialog');
+    this.h2lAboutDialog    = this.shadowRoot.querySelector('h2l-about-dialog');
     this.h2lExportDialog   = this.shadowRoot.querySelector('h2l-export-dialog');
-
-    this.divSummary      = this.shadowRoot.querySelector('#summary');
 
     const btnGetInfo      = this.shadowRoot.querySelector('#id-btn-update-info');
     btnGetInfo.addEventListener('click', this.handleUpdateClick.bind(this));
@@ -198,7 +177,7 @@ class TOCTabList extends HTMLElement {
     const btnExport      = this.shadowRoot.querySelector('#id-btn-export');
     btnExport.addEventListener('click', this.handleExportClick.bind(this));
 
-    this.h2lExportDialog.exportDialog.addEventListener("close", this.handleExportDialogClose.bind(this));
+    this.h2lExportDialog.dialogElem.addEventListener("close", this.handleExportDialogClose.bind(this));
 
     this.footerNode      = this.shadowRoot.querySelector('footer');
 
@@ -234,7 +213,7 @@ class TOCTabList extends HTMLElement {
     });
 
     setI18nLabels(this.shadowRoot, debug.flag);
-    this.resize(window.innerHeight, window.innerWidth);
+    this.resize();
 
     getOptions().then((options) => {
 
@@ -251,6 +230,8 @@ class TOCTabList extends HTMLElement {
     });
 
     this.lastResult = {};
+
+    this.version = "a.b.c";
   }
 
   static get observedAttributes() {
@@ -276,6 +257,10 @@ class TOCTabList extends HTMLElement {
       this.setCount('id-links-count', newValue);
     }
 
+    if (name === "version") {
+      this.version = newValue;
+    }
+
   }
 
   resize () {
@@ -286,12 +271,10 @@ class TOCTabList extends HTMLElement {
     const titleRect     = this.divTitle.getBoundingClientRect();
     const tablistRect   = this.divTablist.getBoundingClientRect();
     const tabpanelsRect = this.divTabpanels.getBoundingClientRect();
-    const summaryRect   = this.divSummary.getBoundingClientRect();
     const footerRect    = this.footerNode.getBoundingClientRect();
 
     const baseComponentsHeight = titleRect.height +
                                  tablistRect.height +
-                                 summaryRect.height +
                                  footerRect.height +
                                  sidepanelOffsetHeight;
 
@@ -317,25 +300,21 @@ class TOCTabList extends HTMLElement {
   setCount (id, count) {
     const countNode = this.shadowRoot.querySelector(`#${id}`);
     const valueNode = countNode.querySelector('.value');
-    const singleNode = countNode.querySelector('.single');
-    const pluralNode = countNode.querySelector('.plural');
 
-    valueNode.textContent = count;
-    if (count === '1') {
-      singleNode.style.display = 'inline-block';
-      pluralNode.style.display = 'none';
+    if (count >= 0) {
+      valueNode.textContent = `(${count})`;
     }
     else {
-      pluralNode.style.display = 'inline-block';
-      singleNode.style.display = 'none';
+      valueNode.textContent = ``;
     }
+
   }
 
   clearContent(message='') {
     this.divTitle.textContent = '';
-    this.setCount('id-headings-count', '');
-    this.setCount('id-landmarks-count', '');
-    this.setCount('id-links-count', '');
+    this.setCount('id-headings-count',  -1);
+    this.setCount('id-landmarks-count', -1);
+    this.setCount('id-links-count',     -1);
 
     if ((typeof message === 'string') && message.length) {
       this.divTitle.textContent = message;
@@ -385,25 +364,26 @@ class TOCTabList extends HTMLElement {
 
       tabListObj.landmarks = Array.from(myResult.regions).filter( (r) => {
           return (r.name ||
-              (landmarkCounts[r.role] <= MAX_LANDMARKS_WITHOUT_NAMES) ||
-              options.unNamedDuplicateRegions);
+                (landmarkCounts[r.role] <= MAX_LANDMARKS_WITHOUT_NAMES) ||
+                !options.emulateScreenReaderForLandmarks);
       });
 
       // Determine links to render
 
-      tabListObj.links= Array.from(myResult.links).filter( (l) => {
-        return (l.isVisibleOnScreen && l.name.length) &&
-               ((l.isInternal   && options.internalLinks) ||
+      tabListObj.links = Array.from(myResult.links).filter( (l) => {
+        return ((l.isInternal   && options.internalLinks) ||
                 (l.isExternal   && options.externalLinks) ||
                 (l.isSameDomain && options.sameDomainLinks && !l.isSameSubDomain) ||
                 (l.isSameSubDomain && options.sameSubDomainLinks && !l.isInternal) ||
                 (l.extensionType && options.nonHtmlExtensionLinks));
       })
 
+      const filteredLinks = myResult.links.length - tabListObj.links.length;
+
       saveOptions(options).then( () => {
         tabListObj.h2lHeadingsTree.updateContent(sameUrl, tabListObj.headings);
         tabListObj.h2lLandmarksList.updateContent(sameUrl, tabListObj.landmarks);
-        tabListObj.h2lLinksGrid.updateContent(sameUrl, tabListObj.links);
+        tabListObj.h2lLinksGrid.updateContent(sameUrl, tabListObj.links, filteredLinks);
 
         tabListObj.resize();
       });
@@ -419,13 +399,14 @@ class TOCTabList extends HTMLElement {
     }
 
     saveOption('lastTabId', currentTab.id).then( () => {
-      for (var i = 0; i < this.tabNodes.length; i += 1) {
-        var tab = this.tabNodes[i];
+      for (let i = 0; i < this.tabNodes.length; i += 1) {
+        const tab = this.tabNodes[i];
         if (currentTab === tab) {
           tab.setAttribute('aria-selected', 'true');
           tab.tabIndex = 0;
           tabListObj.tabpanels[i].node.classList.remove('is-hidden');
           tabListObj.tabpanels[i].contentNode.setAttribute('visible', 'true');
+          tabListObj.resize();
           if (setFocus) {
             tab.focus();
           }
@@ -437,10 +418,11 @@ class TOCTabList extends HTMLElement {
         }
       }
     });
+    updateContent();
   }
 
   setSelectedToPreviousTab(currentTab) {
-    var index;
+    let index;
 
     if (currentTab === this.firstTab) {
       this.setSelectedTab(this.lastTab);
@@ -451,7 +433,7 @@ class TOCTabList extends HTMLElement {
   }
 
   setSelectedToNextTab(currentTab) {
-    var index;
+    let index;
 
     if (currentTab === this.lastTab) {
       this.setSelectedTab(this.firstTab);
@@ -468,66 +450,77 @@ class TOCTabList extends HTMLElement {
   }
 
   handleAboutClick () {
-    window.open(URL_ABOUT);
+    this.h2lAboutDialog.setAttribute('version', this.version);
+    this.h2lAboutDialog.openDialog();
   }
 
   handleOptionsClick () {
-    this.h2lOptionsDialog.openDialog();
+    this.h2lOptionsDialog.openDialog('highlight');
   }
 
   handleExportClick () {
-    this.h2lExportDialog.openDialog();
+    getOptions().then ( (options) => {
+      if (options.promptForExportOptions) {
+        this.h2lExportDialog.openDialog();
+      }
+      else {
+        this.handleExportDialogClose('export');
+      }
+    });
   }
 
   getCSVContent(options) {
 
+    function isYes(value) {
+      return value ? '' : 'Yes';
+    }
+
     const date = new Date();
 
-    let content = `${getMessage('export_title')}, ${this.lastResult.title}`;
-    content += `\n${getMessage('export_url')}, ${this.lastResult.url}`;
-    content += `\n${getMessage('export_date')}, ${date.toLocaleDateString()}`;
-    content += `\n${getMessage('export_time')}, ${date.toLocaleTimeString()}\n`;
+    let content  =   `${getMessage('export_title')}, ${this.lastResult.title}`;
+    content     += `\n${getMessage('export_url')}, ${this.lastResult.url}`;
+    content     += `\n${getMessage('export_date')}, ${date.toLocaleDateString()}`;
+    content     += `\n${getMessage('export_time')}, ${date.toLocaleTimeString()}\n`;
 
-    const eo  = getMessage('export_order');
-    const ehl = getMessage('export_heading_lavel');
-    const ean = getMessage('export_accessible_name');
+    const eo   = getMessage('export_order');
+    const ehl  = getMessage('export_heading_lavel');
+    const ean  = getMessage('export_accessible_name');
     const elt1 = getMessage('export_landmark_type');
     const elt2 = getMessage('export_link_type');
-    const ead = getMessage('export_accessible_desc');
+    const ead  = getMessage('export_accessible_desc');
+    const hScr = 'Hidden on Screen';
+    const hAT  = 'Hidden to AT';
 
     if (options.exportHeadings) {
       content += `\n${getMessage('headings_tree_label')}`;
 
-      content += `\n${eo},"${ehl}","${ean}"`;
+      content += `\n${eo},"${ehl}","${ean}","${hScr}","${hAT}"`;
       this.headings.forEach( (h, index) => {
-        content += `\n${index+1},${h.level},"${filterForCSV(h.name.trim())}"`;
+        content += `\n${index+1},${h.level},"${filterForCSV(h.name.trim())}","${isYes(h.isVisibleOnScreen)}","${isYes(h.isVisibleToAT)}"`;
       });
     }
 
     if (options.exportLandmarks) {
       content += `\n\n${getMessage('landmarks_list_label')}`;
 
-      content += `\n${eo},"${elt1}","${ean}"`;
+      content += `\n${eo},"${elt1}","${ean}","${hScr}","${hAT}"`;
       this.landmarks.forEach( (r, index) => {
-        content += `\n${index+1},${r.role},${filterForCSV(r.name.trim()) ? '"' + filterForCSV(r.name.trim()) + '"' : ''}`;
+        content += `\n${index+1},${r.role},${filterForCSV(r.name.trim()) ? '"' + filterForCSV(r.name.trim()) + '"' : ''},"${isYes(r.isVisibleOnScreen)}","${isYes(r.isVisibleToAT)}"`;
       });
-
     }
 
     if (options.exportLinks) {
       content += `\n\n${getMessage('tab_links')}`;
-
-      content += `\n${eo},"${elt2}","${ean}","${ead}",URL`;
+      content += `\n${eo},"${elt2}","${ean}","${ead}","URL","${hScr}","${hAT}"`;
       this.links.forEach( (l, index) => {
-        content += `\n${index+1},${l.type},"${filterForCSV(l.name)}","${filterForCSV(l.desc)}", ${l.url}`;
+        content += `\n${index+1},${l.type},"${filterForCSV(l.name)}","${filterForCSV(l.desc)}", ${filterForCSV(l.url)},"${isYes(l.isVisibleOnScreen)}","${isYes(l.isVisibleToAT)}"`;
       });
-
     }
 
     return content;
   }
 
-  handleExportDialogClose () {
+  handleExportDialogClose (value='') {
 
     function incrementIndex() {
       getOptions().then( (options) => {
@@ -542,10 +535,10 @@ class TOCTabList extends HTMLElement {
 
     const tabListObj = this;
 
-    const returnValue = this.h2lExportDialog.exportDialog.returnValue;
-    if (returnValue === 'export') {
+    const returnValue = this.h2lExportDialog.dialogElem.returnValue;
+    if (returnValue === 'export' || value === 'export') {
       getOptions().then( (options) => {
-        const filename = options.exportFilename + '-' + options.exportIndex.padStart(4, "0") + '.csv';
+        const filename = options.exportFilename + '-' + `${options.exportIndex}`.padStart(4, "0") + '.csv';
         const content = tabListObj.getCSVContent(options);
 
         const blob = new Blob([content], {

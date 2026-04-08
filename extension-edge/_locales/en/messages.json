@@ -27,6 +27,10 @@
     "message": "Options",
     "description": "Label options button"
   },
+  "buttons_options_link_filter": {
+    "message": "Link Filter Options",
+    "description": "Label link filter options button"
+  },
   "buttons_about": {
     "message": "About",
     "description": "Label About button"
@@ -38,6 +42,10 @@
   "buttons_export": {
     "message": "Export",
     "description": "Label for export information"
+  },
+  "buttons_show_all_headings": {
+    "message": "Show All Headings",
+    "description": "Label for show all headings button"
   },
   "tablist_title": {
     "message": "Page Title",
@@ -66,6 +74,14 @@
   "links_grid_name": {
     "message": "Name",
     "description": "Label for name column in links grid"
+  },
+  "links_grid_desc": {
+    "message": "Desc",
+    "description": "Label for description column in links grid"
+  },
+  "links_grid_desc_name": {
+    "message": "Description",
+    "description": "Label for description column in links grid"
   },
   "links_grid_type": {
     "message": "Type",
@@ -183,6 +199,30 @@
     "message": "Options",
     "description": "Title for options dialog box"
   },
+  "about_dialog_title": {
+    "message": "About H2L",
+    "description": "Title for about dialog box"
+  },
+  "about_version": {
+    "message": "Version",
+    "description": "Version information in about dialog box"
+  },
+  "options_dialog_about": {
+    "message": "About",
+    "description": "Title for about dialog box"
+  },
+  "dialog_about_more_information": {
+    "message": "More Information",
+    "description": "Title for more information button in about dialog"
+  },
+  "options_dialog_title_highlight": {
+    "message": "Highlight Options",
+    "description": "Title for options dialog box for highlight options"
+  },
+  "options_dialog_title_link_filter": {
+    "message": "Link Filter Options",
+    "description": "Title for options dialog box for link filter option"
+  },
   "dialog_reset_defaults": {
     "message": "Reset Defaults",
     "description": "Label for reset defaults button"
@@ -279,6 +319,30 @@
     "message": "dotted",
     "description": "Dotted option for highlight style"
   },
+  "options_highlight_headings_all": {
+    "message": "Highlight all headings",
+    "description": "Message for highlighting all headings"
+  },
+  "options_highlight_heading_names": {
+    "message": "Highlight shows accessible name",
+    "description": "Message for highlight to always include accessible name for headings"
+  },
+  "options_highlight_landmarks_all": {
+    "message": "Highlight all landmark regions",
+    "description": "Message for highlighting all headings"
+  },
+  "options_highlight_landmarks_emulate_screen_reader": {
+    "message": "Emulate how screen readers filter landmark regions",
+    "description": "Message for screen reader view of landmarks"
+  },
+  "options_highlight_links_all": {
+    "message": "Highlight all links",
+    "description": "Message for highlighting all links"
+  },
+  "options_highlight_link_names": {
+    "message": "Highlight shows accessible name",
+    "description": "Message for highlight to always include accessible name for links"
+  },
   "export_dialog_title": {
     "message": "Export to CSV",
     "description": "Export dialog title"
@@ -327,6 +391,10 @@
     "message": "Index",
     "description": "Label for index for file name"
   },
+  "export_prompt_for_export_options": {
+    "message": "Prompt for export options",
+    "description": "Label prompting for export options"
+  },
   "export_title": {
     "message": "Title",
     "description": "Label page title in CSV file"
@@ -374,6 +442,62 @@
   "loading_content": {
     "message": "Loading content, please wait...",
     "description": "Message if waiting for a page to complete loading"
+  },
+  "msg_heading_hidden": {
+    "message": "Heading is hidden",
+    "description": "Message for highlighting when heading is hidden"
+  },
+  "msg_landmark_hidden": {
+    "message": "Region is hidden",
+    "description": "Message for highlighting when region is hidden"
+  },
+  "msg_link_hidden": {
+    "message": "Link is hidden",
+    "description": "Message for highlighting when link is hidden"
+  },
+  "msg_link_hidden_from_screen": {
+    "message": "hidden from screen",
+    "description": "Message for when link is hidden from screen"
+  },
+  "msg_link_hidden_from_at": {
+    "message": "hidden from assistive technologies",
+    "description": "Message for when link is hidden from assistive technologies"
+  },
+  "msg_hidden_heading": {
+    "message": "1 hidden heading",
+    "description": "Message for when there is one hidden heading"
+  },
+  "msg_hidden_headings": {
+    "message": "hidden headings",
+    "description": "Message for when there is more than one hidden heading"
+  },
+  "msg_hidden_landmark": {
+    "message": "1 hidden landmark region",
+    "description": "Message for when there is one hidden landmark region"
+  },
+  "msg_hidden_landmarks": {
+    "message": "hidden landmark regions",
+    "description": "Message for when there is more than one hidden landmark regions"
+  },
+  "msg_hidden_link": {
+    "message": "1 link hidden from screen and assistive technologies",
+    "description": "Message for when there is one hidden link"
+  },
+  "msg_hidden_links": {
+    "message": "hidden links hidden from screen and assistive technologies",
+    "description": "Message for when there is more than one hidden links"
+  },
+  "msg_filtered_link": {
+    "message": "1 filtered link",
+    "description": "Message for when there is one filtered link"
+  },
+  "msg_filtered_links": {
+    "message": "filtered links",
+    "description": "Message for when there is more than one filtered links"
+  },
+  "msg_no_acc_name": {
+    "message": "no name",
+    "description": "Message for when there is no accessible name"
   }
 }
 

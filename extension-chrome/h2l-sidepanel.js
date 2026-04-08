@@ -76,7 +76,7 @@ class H2LSidePanel extends HTMLElement {
     /*
     *   Add Window event listeners
     */
-    window.addEventListener('load', this.handleWindowLoad.bind(this));
+    window.addEventListener('DOMContentLoaded', this.handleWindowLoad.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
 
     // Setup a port to identify when side panel is open
@@ -93,73 +93,73 @@ class H2LSidePanel extends HTMLElement {
     this.tocTablistNode.clearContent(message);
   }
 
-  highlightOrdinalPosition(ordinalPosition, info='') {
 
-    if (!ordinalPosition) {
-      ordinalPosition='';
-      info='';
-    }
+  highlightItems(selectedItem, allItems, msgHidden, showName=true) {
 
-    async function sendHighlightMessage(tabs) {
-      for (const tab of tabs) {
-        const myResult = await myBrowser.tabs
-          .sendMessage(tab.id, {highlight: {
-                                    position: ordinalPosition,
-                                    info: info
-                                  }
-                                });
+    getOptions().then( (options) => {
+
+      async function sendHighlightItemsMessage(tabs) {
+        for (const tab of tabs) {
+          const myResult = await myBrowser.tabs
+            .sendMessage(tab.id, {highlightItems: {
+                                      selectedItem: selectedItem,
+                                      allItems:     allItems,
+                                      msgHidden:    msgHidden,
+                                      highlightSize:          options.highlightSize,
+                                      highlightStyle:         options.highlightStyle,
+                                      highlightStyleSelected: options.highlightStyleSelected,
+                                      scrollBehavior:         options.scrollBehavior,
+                                      showName: showName
+                                    }
+                                  });
+        }
       }
-    }
 
-    myBrowser.tabs
-      .query({
-        currentWindow: true,
-        active: true,
-      })
-      .then(sendHighlightMessage)
-      .catch(onError);
+      function onError(error) {
+        console.error(`[highlightItems][Error]: ${error}`);
+      }
+
+      myBrowser.tabs
+        .query({
+          currentWindow: true,
+          active: true,
+        })
+        .then(sendHighlightItemsMessage)
+        .catch(onError);
+    });
   }
 
   updateHighlightConfig(options) {
 
-    async function sendHighlightMessage(tabs) {
-      for (const tab of tabs) {
-        const myResult = await myBrowser.tabs
-          .sendMessage(tab.id, { updateHighlightConfig: {
-                                    size: options.highlightSize,
-                                    style: options.highlightStyle
-                                  }
-                                });
+
+    getOptions().then( (options) => {
+
+      async function sendHighlightConfigMessage(tabs) {
+        for (const tab of tabs) {
+          const myResult = await myBrowser.tabs
+            .sendMessage(tab.id, { updateHighlightConfig: {
+                highlightSize: options.highlightSize,
+                highlightStyle: options.highlightStyle,
+                highlightStyleSelected: options.highlightStyleSelected
+              }
+            });
+        }
       }
-    }
 
-    myBrowser.tabs
-      .query({
-        currentWindow: true,
-        active: true,
-      })
-      .then(sendHighlightMessage)
-      .catch(onError);
-  }
-
-  focusOrdinalPosition(ordinalPosition) {
-
-    async function sendFocusMessage(tabs) {
-      for (const tab of tabs) {
-        const myResult = await myBrowser.tabs
-          .sendMessage(tab.id, { focusPosition : ordinalPosition });
+      function onError(error) {
+        console.error(`[updateHighlightConfig][Error]: ${error}`);
       }
-    }
 
-    myBrowser.tabs
-      .query({
-        currentWindow: true,
-        active: true,
-      })
-      .then(sendFocusMessage)
-      .catch(onError);
+      myBrowser.tabs
+        .query({
+          currentWindow: true,
+          active: true,
+        })
+        .then(sendHighlightConfigMessage)
+        .catch(onError);
+
+    });
   }
-
 
   updateContent() {
     this.clearContent(getMessage('loading_content'));
@@ -170,6 +170,7 @@ class H2LSidePanel extends HTMLElement {
       spObj.clearContent(getMessage('protocol_not_supported'));
       onError()
     }
+
     myBrowser.tabs
       .query({
         currentWindow: true,
@@ -181,6 +182,10 @@ class H2LSidePanel extends HTMLElement {
 
   handleGetInformationClick () {
     this.clearContent(getMessage('loading_content'));
+
+    function onError(error) {
+      console.error(`[handleGetInformationClick][Error]: ${error}`);
+    }
 
     myBrowser.tabs
       .query({
@@ -208,6 +213,7 @@ class H2LSidePanel extends HTMLElement {
   //-----------------------------------------------
 
   handleWindowLoad () {
+    debug.flag && console.log('Window Loaded');
     browserTabs.onUpdated.addListener(this.handleTabUpdated.bind(this));
     browserTabs.onActivated.addListener(this.handleTabActivated.bind(this));
     myBrowser.windows.onFocusChanged.addListener(this.handleWindowFocusChanged.bind(this));
@@ -222,6 +228,7 @@ class H2LSidePanel extends HTMLElement {
   **  Handle tabs.onUpdated event when status is 'complete'
   */
   handleTabUpdated (tabId, changeInfo, tab) {
+    debug.flag && console.log('handleTabUpdated');
     // Skip content update when new page is loaded in background tab
     if (!tab.active) return;
 
@@ -241,9 +248,12 @@ class H2LSidePanel extends HTMLElement {
   **  Handle tabs.onActivated event
   */
   handleTabActivated (activeInfo) {
+    debug.flag && console.log('handleTabActivated');
     this.logTabUrl(activeInfo);
 
     const that = this;
+
+
 
     function onErrorPotocol(error) {
       that.clearContent(getMessage('protocol_not_supported'));
@@ -283,6 +293,8 @@ class H2LSidePanel extends HTMLElement {
   **  focused window, save the new window ID and update the sidebar content.
   */
   handleWindowFocusChanged (windowId) {
+    debug.flag && debug.log('handleWindowFocusChanged');
+
     if (windowId !== myWindowId) {
       if (isMozilla) {
         let checkingOpenStatus = myBrowser.sidebarAction.isOpen({ windowId });

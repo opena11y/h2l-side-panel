@@ -1,11 +1,8 @@
 const gulp         = require('gulp');
 const exec         = require('child_process').exec;
-const rollup       = require('rollup');
 const {src, dest, task}  = require('gulp');
 const {parallel, series}   = require('gulp');
 const eslint       = require('gulp-eslint');
-const minify       = require("gulp-minify");
-const concat       = require("gulp-concat");
  
 gulp.task('linting', () => {
     return src(['src/*.js'])
@@ -24,6 +21,7 @@ gulp.task('linting', () => {
 
  gulp.task('extensionsCode', () => {
   return src([
+    'src/css/*.css',
     'src/js/*.js',
     'src/*.html',
   ])

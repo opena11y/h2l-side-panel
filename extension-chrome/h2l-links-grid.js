@@ -4,10 +4,12 @@
 
 import DebugLogging   from './debug.js';
 
+
 import {
   getMessage,
-  focusOrdinalPosition,
-  highlightOrdinalPosition,
+  getSpan,
+  getSpanBrackets,
+  highlightItems,
   removeChildContent,
   setI18nLabels,
   setTablistAttr
@@ -18,17 +20,23 @@ import {
   saveOption
 } from './storage.js';
 
+import {
+  TabpanelOptions
+} from './h2l-tabpanel-options.js';
+
 /* Constants */
 
 const debug = new DebugLogging('h2lLinksGrid', false);
 debug.flag = false;
 
-const isMozilla = typeof browser === 'object';
+const isMozilla = !navigator.userAgent.includes('Chrome');
 const isWin     = navigator.userAgent.includes('Windows');
 
 const gridOffsetWidth = ( isWin && !isMozilla) ?
-                            40 :
-                            25;
+                            51 :
+                            36;
+
+const LINK_ROLE = 'A';
 
 /* templates */
 const template = document.createElement('template');
@@ -71,6 +79,24 @@ template.innerHTML = `
               </svg>
             </span>
           </th>
+          <th id="id-th-desc"
+              tabindex="-1"
+              class="desc"
+              data-sort="desc"
+              aria-sort="none"
+              aria-label="links_grid_desc_name">
+            <span class="label"
+                  data-i18n="links_grid_desc">
+            </span>
+            <span class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="1em"
+                   height="1em"
+                   viewbox="0 0 32 32">
+                  <polygon points="4,8 28,8 16,28"/>
+              </svg>
+            </span>
+          </th>
           <th id="id-th-type"
               tabindex="-1"
               class="type"
@@ -93,6 +119,33 @@ template.innerHTML = `
     <tbody id="id-grid-data">
     </tbody>
   </table>
+
+  <div id="options">
+    <div class="flex">
+      <div class="column">
+        <label for="highlight-all">
+          <input id="highlight-all"
+                 type="checkbox"
+                 data-option="highlightAllLinks"/>
+          <span data-i18n="options_highlight_links_all"></span>
+        </label>
+        <label for="show-name">
+          <input id="show-name"
+                 type="checkbox"
+                 data-option="highlightNamesLinks"/>
+          <span data-i18n="options_highlight_link_names"></span>
+        </label>
+      </div>
+      <div class="column">
+            <button id="id-btn-options"
+                    data-i18n="buttons_options_link_filter">
+            </button>
+      </div>
+    </div>
+  </div>
+
+  <h2l-link-filter-dialog>
+  </h2l-link-filter-dialog>
 `;
 
 class H2LLinksGrid extends HTMLElement {
@@ -101,17 +154,24 @@ class H2LLinksGrid extends HTMLElement {
     this.attachShadow({ mode: 'open' });
 
     // Use external CSS stylesheet
-    const link = document.createElement('link');
-    link.setAttribute('rel', 'stylesheet');
-    link.setAttribute('href', './h2l-links-grid.css');
-    this.shadowRoot.appendChild(link);
+    const linkGrid = document.createElement('link');
+    linkGrid.setAttribute('rel', 'stylesheet');
+    linkGrid.setAttribute('href', './h2l-links-grid.css');
+    this.shadowRoot.appendChild(linkGrid);
 
     // Use external CSS stylesheet for focus styling
     const linkFocus = document.createElement('link');
     linkFocus.setAttribute('rel', 'stylesheet');
-    linkFocus.setAttribute('href', './h2l-focus-styled.css');
+    linkFocus.setAttribute('href', './h2l-focus-style.css');
     linkFocus.id = 'focus-style';
     this.shadowRoot.appendChild(linkFocus);
+
+    // Use external CSS stylesheet for options styling
+    const linkOptions = document.createElement('link');
+    linkOptions.setAttribute('rel', 'stylesheet');
+    linkOptions.setAttribute('href', './h2l-tabpanel-options.css');
+    linkOptions.id = 'tabpanel-options';
+    this.shadowRoot.appendChild(linkOptions);
 
 
     // Add DOM tree from template
@@ -135,18 +195,39 @@ class H2LLinksGrid extends HTMLElement {
 
     this.gridTbodyNode = this.shadowRoot.querySelector('[role="grid"] tbody');
 
+    this.h2lLinkFilterDialog  = this.shadowRoot.querySelector('h2l-link-filter-dialog');
+
+    const btnOptions      = this.shadowRoot.querySelector('#id-btn-options');
+    btnOptions.addEventListener('click', this.handleOptionsClick.bind(this));
+
+//    this.checkboxHighlightAll = this.shadowRoot.querySelector("#highlight-all");
+//    this.checkboxHighlightAll.addEventListener('click', this.handleHighlightAllChange.bind(this));
+
+    this.checkboxShowNames    = this.shadowRoot.querySelector("#show-name");
+
     this.posWidth  = 0;
     this.nameWidth = 0;
+    this.descWidth  = 0;
     this.typeWidth  = 0;
 
     this.highlightFollowsFocus = false;
     this.enterKeyMovesFocus    = false;
     this.isVisible = false;
     this.lastLinkId = '';
+    this.links = [];
+    this.linkItems = [];
+
+    this.filteredCount = 0;
+    this.hiddenCount   = 0;
+    this.visibleCount  = 0;
 
     setI18nLabels(this.shadowRoot, debug.flag);
 
-    this.links = [];
+    this.tabpanelOptions = new TabpanelOptions(this.shadowRoot);
+
+//    getOptions().then( (options) => {
+//      this.checkboxShowNames.disabled = !options.highlightAllLinks;
+//    });
   }
 
  static get observedAttributes() {
@@ -168,18 +249,19 @@ class H2LLinksGrid extends HTMLElement {
     }
   }
 
-
   resize (height, width) {
     const tableWidth = width;
 
     this.gridNode.style.width = tableWidth + 'px';
 
-    const posWidth = 50;
-    const typeWidth = 55;
-    const nameWidth = tableWidth - posWidth - typeWidth - gridOffsetWidth;
+    const posWidth  = 50;
+    const descWidth = 58;
+    const typeWidth = 58;
+    const nameWidth = tableWidth - posWidth - descWidth - typeWidth - gridOffsetWidth;
 
     this.posWidth   = posWidth + 'px';
     this.nameWidth  = nameWidth + 'px';
+    this.descWidth  = descWidth + 'px';
     this.typeWidth  = typeWidth + 'px';
 
     const posNodes = Array.from(this.gridNode.querySelectorAll('.position'));
@@ -192,35 +274,80 @@ class H2LLinksGrid extends HTMLElement {
       n.style.width = this.nameWidth;
     });
 
+    const descNodes = Array.from(this.gridNode.querySelectorAll('.desc'));
+    descNodes.forEach( (n) => {
+      n.style.width = this.descWidth;
+    });
+
     const typeNodes = Array.from(this.gridNode.querySelectorAll('.type'));
     typeNodes.forEach( (n) => {
       n.style.width = this.typeWidth;
     });
 
-    this.gridNode.style.height = height - 20 + 'px';
+    const optionsNode = this.shadowRoot.querySelector("#options");
+    const optionsRect = optionsNode.getBoundingClientRect();
 
+    this.gridNode.style.height = (height - 1.2 * optionsRect.height) + 'px';
+
+  }
+
+  addMessage (message, tabindexValue=0, className='message') {
+     if ((typeof message === 'string') && message.length) {
+
+       const trNode = document.createElement('tr');
+       trNode.tabIndex = tabindexValue;
+       trNode.addEventListener('click',   this.handleMessageGridrowClick.bind(this));
+       trNode.addEventListener('keydown', this.handleGridrowKeydown.bind(this));
+       trNode.addEventListener('focus',   this.handleFocus.bind(this));
+       trNode.addEventListener('blur',    this.handleBlur.bind(this));
+
+       this.gridTbodyNode.appendChild(trNode);
+
+       const msgNode =  document.createElement('td');
+       msgNode.setAttribute('colspan', 4);
+       msgNode.textContent = message;
+       msgNode.className = className;
+       msgNode.setAttribute('tabindex', '-1');
+       msgNode.addEventListener('keydown', this.handleMessageGridcellKeydown.bind(this));
+       msgNode.addEventListener('focus',   this.handleFocus.bind(this));
+       msgNode.addEventListener('blur',    this.handleBlur.bind(this));
+
+       trNode.appendChild(msgNode);
+
+     }
   }
 
   clearContent (message = '') {
      removeChildContent(this.gridTbodyNode);
-
-     if ((typeof message === 'string') && message.length) {
-       const trNode = document.createElement('tr');
-       const msgNode =  document.createElement('td');
-       msgNode.setAttribute('colspan', 3);
-       msgNode.textContent = message;
-       trNode.appendChild(msgNode);
-       trNode.tabIndex = 0;
-       this.gridTbodyNode.appendChild(trNode);
-     }
+     this.addMessage(message);
   }
 
-  updateContent (sameUrl, links) {
+  updateMessages(filteredCount, hiddenCount, visibleCount) {
+    if (filteredCount > 0) {
+      filteredCount === 1 ?
+        this.addMessage(getMessage('msg_filtered_link'), (visibleCount ? -1 : 0), 'filtered') :
+        this.addMessage(`${filteredCount} ${getMessage('msg_filtered_links')}`, (visibleCount ? -1 : 0), 'filtered');
+    }
+
+    if (hiddenCount) {
+      hiddenCount === 1 ?
+        this.addMessage(getMessage('msg_hidden_link'), (visibleCount ? -1 : 0), 'hidden') :
+        this.addMessage(`${hiddenCount} ${getMessage('msg_hidden_links')}`, (visibleCount ? -1 : 0), 'hidden');
+    }
+
+  }
+
+  updateContent (sameUrl, links, filteredCount) {
     const linksObj = this;
+    this.filteredCount = filteredCount;
 
-    this.links = links;
+    this.links = links.filter( (link) => {
+      return link.isVisibleOnScreen || link.isVisibleToAT;
+    });
 
-    if (links) {
+    this.hiddenCount = links.length - this.links.length;
+
+    if (this.links) {
 
       getOptions().then( (options) => {
 
@@ -229,17 +356,36 @@ class H2LLinksGrid extends HTMLElement {
         linksObj.lastURL               = options.lastURL;
         linksObj.lastLinkId            = options.lastLinkId;
 
-        links.forEach( (link, index) => {
+        linksObj.links.forEach( (link, index) => {
+
+          linksObj.linkItems.push({
+            position: link.ordinalPosition,
+            isVisibleOnScreen: link.isVisibleOnScreen,
+            isVisibleToAT:     link.isVisibleToAT,
+            elemRole: LINK_ROLE
+          });
+
           [link.type, link.typeDesc, link.typeSort] = linksObj.getTypeContentAndDescription(link);
           link.pos = index + 1;
+
+          if ((link.name && link.desc) &&
+              (link.name.trim().toLowerCase() === link.desc.trim().toLowerCase())) {
+            link.desc = '';
+            link.descSource = '';
+          }
+
+          if (link.name !== link.desc) {
+            link.descValue = link.desc.length === 0 ? 1 : 2;
+          }
+
         });
 
-        const lastGridNode = linksObj.updateLinkContent(links);
+        const lastGridNode = linksObj.updateLinkContent(this.links);
 
         const firstGridrow = linksObj.gridNode.querySelector('[role="grid"] tbody tr');
 
-        const count = linksObj.gridNode.querySelectorAll('[role="grid"] tbody tr').length;
-        setTablistAttr('links-count', count);
+        this.visibleCount = linksObj.gridNode.querySelectorAll('[role="grid"] tbody tr').length;
+        setTablistAttr('links-count', this.visibleCount);
 
         if (firstGridrow) {
           if (sameUrl && lastGridNode) {
@@ -252,25 +398,55 @@ class H2LLinksGrid extends HTMLElement {
         else {
           linksObj.clearContent(getMessage('links_none_found', debug.flag));
         }
+        if (options.highlightAllLinks) {
+          highlightItems({}, linksObj.linkItems, getMessage('msg_link_hidden'), options.highlightNamesLinks);
+        }
+
       });
+
     }
     else {
       this.clearContent(getMessage('protocol_not_supported', debug.flag));
     }
+
+    this.tabpanelOptions.updateOptions();
   }
 
   updateLinkContent (links) {
     const linksObj = this;
     let lastGridNode = null;
+    let hiddenLinks = 0;
 
-    function addRow (pos, ordinalPos, name, desc, url, typeContent, typeDesc, typeSort) {
+    function addRow (pos, ordinalPos, name, nameSource, desc, descSource, descValue, url, typeContent, typeDesc, typeSort, isVisibleOnScreen, isVisibleToAT) {
 
-      function getDataCell(id, cname, content, title, sortValue, width) {
+      // Adding row helper function
+
+      function getDataCell(id, cname, content, desc, title, sortValue, width, isVisScr=true, isVisAT=true, noNameMessage='') {
+
 
         const cellNode =  document.createElement('td');
         cellNode.id = id;
         cellNode.className = cname;
-        cellNode.textContent = content;
+
+        if (noNameMessage && !content) {
+          cellNode.appendChild(getSpan(noNameMessage, 'content noname'));
+        }
+        else {
+          cellNode.appendChild(getSpan(content, 'content'));
+        }
+
+        if (desc) {
+          cellNode.appendChild(getSpan(`; ${desc}`, 'desc'));
+        }
+
+        if (!isVisScr) {
+          cellNode.appendChild(getSpanBrackets(getMessage('msg_link_hidden_from_screen'), 'hidden', '; hidden'));
+        }
+
+        if (!isVisAT) {
+          cellNode.appendChild(getSpanBrackets(getMessage('msg_link_hidden_from_at'), 'hidden', '; hidden from AT'));
+        }
+
         if (title) {
           cellNode.title = title;
         }
@@ -289,6 +465,8 @@ class H2LLinksGrid extends HTMLElement {
         return cellNode;
       }
 
+      // Start adding new row
+
       const trNode = document.createElement('tr');
       trNode.id = 'row-' + pos;
       trNode.title = url;
@@ -304,6 +482,14 @@ class H2LLinksGrid extends HTMLElement {
       trNode.setAttribute('tabindex', '-1');
       const firstChar = name.length ? name[0].toLowerCase() : '';
       trNode.setAttribute('data-first-char', firstChar);
+      trNode.setAttribute('data-role', LINK_ROLE);
+      trNode.setAttribute('data-name', name);
+      trNode.setAttribute('data-name-src', nameSource);
+      trNode.setAttribute('data-desc', desc);
+      trNode.setAttribute('data-desc-src', descSource);
+      trNode.setAttribute('data-visible-screen', isVisibleOnScreen);
+      trNode.setAttribute('data-visible-at', isVisibleToAT);
+
       trNode.addEventListener('click',   linksObj.handleGridrowClick.bind(linksObj));
       trNode.addEventListener('keydown', linksObj.handleGridrowKeydown.bind(linksObj));
       trNode.addEventListener('focus',   linksObj.handleFocus.bind(linksObj));
@@ -314,22 +500,32 @@ class H2LLinksGrid extends HTMLElement {
                                      pos,
                                      '',
                                      '',
+                                     '',
                                      linksObj.posWidth));
-
-      const nameDesc = desc ?
-                       `${name}: ${desc}` :
-                       name;
 
       trNode.appendChild(getDataCell(trNode.id + '-name',
                                      'name',
-                                     nameDesc,
+                                     name,
+                                     desc,
                                      '',
                                      '',
-                                     linksObj.nameWidth));
+                                     linksObj.nameWidth,
+                                     isVisibleOnScreen,
+                                     isVisibleToAT,
+                                     getMessage(`msg_no_acc_name`)));
+
+      trNode.appendChild(getDataCell(trNode.id + '-desc',
+                                     'desc',
+                                     desc ? 'Yes' : ' ',
+                                     '',
+                                     '',
+                                     descValue,
+                                     linksObj.descWidth));
 
       trNode.appendChild(getDataCell(trNode.id + '-type',
                                      'type',
                                      typeContent,
+                                     '',
                                      typeDesc,
                                      typeSort,
                                      linksObj.typeWidth));
@@ -342,14 +538,21 @@ class H2LLinksGrid extends HTMLElement {
       const rowNode = addRow(link.pos,
                              link.ordinalPosition,
                              link.name,
+                             link.nameSource,
                              link.desc,
+                             link.descSource,
+                             link.descValue,
                              link.url,
                              link.type,
                              link.typeDesc,
-                             link.typeSort);
+                             link.typeSort,
+                             link.isVisibleOnScreen,
+                             link.isVisibleToAT);
 
       this.gridTbodyNode.appendChild(rowNode);
     });
+
+    this.updateMessages(this.filteredCount, this.hiddenCount, this.visibleCount);
 
     return lastGridNode;
   }
@@ -438,7 +641,7 @@ class H2LLinksGrid extends HTMLElement {
       const bStr = b.name.toLowerCase().trim();
       const result = bStr.localeCompare(aStr);
       if (result === 0) {
-        return posCompare(a, b);
+        return posCompareDescending(a, b);
       }
       return result;
     }
@@ -454,7 +657,7 @@ class H2LLinksGrid extends HTMLElement {
     function typeCompareDescending(a, b) {
       const result = b.typeSort - a.typeSort;
       if (result === 0) {
-        return posCompare(a, b);
+        return posCompareDescending(a, b);
       }
       return result;
     }
@@ -467,11 +670,34 @@ class H2LLinksGrid extends HTMLElement {
       return b.pos - a.pos;
     }
 
+    function descCompare(a, b) {
+      const result = a.descValue - b.descValue;
+      if (result === 0) {
+        return posCompare(a, b);
+      }
+      return result;
+    }
+
+    function descCompareDescending(a, b) {
+      const result = b.descValue - a.descValue;
+      if (result === 0) {
+        return posCompareDescending(a, b);
+      }
+      return result;
+    }
+
+
     switch (sortColumn) {
       case 'name':
         direction === 'ascending' ?
         this.links.sort(nameCompare) :
         this.links.sort(nameCompareDescending);
+        break;
+
+      case 'desc':
+        direction === 'ascending' ?
+        this.links.sort(descCompare) :
+        this.links.sort(descCompareDescending);
         break;
 
       case 'type':
@@ -516,8 +742,6 @@ class H2LLinksGrid extends HTMLElement {
     }
   }
 
-
-
   // Tree keyboard navigation methods
 
   getGridrows () {
@@ -528,32 +752,43 @@ class H2LLinksGrid extends HTMLElement {
     return Array.from(this.gridNode.querySelectorAll('tr, th, td'));
   }
 
-  focusGridrow(gridrow) {
-    const op = gridrow.getAttribute('data-ordinal-position');
-    if (op) {
-      focusOrdinalPosition(op);
-    }
-  }
-
-
   highlightGriditem(griditem) {
-    const op   = griditem.hasAttribute('data-ordinal-position') ?
-                     griditem.getAttribute('data-ordinal-position') :
-                     griditem.parentNode.getAttribute('data-ordinal-position') ?
-                     griditem.parentNode.getAttribute('data-ordinal-position') :
-                     '';
 
-    const info = griditem.hasAttribute('data-info') ?
-                     griditem.getAttribute('data-info') :
-                     griditem.parentNode.hasAttribute('data-info') ?
-                     griditem.parentNode.getAttribute('data-info') :
-                     '';
-    highlightOrdinalPosition(op, info);
-    saveOption('lastLinkId', griditem.id);
+    function getProp (elem, prop, defaultValue='') {
+      return elem.hasAttribute(prop) ?
+              elem.getAttribute(prop) :
+              elem.parentNode.getAttribute(prop) ?
+                elem.parentNode.getAttribute(prop) :
+                defaultValue;
+    }
+
+    const op = getProp(griditem, 'data-ordinal-position');
+
+
+    getOptions().then( (options) => {
+
+      highlightItems(
+        { position: parseInt(op),
+          elemRole: LINK_ROLE
+         },
+        options.highlightAllLinks ? this.linkItems : [],
+        getMessage('msg_link_hidden'),
+        options.highlightNamesLinks
+      );
+      saveOption('lastLinkId', griditem.id);
+    });
+
   }
 
   removeHighlight() {
-    highlightOrdinalPosition('', '');
+    getOptions().then( (options) => {
+      highlightItems(
+        {},
+        [],
+        getMessage('msg_link_hidden'),
+        false
+      );
+    });
   }
 
   setFocusByFirstCharacter(gridrow, char){
@@ -864,7 +1099,68 @@ class H2LLinksGrid extends HTMLElement {
     }
   }
 
+  handleMessageGridrowClick (event) {
+    const tgt = event.currentTarget;
+    this.setFocusToGriditem(tgt);
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+ handleMessageGridcellKeydown(event) {
+    const tgt = event.currentTarget;
+    const key = event.key;
+    let flag  = false;
+
+    if (event.shiftKey || event.altKey || event.ctrlKey || event.metaKey) {
+      return;
+    }
+
+    switch (key) {
+      case 'ArrowUp':
+        this.setFocusToPreviousGridrowAndCell(tgt);
+        flag = true;
+        break;
+
+      case 'ArrowDown':
+        this.setFocusToNextGridrowAndCell(tgt);
+        flag = true;
+        break;
+
+      case 'ArrowRight':
+        this.setFocusToNextGridcell(tgt);
+        flag = true;
+        break;
+
+      case 'Home':
+        this.setFocusToFirstGridcell(tgt);
+        flag = true;
+        break;
+
+      case 'End':
+        this.setFocusToLastGridcell(tgt);
+        flag = true;
+        break;
+
+      default:
+        break;
+    }
+
+    if (flag) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
+  handleOptionsClick () {
+    this.h2lLinkFilterDialog.openDialog();
+  }
+
+  handleHighlightAllChange() {
+    this.checkboxShowNames.disabled = !this.checkboxHighlightAll.checked;
+  }
+
 }
+
 
 window.customElements.define('h2l-links-grid', H2LLinksGrid);
 

@@ -1,31 +1,30 @@
-/* generated from h2l-dialog.scss */
-/* toc-base.scss */
+/* toc-dialog.css */
 :root {
   color-scheme: light dark;
 }
 
 dialog::backdrop {
-  background-color: light-dark(#000, #fff);
+  background-color: light-dark(var(--main-background-light), var(--main-background-dark));
   opacity: 0.25;
 }
 
 dialog.h2l-dialog {
-  font-family: arial, verdana, tahoma, "trebuchet MS", sans-serif;
-  font-size: 11pt;
+  font-family: var(--main-font-family);
+  font-size: var(--main-font-size);
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
+  width: 75%;
   margin: 0;
   padding: 0;
   border-width: 2px;
   border-style: solid;
-  border-color: light-dark(#000, #fff);
+  border-color: light-dark(var(--dialog-border-light),var(--dialog-border-dark));
   border-radius: 5px;
   z-index: 2000001;
-  color: light-dark(#000, #fff);
-  background-color: light-dark(#fff, #000);
+  color: light-dark(var(--main-color-light), var(--main-color-dark));
+  background-color: light-dark(var(--main-background-light), var(--main-background-dark));
 }
 
 dialog.h2l-dialog .header {
@@ -35,12 +34,12 @@ dialog.h2l-dialog .header {
   border-width: 0;
   border-bottom-width: 1px;
   border-style: solid;
-  border-color: light-dark(#000, #fff);
+  border-color: light-dark(var(--dialog-border-light), var(--dialog-border-dark));
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   font-weight: bold;
-  background-color: light-dark(#fff, #000);
-  color: light-dark(#000, #fff);
+  color: light-dark(var(--main-color-light), var(--main-color-dark));
+  background-color: light-dark(var(--light-gray), var(--light-gray-dark));
   position: relative;
   font-size: 11pt;
 }
@@ -48,17 +47,18 @@ dialog.h2l-dialog .header {
 dialog.h2l-dialog .header h2 {
   margin: 0;
   padding: 0;
-  font-size: 11pt;
+  padding-left: 0.25em;
+  font-size: 12pt;
 }
 
 dialog.h2l-dialog .header button {
   position: absolute;
-  top: 0.25em;
-  right: 0.125em;
+  top: 0.375em;
+  right: 0.25em;
   border: none;
   background: transparent;
   font-weight: bold;
-  color: light-dark(#000, #fff);
+  color: light-dark(var(--main-color-light), var(--main-color-dark));
 }
 
 dialog.h2l-dialog .content {
@@ -140,16 +140,16 @@ dialog.h2l-dialog .content .copyright {
   font-size: 90%;
 }
 
-.buttons {
+.row {
   display: grid;
   grid-template-columns: 40% 30% 30%;
 }
 
-.buttons button {
+.row button {
   margin: 1em;
 }
 
-.buttons button.first {
+.row button.first {
   grid-column-start: 1;
   grid-column-end: 2;
   text-align: center;
@@ -157,7 +157,7 @@ dialog.h2l-dialog .content .copyright {
   width: 8em;
 }
 
-.buttons button.second {
+.row button.second {
   grid-column-start: 2;
   grid-column-end: 3;
   text-align: center;
@@ -165,7 +165,7 @@ dialog.h2l-dialog .content .copyright {
   width: 5em;
 }
 
-.buttons button.third {
+.row button.third {
   grid-column-start: 3;
   grid-column-end: 4;
   text-align: center;
@@ -173,29 +173,72 @@ dialog.h2l-dialog .content .copyright {
   width: 5em;
 }
 
+#buttons .center {
+  margin-bottom: 1em;
+  width: 100%;
+  text-align: center;
+}
+
 button:hover {
   cursor: pointer;
 }
 
-@media (forced-colors: active) {
-  dialog::backdrop {
-    background-color: CanvasText;
-    opacity: 0.25;
-  }
-  dialog.h2l-dialog .header button {
-    color: CanvasText;
-  }
-  dialog.h2l-dialog {
-    border-color: CanvasText;
-    color: CanvasText;
-    background-color: Canvas;
-  }
-  dialog.h2l-dialog .header {
-    border-color: CanvasText;
-    background-color: Canvas;
-    color: CanvasText;
-  }
-  dialog.h2l-dialog .header button {
-    color: CanvasText;
-  }
+#content:has(table) {
+  margin: 1em;
+}
+
+table.info {
+   margin: 0;
+   padding: 0;
+   border-collapse: collapse;
+}
+
+table.info th {
+  color: light-dark(var(--blue), var(--blue-dark));
+  border-bottom: solid 1px light-dark(var(--blue), var(--blue-dark));
+}
+
+table tbody tr:nth-child(even) {
+  background-color: light-dark(var(--light-gray), var(--light-gray));
+}
+
+table.info td, th {
+  text-align: left;
+}
+
+table.info td, th {
+  padding: 0.25em;
+  vertical-align: top;
+}
+
+ul.info {
+  margin: 0;
+  padding: 0;
+}
+
+ul.info li {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 0.25em;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.about-icon {
+  padding: 0;
+  margin: 0;
+  display: block;
+  text-align: center;
+}
+
+.version {
+  padding: 0;
+  margin: 0;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  display: block;
+  text-align: center;
+  font-size: 125%;
 }

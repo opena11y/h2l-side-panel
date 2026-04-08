@@ -150,7 +150,7 @@
   /* Constants */
   const debug$18 = new DebugLogging('constants', false);
 
-  const VERSION = '2.2.0';
+  const VERSION = '2.2.1';
 
   /**
    * @constant RULESET
@@ -1069,6 +1069,7 @@
         const dataItem = {
           level:             de.ariaInfo.ariaLevel,
           name:              cleanName(de.accName.name),
+          nameSource:        de.accName.source,
           ordinalPosition:   de.ordinalPosition,
           isVisibleOnScreen: de.visibility.isVisibleOnScreen,
           isVisibleToAT:     de.visibility.isVisibleToAT
@@ -1127,6 +1128,7 @@
         const dataItem = {
           role:              de.role.toLowerCase(),
           name:              cleanName(de.accName.name),
+          nameSource:        de.accName.source,
           ordinalPosition:   de.ordinalPosition,
           isVisibleOnScreen: de.visibility.isVisibleOnScreen,
           isVisibleToAT:     de.visibility.isVisibleToAT
@@ -1277,7 +1279,9 @@
           const dataItem = {
             url:               de.node.href,
             name:              cleanName(de.accName.name),
+            nameSource:        de.accName.source,
             desc:              cleanName(de.accDescription.name),
+            descSource:        de.accDescription.source,
             ordinalPosition:   de.ordinalPosition,
             isInternal:        sameHostname && samePathname,
             isExternal:        !sameDomain,
@@ -31371,6 +31375,23 @@
         debug$$.tag(elementNode);
       }
 
+      this.display  = style.getPropertyValue("display");
+      this.position =  style.getPropertyValue("position").toLowerCase();
+      this.overflow =  style.getPropertyValue("overflow").toLowerCase();
+      this.isPosition = ['absolute', 'fixed', 'sticky'].includes(this.position);
+      this.isOverflow = ['auto', 'hidden'].includes(this.overflow);
+      this.isPositionRef = this.isPosition || this.isOverflow;
+
+      this.positionValue = 'static';
+      if (this.isPosition) {
+        this.positionValue = this.position;
+      }
+      else {
+        if (this.isOverflow) {
+          this.positionValue = 'overflow';
+        }
+      }
+
       this.hasTextNodes = this.getHasTextNodes(elementNode);
 
       this.opacity            = this.normalizeOpacity(style, parentColorContrast);
@@ -31820,6 +31841,7 @@
 
   /* Constants */
   const debug$_ = new DebugLogging('EventInfo', false);
+  debug$_.flag = false;
 
   /**
    * @class EventInfo
@@ -31924,7 +31946,7 @@
         ],
         id: 'article'
       },
-      aside: {
+      'aside[complementary]': {
         tagName: 'aside',
         defaultRole: 'complementary',
         noRoleAllowed: false,
@@ -31938,7 +31960,31 @@
           'search',
           'complementary'
         ],
-        id: 'aside'
+        id: 'aside[complementary]'
+      },
+      aside: {
+        tagName: 'aside',
+        defaultRole: 'generic',
+        noRoleAllowed: false,
+        anyRoleAllowed: false,
+        allowedRoles: [
+          'group',
+          'none',
+          'presentation',
+          'article',
+          'aside',
+          'main',
+          'nav',
+          'section',
+          'role=article',
+          'complementary',
+          'main',
+          'navigation',
+          'region',
+          'role=contentinfo',
+          'role=generic'
+        ],
+        id: 'header'
       },
       audio: {
         tagName: 'audio',
@@ -33433,16 +33479,38 @@
 
   /* Constants */
   const debug$Z = new DebugLogging('ariaInHtml', false);
+  debug$Z.flag = false;
+
   const higherLevelElements = [
     'article',
     'aside',
     'footer',
+    'form',
     'header',
     'main',
     'nav',
-    'region',
     'section'
     ];
+
+  const asideNotAllowedContextElements = [
+    'footer',
+    'form',
+    'header'
+    ];
+
+  const asideNotAllowedContextRoles = [
+    'banner',
+    'contentinfo',
+    'form'
+    ];
+
+  const sectioningElements = [
+    'article',
+    'aside',
+    'nav',
+    'section'
+    ];
+
 
   const landmarkRoles$1 = [
     'banner',
@@ -33462,9 +33530,10 @@
   *       role restriction information
   *
   * @param  {Object}  node        - Element node from a browser DOM
+  * @param  {String}  name - Accessible name
   */
 
-  function getAriaInHTMLInfo (node) {
+  function getAriaInHTMLInfo (node, name) {
     let elemInfo, type, selector;
 
     let tagName = node.tagName.toLowerCase();
@@ -33484,6 +33553,14 @@
           elemInfo = elementInfo['area[href]'];
         } else {
           elemInfo = elementInfo['area'];
+        }
+        break;
+
+      case 'aside':
+        if (isInContextForComplementary(node, name)) {
+          elemInfo = elementInfo['aside[complementary]'];
+        } else {
+          elemInfo = elementInfo['aside'];
         }
         break;
 
@@ -33663,7 +33740,7 @@
   /**
   * @function isTopLevel
   *
-  * @desc Tests the node to see if it is in the content of any other
+  * @desc Tests the node to see if it is in the context of any other
   *       elements with default landmark roles or is the descendant
   *       of an element with a defined landmark role
   *
@@ -33680,6 +33757,40 @@
           landmarkRoles$1.includes(role)) {
         return false;
       }
+      node = node.parentNode;
+    }
+    return true;
+  }
+
+
+  /**
+  * @function isInContextForComplementary
+  *
+  * @desc Tests the node to see if it is in the context of any other
+  *       elements with default landmark roles or is the descendant
+  *       of an element with a main landmark role
+  *
+  * @param  {Object}  node - Element node from a browser DOM
+  * @param  {String}  name - Accessible name
+  */
+
+  function isInContextForComplementary (node, name='') {
+    node = node && node.parentNode;
+    while (node && (node.nodeType === Node.ELEMENT_NODE)) {
+      const tagName = getString(node.tagName);
+      const role = node.role ? node.role.toLowerCase().trim() : '';
+      if (role && asideNotAllowedContextRoles.includes(role)) {
+        return false;
+      }
+
+      if (asideNotAllowedContextElements.includes(tagName)) {
+        return false;
+      }
+
+      if (sectioningElements.includes(tagName)) {
+        return name.length ? true : false;
+      }
+
       node = node.parentNode;
     }
     return true;
@@ -33782,6 +33893,7 @@
       this.isSmallHeight      = this.normalizeHeight(style, parentVisibility);
       this.isSmallFont        = this.getFontSize(style);
       this.isInClosedDetails  = this.normalizeInClosedDetails(elementNode, parentVisibility);
+      this.zIndex             = this.normalizeZIndex(style, parentVisibility.zIndex);
 
       // Set default values for visibility
       this.isVisibleOnScreen = true;
@@ -33967,8 +34079,10 @@
 
     normalizeHeight (style, parentVisibility) {
       const height   = parseFloat(style.getPropertyValue("height"));
-      const overflow = style.getPropertyValue("overflow");
-      return parentVisibility.isSmallHeight || ((height <= 1) && (overflow === 'hidden'));
+      const overflow  = (style.getPropertyValue("overflow") === 'hidden') ||
+                        (style.getPropertyValue("overflowX") === 'hidden') ||
+                        (style.getPropertyValue("overflowY") === 'hidden');
+      return parentVisibility.isSmallHeight || ((height <= 1) && overflow);
     }
 
     /**
@@ -33987,6 +34101,23 @@
       const fontSize = parseFloat(style.getPropertyValue("font-size"));
       return fontSize <= 1;
     }
+
+    /**
+     * @method normalizedZIndex
+     *
+     * @desc Computes the zIndex of for the DOM element
+     *
+     * @param {Object}  style         - Computed style object for an element node
+     * @param {Object}  parentZIndex  - Computed zIndex of the parent
+     *
+     * @return {Number}  Returns numerical value for ZIndex
+     */
+
+    normalizeZIndex (style, parentZIndex) {
+      const zIndex = parseFloat(style.getPropertyValue("zIndex"));
+      return !isNaN(zIndex) ? zIndex : parentZIndex ? parentZIndex : 0;
+    }
+
   }
 
   /*
@@ -35198,7 +35329,9 @@
         elementNode.dataset.opena11yPosition = ordinalPosition.toString();
       }
 
-      this.ariaInHTMLInfo  = getAriaInHTMLInfo(elementNode);
+      this.accName        = getAccessibleName(accNameDoc, elementNode);
+
+      this.ariaInHTMLInfo  = getAriaInHTMLInfo(elementNode, this.accName.name);
       const defaultRole = this.ariaInHTMLInfo.defaultRole;
 
       this.hasRole = elementNode.hasAttribute('role');
@@ -35251,7 +35384,6 @@
                             elementNode.getAttribute('aria-braillelabel') :
                             '';
 
-
       this.colorContrast = new ColorContrast(parentDomElement, elementNode);
       this.visibility    = new Visibility(parentDomElement, elementNode);
 
@@ -35267,7 +35399,7 @@
 
       this.isButton    = this.role === 'button' && this.tagName === 'button';
       this.isLink      = this.role === 'link' && this.tagName === 'a';
-      this.isLandmark  = this.checkIsLandamrk();
+      this.isLandmark  = this.checkIsLandamrk(this.role || this.defaultRole, this.accName.name);
       this.isHeading   = this.role === 'heading';
       this.isInDialog  = this.tagName === 'dialog' ||
                          this.role === 'dialog' ||
@@ -35364,11 +35496,8 @@
      * @returns  {Boolean}  see @desc
      */
 
-    checkIsLandamrk () {
+    checkIsLandamrk (role, name) {
       let flag = false;
-      const role = this.role || this.defaultRole;
-      const name = this.accName.name;
-
       if (landmarkRoles.includes(role)) {
         if (requireAccessibleNames.includes(role)) {
           flag = name && name.length;
@@ -35645,6 +35774,7 @@
 
   /* Constants */
   const debug$U = new DebugLogging('domText', false);
+  debug$U.flag = false;
 
   /**
    * @class DOMText
@@ -35728,6 +35858,7 @@
 
   /* Constants */
   const debug$T = new DebugLogging('iframeInfo', false);
+  debug$T.flag = false;
 
   /**
    * @class IFrameElement
@@ -35796,6 +35927,7 @@
 
   /* Constants */
   const debug$S = new DebugLogging('idInfo', false);
+  debug$S.flag = false;
 
   /**
    * @class idInfo
@@ -37409,7 +37541,8 @@
     'shadow',
     'title',
     'h2l-highlight',
-    'opena11y-ai-highlight'
+    'opena11y-ai-highlight',
+    'opena11y-h2l-highlight'
   ];
 
   /**
@@ -37437,6 +37570,8 @@
       this.tableRowGroup   = null;
       this.tableCell       = null;
 
+      this.positionDomElement = null;
+
       this.inLink      = false;
       this.inParagraph = false;
       this.inDialog    = false;
@@ -37456,6 +37591,9 @@
         this.mediaElement    = info.mediaElement;
         this.tableElement    = info.tableElement;
         this.tableRowGroup   = info.tableRowGroup;
+        this.tableCell       = info.tableCell;
+
+        this.positionDomElement = info.positionDomElement;
 
         this.inLink       = info.inLink;
         this.inParagraph  = info.inParagraph;
@@ -37521,6 +37659,7 @@
       this.iframeInfo    = new IframeInfo();
 
       this.startingDomElement = new DOMElement(parentInfo, startingElement, 1, this.ariaVersion, addDataId);
+      parentInfo.positionDomElement = this.startingDomElement;
       this.allDomElements.push(this.startingDomElement);
 
       // Information on rule results associated with page
@@ -37748,6 +37887,10 @@
 
       this.idInfo.update(documentIndex, domElement);
       this.timingInfo.update(domElement);
+
+      newParentInfo.positionDomElement = domElement.colorContrast.isPositionRef ?
+                                      domElement :
+                                      parentInfo.positionDomElement;
 
       return newParentInfo;
     }
@@ -50460,14 +50603,17 @@
 
   /* opena11y-for-h2l.js */
 
-  const HIGHLIGHT_ELEMENT_NAME = 'h2l-highlight';
+  const HIGHLIGHT_ELEMENT_NAME = 'opena11y-h2l-highlight';
 
   const browserRuntime = typeof browser === 'object' ?
                 browser.runtime :
                 chrome.runtime;
 
   const evaluationLibrary = new EvaluationLibrary();
-  let evaluationResult;
+
+  let evaluationResult = false;
+
+  const highlightElements = [];
 
   // Load element highlight custom element
 
@@ -50478,53 +50624,186 @@
   document.body.appendChild(scriptNode);
 
 
+  // Helper functions
+
+  function removeHighlightElements () {
+    while (highlightElements[0]) {
+      highlightElements.pop().remove();
+    }
+  }
+
+  function isZeroDimension (rect) {
+    return rect.height === 0 && rect.width === 0;
+  }
+
+  // Some elements have zero height and width, so use their child element
+  // sizes to determine dimensions
+
+  function getPositionAndDimensions (elem, posElem, posValue='static') {
+    let rect = elem.getBoundingClientRect();
+    let posRect = posElem ?
+                  posElem.getBoundingClientRect() :
+                  new DOMRect(0,0,0,0);
+
+    const elemRect = {
+      top:    rect.top,
+      left:   rect.left,
+      bottom: rect.bottom,
+      right:  rect.right,
+      height: rect.height,
+      width:  rect.width
+    };
+
+    if (isZeroDimension(rect)) {
+      let childElem = elem.firstElementChild;
+      while (childElem) {
+        const r = childElem.getBoundingClientRect();
+
+        if (!isZeroDimension(r)) {
+          elemRect.top    = Math.min(r.top,    elemRect.top);
+          elemRect.right  = Math.max(r.right,  elemRect.right);
+          elemRect.bottom = Math.max(r.bottom, elemRect.bottom);
+          elemRect.left   = Math.min(r.left,   elemRect.left);
+        }
+
+        childElem = childElem.nextElementSibling;
+      }
+
+      elemRect.height = elemRect.bottom - elemRect.top;
+      elemRect.width  = elemRect.right  - elemRect.left;
+    }
+
+    if (!isZeroDimension(elemRect)) {
+      switch (posValue) {
+        case 'absolute':
+          elemRect.top   = elemRect.top  - posRect.top;
+          elemRect.left  = elemRect.left - posRect.left;
+          break;
+
+        case 'fixed':
+          elemRect.top   = elemRect.top  - posRect.top;
+          elemRect.left  = elemRect.left - posRect.left;
+          break;
+
+        case 'overflow':
+          elemRect.top   = elemRect.top  - posRect.top;
+          elemRect.left  = elemRect.left - posRect.left;
+          break;
+
+        case 'static':
+          elemRect.top   = elemRect.top  + window.scrollY;
+          elemRect.left  = elemRect.left + window.scrollX;
+          break;
+
+        case 'sticky':
+          elemRect.top   = elemRect.top  - posRect.top;
+          elemRect.left  = elemRect.left - posRect.left;
+          break;
+
+      }
+
+      elemRect.bottom  = elemRect.top  + elemRect.height;
+      elemRect.right   = elemRect.left + elemRect.width;
+    }
+    return elemRect;
+  }
+
+  function highlightItems(dataObj) {
+
+    function highlightPosition(position, elemRole, selected, showName) {
+
+      const de = evaluationResult.getDomElementByPosition(position);
+
+      if (de) {
+
+        const pe = de.parentInfo.positionDomElement;
+        const rect = getPositionAndDimensions(de.node, pe.node, pe.colorContrast.positionValue);
+
+        const he = document.createElement(HIGHLIGHT_ELEMENT_NAME);
+
+        const highlightConfig = selected ?
+                              `${highlightSize};${highlightStyleSelected}` :
+                              `${highlightSize};${highlightStyle}`;
+        he.setAttribute('highlight-config', highlightConfig);
+
+        highlightElements.push(he);
+        pe.node.appendChild(he);
+
+        he.setAttribute('position', position);
+
+        he.setAttribute('elem-role',    elemRole);
+        he.setAttribute('name',         de.accName.name);
+        he.setAttribute('name-src',     de.accName.source);
+        he.setAttribute('name-has-alt', de.accName.includesAlt || de.accName.includesAriaLabel);
+        he.setAttribute('desc',         de.accDescription.name);
+        he.setAttribute('desc-src',     de.accDescription.source);
+        he.setAttribute('z-index',      de.visibility.zIndex);
+        he.setAttribute('msg-hidden',   msgHidden);
+        he.setAttribute('show-name',    showName);
+        he.setAttribute('selected',     selected);
+
+        let attrValue = `${Math.round(rect.left)}`;
+        attrValue += `;${Math.round(rect.top)}`;
+        attrValue += `;${Math.round(rect.width)}`;
+        attrValue += `;${Math.round(rect.height)}`;
+        attrValue += `;${selected ? scrollBehavior : 'none'}`;
+
+        he.setAttribute('highlight', attrValue);
+      }
+    }
+
+    const selectedItem           = dataObj.selectedItem;
+    const allItems               = dataObj.allItems;
+    const highlightSize          = dataObj.highlightSize;
+    const highlightStyle         = dataObj.highlightStyle;
+    const highlightStyleSelected = dataObj.highlightStyleSelected;
+    const msgHidden              = dataObj.msgHidden;
+    const scrollBehavior         = dataObj.scrollBehavior;
+    const showName               = dataObj.showName;
+
+    removeHighlightElements();
+
+    if (allItems.length) {
+      allItems.forEach( (item) => {
+        const selected = item.position == selectedItem.position;
+        highlightPosition(item.position, item.elemRole, selected, showName || selected);
+      });
+    }
+    else {
+      highlightPosition(selectedItem.position, selectedItem.elemRole, true, showName);
+    }
+
+
+  }
 
   // Listen for messages from side panel
   browserRuntime.onMessage.addListener(
     function(request, sender, sendResponse) {
-
-      // Highlight elements
-      if(request.highlight) {
-        const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
-
-        if (he) {
-          he.setAttribute('data-attr', 'data-opena11y-id');
-          he.setAttribute('highlight-position', request.highlight.position + ';' + request.highlight.info);
-        }
+      // Highlight selected and/or all elements on a page
+      if(request.highlightItems) {
+        highlightItems(request.highlightItems);
       }
 
-      // Removed highlight
+      // Remove highlights
       if(request.removeHighlight) {
-        const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
-
-        if (he) {
-          he.setAttribute('highlight-position', '');
-        }
+        removeHighlightElements();
       }
 
       // Update Highlight configuration
       if(request.updateHighlightConfig) {
-        const hc = request.updateHighlightConfig;
+        const config= request.updateHighlightConfig;
 
-        const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
-
-        if (he) {
-          he.setAttribute('highlight-config', `${hc.size} ${hc.style}`);
-        }
-      }
-
-      // Focus elements
-      if(request.focusPosition) {
-        const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
-
-        if (he) {
-          he.setAttribute('data-attr', 'data-opena11y-id');
-          he.setAttribute('focus-position', request.focusPosition);
-        }
+        highlightElements.forEach( (he) => {
+          const highlightConfig = he.hasAttribute('selected') ?
+                                  `${config.highlightSize};${config.highlightStyleSelected}` :
+                                  `${config.highlightSize};${config.highlightStyle}`;
+           he.setAttribute('highlight-config', highlightConfig);
+        });
       }
 
       // Update heading, region and link information
       if(request.runEvaluation) {
+        removeHighlightElements();
         const doc = window.document;
         evaluationResult  = evaluationLibrary.evaluateWCAG(doc,
                                   doc.title,
@@ -50533,7 +50812,7 @@
                                   '',
                                   '',
                                   '',
-                                  true);
+                                  false);
 
         sendResponse({title: evaluationResult.getTitle(),
                       url: evaluationResult.getURL(),
@@ -50541,20 +50820,16 @@
                       regions: evaluationResult.landmarkRegions.data,
                       links: evaluationResult.links.data});
       }
-      return true;
     }
   );
 
+
   setInterval(() => {
-    chrome.runtime
-      .sendMessage({ ['h2l-sidepanel-open']: true })
+    browserRuntime.sendMessage({ ['h2l-sidepanel-open']: true })
       .then((msgRes) => {
       })
       .catch( () => {
-        const he = document.querySelector(HIGHLIGHT_ELEMENT_NAME);
-        if (he) {
-          he.setAttribute('highlight-position', '');
-        }
+        removeHighlightElements();
     });
   }, 50);
 

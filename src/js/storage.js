@@ -1,4 +1,4 @@
- /* storage.js */
+/* storage.js */
 
 /* imports */
 
@@ -26,18 +26,20 @@ const browserStorage = typeof browser === 'object' ?
 const dialogOptions = {
   highlightSize: 'large',
   highlightStyle: 'dashed',
+  highlightStyleSelected: 'solid',
   highlightFollowsFocus: true,
-  enterKeyMovesFocus: true,
-  unNamedDuplicateRegions: false,
+  highlightAllHeadings: false,
+  highlightNamesHeadings: false,
+  highlightAllLandmarks: false,
+  highlightAllLinks: false,
+  scrollBehavior: 'instant',
+  highlightNamesLinks: false,
+  emulateScreenReaderForLandmarks: false,
   internalLinks: true,
   externalLinks: true,
   sameSubDomainLinks: true,
   sameDomainLinks: true,
   nonHtmlExtensionLinks: true,
-  ariaRoles: true,
-  ariaProps: true,
-  accessibleNames: true,
-  keyboardSupport: true,
   keyboardFocus: 'styled',  // options 'styled', 'default' and 'none'
   lastUrl: '',
   lastHeadingId: '',
@@ -51,10 +53,19 @@ const exportOptions = {
   exportLandmarks: true,
   exportLinks: true,
   exportFilename: 'h2l-export',
-  exportIndex: 1
+  exportIndex: 1,
+  promptForExportOptions: true
 };
 
-const defaultOptions = Object.assign({}, dialogOptions, exportOptions);
+const ariaOptions = {
+  ariaRoles: true,
+  ariaProps: true,
+  ariaNames: true,
+  ariaKeyboard: true
+
+};
+
+const defaultOptions = Object.assign({}, dialogOptions, exportOptions, ariaOptions);
 
 function hasAllProperties (refObj, srcObj) {
   for (const key of Object.keys(refObj)) {
@@ -165,6 +176,19 @@ export function resetExportOptions () {
     });
   });
 }
+
+
+/*
+** resetAriaOptions
+*/
+export function resetAriaOptions () {
+  return new Promise (function (resolve) {
+    browserStorage.set(ariaOptions, function () {
+      if (notLastError()) { resolve(); }
+    });
+  });
+}
+
 
 /*
 **  logOptions
