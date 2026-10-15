@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 echo "Building extensions.."
 
-version="2.0.1"
+version="2.0.2"
 
 echo "
 Building H2L browser extenions
