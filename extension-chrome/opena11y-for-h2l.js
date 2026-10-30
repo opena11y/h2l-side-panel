@@ -52107,13 +52107,7 @@
 
         const he = document.createElement(HIGHLIGHT_ELEMENT_NAME);
 
-        const docElem = de.parentInfo.document ?
-                        de.parentInfo.document :
-                        window.document;
-
-        const attachElem = docElem.body ?
-                           docElem.body :
-                           docElem.documentElement;
+        const attachElem = de.getBodyElement();
 
         if (attachElem && attachElem.appendChild) {
           // Append the highlight element to the document object that contains the DOM element
