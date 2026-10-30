@@ -105,7 +105,7 @@ styleElem.textContent = `
   border-color: light-dark(var(--color-light-background), var(--color-dark-background));
   box-sizing: border-box;
   pointer-events:none;
-  z-index: 100000;
+  z-index: 2000000000;
 }
 
 .h2l-highlight.hasInfoBottom,
@@ -126,7 +126,7 @@ styleElem.textContent = `
   border-width: var(--border-width);
   border-style: var(--border-style);
   border-color: light-dark(var(--color-light-border-color), var(--color-dark-border-color));
-  z-index: 100000;
+  z-index: 2000000000;
   box-sizing: border-box;
   pointer-events:none;
   background: transparent;
@@ -145,7 +145,7 @@ styleElem.textContent = `
   border-color: light-dark(var(--color-light-background), var(--color-dark-background));
   background-color: light-dark(var(--color-light-background), var(--color-dark-background));
   color: light-dark(var(--color-light-text-color), var(--color-dark-text-color));
-  z-index: 100000;
+  z-index: 2000000000;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -170,7 +170,7 @@ styleElem.textContent = `
   font-weight: bold;
   text-align: center;
   animation: fadeIn 1.5s;
-  z-index: 100000;
+  z-index: 2000000000;
 }
 
 .h2l-highlight .overlay-info.hasInfoTop {
