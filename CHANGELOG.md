@@ -2,6 +2,7 @@
 
 ## Version 2.0.2
 * Updated evaluation library to fix DOM evaluation bugs
+* Updated highlighting feature
 
 ## Version 2.0.1
 * Updated h2l side panel highlight element feature
