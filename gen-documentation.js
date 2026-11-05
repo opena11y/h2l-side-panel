@@ -45,7 +45,7 @@ function outputTemplate(fname, data) {
 
 const mainPages = [
   { content: 'content-home.njk',
-    title: 'Browser Extension',
+    title: 'Headings, Landmarks and Links Browser Extension',
     link: 'Home',
     filename: 'index.html'
   },
